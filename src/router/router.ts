@@ -1,8 +1,8 @@
 import express from "express";
-import api from "./api/api";
+import admin from "./admin/admin";
 
 const router: express.Router = express.Router();
 
-router.use("/api", api);
+router.use("/admin", admin);
 
 export default router;

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { query } from "express";
 import mysql2 from "mysql2/promise";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
@@ -9,6 +9,7 @@ import crypto from "crypto";
 import { cwd } from "process";
 import dotenv from "dotenv";
 import path from "path";
+import { createHash } from "crypto";
 
 dotenv.config({ path: path.resolve(cwd(), ".env") });
 
@@ -69,13 +70,7 @@ class S3 {
 class MiddlewareUtil {
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
-	public static async deleteProduct(product: { id: number; image: string }): Promise<void> {
-		await S3.deleteFileFromS3Bucket(product.image);
-
-		await Sql.sqlMasterQuery("DELETE FROM products WHERE id = ?;", [String(product.id)]);
-	}
-
-	private static generateRandomFileName(): string {
+	private static generateRandomBytes(): string {
 		return crypto.randomBytes(128).toString("hex").substring(0, 255);
 	}
 
@@ -85,26 +80,32 @@ class MiddlewareUtil {
 			.toBuffer();
 	}
 
+	public static async deleteProduct(product: { id: number; image: string }): Promise<void> {
+		await S3.deleteFileFromS3Bucket(product.image);
+
+		await Sql.sqlMasterQuery("DELETE FROM products WHERE id = ?;", [String(product.id)]);
+	}
+
 	public static async validateDataForMiddlewarePostPropaganda(body: { imagesContext: [string, string] }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
 		if (!files || files.length !== 2) {
-			throw { type: 404, message: "Por favor, forneça todas as imagens corretamente para concluir a solicitação" };
+			throw { type: 400, message: "Por favor, forneça todas as imagens corretamente para concluir a solicitação" };
 		}
 
 		try {
 			const big: { fieldname: string; originalname: string; encoding: string; mimetype: string; buffer: Buffer; size: number } = Object(files)[body.imagesContext.indexOf("big")];
-			big.originalname = this.generateRandomFileName();
+			big.originalname = this.generateRandomBytes();
 			big.buffer = await this.sharpImage(big.buffer, 1920, 420, "contain");
 
 			const small: { fieldname: string; originalname: string; encoding: string; mimetype: string; buffer: Buffer; size: number } = Object(files)[body.imagesContext.indexOf("small")];
-			small.originalname = this.generateRandomFileName();
+			small.originalname = this.generateRandomBytes();
 			small.buffer = await this.sharpImage(small.buffer, 800, 800, "contain");
 		} catch (err: any) {
 			if (err instanceof TypeError) {
-				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 			}
 
 			if (err.message === "Input buffer contains unsupported image format") {
-				throw { type: 404, message: "Por favor, forneça imagens válidas para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça imagens válidas para concluir a solicitação" };
 			}
 
 			throw err;
@@ -116,54 +117,76 @@ class MiddlewareUtil {
 			var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT * FROM categories WHERE category = ?;", [body.category]);
 		} catch (err: any) {
 			if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 			}
 
 			throw err;
 		}
 
 		if (Object(query).length !== 0) {
-			throw { type: 404, message: "Por favor, forneça um nome de categoria diferente para concluir a solicitação" };
+			throw { type: 400, message: "Por favor, forneça um nome de categoria diferente para concluir a solicitação" };
 		}
 	}
 
 	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
+		if (!files || files.length !== 1) {
+			throw { type: 400, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
+		}
+
 		try {
 			var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT * FROM categories WHERE category = ?;", [body.category]);
 		} catch (err: any) {
 			if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 			}
 
 			throw err;
 		}
 
 		if (Object(query).length !== 1) {
-			throw { type: 404, message: "Por favor, forneça um nome de categoria existente para concluir a solicitação" };
-		}
-
-		if (!files || files.length !== 1) {
-			throw { type: 404, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
+			throw { type: 400, message: "Por favor, forneça um nome de categoria existente para concluir a solicitação" };
 		}
 
 		try {
 			const productImage: { fieldname: string; originalname: string; encoding: string; mimetype: string; buffer: Buffer; size: number } = Object(files)[0];
-			productImage.originalname = this.generateRandomFileName();
+			productImage.originalname = this.generateRandomBytes();
 			productImage.buffer = await this.sharpImage(productImage.buffer, 800, 800, "contain");
 		} catch (err: any) {
 			if (err instanceof TypeError) {
-				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 			}
 
 			if (err.message === "Input buffer contains unsupported image format") {
-				throw { type: 404, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
 			}
 
 			throw err;
 		}
 	}
 
-	public static validateDataForMiddlewareUpdateText(body: { id: string; table: string; column: string; value: string }): void {
+	public static async validateDataForMiddlewarePutLogin(body: { oldUser: string; oldPassword: string; newUser: string; newPassword: string }): Promise<void> {
+		try {
+			body.oldUser = createHash("sha512").update(body.oldUser).digest("hex");
+			body.oldPassword = createHash("sha512").update(body.oldPassword).digest("hex");
+			body.newUser = createHash("sha512").update(body.newUser).digest("hex");
+			body.newPassword = createHash("sha512").update(body.newPassword).digest("hex");
+			Object(body).newToken = this.generateRandomBytes();
+		} catch (err) {
+			if (err instanceof TypeError) {
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+			}
+
+			throw err;
+		}
+
+		const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT user, password FROM auth WHERE user = ? AND password = ?;", [body.oldUser, body.oldPassword]);
+
+		if (Object(query).length !== 1) {
+			throw { type: 403, message: "Oops, algo não estava certo" };
+		}
+	}
+
+	public static validateDataForMiddlewarePutText(body: { id: string; table: string; column: string; value: string }): void {
 		const sqlMask: { header: string[]; categories: string[]; products: string[]; footer: string[] } = {
 			header: ["title", "description"],
 			categories: ["category"],
@@ -172,11 +195,11 @@ class MiddlewareUtil {
 		};
 
 		if (!Object(sqlMask)[body.table] || !Object(sqlMask)[body.table].includes(body.column)) {
-			throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+			throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 		}
 	}
 
-	public static async validateDataForMiddlewareUpdateImage(body: { id: string; table: string; column: string }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
+	public static async validateDataForMiddlewarePutImage(body: { id: string; table: string; column: string }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
 		const sqlMask: { header: { icon: { width: number; height: number }; logo: { width: number; height: number } }; products: { image: { width: number; height: number } } } = {
 			header: {
 				icon: {
@@ -197,7 +220,7 @@ class MiddlewareUtil {
 		};
 
 		if (!Object(sqlMask)[body.table] || !Object(sqlMask)[body.table][body.column]) {
-			throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+			throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 		}
 
 		try {
@@ -205,14 +228,36 @@ class MiddlewareUtil {
 			image.buffer = await this.sharpImage(image.buffer, Object(sqlMask)[body.table][body.column].width, Object(sqlMask)[body.table][body.column].height, "contain");
 		} catch (err: any) {
 			if (err instanceof TypeError) {
-				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 			}
 
 			if (err.message === "Input buffer contains unsupported image format") {
-				throw { type: 404, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
+				throw { type: 400, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
 			}
 
 			throw err;
+		}
+	}
+
+	public static async validateDataForMiddlewarePutPosition(body: { table: string; ids: string[] }) {
+		const sqlMask: string[] = ["propagandas", "categories", "products"];
+
+		if (!sqlMask.includes(body.table)) {
+			throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+		}
+
+		const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT id FROM " + body.table + " ORDER BY position;");
+
+		if (Object(body.ids).length !== Object(query).length) {
+			throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+		}
+
+		for (let c = 0; c < Object(query).length; c++) {
+			const id: number = Object(query)[c].id;
+
+			if (!body.ids.includes(String(id))) {
+				throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+			}
 		}
 	}
 
@@ -247,14 +292,39 @@ class MiddlewareUtil {
 	}
 }
 
-export default class ApiMiddlewares {
+export default class AdminApiMiddlewares {
+	public static async middlewareCheckToken(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { token: string } = req.body;
+
+			try {
+				var [query] = await Sql.sqlMasterQuery("SELECT token FROM auth WHERE id = ?", ["only"]);
+			} catch (err: any) {
+				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				}
+
+				throw err;
+			}
+
+			console.log(Object(query)[0].token, body.token)
+			if (Object(query)[0].token !== body.token) {
+				throw { type: 403, message: "Oops, algo não estava certo" };
+			}
+
+			return next();
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
+	}
+
 	public static middlewareUploadFiles(fieldName: string, maxCount: number) {
 		return function (req: express.Request, res: express.Response, next: express.NextFunction) {
 			const upload = MiddlewareUtil.multer.array(fieldName, maxCount);
 
 			upload(req, res, (err: any) => {
 				if (err instanceof multer.MulterError || !req.files) {
-					return MiddlewareUtil.handleMiddlewareError(res, { type: 404, message: "Por favor, forneça o número adequado de imagens para concluir a solicitação" });
+					return MiddlewareUtil.handleMiddlewareError(res, { type: 400, message: "Por favor, forneça o número adequado de imagens para concluir a solicitação" });
 				} else if (err) {
 					return MiddlewareUtil.handleMiddlewareError(res, err);
 				}
@@ -309,7 +379,7 @@ export default class ApiMiddlewares {
 				await Sql.sqlMasterQuery("INSERT INTO categories (category) VALUES (?);", [body.category]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -336,7 +406,7 @@ export default class ApiMiddlewares {
 				await S3.deleteFileFromS3Bucket(Object(files)[0].originalname);
 
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -348,9 +418,23 @@ export default class ApiMiddlewares {
 		}
 	}
 
-	public static async middlewareUpdateText(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePutLogin(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			MiddlewareUtil.validateDataForMiddlewareUpdateText(req.body);
+			await MiddlewareUtil.validateDataForMiddlewarePutLogin(req.body);
+
+			const body: { oldUser: string; oldPassword: string; newUser: string; newPassword: string; newToken: string } = req.body;
+
+			await Sql.sqlMasterQuery("UPDATE auth SET user = ?, password = ?, token = ? WHERE id = ?", [body.newUser, body.newPassword, body.newToken, "only"]);
+
+			return next();
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			MiddlewareUtil.validateDataForMiddlewarePutText(req.body);
 
 			const body: { id: string; table: string; column: string; value: string } = req.body;
 
@@ -358,7 +442,7 @@ export default class ApiMiddlewares {
 				await Sql.sqlMasterQuery("UPDATE " + body.table + " SET " + body.column + " = ? WHERE id = ?;", [body.value, body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -370,9 +454,9 @@ export default class ApiMiddlewares {
 		}
 	}
 
-	public static async middlewareUpdateImage(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			await MiddlewareUtil.validateDataForMiddlewareUpdateImage(req.body, req.files);
+			await MiddlewareUtil.validateDataForMiddlewarePutImage(req.body, req.files);
 
 			const body: { id: string; table: string; column: string; value: string } = req.body;
 			const files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined = req.files;
@@ -381,7 +465,7 @@ export default class ApiMiddlewares {
 				var [query] = await Sql.sqlMasterQuery("SELECT " + body.column + " FROM " + body.table + " WHERE id = ?;", [body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -399,8 +483,20 @@ export default class ApiMiddlewares {
 		}
 	}
 
-	public static async middlewareUpdatePosition(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePutPosition(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			await MiddlewareUtil.validateDataForMiddlewarePutPosition(req.body);
 
+			const body: { table: string; ids: string[] } = req.body;
+
+			for (let c = 0; c < body.ids.length; c++) {
+				await Sql.sqlMasterQuery("UPDATE " + body.table + " SET position = ? WHERE id = ?;", [String(c), Object(body).ids[c]]);
+			}
+
+			return next();
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
 	}
 
 	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
@@ -411,7 +507,7 @@ export default class ApiMiddlewares {
 				var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT big, small FROM propagandas WHERE id = ?;", [body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -446,7 +542,7 @@ export default class ApiMiddlewares {
 				var [query1]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT category FROM categories WHERE id = ?;", [body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -478,7 +574,7 @@ export default class ApiMiddlewares {
 				var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT id, image FROM products WHERE id = ?;", [body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
-					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+					throw { type: 400, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
 				}
 
 				throw err;
@@ -496,10 +592,11 @@ export default class ApiMiddlewares {
 		}
 	}
 
-	public static middlewareSendStatusCode200(req: express.Request, res: express.Response): void {
-		res.json({
-			status: 200,
-			message: "ok",
-		});
+	public static middlewareSendResponse(status: number) {
+		return function (req: express.Request, res: express.Response) {
+			res.json({
+				status: status,
+			});
+		};
 	}
 }
