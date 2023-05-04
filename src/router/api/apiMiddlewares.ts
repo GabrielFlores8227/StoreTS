@@ -69,6 +69,12 @@ class S3 {
 class MiddlewareUtil {
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
+	public static async deleteProduct(product: { id: number; image: string }): Promise<void> {
+		await S3.deleteFileFromS3Bucket(product.image);
+
+		await Sql.sqlMasterQuery("DELETE FROM products WHERE id = ?;", [String(product.id)]);
+	}
+
 	private static generateRandomFileName(): string {
 		return crypto.randomBytes(128).toString("hex").substring(0, 255);
 	}
@@ -121,7 +127,21 @@ class MiddlewareUtil {
 		}
 	}
 
-	public static async validateDataForMiddlewarePostProduct(files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
+	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
+		try {
+			var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT * FROM categories WHERE category = ?;", [body.category]);
+		} catch (err: any) {
+			if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
+				throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+			}
+
+			throw err;
+		}
+
+		if (Object(query).length !== 1) {
+			throw { type: 404, message: "Por favor, forneça um nome de categoria existente para concluir a solicitação" };
+		}
+
 		if (!files || files.length !== 1) {
 			throw { type: 404, message: "Por favor, forneça uma imagem válida para concluir a solicitação" };
 		}
@@ -258,7 +278,7 @@ export default class ApiMiddlewares {
 
 			try {
 				await S3.uploadFileToS3Bucket(small.buffer.toString(), small.originalname, small.mimetype);
-			} catch (err) {
+			} catch (err: any) {
 				await S3.deleteFileFromS3Bucket(big.originalname);
 
 				throw err;
@@ -266,7 +286,7 @@ export default class ApiMiddlewares {
 
 			try {
 				await Sql.sqlMasterQuery("INSERT INTO propagandas (big, small) VALUES (?, ?);", [big.originalname, small.originalname]);
-			} catch (err) {
+			} catch (err: any) {
 				await S3.deleteFileFromS3Bucket(big.originalname);
 				await S3.deleteFileFromS3Bucket(small.originalname);
 
@@ -274,7 +294,7 @@ export default class ApiMiddlewares {
 			}
 
 			return next();
-		} catch (err) {
+		} catch (err: any) {
 			MiddlewareUtil.handleMiddlewareError(res, err);
 		}
 	}
@@ -296,14 +316,14 @@ export default class ApiMiddlewares {
 			}
 
 			return next();
-		} catch (err) {
+		} catch (err: any) {
 			MiddlewareUtil.handleMiddlewareError(res, err);
 		}
 	}
 
 	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			await MiddlewareUtil.validateDataForMiddlewarePostProduct(req.files);
+			await MiddlewareUtil.validateDataForMiddlewarePostProduct(req.body, req.files);
 
 			const body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string } = req.body;
 			const files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined = req.files;
@@ -311,7 +331,7 @@ export default class ApiMiddlewares {
 			await S3.uploadFileToS3Bucket(Object(files)[0].buffer.toString(), Object(files)[0].originalname, Object(files)[0].mimetype);
 
 			try {
-				await Sql.sqlMasterQuery("INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [body.category, body.name, Object(files)[0].originalname, body.price, body.off, body.installment, body.whatsapp, body.message]);
+				await Sql.sqlMasterQuery("INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", [body.category, body.name, Object(files)[0].originalname, body.price, body.off, body.installment, body.whatsapp, body.message]);
 			} catch (err: any) {
 				await S3.deleteFileFromS3Bucket(Object(files)[0].originalname);
 
@@ -323,7 +343,7 @@ export default class ApiMiddlewares {
 			}
 
 			return next();
-		} catch (err) {
+		} catch (err: any) {
 			MiddlewareUtil.handleMiddlewareError(res, err);
 		}
 	}
@@ -345,7 +365,7 @@ export default class ApiMiddlewares {
 			}
 
 			return next();
-		} catch (err) {
+		} catch (err: any) {
 			MiddlewareUtil.handleMiddlewareError(res, err);
 		}
 	}
@@ -358,7 +378,7 @@ export default class ApiMiddlewares {
 			const files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined = req.files;
 
 			try {
-				var [value] = await Sql.sqlMasterQuery("SELECT " + body.column + " FROM " + body.table + " WHERE id = ?;", [body.id]);
+				var [query] = await Sql.sqlMasterQuery("SELECT " + body.column + " FROM " + body.table + " WHERE id = ?;", [body.id]);
 			} catch (err: any) {
 				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
 					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
@@ -367,14 +387,111 @@ export default class ApiMiddlewares {
 				throw err;
 			}
 
-			if (Object(value).length === 0) {
+			if (Object(query).length === 0) {
 				return next();
 			}
 
-			await S3.uploadFileToS3Bucket(Object(files)[0].buffer, Object(value)[0][body.column], Object(files)[0].mimetype);
+			await S3.uploadFileToS3Bucket(Object(files)[0].buffer, Object(query)[0][body.column], Object(files)[0].mimetype);
 
 			return next();
-		} catch (err) {
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewareUpdatePosition(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+
+	}
+
+	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { id: string } = req.body;
+
+			try {
+				var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT big, small FROM propagandas WHERE id = ?;", [body.id]);
+			} catch (err: any) {
+				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
+					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				}
+
+				throw err;
+			}
+
+			if (Object(query).length === 0) {
+				return next();
+			}
+
+			try {
+				await S3.deleteFileFromS3Bucket(Object(query)[0].big);
+				await S3.deleteFileFromS3Bucket(Object(query)[0].small);
+			} catch (err: any) {
+				await Sql.sqlMasterQuery("DELETE FROM propagandas WHERE id = ?;", [body.id]);
+
+				throw err;
+			}
+
+			await Sql.sqlMasterQuery("DELETE FROM propagandas WHERE id = ?;", [body.id]);
+
+			return next();
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { id: string } = req.body;
+
+			try {
+				var [query1]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT category FROM categories WHERE id = ?;", [body.id]);
+			} catch (err: any) {
+				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
+					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				}
+
+				throw err;
+			}
+
+			if (Object(query1).length !== 1) {
+				return next();
+			}
+
+			const [query2]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT id, image FROM products WHERE category = ?;", [Object(query1)[0].category]);
+
+			for (let c = 0; c < Object(query2).length; c++) {
+				await MiddlewareUtil.deleteProduct(Object(query2)[c]);
+			}
+
+			await Sql.sqlMasterQuery("DELETE FROM categories WHERE id = ?;", [body.id]);
+
+			return next();
+		} catch (err: any) {
+			MiddlewareUtil.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { id: string } = req.body;
+
+			try {
+				var [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await Sql.sqlMasterQuery("SELECT id, image FROM products WHERE id = ?;", [body.id]);
+			} catch (err: any) {
+				if (err instanceof TypeError || err.code === "ER_DATA_TOO_LONG" || err.code === "ER_WARN_DATA_TRUNCATED" || err.message === "Bind parameters must not contain undefined. To pass SQL NULL specify JS null") {
+					throw { type: 404, message: "Por favor, forneça todos os dados corretamente para concluir a solicitação" };
+				}
+
+				throw err;
+			}
+
+			if (Object(query).length !== 1) {
+				return next();
+			}
+
+			MiddlewareUtil.deleteProduct(Object(query)[0]);
+
+			return next();
+		} catch (err: any) {
 			MiddlewareUtil.handleMiddlewareError(res, err);
 		}
 	}
