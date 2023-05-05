@@ -1,8 +1,8 @@
 import express from 'express';
-import adminApi from './adminApi/adminApi';
+import api from './api/api';
 
 const admin = express.Router();
 
-admin.use('/api', adminApi);
+admin.use('/api', api);
 
 export default admin;
