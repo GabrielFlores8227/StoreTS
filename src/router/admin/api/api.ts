@@ -1,26 +1,34 @@
 import express from 'express';
-import ApiModules from './apiModules';
+import LocalModules from './.localModules';
 
 const api: express.Router = express.Router();
 
-api.post('/post/propaganda', ApiModules.middlewareUploadFiles('files', 2), ApiModules.middlewareCheckToken, ApiModules.middlewarePostPropaganda, ApiModules.middlewareSendResponse(200));
+//*NEW SECTION
+api.post('/propaganda', LocalModules.middlewareUploadFiles(2, 2), LocalModules.middlewareCheckToken, LocalModules.middlewarePostPropaganda, LocalModules.middlewareSendResponse(200));
 
-api.post('/post/category', ApiModules.middlewareCheckToken, ApiModules.middlewarePostCategory, ApiModules.middlewareSendResponse(200));
+api.delete('/propaganda', LocalModules.middlewareCheckToken, LocalModules.middlewareDeletePropaganda, LocalModules.middlewareSendResponse(200));
 
-api.post('/post/product', ApiModules.middlewareUploadFiles('files', 1), ApiModules.middlewareCheckToken, ApiModules.middlewarePostProduct, ApiModules.middlewareSendResponse(200));
+//*NEW SECTION
+api.post('/category', LocalModules.middlewareCheckToken, LocalModules.middlewarePostCategory, LocalModules.middlewareSendResponse(200));
 
-api.put('/put/login', ApiModules.middlewareCheckToken, ApiModules.middlewarePutLogin, ApiModules.middlewareSendResponse(200));
+/*
+api.post('/category', LocalModules.middlewareCheckToken, LocalModules.middlewarePostCategory, LocalModules.middlewareSendResponse(200));
 
-api.put('/put/text', ApiModules.middlewareCheckToken, ApiModules.middlewarePutText, ApiModules.middlewareSendResponse(200));
+api.post('/product', LocalModules.middlewareUploadFiles(1, 1), LocalModules.middlewareCheckToken, LocalModules.middlewarePostProduct, LocalModules.middlewareSendResponse(200));
 
-api.put('/put/image', ApiModules.middlewareUploadFiles('files', 1), ApiModules.middlewareCheckToken, ApiModules.middlewarePutImage, ApiModules.middlewareSendResponse(200));
+api.put('/login', LocalModules.middlewareCheckToken, LocalModules.middlewarePutLogin, LocalModules.middlewareSendResponse(200));
 
-api.put('/put/position', ApiModules.middlewareCheckToken, ApiModules.middlewarePutPosition, ApiModules.middlewareSendResponse(200));
+api.put('/text', LocalModules.middlewareCheckToken, LocalModules.middlewarePutText, LocalModules.middlewareSendResponse(200));
 
-api.delete('/delete/propaganda', ApiModules.middlewareCheckToken, ApiModules.middlewareDeletePropaganda, ApiModules.middlewareSendResponse(200));
+api.put('/image', LocalModules.middlewareUploadFiles('files', 1), LocalModules.middlewareCheckToken, LocalModules.middlewarePutImage, LocalModules.middlewareSendResponse(200));
 
-api.delete('/delete/category', ApiModules.middlewareCheckToken, ApiModules.middlewareDeleteCategory, ApiModules.middlewareSendResponse(200));
+api.put('/position', LocalModules.middlewareCheckToken, LocalModules.middlewarePutPosition, LocalModules.middlewareSendResponse(200));
 
-api.delete('/delete/product', ApiModules.middlewareCheckToken, ApiModules.middlewareDeleteProduct, ApiModules.middlewareSendResponse(200));
+api.delete('/propaganda', LocalModules.middlewareCheckToken, LocalModules.middlewareDeletePropaganda, LocalModules.middlewareSendResponse(200));
+
+api.delete('/category', LocalModules.middlewareCheckToken, LocalModules.middlewareDeleteCategory, LocalModules.middlewareSendResponse(200));
+
+api.delete('/product', LocalModules.middlewareCheckToken, LocalModules.middlewareDeleteProduct, LocalModules.middlewareSendResponse(200));
+*/
 
 export default api;
