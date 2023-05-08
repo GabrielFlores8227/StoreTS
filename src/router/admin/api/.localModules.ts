@@ -4,6 +4,7 @@ import mysql2 from 'mysql2/promise';
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
+import http from 'http';
 
 class LocalModulesUtil {
 	//*NEW SECTION
@@ -39,17 +40,26 @@ class LocalModulesUtil {
 
 	//*NEW SECTION
 	//status: ok
-	public static validateDataFormMiddlewareCheckToken(body: { [key: string]: string | Object }): void {
+	public static validateDataFormMiddlewareCheckAuth(headers: http.IncomingHttpHeaders): void {
 		this.executeChecker({
-			token: !Object(body).token || typeof Object(body).token !== 'string',
+			authorization: typeof Object(headers).authorization !== 'string' || Object(headers).authorization.split(':').length !== 2,
 		});
+
+		const auth: string[] = String(Object(headers).authorization)
+			.substring(7, String(Object(headers).authorization).length)
+			.split(':');
+
+		Object(headers).authorization = {
+			user: auth[0],
+			token: auth[1],
+		};
 	}
 
 	//*NEW SECTION
 	//status: ok
 	public static async validateDataForMiddlewarePostPropaganda(body: { [key: string]: string | object }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
 		this.executeChecker({
-			imagesContext: !Object(body).imagesContext || JSON.stringify(['bigImage', 'smallImage'].sort()) !== JSON.stringify(Object(body).imagesContext.sort()),
+			imagesContext: typeof Object(body).imagesContext !== 'object' || JSON.stringify(['bigImage', 'smallImage'].sort()) !== JSON.stringify(Object(body).imagesContext.sort()),
 		});
 
 		const bigImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('bigImage')];
@@ -78,26 +88,44 @@ class LocalModulesUtil {
 	//status: ok
 	public static async validateDataForMiddlewareDeletePropaganda(body: { [key: string]: string | object }): Promise<void> {
 		this.executeChecker({
-			id: !Object(body).id || typeof Object(body).id !== 'string',
+			id: typeof Object(body).id !== 'string',
 		});
 	}
 
 	public static async validateDataForMiddlewarePostCategory(body: { [key: string]: string | object }): Promise<void> {
 		this.executeChecker({
-			category: !Object(body).category || typeof Object(body).category !== 'string' || Object(body).category.length < 1 || Object(body).category.length > 50,
+			category: typeof Object(body).category !== 'string' || Object(body).category.length < 1 || Object(body).category.length > 50,
 		});
 	}
 
-	public static async validateDataForMiddlewarePostProduct(body: { [key: string]: string | object }, file: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
+	public static async validateDataForMiddlewarePostProduct(body: { [key: string]: string | object }, file: Express.Multer.File | undefined): Promise<void> {
+		const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT category FROM categories WHERE category = ?;', [Object(body).category]);
+
 		this.executeChecker({
-			category: !Object(body).category,
-			name: !Object(body).name || typeof Object(body).name !== 'string' || Object(body).name.length < 1 || Object(body).name.length > 50,
-			price: !Object(body).price || typeof Object(body).price !== 'string' || !isNaN(Object(body).price) || Number(Object(body).price) < 0,
-			off: !Object(body).off || typeof Object(body).off !== 'string' || !isNaN(Object(body).off) || Number(Object(body).off) < 0 || Number(Object(body).off) > 100,
-			installment: !Object(body).installment || typeof Object(body).installment !== 'string' || Object(body).installment.length > 50,
-			whatsapp: !Object(body).whatsapp || typeof Object(body).whatsapp !== 'string' || isNaN(Object(body).whatsapp) || Object(body).name.length !== 13,
-			message: !Object(body).message || typeof Object(body).message !== 'string' || Object(body).message.length > 255,
+			category: typeof Object(body).category !== 'string' || Object(query).length !== 1,
+			name: typeof Object(body).name !== 'string' || Object(body).name.length < 1 || Object(body).name.length > 50,
+			price: typeof Object(body).price !== 'string' || isNaN(Object(body).price) || Number(Object(body).price) < 0,
+			off: typeof Object(body).off !== 'string' || isNaN(Object(body).off) || Number(Object(body).off) < 0 || Number(Object(body).off) > 100,
+			installment: typeof Object(body).installment !== 'string' || Object(body).installment.length > 50,
+			whatsapp: typeof Object(body).whatsapp !== 'string' || isNaN(Object(body).whatsapp) || Object(body).whatsapp.length !== 13,
+			message: typeof Object(body).message !== 'string' || Object(body).message.length > 255,
 		});
+
+		Object(file).originalname = this.generateRandomBytes();
+
+		try {
+			Object(file).buffer = await this.sharpImage(Object(file).buffer, 800, 800, 'contain');
+		} catch (err: any) {
+			if (err.message === 'Input buffer contains unsupported image format') {
+				throw {
+					type: 400,
+					message: 'Please provide valid images to fulfill the request',
+					check: 'files',
+				};
+			}
+
+			throw err;
+		}
 	}
 }
 
@@ -114,16 +142,22 @@ export default class LocalModules {
 			}
 
 			upload(req, res, (err: any) => {
-				if (err instanceof multer.MulterError || !req.files) {
-					GlobalMiddlewareModules.handleMiddlewareError(res, {
+				if (err instanceof multer.MulterError) {
+					return GlobalMiddlewareModules.handleMiddlewareError(res, {
 						type: 400,
 						message: 'Please provide the appropriate number of images to fulfill the request',
 						check: maxCount === 1 ? 'file' : 'files',
 					});
+				} else if (err) {
+					return GlobalMiddlewareModules.handleMiddlewareError(res, err);
 				}
 
-				if (err) {
-					GlobalMiddlewareModules.handleMiddlewareError(res, err);
+				if ((maxCount === 1 && typeof req.file !== 'object') || (maxCount > 1 && Object(req).files.length < minCount)) {
+					return GlobalMiddlewareModules.handleMiddlewareError(res, {
+						type: 400,
+						message: 'Please provide the appropriate number of images to fulfill the request',
+						check: maxCount === 1 ? 'file' : 'files',
+					});
 				}
 
 				return next();
@@ -133,16 +167,16 @@ export default class LocalModules {
 
 	//*NEW SECTION
 	//status: ok
-	public static async middlewareCheckToken(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewareCheckAuth(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
+			const headers: http.IncomingHttpHeaders = req.headers;
 
-			LocalModulesUtil.validateDataFormMiddlewareCheckToken(body);
+			LocalModulesUtil.validateDataFormMiddlewareCheckAuth(headers);
 
-			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] | undefined = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [Object(body).token, 'only']);
+			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] | undefined = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE user = ? AND token = ? AND id = ?;', [Object(headers).authorization.user, Object(headers).authorization.token, 'only']);
 
 			if (Object(query).length !== 1) {
-				throw { type: 403, message: "Oops, something wasn't right", check: 'token' };
+				throw { type: 403, message: "Oops, something wasn't right", check: 'authorization' };
 			}
 
 			return next();
@@ -217,6 +251,24 @@ export default class LocalModules {
 			await LocalModulesUtil.validateDataForMiddlewarePostCategory(body);
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT IGNORE INTO categories (category) VALUES (?);', [Object(body).category]);
+
+			return next();
+		} catch (err: any) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	//*NEW SECTION
+	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: NextFunction): Promise<void> {
+		try {
+			const body: { [key: string]: string | Object } = req.body;
+			const file: Express.Multer.File | undefined = req.file;
+
+			await LocalModulesUtil.validateDataForMiddlewarePostProduct(body, file);
+
+			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(file).originalname, Object(file).mimeType);
+
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [Object(body).category, Object(body).name, Object(file).originalname, Object(body).price, Object(body).off, Object(body).installment, Object(body).whatsapp, Object(body).message]);
 
 			return next();
 		} catch (err: any) {
