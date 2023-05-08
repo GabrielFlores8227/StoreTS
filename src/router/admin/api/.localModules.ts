@@ -1,4 +1,4 @@
-import express, { NextFunction } from 'express';
+import express from 'express';
 import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../.globalModules';
 import mysql2 from 'mysql2/promise';
 import multer from 'multer';
@@ -26,9 +26,47 @@ class LocalModulesUtil {
 	}
 
 	//status: ok
+	private static sqlMask(body: { [key: string]: string | object }, table: 'header' | 'propagandas' | 'categories' | 'products' | 'footer'): { [key: string]: boolean } {
+		const mask: { [key: string]: { [key: string]: boolean } } = {
+			header: {
+				title: typeof Object(body).title === 'string' && Object(body).title.length > 1 && Object(body).title.length < 50,
+				description: typeof Object(body).description === 'string' && Object(body).description.length > 1 && Object(body).description.length < 255,
+			},
+			propagandas: {
+				id: typeof Object(body).id === 'string',
+				imagesContext: typeof Object(body).imagesContext === 'object' && JSON.stringify(['bigImage', 'smallImage'].sort()) === JSON.stringify(Object(body).imagesContext.sort()),
+			},
+			categories: {
+				id: typeof Object(body).id === 'string',
+				category: typeof Object(body).category === 'string' && Object(body).category.length > 1 && Object(body).category.length < 50,
+			},
+			products: {
+				id: typeof Object(body).id === 'string',
+				category: typeof Object(body).category === 'string',
+				name: typeof Object(body).name === 'string' && Object(body).name.length > 1 && Object(body).name.length < 50,
+				price: typeof Object(body).price === 'string' && !isNaN(Object(body).price) && Number(Object(body).price) > 0,
+				off: typeof Object(body).off === 'string' && !isNaN(Object(body).off) && Number(Object(body).off) > 0 && Number(Object(body).off) < 100,
+				installment: typeof Object(body).installment === 'string' && Object(body).installment.length < 50,
+				whatsapp: typeof Object(body).whatsapp === 'string' && !isNaN(Object(body).whatsapp) && Object(body).whatsapp.length === 13,
+				message: typeof Object(body).message === 'string' && Object(body).message.length < 255,
+			},
+			footer: {
+				title: typeof Object(body).title === 'string' && Object(body).title.length > 1 && Object(body).title.length < 50,
+				description: typeof Object(body).text === 'string' && Object(body).text.length > 1 && Object(body).text.length < 255,
+				whatsapp: typeof Object(body).whatsapp === 'string' && !isNaN(Object(body).whatsapp) && Object(body).whatsapp.length === 13,
+				instagram: typeof Object(body).instagram === 'string' && Object(body).instagram.length > 1 && Object(body).instagram.length < 50,
+				facebook: typeof Object(body).facebook === 'string' && Object(body).facebook.length > 1 && Object(body).facebook.length < 50,
+				location: typeof Object(body).location === 'string' && Object(body).location.length > 1 && Object(body).location.length < 255,
+			},
+		};
+
+		return Object(mask)[table];
+	}
+
+	//status: ok
 	private static executeChecker(checker: { [key: string]: boolean }): void {
 		Object.keys(checker).forEach((key: string) => {
-			if (Object(checker)[key]) {
+			if (!Object(checker)[key]) {
 				throw {
 					type: 400,
 					message: 'Please ensure that all data is provided accurately to fulfill the request',
@@ -42,7 +80,7 @@ class LocalModulesUtil {
 	//status: ok
 	public static validateDataFormMiddlewareCheckAuth(headers: http.IncomingHttpHeaders): void {
 		this.executeChecker({
-			authorization: typeof Object(headers).authorization !== 'string' || Object(headers).authorization.split(':').length !== 2,
+			authorization: typeof Object(headers).authorization === 'string' && Object(headers).authorization.split(':').length === 2,
 		});
 
 		const auth: string[] = String(Object(headers).authorization)
@@ -59,7 +97,7 @@ class LocalModulesUtil {
 	//status: ok
 	public static async validateDataForMiddlewarePostPropaganda(body: { [key: string]: string | object }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
 		this.executeChecker({
-			imagesContext: typeof Object(body).imagesContext !== 'object' || JSON.stringify(['bigImage', 'smallImage'].sort()) !== JSON.stringify(Object(body).imagesContext.sort()),
+			imagesContext: Object(this.sqlMask(body, 'propagandas')).imagesContext,
 		});
 
 		const bigImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('bigImage')];
@@ -86,29 +124,44 @@ class LocalModulesUtil {
 	}
 
 	//status: ok
-	public static async validateDataForMiddlewareDeletePropaganda(body: { [key: string]: string | object }): Promise<void> {
+	public static validateDataForMiddlewareDeletePropaganda(body: { [key: string]: string | object }): void {
 		this.executeChecker({
-			id: typeof Object(body).id !== 'string',
+			id: Object(this.sqlMask(body, 'propagandas')).id,
 		});
 	}
 
-	public static async validateDataForMiddlewarePostCategory(body: { [key: string]: string | object }): Promise<void> {
+	//*NEW SECTION
+	//status: ok
+	public static validateDataForMiddlewarePostCategory(body: { [key: string]: string | object }): void {
 		this.executeChecker({
-			category: typeof Object(body).category !== 'string' || Object(body).category.length < 1 || Object(body).category.length > 50,
+			category: Object(this.sqlMask(body, 'categories')).category,
 		});
 	}
 
+	//status: ok
+	public static validateDataForMiddlewareDeleteCategory(body: { [key: string]: string | object }): void {
+		this.executeChecker({
+			id: Object(this.sqlMask(body, 'categories')).id,
+		});
+	}
+
+	//*NEW SECTION
+	//status: ok
 	public static async validateDataForMiddlewarePostProduct(body: { [key: string]: string | object }, file: Express.Multer.File | undefined): Promise<void> {
-		const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT category FROM categories WHERE category = ?;', [Object(body).category]);
+		this.executeChecker({
+			category: Object(this.sqlMask(body, 'products')).category,
+			name: Object(this.sqlMask(body, 'products')).name,
+			price: Object(this.sqlMask(body, 'products')).price,
+			off: Object(this.sqlMask(body, 'products')).off,
+			installment: Object(this.sqlMask(body, 'products')).installment,
+			whatsapp: Object(this.sqlMask(body, 'products')).whatsapp,
+			message: Object(this.sqlMask(body, 'products')).message,
+		});
+
+		const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT category FROM categories WHERE id = ?;', [Object(body).category]);
 
 		this.executeChecker({
-			category: typeof Object(body).category !== 'string' || Object(query).length !== 1,
-			name: typeof Object(body).name !== 'string' || Object(body).name.length < 1 || Object(body).name.length > 50,
-			price: typeof Object(body).price !== 'string' || isNaN(Object(body).price) || Number(Object(body).price) < 0,
-			off: typeof Object(body).off !== 'string' || isNaN(Object(body).off) || Number(Object(body).off) < 0 || Number(Object(body).off) > 100,
-			installment: typeof Object(body).installment !== 'string' || Object(body).installment.length > 50,
-			whatsapp: typeof Object(body).whatsapp !== 'string' || isNaN(Object(body).whatsapp) || Object(body).whatsapp.length !== 13,
-			message: typeof Object(body).message !== 'string' || Object(body).message.length > 255,
+			category: Object(query).length === 1,
 		});
 
 		Object(file).originalname = this.generateRandomBytes();
@@ -127,12 +180,22 @@ class LocalModulesUtil {
 			throw err;
 		}
 	}
+
+	//status: ok
+	public static validateDataForMiddlewareDeleteProduct(body: { [key: string]: string | object }): void {
+		this.executeChecker({
+			id: Object(this.sqlMask(body, 'products')).id,
+		});
+	}
+
+	//*NEW SECTION
+	public static async validateDataForMiddlewarePutText(body: { [key: string]: string | object }): Promise<void> {}
 }
 
 export default class LocalModules {
 	//*NEW SECTION
 	//status: ok
-	public static middlewareUploadFiles(maxCount: number, minCount: number = 0): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
+	public static middlewareUploadFiles(minCount: number, maxCount: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
 		return function (req: express.Request, res: express.Response, next: express.NextFunction) {
 			let upload: express.RequestHandler;
 			if (maxCount == 1) {
@@ -197,7 +260,7 @@ export default class LocalModules {
 
 	//*NEW SECTION
 	//status: ok
-	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: NextFunction): Promise<void> {
+	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body: { [key: string]: string | Object } = req.body;
 			const files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined = req.files;
@@ -219,11 +282,11 @@ export default class LocalModules {
 	}
 
 	//status: ok
-	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: NextFunction): Promise<void> {
+	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body: { [key: string]: string | Object } = req.body;
 
-			await LocalModulesUtil.validateDataForMiddlewareDeletePropaganda(body);
+			LocalModulesUtil.validateDataForMiddlewareDeletePropaganda(body);
 
 			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;', [Object(body).id]);
 
@@ -244,11 +307,11 @@ export default class LocalModules {
 
 	//*NEW SECTION
 	//status: ok
-	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: NextFunction): Promise<void> {
+	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body: { [key: string]: string | Object } = req.body;
 
-			await LocalModulesUtil.validateDataForMiddlewarePostCategory(body);
+			LocalModulesUtil.validateDataForMiddlewarePostCategory(body);
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT IGNORE INTO categories (category) VALUES (?);', [Object(body).category]);
 
@@ -258,8 +321,38 @@ export default class LocalModules {
 		}
 	}
 
+	//status: ok
+	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { [key: string]: string | Object } = req.body;
+
+			LocalModulesUtil.validateDataForMiddlewareDeleteCategory(body);
+
+			const [query1]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT category FROM categories WHERE id = ?;', [Object(body).id]);
+
+			if (Object(query1).length !== 1) {
+				return next();
+			}
+
+			const [query2]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id, image FROM products WHERE category = ?;', [Object(body).id]);
+
+			Object(query2).forEach(async (row: { id: number; image: string }) => {
+				await GlobalS3Modules.deleteFileFromS3Bucket(row.image);
+
+				await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [String(row.id)]);
+			});
+
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM categories WHERE id = ?;', [Object(body).id]);
+
+			return next();
+		} catch (err: any) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
 	//*NEW SECTION
-	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: NextFunction): Promise<void> {
+	//status: ok
+	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body: { [key: string]: string | Object } = req.body;
 			const file: Express.Multer.File | undefined = req.file;
@@ -272,6 +365,40 @@ export default class LocalModules {
 
 			return next();
 		} catch (err: any) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	//status: ok
+	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { [key: string]: string | Object } = req.body;
+
+			LocalModulesUtil.validateDataForMiddlewareDeleteProduct(body);
+
+			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT image FROM products WHERE id = ?;', [Object(body).id]);
+
+			if (Object(query).length !== 1) {
+				return next();
+			}
+
+			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].image);
+
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [Object(body).id]);
+
+			return next();
+		} catch (err: any) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	//*NEW SECTION
+	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+		try {
+			const body: { [key: string]: string | Object } = req.body;
+
+			return next();
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
