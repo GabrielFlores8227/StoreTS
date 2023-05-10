@@ -1,134 +1,158 @@
 import express from 'express';
 import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../.globalModules';
-import mysql2 from 'mysql2/promise';
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
 import http from 'http';
 
 class InputMask {
-	public static readonly imageUpdatable = {
+	//*NEW SECTION
+	//status: ok
+	public static readonly imageMask = {
 		header: {
-			columns: {
-				icon: {
-					function: async (file: Express.Multer.File | undefined) => await this.sharpImage(file, 50, 50, 'contain'),
-				},
-				logo: {
-					function: async (file: Express.Multer.File | undefined) => await this.sharpImage(file, 50, 50, 'contain'),
-				},
+			icon: {
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 50, 50, 'contain'),
+			},
+			logo: {
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 437, 36, 'contain'),
 			},
 		},
 		propagandas: {
-			columns: {
-				bigImage: {
-					function: async (file: Express.Multer.File | undefined) => await this.sharpImage(file, 1920, 420, 'contain'),
-				},
-				smallImage: {
-					function: async (file: Express.Multer.File | undefined) => await this.sharpImage(file, 800, 800, 'contain'),
-				},
+			bigImage: {
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1920, 420, 'contain'),
+			},
+			smallImage: {
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 800, 800, 'contain'),
 			},
 		},
 		products: {
-			columns: {
-				image: {
-					function: async (file: Express.Multer.File | undefined) => await this.sharpImage(file, 800, 800, 'contain'),
-				},
+			image: {
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 800, 800, 'contain'),
 			},
 		},
 	};
 
-	public static readonly textUpdatable = {
-		header: {
-			columns: ['title', 'description'],
-			function: (body: { [key: string]: string | object }) => InputMask.headerChecker(body),
-		},
-		categories: {
-			columns: ['name'],
-			function: (body: { [key: string]: string | object }) => InputMask.categoriesChecker(body),
-		},
-		products: {
-			columns: ['category', 'name', 'price', 'off', 'installment', 'whatsapp', 'messsage'],
-			function: async (body: { [key: string]: string | object }) => await InputMask.productsChecker(body),
-		},
-		footer: {
-			columns: ['title', 'text', 'whatsapp', 'instagram', 'facebook', 'location'],
-			function: (body: { [key: string]: string | object }) => InputMask.footerChecker(body),
-		},
-	};
-
-	private static async sharpImage(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum): Promise<void> {
+	//status: ok
+	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
 		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
 
-		Object(file).buffer = await sharp(Object(file).buffer)
-			.resize({
-				width,
-				height,
-				fit,
-				background: { r: 0, g: 0, b: 0, alpha: 0 },
-			})
-			.toBuffer();
+		try {
+			Object(file).buffer = await sharp(Object(file).buffer)
+				.resize({
+					width,
+					height,
+					fit,
+					background: { r: 0, g: 0, b: 0, alpha: 0 },
+				})
+				.toBuffer();
+		} catch (err: any) {
+			if (err.message === 'Input buffer contains unsupported image format') {
+				throw {
+					status: 400,
+					message: 'Please provide valid image(s) to fulfill the request',
+				};
+			}
+
+			throw err;
+		}
 	}
 
-	public static idChecker(body: { [key: string]: string | object }): { id: boolean } {
+	//*NEW SECTION
+	//status: ok
+	public static readonly textMask = {
+		authorization: {
+			executeChecker: (headers: http.IncomingHttpHeaders) => this.checkAuthorization(headers),
+		},
+		id: {
+			executeChecker: (body: { id: string }) => this.idChecker(body),
+		},
+		header: {
+			executeChecker: (body: { title: string; description: string }) => this.headerChecker(body),
+		},
+		propagandas: {
+			executeChecker: (body: { imagesContext: string[] }) => this.propagandasChecker(body),
+		},
+		categories: {
+			executeChecker: (body: { name: string }) => this.categoriesChecker(body),
+		},
+		products: {
+			executeChecker: async (body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) => await this.productsChecker(body),
+		},
+		footer: {
+			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string }) => this.footerChecker(body),
+		},
+	};
+
+	//status: ok
+	public static executeChecker(checker: { [key: string]: boolean }, status?: number, message?: string) {
+		Object.keys(checker).forEach((key: string) => {
+			if (!checker[key]) {
+				throw {
+					status: status ? status : 400,
+					message: message ? message : "Please ensure that the key '" + key + "' is provided accurately to fulfill the request",
+				};
+			}
+		});
+	}
+
+	//status: ok
+	private static checkAuthorization(headers: http.IncomingHttpHeaders) {
 		return {
-			id: typeof Object(body).id === 'string',
+			authorization: typeof headers.authorization === 'string',
 		};
 	}
 
-	public static headerChecker(body: { [key: string]: string | object }): { title: boolean; description: boolean } {
+	//status: ok
+	private static idChecker(body: { id: string }) {
 		return {
-			title: typeof Object(body).title === 'string' && Object(body).title.length >= 1 && Object(body).title.length <= 50,
-			description: typeof Object(body).description === 'string' && Object(body).description.length >= 1 && Object(body).description.length <= 255,
+			id: typeof body.id === 'string',
 		};
 	}
 
-	public static propagandasChecker(body: { [key: string]: string | object }): { imagesContext: boolean } {
+	//status: ok
+	private static headerChecker(body: { title: string; description: string }) {
 		return {
-			imagesContext: typeof Object(body).imagesContext === 'object' && JSON.stringify(['bigImage', 'smallImage'].sort()) === JSON.stringify(Object(body).imagesContext.sort()),
+			title: typeof body.title === 'string' && body.title.length >= 1 && body.title.length <= 50,
+			description: typeof body.description === 'string' && body.description.length >= 1 && body.description.length <= 255,
 		};
 	}
 
-	public static categoriesChecker(body: { [key: string]: string | object }): { name: boolean } {
+	//status: ok
+	private static propagandasChecker(body: { imagesContext: string[] }) {
 		return {
-			name: typeof Object(body).name === 'string' && Object(body).name.length >= 1 && Object(body).name.length <= 50,
+			imagesContext: typeof body.imagesContext === 'object' && JSON.stringify(['bigImage', 'smallImage'].sort()) === JSON.stringify(body.imagesContext.sort()),
 		};
 	}
 
-	public static async productsChecker(body: { [key: string]: string | object }): Promise<{
-		category: boolean;
-		name: boolean;
-		price: boolean;
-		off: boolean;
-		installment: boolean;
-		whatsapp: boolean;
-		message: boolean;
-	}> {
+	//status: ok
+	private static categoriesChecker(body: { name: string }) {
 		return {
-			category: typeof Object(body).category === 'string' && Object(await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT name FROM categories WHERE id = ?;', [Object(body).category]))[0].length === 1,
-			name: typeof Object(body).name === 'string' && Object(body).name.length >= 1 && Object(body).name.length <= 50,
-			price: typeof Object(body).price === 'string' && !isNaN(Object(body).price) && Number(Object(body).price) >= 0,
-			off: typeof Object(body).off === 'string' && !isNaN(Object(body).off) && Number(Object(body).off) >= 0 && Number(Object(body).off) <= 100,
-			installment: typeof Object(body).installment === 'string' && Object(body).installment.length <= 50,
-			whatsapp: typeof Object(body).whatsapp === 'string' && !isNaN(Object(body).whatsapp) && Object(body).whatsapp.length === 13,
-			message: typeof Object(body).message === 'string' && Object(body).message.length <= 255,
+			name: typeof body.name === 'string' && body.name.length >= 1 && body.name.length <= 50,
 		};
 	}
 
-	public static footerChecker(body: { [key: string]: string | object }): {
-		title: boolean;
-		description: boolean;
-		whatsapp: boolean;
-		instagram: boolean;
-		facebook: boolean;
-		location: boolean;
-	} {
+	//status: ok
+	private static async productsChecker(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) {
 		return {
-			title: typeof Object(body).title === 'string' && Object(body).title.length > 1 && Object(body).title.length < 50,
-			description: typeof Object(body).text === 'string' && Object(body).text.length > 1 && Object(body).text.length < 255,
-			whatsapp: typeof Object(body).whatsapp === 'string' && !isNaN(Object(body).whatsapp) && Object(body).whatsapp.length === 13,
-			instagram: typeof Object(body).instagram === 'string' && Object(body).instagram.length > 1 && Object(body).instagram.length < 50,
-			facebook: typeof Object(body).facebook === 'string' && Object(body).facebook.length > 1 && Object(body).facebook.length < 50,
-			location: typeof Object(body).location === 'string' && Object(body).location.length > 1 && Object(body).location.length < 255,
+			category: typeof body.category === 'string' && Object(await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT name FROM categories WHERE id = ?;', [body.category]))[0].length === 1,
+			name: typeof body.name === 'string' && body.name.length >= 1 && body.name.length <= 50,
+			price: typeof body.price === 'string' && !isNaN(Number(body.price)) && Number(body.price) >= 0,
+			off: typeof body.off === 'string' && !isNaN(Number(body.off)) && Number(body.off) >= 0 && Number(body.off) <= 100,
+			installment: typeof body.installment === 'string' && body.installment.length <= 50,
+			whatsapp: typeof body.whatsapp === 'string' && !isNaN(Number(body.whatsapp)) && body.whatsapp.length === 13,
+			message: typeof body.message === 'string' && body.message.length <= 255,
+		};
+	}
+
+	//status: ok
+	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string }) {
+		return {
+			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
+			text: typeof body.text === 'string' && body.text.length > 1 && body.text.length <= 255,
+			whatsapp: typeof body.whatsapp === 'string' && !isNaN(Number(body.whatsapp)) && body.whatsapp.length === 13,
+			instagram: typeof body.instagram === 'string' && body.instagram.length > 1 && body.instagram.length <= 50,
+			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 50,
+			location: typeof body.location === 'string' && body.location.length > 1 && body.location.length <= 65535,
 		};
 	}
 }
@@ -136,180 +160,105 @@ class InputMask {
 class LocalModulesUtil {
 	//*NEW SECTION
 	//status: ok
-	private static executeChecker(checker: { [key: string]: boolean }, message: string = 'Please ensure that all data is provided accurately to fulfill the request'): void {
-		Object.keys(checker).forEach((key: string) => {
-			if (!Object(checker)[key]) {
-				throw {
-					type: 400,
-					message,
-					check: key,
-				};
-			}
-		});
+	public static validateDataFormMiddlewareCheckAuth(headers: http.IncomingHttpHeaders) {
+		const checker = InputMask.textMask.authorization.executeChecker(headers);
+		InputMask.executeChecker(checker, 401, 'unauthorized');
+
+		headers.authorization = headers.authorization!.replace('Bearer ', '');
 	}
 
 	//*NEW SECTION
 	//status: ok
-	public static validateDataFormMiddlewareCheckAuth(headers: http.IncomingHttpHeaders): void {
-		this.executeChecker({
-			authorization: typeof headers.authorization === 'string',
-		});
+	public static async validateDataForMiddlewarePostPropaganda(body: { imagesContext: string[] }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
+		const checker = InputMask.textMask.propagandas.executeChecker(body);
+		InputMask.executeChecker(checker);
 
-		Object(headers).authorization = Object(headers).authorization.replace('Bearer ', '');
+		const bigImage = Object(files)[body.imagesContext.indexOf('bigImage')];
+		const smallImage = Object(files)[body.imagesContext.indexOf('smallImage')];
+
+		await InputMask.imageMask.propagandas.bigImage.sharpFile(bigImage);
+		await InputMask.imageMask.propagandas.smallImage.sharpFile(smallImage);
+	}
+
+	//status: ok
+	public static validateDataForMiddlewareDeletePropaganda(body: { id: string }) {
+		const checker = InputMask.textMask.id.executeChecker(body);
+		InputMask.executeChecker(checker);
 	}
 
 	//*NEW SECTION
 	//status: ok
-	public static async validateDataForMiddlewarePostPropaganda(body: { [key: string]: string | object }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined): Promise<void> {
-		const inputMask = InputMask.propagandasChecker(body);
-
-		this.executeChecker({
-			imagesContext: inputMask.imagesContext,
-		});
-
-		try {
-			const inputMask = InputMask.imageUpdatable.propagandas.columns;
-
-			const bigImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('bigImage')];
-			const smallImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('smallImage')];
-
-			Object(bigImage).buffer = await inputMask.bigImage.function(Object(bigImage));
-			Object(smallImage).buffer = await inputMask.smallImage.function(Object(smallImage));
-		} catch (err: any) {
-			if (err.message === 'Input buffer contains unsupported image format') {
-				throw {
-					type: 400,
-					message: 'Please provide valid images to fulfill the request',
-					check: 'files',
-				};
-			}
-
-			throw err;
-		}
+	public static validateDataForMiddlewarePostCategory(body: { name: string }) {
+		const checker = InputMask.textMask.categories.executeChecker(body);
+		InputMask.executeChecker(checker);
 	}
 
 	//status: ok
-	public static validateDataForMiddlewareDeletePropaganda(body: { [key: string]: string | object }): void {
-		const inputMask: { id: boolean } = InputMask.idChecker(body);
-
-		this.executeChecker({
-			id: inputMask.id,
-		});
+	public static validateDataForMiddlewareDeleteCategory(body: { id: string }) {
+		const checker = InputMask.textMask.id.executeChecker(body);
+		InputMask.executeChecker(checker);
 	}
 
 	//*NEW SECTION
 	//status: ok
-	public static validateDataForMiddlewarePostCategory(body: { [key: string]: string | object }): void {
-		const inputMask: { name: boolean } = InputMask.categoriesChecker(body);
+	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, file: Express.Multer.File | undefined) {
+		const checker = await InputMask.textMask.products.executeChecker(body);
+		InputMask.executeChecker(checker);
 
-		this.executeChecker({
-			name: inputMask.name,
-		});
+		await InputMask.imageMask.products.image.sharpFile(file);
 	}
 
 	//status: ok
-	public static validateDataForMiddlewareDeleteCategory(body: { [key: string]: string | object }): void {
-		const inputMask: { id: boolean } = InputMask.idChecker(body);
-
-		this.executeChecker({
-			id: inputMask.id,
-		});
+	public static validateDataForMiddlewareDeleteProduct(body: { id: string }) {
+		const checker = InputMask.textMask.id.executeChecker(body);
+		InputMask.executeChecker(checker);
 	}
 
 	//*NEW SECTION
 	//status: ok
-	public static async validateDataForMiddlewarePostProduct(body: { [key: string]: string | object }, file: Express.Multer.File | undefined): Promise<void> {
-		const inputMask: { category: boolean; name: boolean; price: boolean; off: boolean; installment: boolean; whatsapp: boolean; message: boolean } = await InputMask.productsChecker(body);
+	public static async validateDataForMiddlewarePutText(params: { table: string; column: string }, body: { id: string; [key: string]: string }) {
+		const urlMap = {
+			header: ['title', 'description'],
+			categories: ['name'],
+			products: ['category', 'name', 'price', 'off', 'installment', 'whatsapp', 'message'],
+			footer: ['title', 'text', 'whatsapp', 'facebook', 'instagram', 'location'],
+		};
 
-		this.executeChecker({
-			category: inputMask.category,
-			name: inputMask.name,
-			price: inputMask.price,
-			off: inputMask.off,
-			installment: inputMask.installment,
-			whatsapp: inputMask.whatsapp,
-			message: inputMask.message,
-		});
-
-		try {
-			const inputMask = InputMask.imageUpdatable.products.columns;
-
-			Object(file).buffer = await inputMask.image.function(Object(file));
-		} catch (err: any) {
-			if (err.message === 'Input buffer contains unsupported image format') {
-				throw {
-					type: 400,
-					message: 'Please provide valid images to fulfill the request',
-					check: 'files',
-				};
-			}
-
-			throw err;
-		}
-	}
-
-	//status: ok
-	public static validateDataForMiddlewareDeleteProduct(body: { [key: string]: string | object }): void {
-		const inputMask: { id: boolean } = InputMask.idChecker(body);
-
-		this.executeChecker({
-			id: inputMask.id,
-		});
-	}
-
-	//*NEW SECTION
-	//status: ok
-	public static async validateDataForMiddlewarePutText(params: object, body: { [key: string]: string | object }): Promise<void> {
-		this.executeChecker(
+		InputMask.executeChecker(
 			{
-				url: Object(InputMask.textUpdatable)[Object(params).table] !== undefined && Object(InputMask.textUpdatable)[Object(params).table].columns.includes(Object(params).column),
+				url: Object.keys(urlMap).includes(params.table) && Object(urlMap)[params.table].includes(params.column),
 			},
+			404,
 			'not found',
 		);
 
-		const mask1: { id: boolean } = InputMask.idChecker(body);
+		const checker1 = InputMask.textMask.id.executeChecker(body);
+		InputMask.executeChecker(checker1);
 
-		if (Object(InputMask.textUpdatable)[Object(params).table].function.constructor.name === 'AsyncFunction') {
-			var mask2: { [key: string]: boolean } = await Object(InputMask.textUpdatable)[Object(params).table].function(body);
-		} else {
-			var mask2: { [key: string]: boolean } = Object(InputMask.textUpdatable)[Object(params).table].function(body);
-		}
-
-		const executeCheckerObject: { [key: string]: boolean } = { id: mask1.id };
-		Object(executeCheckerObject)[Object(params).column] = mask2[Object(params).column];
-
-		this.executeChecker(executeCheckerObject);
+		const { [params.column]: columnValue } = await Object(InputMask).textMask[params.table].executeChecker(body);
+		const checker2 = { [params.column]: columnValue };
+		InputMask.executeChecker(checker2);
 	}
 
-	public static async validateDataForMiddlewarePutImage(params: object, body: { [key: string]: string | object }, file: Express.Multer.File | undefined): Promise<void> {
-		this.executeChecker(
+	public static async validateDataForMiddlewarePutImage(params: { table: string; column: string }, body: { id: string }, file: Express.Multer.File | undefined) {
+		const urlMap = {
+			header: ['icon', 'logo'],
+			propagandas: ['bigImage', 'smallImage'],
+			products: ['image'],
+		};
+
+		InputMask.executeChecker(
 			{
-				url: Object(InputMask.imageUpdatable)[Object(params).table] !== undefined && Object(InputMask.imageUpdatable)[Object(params).table].columns[Object(params).column] !== undefined,
+				url: Object.keys(urlMap).includes(params.table) && Object(urlMap)[params.table].includes(params.column),
 			},
+			404,
 			'not found',
 		);
 
-		const inputMask = InputMask.idChecker(body);
+		const checker = InputMask.textMask.id.executeChecker(body);
+		InputMask.executeChecker(checker);
 
-		this.executeChecker({
-			id: inputMask.id,
-		});
-
-		try {
-			const inputMask = Object(InputMask).imageUpdatable[Object(params).table].columns;
-
-			await inputMask[Object(params).column].function(Object(file));
-		} catch (err: any) {
-			if (err.message === 'Input buffer contains unsupported image format') {
-				throw {
-					type: 400,
-					message: 'Please provide valid images to fulfill the request',
-					check: 'files',
-				};
-			}
-
-			throw err;
-		}
+		await Object(InputMask).imageMask[params.table][params.column].sharpFile(file);
 	}
 }
 
@@ -317,50 +266,44 @@ export default class LocalModules {
 	//*NEW SECTION
 	//status: ok
 	public static middlewareUploadFiles(minCount: number, maxCount: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
-		return function (req: express.Request, res: express.Response, next: express.NextFunction) {
-			let upload: express.RequestHandler;
+		return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
 			if (maxCount == 1) {
-				upload = GlobalMiddlewareModules.multer.single('file');
+				var upload = GlobalMiddlewareModules.multer.single('file');
 			} else {
-				upload = GlobalMiddlewareModules.multer.array('files', maxCount);
+				var upload = GlobalMiddlewareModules.multer.array('files', maxCount);
 			}
 
 			upload(req, res, (err: any) => {
-				if (err instanceof multer.MulterError) {
-					return GlobalMiddlewareModules.handleMiddlewareError(res, {
-						type: 400,
-						message: 'Please provide the appropriate number of images to fulfill the request',
-						check: maxCount === 1 ? 'file' : 'files',
-					});
-				} else if (err) {
-					return GlobalMiddlewareModules.handleMiddlewareError(res, err);
-				}
+				try {
+					if (err instanceof multer.MulterError || (maxCount === 1 && typeof req.file !== 'object') || (maxCount > 1 && Object(req).files.length < minCount)) {
+						throw {
+							status: 400,
+							message: 'Please provide the appropriate number of image(s) to fulfill the request',
+						};
+					} else if (err) {
+						throw err;
+					}
 
-				if ((maxCount === 1 && typeof req.file !== 'object') || (maxCount > 1 && Object(req).files.length < minCount)) {
-					return GlobalMiddlewareModules.handleMiddlewareError(res, {
-						type: 400,
-						message: 'Please provide the appropriate number of images to fulfill the request',
-						check: maxCount === 1 ? 'file' : 'files',
-					});
+					return next();
+				} catch (err: any) {
+					GlobalMiddlewareModules.handleMiddlewareError(res, err);
 				}
-
-				return next();
 			});
 		};
 	}
 
 	//*NEW SECTION
 	//status: ok
-	public static async middlewareCheckAuth(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewareCheckAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
-			const headers: http.IncomingHttpHeaders = req.headers;
+			const headers = req.headers;
 
 			LocalModulesUtil.validateDataFormMiddlewareCheckAuth(headers);
 
-			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] | undefined = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [Object(headers).authorization, 'only']);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [Object(headers).authorization, 'only']);
 
 			if (Object(query).length !== 1) {
-				throw { type: 401, message: 'unauthorized' };
+				throw { status: 401, message: 'unauthorized' };
 			}
 
 			return next();
@@ -374,7 +317,7 @@ export default class LocalModules {
 	public static middlewareSendResponse(status: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
 		return function (req: express.Request, res: express.Response) {
 			res.json({
-				type: status,
+				status: status,
 				message: 'ok',
 			});
 		};
@@ -384,8 +327,8 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
-			const files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined = req.files;
+			const body = req.body;
+			const files = req.files;
 
 			await LocalModulesUtil.validateDataForMiddlewarePostPropaganda(body, files);
 
@@ -406,11 +349,11 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
+			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeletePropaganda(body);
 
-			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;', [Object(body).id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;', [Object(body).id]);
 
 			if (Object(query).length !== 1) {
 				return next();
@@ -431,7 +374,7 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
+			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewarePostCategory(body);
 
@@ -446,17 +389,17 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
+			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeleteCategory(body);
 
-			const [query1]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM categories WHERE id = ?;', [Object(body).id]);
+			const [query1] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM categories WHERE id = ?;', [Object(body).id]);
 
 			if (Object(query1).length !== 1) {
 				return next();
 			}
 
-			const [query2]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id, image FROM products WHERE category = ?;', [Object(body).id]);
+			const [query2] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id, image FROM products WHERE category = ?;', [Object(body).id]);
 
 			Object(query2).forEach(async (row: { id: number; image: string }) => {
 				await GlobalS3Modules.deleteFileFromS3Bucket(row.image);
@@ -476,8 +419,8 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
-			const file: Express.Multer.File | undefined = req.file;
+			const body = req.body;
+			const file = req.file;
 
 			await LocalModulesUtil.validateDataForMiddlewarePostProduct(body, file);
 
@@ -494,11 +437,11 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const body: { [key: string]: string | Object } = req.body;
+			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeleteProduct(body);
 
-			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT image FROM products WHERE id = ?;', [Object(body).id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT image FROM products WHERE id = ?;', [Object(body).id]);
 
 			if (Object(query).length !== 1) {
 				return next();
@@ -517,18 +460,18 @@ export default class LocalModules {
 	//*NEW SECTION
 	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const params: object = req.params;
-			const body: { [key: string]: string | Object } = req.body;
+			const params = Object(req.params);
+			const body = req.body;
 
 			await LocalModulesUtil.validateDataForMiddlewarePutText(params, body);
 
-			const [query]: [mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM ' + Object(params).table + ' WHERE id = ?;', [Object(body).id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM ' + params.table + ' WHERE id = ?;', [body.id]);
 
 			if (Object(query).length !== 1) {
 				return next();
 			}
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + Object(params).table + ' SET ' + Object(params).column + ' = ? WHERE id = ?;', [Object(body)[Object(params).column], Object(body).id]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + params.table + ' SET ' + params.column + ' = ? WHERE id = ?;', [body[params.column], body.id]);
 
 			return next();
 		} catch (err: any) {
@@ -538,11 +481,19 @@ export default class LocalModules {
 
 	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
-			const params: object = req.params;
-			const body: { [key: string]: string | Object } = req.body;
-			const file: Express.Multer.File | undefined = req.file;
+			const params = Object(req.params);
+			const body = req.body;
+			const file = req.file;
 
 			await LocalModulesUtil.validateDataForMiddlewarePutImage(params, body, file);
+
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT ' + params.column + ' FROM ' + params.table + ' WHERE id = ?;', [body.id]);
+
+			if (Object(query).length !== 1) {
+				return next();
+			}
+
+			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(query)[0][Object(params).column], Object(file).mimetype);
 
 			return next();
 		} catch (err: any) {

@@ -23,17 +23,4 @@ api.put('/t/:table/:column', LocalModules.middlewareCheckAuth, LocalModules.midd
 
 api.put('/i/:table/:column', LocalModules.middlewareUploadFiles(1, 1), LocalModules.middlewarePutImage, LocalModules.middlewareCheckAuth, LocalModules.middlewareSendResponse(200));
 
-/*
-
-api.put('/login', LocalModules.middlewareCheckAuth, LocalModules.middlewarePutLogin, LocalModules.middlewareSendResponse(200));
-
-
-
-api.put('/position', LocalModules.middlewareCheckAuth, LocalModules.middlewarePutPosition, LocalModules.middlewareSendResponse(200));
-
-
-
-api.delete('/product', LocalModules.middlewareCheckAuth, LocalModules.middlewareDeleteProduct, LocalModules.middlewareSendResponse(200));
-*/
-
 export default api;
