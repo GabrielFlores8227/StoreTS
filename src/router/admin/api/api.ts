@@ -19,8 +19,22 @@ api.post('/products', LocalModules.middlewareUploadFiles(1, 1), LocalModules.mid
 api.delete('/products', LocalModules.middlewareCheckAuth, LocalModules.middlewareDeleteProduct, LocalModules.middlewareSendResponse(200));
 
 //*NEW SECTION
+//prettier-ignore
+api.put(
+	[
+		'/header/title', '/header/description',
+		'/categories/name',
+		'/products/category', '/products/name', '/products/price', '/products/off', '/products/installment', 'products/whatsapp', '/products/message',
+		'/footer/title', '/footer/text'
+	], 
+	LocalModules.middlewareCheckAuth, 
+	LocalModules.middlewarePutText, 
+	LocalModules.middlewareSendResponse(200)
+)
+/*
 api.put('/t/:table/:column', LocalModules.middlewareCheckAuth, LocalModules.middlewarePutText, LocalModules.middlewareSendResponse(200));
 
-api.put('/i/:table/:column', LocalModules.middlewareUploadFiles(1, 1), LocalModules.middlewarePutImage, LocalModules.middlewareCheckAuth, LocalModules.middlewareSendResponse(200));
+api.put('/i/:table/:column', LocalModules.middlewareUploadFiles(1, 1), LocalModules.middlewareCheckAuth, LocalModules.middlewarePutImage, LocalModules.middlewareCheckAuth, LocalModules.middlewareSendResponse(200));
+*/
 
 export default api;

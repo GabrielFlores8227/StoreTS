@@ -3,7 +3,7 @@ import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../.
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
-import http from 'http';
+import { IncomingHttpHeaders } from 'http';
 
 class InputMask {
 	//*NEW SECTION
@@ -61,10 +61,13 @@ class InputMask {
 	//status: ok
 	public static readonly textMask = {
 		authorization: {
-			executeChecker: (headers: http.IncomingHttpHeaders) => this.checkAuthorization(headers),
+			executeChecker: (headers: IncomingHttpHeaders) => this.checkAuthorization(headers),
 		},
 		id: {
 			executeChecker: (body: { id: string }) => this.idChecker(body),
+		},
+		ids: {
+			executeChecker: (body: { ids: string[] }) => this.idsChecker(body),
 		},
 		header: {
 			executeChecker: (body: { title: string; description: string }) => this.headerChecker(body),
@@ -96,7 +99,7 @@ class InputMask {
 	}
 
 	//status: ok
-	private static checkAuthorization(headers: http.IncomingHttpHeaders) {
+	private static checkAuthorization(headers: IncomingHttpHeaders) {
 		return {
 			authorization: typeof headers.authorization === 'string',
 		};
@@ -106,6 +109,12 @@ class InputMask {
 	private static idChecker(body: { id: string }) {
 		return {
 			id: typeof body.id === 'string',
+		};
+	}
+
+	private static idsChecker(body: { ids: string[] }) {
+		return {
+			ids: body.ids.every((id) => typeof id === 'string'),
 		};
 	}
 
@@ -160,7 +169,7 @@ class InputMask {
 class LocalModulesUtil {
 	//*NEW SECTION
 	//status: ok
-	public static validateDataFormMiddlewareCheckAuth(headers: http.IncomingHttpHeaders) {
+	public static validateDataFormMiddlewareCheckAuth(headers: IncomingHttpHeaders) {
 		const checker = InputMask.textMask.authorization.executeChecker(headers);
 		InputMask.executeChecker(checker, 401, 'unauthorized');
 
@@ -285,7 +294,7 @@ export default class LocalModules {
 					}
 
 					return next();
-				} catch (err: any) {
+				} catch (err) {
 					GlobalMiddlewareModules.handleMiddlewareError(res, err);
 				}
 			});
@@ -307,7 +316,7 @@ export default class LocalModules {
 			}
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -341,7 +350,7 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);', [Object(bigImage).originalname, Object(smallImage).originalname]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -365,7 +374,7 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM propagandas WHERE id = ?;', [Object(body).id]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -381,7 +390,7 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT IGNORE INTO categories (name) VALUES (?);', [Object(body).name]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -410,7 +419,7 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM categories WHERE id = ?;', [Object(body).id]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -429,7 +438,7 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [Object(body).category, Object(body).name, Object(file).originalname, Object(body).price, Object(body).off, Object(body).installment, Object(body).whatsapp, Object(body).message]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
@@ -452,13 +461,14 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [Object(body).id]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
 
 	//*NEW SECTION
-	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	//status: ok
+	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const params = Object(req.params);
 			const body = req.body;
@@ -474,12 +484,13 @@ export default class LocalModules {
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + params.table + ' SET ' + params.column + ' = ? WHERE id = ?;', [body[params.column], body.id]);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
 
-	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	//status: ok
+	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const params = Object(req.params);
 			const body = req.body;
@@ -496,7 +507,7 @@ export default class LocalModules {
 			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(query)[0][Object(params).column], Object(file).mimetype);
 
 			return next();
-		} catch (err: any) {
+		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
 	}
