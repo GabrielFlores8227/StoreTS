@@ -1,10 +1,12 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import { cwd } from 'process';
 import mysql2 from 'mysql2/promise';
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve(cwd(), '.env') });
@@ -50,6 +52,17 @@ export class GlobalS3Modules {
 		},
 	});
 
+	public static async generateSignedUrlForS3BucketFile(fileName: string) {
+		return await getSignedUrl(
+			this.s3DataClient,
+			new GetObjectCommand({
+				Bucket: this.s3BucketName,
+				Key: fileName,
+			}),
+			{ expiresIn: 60 * 60 },
+		);
+	}
+
 	public static async uploadFileToS3Bucket(fileBuffer: string, fileName: string, mimeType: string): Promise<void> {
 		await this.s3DataClient.send(
 			new PutObjectCommand({
@@ -72,12 +85,26 @@ export class GlobalS3Modules {
 }
 
 export class GlobalMiddlewareModules {
+	public static readonly apiLimiter = rateLimit({
+		windowMs: 15 * 60 * 1000, // 15 minutes
+		max: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+		standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+		legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	});
+
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
 	public static handleMiddlewareError(res: express.Response, err: any) {
 		if (err.status) {
-			return res.status(err.status).json(err);
+			res.status(err.status).json(err);
+
+			return;
 		}
+
+		res.status(500).json({
+			status: 500,
+			message: 'Please bear with us while we work to restore service. If you require additional assistance, please do not hesitate to contact our technical support team',
+		});
 
 		const errorLogFolderPath = path.join(cwd(), '.log');
 		const errorLogFilePath = path.join(errorLogFolderPath, 'error.log');
@@ -94,10 +121,5 @@ export class GlobalMiddlewareModules {
 		}
 
 		fs.appendFileSync(errorLogFilePath, errorMessage);
-
-		return res.status(500).json({
-			status: 500,
-			message: 'Please bear with us while we work to restore service. If you require additional assistance, please do not hesitate to contact our technical support team',
-		});
 	}
 }

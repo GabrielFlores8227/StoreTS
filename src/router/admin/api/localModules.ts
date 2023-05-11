@@ -1,13 +1,11 @@
 import express from 'express';
-import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../.globalModules';
+import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../globalModules';
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
 import { IncomingHttpHeaders } from 'http';
 
 class InputMask {
-	//*NEW SECTION
-	//status: ok
 	public static readonly imageMask = {
 		header: {
 			icon: {
@@ -32,8 +30,14 @@ class InputMask {
 		},
 	};
 
-	//status: ok
 	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
+		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG'].includes(Object(file).mimetype)) {
+			throw {
+				status: 400,
+				message: 'Please provide valid image(s) to fulfill the request',
+			};
+		}
+
 		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
@@ -57,8 +61,6 @@ class InputMask {
 		}
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static readonly textMask = {
 		authorization: {
 			executeChecker: (headers: IncomingHttpHeaders) => this.checkAuthorization(headers),
@@ -70,7 +72,7 @@ class InputMask {
 			executeChecker: async (table: string, body: { ids: string[] }) => await this.idsChecker(table, body),
 		},
 		header: {
-			executeChecker: (body: { title: string; description: string }) => this.headerChecker(body),
+			executeChecker: (body: { title: string; description: string; color: string }) => this.headerChecker(body),
 		},
 		propagandas: {
 			executeChecker: (body: { imagesContext: string[] }) => this.propagandasChecker(body),
@@ -86,7 +88,6 @@ class InputMask {
 		},
 	};
 
-	//status: ok
 	public static executeChecker(checker: { [key: string]: boolean }, status?: number, message?: string) {
 		Object.keys(checker).forEach((key: string) => {
 			if (!checker[key]) {
@@ -98,21 +99,18 @@ class InputMask {
 		});
 	}
 
-	//status: ok
 	private static checkAuthorization(headers: IncomingHttpHeaders) {
 		return {
 			authorization: typeof headers.authorization === 'string',
 		};
 	}
 
-	//status: ok
 	private static idChecker(body: { id: string }) {
 		return {
 			id: typeof body.id === 'string',
 		};
 	}
 
-	//status: ok
 	private static async idsChecker(table: string, body: { ids: string[] }) {
 		return {
 			ids:
@@ -125,29 +123,26 @@ class InputMask {
 		};
 	}
 
-	//status: ok
-	private static headerChecker(body: { title: string; description: string }) {
+	private static headerChecker(body: { title: string; description: string; color: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length >= 1 && body.title.length <= 50,
 			description: typeof body.description === 'string' && body.description.length >= 1 && body.description.length <= 255,
+			color: typeof body.color === 'string' && body.color.length === 7,
 		};
 	}
 
-	//status: ok
 	private static propagandasChecker(body: { imagesContext: string[] }) {
 		return {
 			imagesContext: typeof body.imagesContext === 'object' && JSON.stringify(['bigImage', 'smallImage'].sort()) === JSON.stringify(body.imagesContext.sort()),
 		};
 	}
 
-	//status: ok
 	private static categoriesChecker(body: { name: string }) {
 		return {
 			name: typeof body.name === 'string' && body.name.length >= 1 && body.name.length <= 50,
 		};
 	}
 
-	//status: ok
 	private static async productsChecker(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) {
 		return {
 			category: typeof body.category === 'string' && Object(await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT name FROM categories WHERE id = ?;', [body.category]))[0].length === 1,
@@ -160,7 +155,6 @@ class InputMask {
 		};
 	}
 
-	//status: ok
 	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
@@ -174,8 +168,6 @@ class InputMask {
 }
 
 class LocalModulesUtil {
-	//*NEW SECTION
-	//status: ok
 	public static validateDataFormMiddlewareCheckAuth(headers: IncomingHttpHeaders) {
 		const checker = InputMask.textMask.authorization.executeChecker(headers);
 		InputMask.executeChecker(checker, 401, 'unauthorized');
@@ -183,8 +175,6 @@ class LocalModulesUtil {
 		headers.authorization = headers.authorization!.replace('Bearer ', '');
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async validateDataForMiddlewarePostPropaganda(body: { imagesContext: string[] }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
 		const checker = InputMask.textMask.propagandas.executeChecker(body);
 		InputMask.executeChecker(checker);
@@ -196,27 +186,21 @@ class LocalModulesUtil {
 		await InputMask.imageMask.propagandas.smallImage.sharpFile(smallImage);
 	}
 
-	//status: ok
 	public static validateDataForMiddlewareDeletePropaganda(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker);
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static validateDataForMiddlewarePostCategory(body: { name: string }) {
 		const checker = InputMask.textMask.categories.executeChecker(body);
 		InputMask.executeChecker(checker);
 	}
 
-	//status: ok
 	public static validateDataForMiddlewareDeleteCategory(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker);
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, file: Express.Multer.File | undefined) {
 		const checker = await InputMask.textMask.products.executeChecker(body);
 		InputMask.executeChecker(checker);
@@ -224,14 +208,11 @@ class LocalModulesUtil {
 		await InputMask.imageMask.products.image.sharpFile(file);
 	}
 
-	//status: ok
 	public static validateDataForMiddlewareDeleteProduct(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker);
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async validateDataForMiddlewarePutText(table: string, column: string, body: { id: string; [key: string]: string }) {
 		const checker1 = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker1);
@@ -240,7 +221,6 @@ class LocalModulesUtil {
 		InputMask.executeChecker({ [column]: columnValue });
 	}
 
-	//status: ok
 	public static async validateDataForMiddlewarePutImage(table: string, column: string, body: { id: string }, file: Express.Multer.File | undefined) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker);
@@ -248,7 +228,6 @@ class LocalModulesUtil {
 		await Object(InputMask).imageMask[table][column].sharpFile(file);
 	}
 
-	//status: ok
 	public static async validateDataForMiddlewarePutPosition(table: string, body: { ids: string[] }) {
 		const checker = await InputMask.textMask.ids.executeChecker(table, body);
 		InputMask.executeChecker(checker);
@@ -256,8 +235,6 @@ class LocalModulesUtil {
 }
 
 export default class LocalModules {
-	//*NEW SECTION
-	//status: ok
 	public static middlewareUploadFiles(minCount: number, maxCount: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
 		return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
 			if (maxCount == 1) {
@@ -285,8 +262,6 @@ export default class LocalModules {
 		};
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async middlewareCheckAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const headers = req.headers;
@@ -305,20 +280,7 @@ export default class LocalModules {
 		}
 	}
 
-	//*NEW SECTION
-	//status: ok
-	public static middlewareSendResponse(status: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
-		return function (_: express.Request, res: express.Response) {
-			res.json({
-				status: status,
-				message: 'ok',
-			});
-		};
-	}
-
-	//*NEW SECTION
-	//status: ok
-	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 			const files = req.files;
@@ -328,8 +290,8 @@ export default class LocalModules {
 			const bigImage: { [key: string]: string | Buffer } = Object(Object(files)[Object(body).imagesContext.indexOf('bigImage')]);
 			const smallImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('smallImage')];
 
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(bigImage).buffer.toString(), Object(bigImage).originalname, Object(bigImage).mimetype);
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(smallImage).buffer.toString(), Object(smallImage).originalname, Object(smallImage).mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(Object(bigImage).buffer, Object(bigImage).originalname, Object(bigImage).mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(Object(smallImage).buffer, Object(smallImage).originalname, Object(smallImage).mimetype);
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);', [Object(bigImage).originalname, Object(smallImage).originalname]);
 
@@ -339,7 +301,6 @@ export default class LocalModules {
 		}
 	}
 
-	//status: ok
 	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -363,8 +324,6 @@ export default class LocalModules {
 		}
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -379,7 +338,6 @@ export default class LocalModules {
 		}
 	}
 
-	//status: ok
 	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -408,8 +366,6 @@ export default class LocalModules {
 		}
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -427,7 +383,6 @@ export default class LocalModules {
 		}
 	}
 
-	//status: ok
 	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -450,8 +405,6 @@ export default class LocalModules {
 		}
 	}
 
-	//*NEW SECTION
-	//status: ok
 	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -475,7 +428,6 @@ export default class LocalModules {
 		}
 	}
 
-	//status: ok
 	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -500,14 +452,13 @@ export default class LocalModules {
 		}
 	}
 
-	//status: ok
 	public static async middlewarePutPosition(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 			const url = req.originalUrl.split('/');
 			const table = String(url[3]);
 
-			await LocalModulesUtil.validateDataForMiddlewarePutPosition(table, body);
+			await LocalModulesUtil.validateDataForMiddlewarePutPosition(table, JSON.parse(JSON.stringify(body)));
 
 			body.ids.forEach(async (id: any, index: number) => {
 				await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + table + ' SET position = ? WHERE id = ?', [index, id]);
@@ -517,5 +468,14 @@ export default class LocalModules {
 		} catch (err) {
 			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
+	}
+
+	public static middlewareSendResponse(status: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
+		return function (_: express.Request, res: express.Response) {
+			res.json({
+				status: status,
+				message: 'ok',
+			});
+		};
 	}
 }

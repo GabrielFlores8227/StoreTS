@@ -1,9 +1,11 @@
 import express from 'express';
-import LocalModules from './.localModules';
+import { GlobalMiddlewareModules } from '../../globalModules';
+import LocalModules from './localModules';
 
 const api: express.Router = express.Router();
 
-//*NEW SECTION
+api.use(GlobalMiddlewareModules.apiLimiter);
+
 //prettier-ignore
 api.post(
 	'/propaganda', 
@@ -21,7 +23,6 @@ api.delete(
 	LocalModules.middlewareSendResponse(200)
 );
 
-//*NEW SECTION
 //prettier-ignore
 api.post(
 	'/category', 
@@ -37,7 +38,6 @@ api.delete(
 	LocalModules.middlewareSendResponse(200)
 );
 
-//*NEW SECTION
 //prettier-ignore
 api.post(
 	'/product', 
@@ -55,11 +55,10 @@ api.delete(
 	LocalModules.middlewareSendResponse(200)
 );
 
-//*NEW SECTION
 //prettier-ignore
 api.put(
 	[
-		'/header/title', '/header/description',
+		'/header/title', '/header/description', '/header/color',
 		'/categories/name',
 		'/products/category', '/products/name', '/products/price', '/products/off', '/products/installment', 'products/whatsapp', '/products/message',
 		'/footer/title', '/footer/text'
