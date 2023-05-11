@@ -67,7 +67,7 @@ class InputMask {
 			executeChecker: (body: { id: string }) => this.idChecker(body),
 		},
 		ids: {
-			executeChecker: (body: { ids: string[] }) => this.idsChecker(body),
+			executeChecker: async (table: string, body: { ids: string[] }) => await this.idsChecker(table, body),
 		},
 		header: {
 			executeChecker: (body: { title: string; description: string }) => this.headerChecker(body),
@@ -112,9 +112,16 @@ class InputMask {
 		};
 	}
 
-	private static idsChecker(body: { ids: string[] }) {
+	//status: ok
+	private static async idsChecker(table: string, body: { ids: string[] }) {
 		return {
-			ids: body.ids.every((id) => typeof id === 'string'),
+			ids:
+				typeof body.ids === 'object' &&
+				JSON.stringify(
+					Object(await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM ' + table))[0]
+						.map((item: any) => String(item.id))
+						.sort(),
+				) === JSON.stringify(body.ids.sort()),
 		};
 	}
 
@@ -225,49 +232,26 @@ class LocalModulesUtil {
 
 	//*NEW SECTION
 	//status: ok
-	public static async validateDataForMiddlewarePutText(params: { table: string; column: string }, body: { id: string; [key: string]: string }) {
-		const urlMap = {
-			header: ['title', 'description'],
-			categories: ['name'],
-			products: ['category', 'name', 'price', 'off', 'installment', 'whatsapp', 'message'],
-			footer: ['title', 'text', 'whatsapp', 'facebook', 'instagram', 'location'],
-		};
-
-		InputMask.executeChecker(
-			{
-				url: Object.keys(urlMap).includes(params.table) && Object(urlMap)[params.table].includes(params.column),
-			},
-			404,
-			'not found',
-		);
-
+	public static async validateDataForMiddlewarePutText(table: string, column: string, body: { id: string; [key: string]: string }) {
 		const checker1 = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker1);
 
-		const { [params.column]: columnValue } = await Object(InputMask).textMask[params.table].executeChecker(body);
-		const checker2 = { [params.column]: columnValue };
-		InputMask.executeChecker(checker2);
+		const { [column]: columnValue } = await Object(InputMask).textMask[table].executeChecker(body);
+		InputMask.executeChecker({ [column]: columnValue });
 	}
 
-	public static async validateDataForMiddlewarePutImage(params: { table: string; column: string }, body: { id: string }, file: Express.Multer.File | undefined) {
-		const urlMap = {
-			header: ['icon', 'logo'],
-			propagandas: ['bigImage', 'smallImage'],
-			products: ['image'],
-		};
-
-		InputMask.executeChecker(
-			{
-				url: Object.keys(urlMap).includes(params.table) && Object(urlMap)[params.table].includes(params.column),
-			},
-			404,
-			'not found',
-		);
-
+	//status: ok
+	public static async validateDataForMiddlewarePutImage(table: string, column: string, body: { id: string }, file: Express.Multer.File | undefined) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 		InputMask.executeChecker(checker);
 
-		await Object(InputMask).imageMask[params.table][params.column].sharpFile(file);
+		await Object(InputMask).imageMask[table][column].sharpFile(file);
+	}
+
+	//status: ok
+	public static async validateDataForMiddlewarePutPosition(table: string, body: { ids: string[] }) {
+		const checker = await InputMask.textMask.ids.executeChecker(table, body);
+		InputMask.executeChecker(checker);
 	}
 }
 
@@ -324,7 +308,7 @@ export default class LocalModules {
 	//*NEW SECTION
 	//status: ok
 	public static middlewareSendResponse(status: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
-		return function (req: express.Request, res: express.Response) {
+		return function (_: express.Request, res: express.Response) {
 			res.json({
 				status: status,
 				message: 'ok',
@@ -470,18 +454,20 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
-			const params = Object(req.params);
 			const body = req.body;
+			const url = req.originalUrl.split('/');
+			const table = String(url[3]);
+			const column = String(url[4]);
 
-			await LocalModulesUtil.validateDataForMiddlewarePutText(params, body);
+			await LocalModulesUtil.validateDataForMiddlewarePutText(table, column, body);
 
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM ' + params.table + ' WHERE id = ?;', [body.id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM ' + table + ' WHERE id = ?;', [body.id]);
 
 			if (Object(query).length !== 1) {
 				return next();
 			}
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + params.table + ' SET ' + params.column + ' = ? WHERE id = ?;', [body[params.column], body.id]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;', [body[column], body.id]);
 
 			return next();
 		} catch (err) {
@@ -492,19 +478,40 @@ export default class LocalModules {
 	//status: ok
 	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
-			const params = Object(req.params);
 			const body = req.body;
+			const url = req.originalUrl.split('/');
+			const table = String(url[3]);
+			const column = String(url[4]);
 			const file = req.file;
 
-			await LocalModulesUtil.validateDataForMiddlewarePutImage(params, body, file);
+			await LocalModulesUtil.validateDataForMiddlewarePutImage(table, column, body, file);
 
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT ' + params.column + ' FROM ' + params.table + ' WHERE id = ?;', [body.id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?;', [body.id]);
 
 			if (Object(query).length !== 1) {
 				return next();
 			}
 
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(query)[0][Object(params).column], Object(file).mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(query)[0][column], Object(file).mimetype);
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	//status: ok
+	public static async middlewarePutPosition(req: express.Request, res: express.Response, next: express.NextFunction) {
+		try {
+			const body = req.body;
+			const url = req.originalUrl.split('/');
+			const table = String(url[3]);
+
+			await LocalModulesUtil.validateDataForMiddlewarePutPosition(table, body);
+
+			body.ids.forEach(async (id: any, index: number) => {
+				await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE ' + table + ' SET position = ? WHERE id = ?', [index, id]);
+			});
 
 			return next();
 		} catch (err) {
