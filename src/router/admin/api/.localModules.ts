@@ -91,8 +91,8 @@ class InputMask {
 		Object.keys(checker).forEach((key: string) => {
 			if (!checker[key]) {
 				throw {
-					status: status ? status : 400,
-					message: message ? message : "Please ensure that the key '" + key + "' is provided accurately to fulfill the request",
+					status: status || 400,
+					message: message || "Please ensure that the key '" + key + "' is provided accurately to fulfill the request",
 				};
 			}
 		});
