@@ -17,15 +17,15 @@ class InputMask {
 		},
 		propagandas: {
 			bigImage: {
-				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1920, 420, 'contain'),
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1920, 460, 'contain'),
 			},
 			smallImage: {
-				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 800, 800, 'contain'),
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 900, 900, 'contain'),
 			},
 		},
 		products: {
 			image: {
-				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 800, 800, 'contain'),
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 900, 900, 'contain'),
 			},
 		},
 	};
@@ -84,7 +84,7 @@ class InputMask {
 			executeChecker: async (body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) => await this.productsChecker(body),
 		},
 		footer: {
-			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string }) => this.footerChecker(body),
+			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string, storeInfo: string, completeStoreInfo: string }) => this.footerChecker(body),
 		},
 	};
 
@@ -155,7 +155,7 @@ class InputMask {
 		};
 	}
 
-	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string }) {
+	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string, storeInfo: string, completeStoreInfo: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
 			text: typeof body.text === 'string' && body.text.length > 1 && body.text.length <= 255,
@@ -163,6 +163,8 @@ class InputMask {
 			instagram: typeof body.instagram === 'string' && body.instagram.length > 1 && body.instagram.length <= 50,
 			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 50,
 			location: typeof body.location === 'string' && body.location.length > 1 && body.location.length <= 65535,
+			storeInfo: typeof body.storeInfo === 'string' && body.storeInfo.length > 1 && body.storeInfo.length <= 50,
+			completeStoreInfo: typeof body.completeStoreInfo === 'string' && body.completeStoreInfo.length > 1 && body.completeStoreInfo.length <= 100
 		};
 	}
 }

@@ -61,7 +61,7 @@ api.put(
 		'/header/title', '/header/description', '/header/color',
 		'/categories/name',
 		'/products/category', '/products/name', '/products/price', '/products/off', '/products/installment', 'products/whatsapp', '/products/message',
-		'/footer/title', '/footer/text'
+		'/footer/title', '/footer/text', '/footer/whatsapp', '/footer/facebook', '/footer/instagram', '/footer/storeInfo', '/footer/completeStoreInfo'
 	], 
 	LocalModules.middlewareCheckAuth, 
 	LocalModules.middlewarePutText, 

@@ -9,7 +9,7 @@ export default class LocalModules {
 			Object(query)[0].icon = await GlobalS3Modules.generateSignedUrlForS3BucketFile(Object(query)[0].icon);
 			Object(query)[0].logo = await GlobalS3Modules.generateSignedUrlForS3BucketFile(Object(query)[0].logo);
 
-			Object(req).sendBack = query;
+			Object(req).sendBack = Object(query)[0];
 
 			return next();
 		} catch (err) {
@@ -73,9 +73,9 @@ export default class LocalModules {
 
 	public static async middlewareGetFooter(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT title, text, whatsapp, facebook, instagram, location FROM footer WHERE id = ?;', ['only']);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT title, text, whatsapp, facebook, instagram, location, storeInfo, completeStoreInfo FROM footer WHERE id = ?;', ['only']);
 
-			Object(req).sendBack = query;
+			Object(req).sendBack = Object(query)[0];
 
 			return next();
 		} catch (err) {

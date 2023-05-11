@@ -85,6 +85,8 @@ export class GlobalS3Modules {
 }
 
 export class GlobalMiddlewareModules {
+	public static readonly frontEndFolderPath = path.join(cwd(), 'src/front-end');
+
 	public static readonly apiLimiter = rateLimit({
 		windowMs: 15 * 60 * 1000, // 15 minutes
 		max: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes)

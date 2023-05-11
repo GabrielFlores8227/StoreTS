@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+
+		<!--icon-->
+		<link rel="shortcut icon"/>
+
+		<!--title-->
+		<title></title>
+
+		<!--description-->
+		<meta name="description" />
+
+		<!--css-->
+		<link rel="stylesheet" href="home-page/styles/global/global.css" />
+		<link rel="stylesheet" href="home-page/styles/index/index.css" />
+		<link rel="stylesheet" href="home-page/styles/header/header.css" />
+		<link rel="stylesheet" href="home-page/styles/main/main.css">
+
+		<!--font-awesome-->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	</head>
+	<body>
+
+		<!--start-header-->
+		<header >
+			<div class="global__hrz-padding">
+				<img store-logo alt="Store Logo">
+				<div class="global__hrz-padding search-container">
+					<input type="text" placeholder="What are you looking for?">
+				</div>
+				<div>
+					<button>
+						<i class="fa-solid fa-cart-shopping"></i>
+					</button>
+					<button>
+						<i class="fa-solid fa-bars"></i>
+					</button>
+				</div>
+			</div>
+			<div class="global__hrz-padding">
+				<button>
+					<i class="fa-solid fa-bars"></i>
+				</button>
+				<div class="search-container">
+					<input type="text" placeholder="What are you looking for?">
+				</div>
+			</div>
+
+			<!--script-->
+			<script src="home-page/scripts/header.js"></script>
+		</header>
+		<!--end-header-->
+
+		<!--start-main-->
+		<main>
+
+			<!--start-propagandas-->
+			<div class="propagandas-container">
+				<div image-slider propagandas-container>
+					<template>
+						<picture>
+							<source big-image media="(min-width: 490px)" />
+							<img small-image alt="Propaganda"/>
+						</picture>
+					</template>
+				</div>
+				<p store-info></p>
+			</div>
+			<!--end-propagandas-->
+
+		</main>
+		<!--end-main-->
+
+		<!--script-->
+		<script src="home-page/scripts/globalModules.js"></script>
+		<script src="home-page/scripts/controller.js"></script>
+	</body>
+</html>

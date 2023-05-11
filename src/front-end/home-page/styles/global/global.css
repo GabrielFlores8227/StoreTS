@@ -1,0 +1,19 @@
+/*01*/
+.global__hrz-padding {
+  padding-right: 24.5px !important;
+  padding-left: 24.5px !important;
+}
+
+/*@media*/
+@media (min-width: 700px) {
+  .global__hrz-padding {
+    padding-right: 35px !important;
+    padding-left: 35px !important;
+  }
+}
+@media (min-width: 1000px) {
+  .global__hrz-padding {
+    padding-right: 119px !important;
+    padding-left: 119px !important;
+  }
+}/*# sourceMappingURL=global.css.map */

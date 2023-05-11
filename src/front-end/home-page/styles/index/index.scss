@@ -1,0 +1,91 @@
+@font-face {
+	font-family: poppins-regular;
+	src: url(../../assets/poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+	font-family: poppins-medium;
+	src: url(../../assets/poppins/Poppins-Regular.ttf);
+}
+
+:root {
+	--font-regular: poppins-regular;
+	--font-medium: poppins-medium;
+	--primary-color: red;
+	--regular-green: rgb(93, 212, 104);
+	--light-gray: rgb(236, 236, 236);
+	--regular-gray: rgb(59, 59, 59);
+	--dark-gray: rgb(41, 41, 41);
+}
+
+*::-webkit-scrollbar {
+	display: none;
+}
+
+*:focus-visible {
+	outline: 2.1px solid rgb(0, 162, 255);
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+	font-family: var(--font-regular);
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+body,
+header,
+main,
+footer {
+	min-width: 315px !important;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	line-height: 112%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+	cursor: default;
+}
+
+img {
+	-webkit-user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	pointer-events: none;
+}
+
+button {
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a {
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 28px;
+}

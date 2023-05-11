@@ -2,9 +2,9 @@
   "name": "storets",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "./src/back-end/index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node ./src/back-end/index.ts",
     "start:dev": "nodemon",
     "build": "npx tsc"
   },
