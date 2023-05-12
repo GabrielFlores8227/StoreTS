@@ -1,7 +1,7 @@
 @import "../global/global.scss";
 
 header {
-     z-index: 2;
+     z-index: 3;
      width: 100%;
      position: fixed;
      top: 0px;
@@ -48,7 +48,7 @@ header {
           width: 100%;
           gap: 14px;
           background-color: var(--light-gray);
-          padding: 14px 0px;
+          padding: 10.5px 0px;
 
           button {
                @extend %default-font-size;

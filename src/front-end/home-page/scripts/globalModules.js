@@ -41,10 +41,44 @@ function buildPropagandas(propagandas, footer) {
 		templateParent.append(template);
 	});
 
-	buildImageSlider();
+	setImageSlider();
 }
 
-function buildImageSlider() {
+function buildProducts(products) {
+	const template1Parent = window.document.querySelector("div[product-section-container]")
+
+	Object.keys(products).forEach((key) => {
+		const template1 = template1Parent.querySelector("template").cloneNode(true).content.children[0]
+		const template2Parent = template1.querySelector("[products-container]")
+
+		template1.querySelector("h1[category]").innerText = key
+
+		products[key].forEach((product) => {
+			const template2 = template2Parent.querySelector("template").cloneNode(true).content.children[0]
+
+			template2.querySelector("[product-image]").setAttribute("src", product.image)
+			template2.querySelector("[product-image]").setAttribute("alt", product.name)
+			template2.querySelector("[product-name]").innerText = product.name
+			
+			if (product.off !== "") {
+				template2.querySelector("[product-old-price]").innerText =  convertToMoneyFormat(product.price)
+				template2.querySelector("[product-price]").innerText =  convertToMoneyFormat(Number(product.price) / 100 * (100 - Number(product.off)))
+			} else {
+				template2.querySelector("[product-price]").innerText = convertToMoneyFormat(product.price)
+			}
+
+			template2.querySelector("[product-installment]").innerText = product.installment
+
+			template2Parent.append(template2)
+		})
+
+		template1Parent.append(template1)
+	})
+
+	setProductSlider()
+}
+
+function setImageSlider() {
 	const imageSliderContainer = window.document.querySelector('div[image-slider-container]')
 	const imageSlider = imageSliderContainer.querySelector('div');
 	const numberOfPropagandas = imageSliderContainer.querySelectorAll('img[small-image]').length;
@@ -101,4 +135,79 @@ function buildImageSlider() {
 			goingLeft = false;
 		}	
 	}
+}
+
+const sliderController = []
+function setProductSlider() {
+	window.document.querySelectorAll("[product-slider-container]").forEach((element, index) => {
+		sliderController.push(true);
+		let isDown = false;
+		let startX;
+		let position;
+		let left;
+		let scrollLeft;
+		let sliderControllerSetted = false;
+		setInterval(() => {
+			if (!isDown && sliderController[index]) {
+				if (sliderControllerSetted) {
+					sliderControllerSetted = false;
+				}
+				if (position >= element.scrollWidth - element.clientWidth) left = false;
+				if (position <= 1) left = true;
+
+				if (left) position = element.scrollLeft + 1;
+				else position = element.scrollLeft - 1;
+
+				element.scrollTo(position, 0);
+			}
+			if (!sliderControllerSetted && !sliderController[index]) {
+				sliderControllerSetted = true;
+				setTimeout(() => {
+					sliderController[index] = true;
+				}, 5000);
+			}
+		}, 10);
+		element.addEventListener("touchmove", () => {
+			isDown = true;
+		});
+		element.addEventListener("touchend", () => {
+			isDown = false;
+		});
+		element.addEventListener("mousedown", (e) => {
+			isDown = true;
+			element.classList.add("active");
+			startX = e.pageX - element.offsetLeft;
+			scrollLeft = element.scrollLeft;
+		});
+		element.addEventListener("mouseleave", () => {
+			isDown = false;
+			element.classList.remove("active");
+		});
+		element.addEventListener("mouseup", () => {
+			isDown = false;
+			element.classList.remove("active");
+		});
+		element.addEventListener("mousemove", (e) => {
+			if (!isDown) return;
+			e.preventDefault();
+			const x = e.pageX - element.offsetLeft;
+			const walk = x - startX;
+			element.scrollLeft = scrollLeft - walk;
+			position = element.scrollLeft;
+		});
+	});
+
+	window.document.querySelectorAll("[card-slider] [real]").forEach((element) => {
+		element.innerText = formatarReal(Number(element.innerText));
+	});
+
+	window.document.querySelectorAll("[add-to-cart-button]").forEach(element => {
+		element.addEventListener("click", () => {
+			addToCart(element.getAttribute("for"))
+		})
+	})
+}
+
+function convertToMoneyFormat(number) {
+	return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }

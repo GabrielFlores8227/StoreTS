@@ -6,15 +6,12 @@
      showLoadingScreenLogo()
 
      const propagandas = await(await fetch('/api/propagandas')).json();
-
-     const categories = await(await fetch('/api/propagandas')).json();
-
-     const products = await(await fetch('/api/propagandas')).json();
-
+     const products = await(await fetch('/api/products')).json();
      const footer = await(await fetch('/api/footer')).json();
 
      buildHead(header)
      buildPropagandas(propagandas, footer)
+     buildProducts(products)
 
      removeLoadingScreen()
 })()

@@ -34,23 +34,13 @@ export default class LocalModules {
 		}
 	}
 
-	public static async middlewareGetCategories(req: express.Request, res: express.Response, next: express.NextFunction) {
-		try {
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT name FROM categories ORDER BY position;');
-			Object(req).sendBack = query;
-			return next();
-		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
-		}
-	}
-
 	public static async middlewareGetProducts(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const [query1] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT id, name FROM categories ORDER BY position;');
 			const sendBack = {};
 
 			for (let c = 0; c < Object(query1).length; c++) {
-				const [query2] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT name, image, price, off, installment, whatsapp, message FROM products WHERE category = ? ORDER BY position;', [Object(query1)[c].id]);
+				const [query2] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlSelectorConn, 'SELECT id, name, image, price, off, installment, whatsapp, message FROM products WHERE category = ? ORDER BY position;', [Object(query1)[c].id]);
 
 				for (let i = 0; i < Object(query2).length; i++) {
 					Object(query2)[i].image = await GlobalS3Modules.generateSignedUrlForS3BucketFile(Object(query2)[i].image);

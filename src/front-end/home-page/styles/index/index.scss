@@ -4,18 +4,18 @@
 }
 
 @font-face {
-	font-family: poppins-medium;
-	src: url(../../assets/poppins/Poppins-Regular.ttf);
+	font-family: poppins-bold;
+	src: url(../../assets/poppins/Poppins-Medium.ttf);
 }
 
 :root {
-	--font-regular: poppins-regular;
-	--font-medium: poppins-medium;
+	--font-regular: poppins-regular, Arial, Helvetica, sans-serif;
+	--font-bold: poppins-bold, Arial, Helvetica, sans-serif;
 	--primary-color: white;
 	--regular-green: rgb(93, 212, 104);
 	--light-gray: rgb(236, 236, 236);
 	--regular-gray: rgb(59, 59, 59);
-	--dark-gray: rgb(41, 41, 41);
+	--dark-gray: rgb(20, 20, 20);
 }
 
 *::-webkit-scrollbar {
@@ -40,6 +40,7 @@ header,
 main,
 footer {
 	min-width: 315px !important;
+	overflow-x: hidden;
 }
 
 ul,
@@ -83,8 +84,4 @@ a {
 	cursor: pointer;
 	-webkit-tap-highlight-color: transparent;
 	text-decoration: none;
-}
-
-h1 {
-	font-size: 28px;
 }

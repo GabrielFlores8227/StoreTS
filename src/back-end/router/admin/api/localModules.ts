@@ -20,25 +20,26 @@ class InputMask {
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1920, 460, 'contain'),
 			},
 			smallImage: {
-				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 900, 900, 'contain'),
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1080, 1080, 'contain'),
 			},
 		},
 		products: {
 			image: {
-				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 900, 900, 'contain'),
+				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1080, 1080, 'contain'),
 			},
 		},
 	};
 
 	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
-		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG'].includes(Object(file).mimetype)) {
+		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', "image/webp"].includes(Object(file).mimetype)) {
 			throw {
 				status: 400,
 				message: 'Please provide valid image(s) to fulfill the request',
 			};
 		}
 
-		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
+		const mimeType = "." + String(Object(file).mimetype.replace("image/", ""))
+		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255 - mimeType.length) + mimeType
 
 		try {
 			Object(file).buffer = await sharp(Object(file).buffer)
@@ -46,7 +47,7 @@ class InputMask {
 					width,
 					height,
 					fit,
-					background: { r: 0, g: 0, b: 0, alpha: 0 },
+					background: { r: 255, g: 255, b: 255, alpha: 255 },
 				})
 				.toBuffer();
 		} catch (err: any) {

@@ -21,13 +21,6 @@ api.get(
 
 //prettier-ignore
 api.get(
-	"/categories",
-	LocalModules.middlewareGetCategories,
-	LocalModules.middlewareSendResponse
-)
-
-//prettier-ignore
-api.get(
 	"/products",
 	LocalModules.middlewareGetProducts,
 	LocalModules.middlewareSendResponse
