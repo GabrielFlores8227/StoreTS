@@ -23,12 +23,11 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-
 		<!--start-header-->
-		<header >
-			<div class="global__hrz-padding">
+		<header>
+			<div>
 				<img store-logo alt="Store Logo">
-				<div class="global__hrz-padding search-container">
+				<div class="search-container">
 					<input type="text" placeholder="What are you looking for?">
 				</div>
 				<div>
@@ -40,7 +39,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="global__hrz-padding">
+			<div>
 				<button>
 					<i class="fa-solid fa-bars"></i>
 				</button>
@@ -48,18 +47,21 @@
 					<input type="text" placeholder="What are you looking for?">
 				</div>
 			</div>
-
-			<!--script-->
-			<script src="home-page/scripts/header.js"></script>
 		</header>
 		<!--end-header-->
 
 		<!--start-main-->
 		<main>
+			<!--start-loading-screen-->
+			<div loading-screen-container class="loading-screen-container">
+				<img store-logo alt="Store Logo">
+			</div>
+			<!--end-loading-screen-->
 
 			<!--start-propagandas-->
-			<div class="propagandas-container">
-				<div image-slider propagandas-container>
+			<div image-slider-container class="propagandas-container">
+				<button></button>
+				<div propagandas-container>
 					<template>
 						<picture>
 							<source big-image media="(min-width: 490px)" />
@@ -67,6 +69,7 @@
 						</picture>
 					</template>
 				</div>
+				<button></button>
 				<p store-info></p>
 			</div>
 			<!--end-propagandas-->
@@ -74,7 +77,6 @@
 		</main>
 		<!--end-main-->
 
-		<!--script-->
 		<script src="home-page/scripts/globalModules.js"></script>
 		<script src="home-page/scripts/controller.js"></script>
 	</body>

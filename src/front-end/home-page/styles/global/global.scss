@@ -1,20 +1,62 @@
-/*01*/
-.global__hrz-padding {
+%default-padding-size {
      padding-right: 24.5px !important;
      padding-left: 24.5px !important;
 }
 
-/*@media*/
+%default-height-size {
+     height: 17.5px;
+}
+
+%big-height-size {
+     height: 20.3px;
+}
+
+%default-font-size {
+     font-size: 17.5px;
+}
+
+//@media
 @media (min-width: 700px) {
-     .global__hrz-padding {
+     %default-padding-size {
           padding-right: 35px !important;
           padding-left: 35px !important;
+     }
+
+     %default-height-size {
+          height: 18.9px;
+     }
+
+     %big-height-size {
+          height: 21px;
+     }
+
+     %default-font-size {
+          font-size: 18.9px;
      }
 }
 
 @media (min-width: 1000px) {
-     .global__hrz-padding {
-          padding-right: 119px !important;
-          padding-left: 119px !important;
+     %default-padding-size {
+          padding-right: 84px !important;
+          padding-left: 84px !important;
+     }
+
+     %default-height-size {
+          height: 19.6px;
+     }
+
+     %big-height-size {
+          height: 21.7px;
+     }
+
+     %default-font-size {
+          font-size: 19.6px;
+     }
+}
+
+@media (min-width: 1200px) {
+     %default-padding-size {
+          padding-right: 140px !important;
+          padding-left: 140px !important;
      }
 }

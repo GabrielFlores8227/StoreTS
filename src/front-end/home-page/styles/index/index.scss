@@ -11,7 +11,7 @@
 :root {
 	--font-regular: poppins-regular;
 	--font-medium: poppins-medium;
-	--primary-color: red;
+	--primary-color: white;
 	--regular-green: rgb(93, 212, 104);
 	--light-gray: rgb(236, 236, 236);
 	--regular-gray: rgb(59, 59, 59);
@@ -66,11 +66,10 @@ p {
 
 img {
 	-webkit-user-drag: none;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	pointer-events: none;
+	-khtml-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
+	user-drag: none;
 }
 
 button {

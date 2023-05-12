@@ -1,10 +1,61 @@
+div.loading-screen-container > img {
+  height: 20.3px;
+}
+
+@media (min-width: 700px) {
+  div.loading-screen-container > img {
+    height: 21px;
+  }
+}
+@media (min-width: 1000px) {
+  div.loading-screen-container > img {
+    height: 21.7px;
+  }
+}
 main {
   padding: 140px 0px;
   background-color: var(--light-gray);
 }
 
+div.loading-screen-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--primary-color);
+  transition: ease-in-out 0.56s;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+div.loading-screen-container.--off {
+  filter: opacity(0%);
+  pointer-events: none;
+}
+div.loading-screen-container > img {
+  filter: opacity(0%);
+  transition: ease-in-out 0.56s;
+}
+div.loading-screen-container > img.--on {
+  filter: opacity(100%);
+}
+
 div.propagandas-container {
   position: relative;
+}
+div.propagandas-container button {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+}
+div.propagandas-container button:first-of-type {
+  left: 0px;
+}
+div.propagandas-container button:last-of-type {
+  right: 0px;
 }
 div.propagandas-container > div:first-of-type {
   display: flex;
@@ -15,7 +66,7 @@ div.propagandas-container > div:first-of-type img {
   -o-object-fit: cover;
      object-fit: cover;
 }
-div.propagandas-container p {
+div.propagandas-container > p {
   border-radius: 4.9px;
   color: var(--dark-gray);
   background-color: var(--light-gray);
@@ -28,7 +79,11 @@ div.propagandas-container p {
   left: 50%;
 }
 
-/*media*/
+@media (pointer: none), (pointer: coarse) {
+  div.loading-screen-container > img {
+    transform: translateY(-200%);
+  }
+}
 @media (min-width: 700px) {
   main {
     padding: 84px 0px;

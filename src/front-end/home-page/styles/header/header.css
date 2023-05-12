@@ -1,3 +1,46 @@
+header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+  padding-right: 24.5px !important;
+  padding-left: 24.5px !important;
+}
+
+header > div:first-of-type img:first-of-type {
+  height: 17.5px;
+}
+
+header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+  font-size: 17.5px;
+}
+
+@media (min-width: 700px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 35px !important;
+    padding-left: 35px !important;
+  }
+  header > div:first-of-type img:first-of-type {
+    height: 18.9px;
+  }
+  header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+    font-size: 18.9px;
+  }
+}
+@media (min-width: 1000px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 84px !important;
+    padding-left: 84px !important;
+  }
+  header > div:first-of-type img:first-of-type {
+    height: 19.6px;
+  }
+  header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+    font-size: 19.6px;
+  }
+}
+@media (min-width: 1200px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 140px !important;
+    padding-left: 140px !important;
+  }
+}
 header {
   z-index: 2;
   width: 100%;
@@ -14,7 +57,6 @@ header > div:first-of-type {
   background-color: var(--primary-color);
 }
 header > div:first-of-type img:first-of-type {
-  height: 17.5px;
   filter: grayscale(100%) brightness(200%);
 }
 header > div:first-of-type > div:first-of-type {
@@ -25,7 +67,6 @@ header > div:first-of-type > div:last-of-type {
   gap: 21px;
 }
 header > div:first-of-type > div:last-of-type button {
-  font-size: 17.5px;
   color: white;
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
@@ -40,7 +81,6 @@ header > div:last-of-type {
   padding: 14px 0px;
 }
 header > div:last-of-type button {
-  font-size: 17.5px;
   color: var(--primary-color);
 }
 
@@ -49,25 +89,17 @@ div.search-container {
 }
 div.search-container input {
   width: 100%;
-  height: 17.5px;
   border: 0px;
   border-radius: 7px;
-  padding: 14px 10.5px;
+  padding: 3.5px 10.5px;
 }
 div.search-container input:focus {
   outline: none;
 }
 
-/*@media*/
 @media (min-width: 700px) {
-  header > div:first-of-type img:first-of-type {
-    height: 18.9px;
-  }
   header > div:first-of-type > div:first-of-type {
     display: block;
-  }
-  header > div:first-of-type div:last-of-type button {
-    font-size: 18.9px;
   }
   header > div:first-of-type div:last-of-type > button:last-of-type {
     display: block;
@@ -75,18 +107,7 @@ div.search-container input:focus {
   header > div:last-of-type {
     display: none;
   }
-  input {
-    height: 18.9px;
-  }
-}
-@media (min-width: 1000px) {
-  header > div:first-of-type img:first-of-type {
-    height: 19.6px;
-  }
-  header > div:first-of-type div:last-of-type button {
-    font-size: 19.6px;
-  }
-  input {
-    height: 19.6px;
+  div.search-container input {
+    padding: 4.9px 10.5px;
   }
 }/*# sourceMappingURL=header.css.map */

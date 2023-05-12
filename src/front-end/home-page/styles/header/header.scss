@@ -1,3 +1,5 @@
+@import "../global/global.scss";
+
 header {
      z-index: 2;
      width: 100%;
@@ -6,6 +8,7 @@ header {
      left: 0px;
 
      & > div:first-of-type {
+          @extend %default-padding-size;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -14,11 +17,12 @@ header {
           background-color: var(--primary-color);
 
           img:first-of-type {
-               height: 17.5px;
+               @extend %default-height-size;
                filter: grayscale(100%) brightness(200%);
           }
 
           & > div:first-of-type {
+               @extend %default-padding-size;
                display: none;
           }
 
@@ -27,7 +31,7 @@ header {
                gap: 21px;
 
                button {
-                    font-size: 17.5px;
+                    @extend %default-font-size;
                     color: white;
                }
 
@@ -38,6 +42,7 @@ header {
      }
 
      & > div:last-of-type {
+          @extend %default-padding-size;
           display: flex;
           align-items: center;
           width: 100%;
@@ -46,7 +51,7 @@ header {
           padding: 14px 0px;
 
           button {
-               font-size: 17.5px;
+               @extend %default-font-size;
                color: var(--primary-color);
           }
      }
@@ -61,30 +66,21 @@ div.search-container {
           }
 
           width: 100%;
-          height: 17.5px;
           border: 0px;
           border-radius: 7px;
-          padding: 14px 10.5px;
+          padding: 3.5px 10.5px;
      }
 }
 
-/*@media*/
+//@media
 @media (min-width: 700px) {
      header {
           & > div:first-of-type {
-               img:first-of-type {
-                    height: 18.9px;
-               }
-
                & > div:first-of-type {
                     display: block;
                }
 
                div:last-of-type {
-                    button {
-                         font-size: 18.9px;
-                    }
-
                     & > button:last-of-type {
                          display: block;
                     }
@@ -96,28 +92,9 @@ div.search-container {
           }
      }
 
-     input {
-          height: 18.9px;
-     }
-}
-
-
-@media (min-width: 1000px) {
-     header {
-          & > div:first-of-type {
-               img:first-of-type {
-                    height: 19.6px;
-               }
-
-               div:last-of-type {
-                    button {
-                         font-size: 19.6px;
-                    }
-               }
+     div.search-container {
+          input {
+               padding: 4.9px 10.5px;
           }
-     }
-
-     input {
-          height: 19.6px;
      }
 }
