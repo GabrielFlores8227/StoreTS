@@ -1,13 +1,13 @@
-header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+div.search-container > div, header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
   padding-right: 24.5px !important;
   padding-left: 24.5px !important;
 }
 
-header > div:first-of-type img:first-of-type {
+header > div:first-of-type > img:first-of-type {
   height: 17.5px;
 }
 
-header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
   font-size: 17.5px;
 }
 
@@ -107,31 +107,31 @@ div.product-container a i {
 }
 
 @media (min-width: 700px) {
-  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+  div.search-container > div, header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
     padding-right: 35px !important;
     padding-left: 35px !important;
   }
-  header > div:first-of-type img:first-of-type {
+  header > div:first-of-type > img:first-of-type {
     height: 18.9px;
   }
-  header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+  header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
     font-size: 18.9px;
   }
 }
 @media (min-width: 1000px) {
-  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+  div.search-container > div, header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
     padding-right: 84px !important;
     padding-left: 84px !important;
   }
-  header > div:first-of-type img:first-of-type {
+  header > div:first-of-type > img:first-of-type {
     height: 19.6px;
   }
-  header > div:last-of-type button, header > div:first-of-type > div:last-of-type button {
+  header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
     font-size: 19.6px;
   }
 }
 @media (min-width: 1200px) {
-  header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+  div.search-container > div, header > div:last-of-type, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
     padding-right: 140px !important;
     padding-left: 140px !important;
   }
@@ -151,7 +151,7 @@ header > div:first-of-type {
   padding: 28px 0px;
   background-color: var(--primary-color);
 }
-header > div:first-of-type img:first-of-type {
+header > div:first-of-type > img:first-of-type {
   filter: grayscale(100%) brightness(200%);
 }
 header > div:first-of-type > div:first-of-type {
@@ -161,7 +161,7 @@ header > div:first-of-type > div:last-of-type {
   display: flex;
   gap: 21px;
 }
-header > div:first-of-type > div:last-of-type button {
+header > div:first-of-type > div:last-of-type > button {
   color: white;
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
@@ -175,34 +175,84 @@ header > div:last-of-type {
   background-color: var(--light-gray);
   padding: 10.5px 0px;
 }
-header > div:last-of-type button {
+header > div:last-of-type > button {
   color: var(--primary-color);
 }
 
 div.search-container {
   width: 100%;
+  position: relative;
 }
-div.search-container input {
+div.search-container > input {
   width: 100%;
   border: 0px;
   border-radius: 7px;
   padding: 3.5px 10.5px;
 }
-div.search-container input:focus {
+div.search-container > input:focus {
   outline: none;
+}
+div.search-container > div {
+  width: 100%;
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+}
+div.search-container > div > div {
+  background-color: white;
+  border-radius: 0px 0px 7px 7px;
+}
+
+button.search-container__product {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 21px 14px;
+  position: relative;
+}
+button.search-container__product:not(:last-of-type)::after {
+  content: "";
+  width: 91%;
+  height: 1px;
+  background-color: rgb(219, 219, 219);
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+}
+button.search-container__product > img {
+  width: 73.5px;
+  height: 73.5px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+button.search-container__product > div p {
+  line-height: 140%;
+  text-align: left;
+  font-family: var(--font-bold);
+}
+button.search-container__product > div > p:first-of-type {
+  color: var(--regular-gray);
+  font-size: 17.5px;
+}
+button.search-container__product > div > p:last-of-type {
+  color: var(--regular-green);
+  font-size: 25.9px;
 }
 
 @media (min-width: 700px) {
   header > div:first-of-type > div:first-of-type {
     display: block;
   }
-  header > div:first-of-type div:last-of-type > button:last-of-type {
+  header > div:first-of-type > div:last-of-type > button:last-of-type {
     display: block;
   }
   header > div:last-of-type {
     display: none;
   }
-  div.search-container input {
+  div.search-container > input {
     padding: 4.9px 10.5px;
   }
 }/*# sourceMappingURL=header.css.map */

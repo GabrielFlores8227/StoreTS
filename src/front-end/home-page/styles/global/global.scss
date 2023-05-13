@@ -1,11 +1,8 @@
-//start-padding-size
 %default-padding-size {
      padding-right: 24.5px !important;
      padding-left: 24.5px !important;
 }
-//end-padding-size
 
-//start-height-size
 %default-height-size {
      height: 17.5px;
 }
@@ -13,9 +10,7 @@
 %big-height-size {
      height: 20.3px;
 }
-//end-height-size
 
-//start-font-size
 %small-font-size {
      font-size: 11.2px;
 }
@@ -27,9 +22,7 @@
 %big-font-size {
      font-size: 28px;
 }
-//end-font-size
 
-//start-product
 div.product-container {
      z-index: 2;
      display: flex;
@@ -133,10 +126,8 @@ div.product-container {
           }
      }
 }
-//end-product
 
 
-//@media
 @media (min-width: 700px) {
      %default-padding-size {
           padding-right: 35px !important;

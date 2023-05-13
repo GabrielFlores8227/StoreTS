@@ -139,6 +139,8 @@ main {
 }
 
 div.loading-screen-container {
+  filter: opacity(0%);
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;

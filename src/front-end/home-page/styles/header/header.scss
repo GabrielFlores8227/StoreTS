@@ -16,7 +16,7 @@ header {
           padding: 28px 0px;
           background-color: var(--primary-color);
 
-          img:first-of-type {
+          & > img:first-of-type {
                @extend %default-height-size;
                filter: grayscale(100%) brightness(200%);
           }
@@ -30,7 +30,7 @@ header {
                display: flex;
                gap: 21px;
 
-               button {
+               & > button {
                     @extend %default-font-size;
                     color: white;
                }
@@ -50,7 +50,7 @@ header {
           background-color: var(--light-gray);
           padding: 10.5px 0px;
 
-          button {
+          & > button {
                @extend %default-font-size;
                color: var(--primary-color);
           }
@@ -59,8 +59,9 @@ header {
 
 div.search-container {
      width: 100%;
+     position: relative;
 
-     input {
+     & > input {
           &:focus {
                outline: none;
           }
@@ -69,6 +70,64 @@ div.search-container {
           border: 0px;
           border-radius: 7px;
           padding: 3.5px 10.5px;
+     }
+
+     & > div {
+          @extend %default-padding-size;
+          width: 100%;
+          transform: translateX(-50%);
+          position: absolute;
+          left: 50%;
+
+          & > div {
+               background-color: white;
+               border-radius: 0px 0px 7px 7px;
+          }
+     }
+}
+
+button.search-container__product {
+     &:not(:last-of-type)::after {
+          content: "";
+          width: 91%;
+          height: 1px;
+          background-color: rgb(219, 219, 219);
+          transform: translateX(-50%);
+          position: absolute;
+          left: 50%;
+          bottom: 0px;
+     }
+
+     display: flex;
+     justify-content: left;
+     align-items: center;
+     gap: 14px;
+     width: 100%;
+     padding: 21px 14px;
+     position: relative;
+
+     & > img {
+          width: 73.5px;
+          height: 73.5px;
+          object-fit: contain;
+     }
+
+     & > div {
+          p {
+               line-height: 140%;
+               text-align: left;
+               font-family: var(--font-bold);
+          }
+
+          & > p:first-of-type {
+               color: var(--regular-gray);
+               font-size: 17.5px;
+          }
+
+          & > p:last-of-type {
+               color: var(--regular-green);
+               font-size: 25.9px;
+          }
      }
 }
 
@@ -80,7 +139,7 @@ div.search-container {
                     display: block;
                }
 
-               div:last-of-type {
+               & > div:last-of-type {
                     & > button:last-of-type {
                          display: block;
                     }
@@ -93,7 +152,7 @@ div.search-container {
      }
 
      div.search-container {
-          input {
+          & > input {
                padding: 4.9px 10.5px;
           }
      }

@@ -38,8 +38,7 @@ class InputMask {
 			};
 		}
 
-		const mimeType = "." + String(Object(file).mimetype.replace("image/", ""))
-		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255 - mimeType.length) + mimeType
+		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255)
 
 		try {
 			Object(file).buffer = await sharp(Object(file).buffer)
