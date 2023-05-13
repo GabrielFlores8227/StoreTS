@@ -16,13 +16,13 @@ export class GlobalSqlModules {
 	private static readonly sqlDatabase = process.env.SQL_DATABASE!;
 	private static readonly sqlSocketPath = process.env.SQL_SOCKET_PATH!;
 
-	public static readonly sqlSelectorConn = mysql2.createPool({
+	public static readonly sqlOrdinaryConn = mysql2.createPool({
 		connectionLimit: 16,
 		host: this.sqlHost,
 		database: this.sqlDatabase,
 		socketPath: this.sqlSocketPath,
-		user: process.env.SQL_SELECTOR_USER!,
-		password: process.env.SQL_SELECTOR_PASSWORD!,
+		user: process.env.SQL_ORDINARY_USER!,
+		password: process.env.SQL_ORDINARY_PASSWORD!,
 	});
 
 	public static readonly sqlMasterConn = mysql2.createPool({
@@ -87,12 +87,14 @@ export class GlobalS3Modules {
 export class GlobalMiddlewareModules {
 	public static readonly frontEndFolderPath = path.join(cwd(), 'src/front-end');
 
-	public static readonly apiLimiter = rateLimit({
-		windowMs: 15 * 60 * 1000, // 15 minutes
-		max: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-		standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-		legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-	});
+	public static apiLimiter(minutes: number, max: number) {
+		return rateLimit({
+			windowMs: minutes * 60 * 1000,
+			max: max,
+			standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+			legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+		})
+	}
 
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 

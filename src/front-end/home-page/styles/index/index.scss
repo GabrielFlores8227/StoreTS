@@ -1,11 +1,11 @@
 @font-face {
 	font-family: poppins-regular;
-	src: url(../../assets/poppins/Poppins-Regular.ttf);
+	src: url(../../assets/fonts/poppins/Poppins-Regular.ttf);
 }
 
 @font-face {
 	font-family: poppins-bold;
-	src: url(../../assets/poppins/Poppins-Medium.ttf);
+	src: url(../../assets/fonts/poppins/Poppins-Medium.ttf);
 }
 
 :root {
@@ -40,7 +40,6 @@ header,
 main,
 footer {
 	min-width: 315px !important;
-	overflow-x: hidden;
 }
 
 ul,

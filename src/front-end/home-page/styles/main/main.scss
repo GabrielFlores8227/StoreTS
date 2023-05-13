@@ -1,7 +1,7 @@
 @import "../global/global";
 
 main {
-     padding: 126px 0px;
+     padding: 126px 0px 140px 0px;
 	background-color: var(--light-gray);
 }
 
@@ -11,8 +11,7 @@ div.loading-screen-container {
 		filter: opacity(0%);
 		pointer-events: none;
 	}
-	filter: opacity(0%);
-	pointer-events: none;
+
 
 	display: flex;
 	align-items: center;
@@ -75,13 +74,13 @@ div.propagandas-container {
 	& > p {
 		border-radius: 4.9px;
 		color: var(--dark-gray);
-		background-color: var(--light-gray);
+		background-color: white;
 		padding: 6.3px 10.5px;
 		font-size: 12.6px;
 		transform: translateX(-50%);
 		white-space: nowrap;
 		position: absolute;
-		bottom: -3px;
+		bottom: -5px;
 		left: 50%;
 	}
 }
@@ -90,7 +89,7 @@ div.propagandas-container {
 //start-products
 div.product-section-container {
 	& > div {
-		&:nth-of-type(2) {
+		&.--on {
 			&::before {
 				content: "";
 				width: 350px;
@@ -100,19 +99,7 @@ div.product-section-container {
 				transform: translateY(-50%);
 				position: absolute;
 				top: 0px;
-				left: -14px;
-			}
-
-			&::after {
-				content: "";
-				width: 350px;
-				height: 350px;
-				border-radius: 100%;
-				transform: translateY(-50%);
-				border: 4.9px solid var(--primary-color);
-				position: absolute;
-				right: -14px;
-				bottom: -49%;
+				left: 0px;
 			}
 
 			background-color: var(--primary-color);
@@ -127,7 +114,7 @@ div.product-section-container {
 			}
 		}
 
-		padding: 77px 0px;
+		padding: 84px 0px;
 
 		& > div:first-of-type {
 			@extend %default-padding-size;
@@ -153,7 +140,7 @@ div.product-section-container {
 				overflow: hidden;
 				text-overflow: ellipsis;
 				color: var(--dark-gray);
-				padding: 7px 0px 7px 19.6px;
+				padding: 10.5px 0px 10.5px 19.6px;
 				position: relative;
 			}
 		}
@@ -181,22 +168,29 @@ div.product-section-container {
 
 @media (min-width: 700px) {
      main {
-          padding: 84px 0px;
+		padding: 84px 0px 140px 0px;
      }
 
 	div.product-section-container {
 		& > div {
-			&:nth-of-type(2) {
+			&.--on {
 				&::before {
 					width: 420px;
 					height: 420px;
 				}
 
 				&::after {
+					content: "";
 					width: 420px;
 					height: 420px;
+					border-radius: 100%;
+					border: 4.9px solid var(--primary-color);
+					transform: translateY(-50%);
+					position: absolute;
+					right: 0px;
+					bottom: -50%;
 				}
-			}
+			}		
 		}
 	}
 }

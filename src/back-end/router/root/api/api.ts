@@ -4,7 +4,7 @@ import LocalModules from './localModules';
 
 const api = express.Router();
 
-api.use(GlobalMiddlewareModules.apiLimiter);
+api.use(GlobalMiddlewareModules.apiLimiter(15, 50));
 
 //prettier-ignore
 api.get('/header', 
@@ -31,6 +31,13 @@ api.get(
 	"/footer",
 	LocalModules.middlewareGetFooter,
 	LocalModules.middlewareSendResponse
+)
+
+//prettier-ignore
+api.get(
+	"/product/order/:id",
+	LocalModules.middlewareGetProduct,
+	LocalModules.middlewareRedirect
 )
 
 export default api;

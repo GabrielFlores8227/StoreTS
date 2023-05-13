@@ -47,9 +47,20 @@ function buildPropagandas(propagandas, footer) {
 function buildProducts(products) {
 	const template1Parent = window.document.querySelector("div[product-section-container]")
 
-	Object.keys(products).forEach((key) => {
+	const keys = Object.keys(products)
+	let middleKey = -1
+
+	if (keys.length > 2) {
+		middleKey = Math.floor(keys.length / 2)
+	}
+
+	keys.forEach((key, index) => {
 		const template1 = template1Parent.querySelector("template").cloneNode(true).content.children[0]
 		const template2Parent = template1.querySelector("[products-container]")
+
+		if (index === middleKey && middleKey !== -1) {
+			template1.classList.add("--on")
+		}
 
 		template1.querySelector("h1[category]").innerText = key
 
@@ -68,6 +79,8 @@ function buildProducts(products) {
 			}
 
 			template2.querySelector("[product-installment]").innerText = product.installment
+
+			template2.querySelector("[product-link]").setAttribute("href", "/api/product/order/" + product.id)
 
 			template2Parent.append(template2)
 		})
@@ -147,8 +160,17 @@ function setProductSlider() {
 		let left;
 		let scrollLeft;
 		let sliderControllerSetted = false;
+
 		setInterval(() => {
-			if (!isDown && sliderController[index]) {
+			if (element.scrollWidth - element.clientWidth < 80) {
+				return
+			} 
+
+			if (isDown) {
+				sliderController[index] = false;
+			}
+
+			if (sliderController[index]) {
 				if (sliderControllerSetted) {
 					sliderControllerSetted = false;
 				}
@@ -160,13 +182,15 @@ function setProductSlider() {
 
 				element.scrollTo(position, 0);
 			}
-			if (!sliderControllerSetted && !sliderController[index]) {
+
+			if (!sliderController[index] && !sliderControllerSetted) {
 				sliderControllerSetted = true;
 				setTimeout(() => {
 					sliderController[index] = true;
 				}, 5000);
 			}
-		}, 10);
+		}, 14);
+
 		element.addEventListener("touchmove", () => {
 			isDown = true;
 		});

@@ -74,8 +74,8 @@ div.product-container {
           }
 
           img {
-               width: 210px;
-               height: 210px;
+               width: 189px;
+               height: 189px;
                border-radius: 14px;
                object-fit: contain;
           }
@@ -170,12 +170,12 @@ div.product-container {
           height: 19.6px;
      }
 
-     %big-height-size {
-          height: 21.7px;
-     }
-
      %default-font-size {
           font-size: 19.6px;
+     }
+
+     %big-height-size {
+          height: 22.4px;
      }
 }
 
