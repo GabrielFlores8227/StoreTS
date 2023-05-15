@@ -1,10 +1,7 @@
 import express from 'express';
-import { GlobalMiddlewareModules } from '../../globalModules';
 import LocalModules from './localModules';
 
 const api: express.Router = express.Router();
-
-api.use(GlobalMiddlewareModules.apiLimiter(15, 200));
 
 //prettier-ignore
 api.post(

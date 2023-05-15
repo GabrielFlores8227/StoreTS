@@ -86,7 +86,6 @@ export default class LocalModules {
 			}
 
 			const clicks = String(Object(query)[0].clicks + 1)
-			console.log(clicks)
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE products SET clicks = ?, lastClick = CURRENT_TIMESTAMP WHERE id = ?;', [clicks, id!])
 

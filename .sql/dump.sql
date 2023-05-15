@@ -44,7 +44,7 @@ CREATE TABLE `categories` (
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `category` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,10 +105,10 @@ CREATE TABLE `products` (
   `message` varchar(255) NOT NULL,
   `position` smallint DEFAULT NULL,
   `clicks` bigint NOT NULL DEFAULT '0',
-  `lastClick` datetime DEFAULT CURRENT_TIMESTAMP,
+  `lastClick` datetime DEFAULT NULL,
   `creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,4 +136,4 @@ CREATE TABLE `propagandas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-14 18:07:37
+-- Dump completed on 2023-05-15 16:00:54

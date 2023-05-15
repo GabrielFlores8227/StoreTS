@@ -11,7 +11,7 @@ div.product-section-container > div > div:first-of-type h1 {
   font-size: 28px;
 }
 
-div.product-container {
+div.product-section-container > div > div:last-of-type > div {
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -24,19 +24,20 @@ div.product-container {
           user-select: none;
   overflow: hidden;
 }
-div.product-container > div:first-of-type {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
   gap: 28px;
   background-color: white;
   padding: 21px;
 }
-div.product-container > div:first-of-type > div:first-of-type {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:first-of-type {
   width: 100%;
   padding-bottom: 14px;
 }
-div.product-container > div:first-of-type > div:first-of-type button {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:first-of-type button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,59 +51,67 @@ div.product-container > div:first-of-type > div:first-of-type button {
   background-color: var(--primary-color);
   color: white;
 }
-div.product-container > div:first-of-type > div:first-of-type button i {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:first-of-type button i {
   color: white;
   font-size: 11.9px;
 }
-div.product-container > div:first-of-type img {
-  width: 189px;
-  height: 189px;
+div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
+  width: 182px;
+  height: 182px;
   border-radius: 14px;
   -o-object-fit: contain;
      object-fit: contain;
 }
-div.product-container > div:first-of-type > div:last-of-type {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  height: 100%;
 }
-div.product-container > div:first-of-type > div:last-of-type p {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type p {
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-div.product-container > div:first-of-type > div:last-of-type p.product-container__name {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type > p:first-of-type {
   color: var(--regular-gray);
   font-size: 19.6px;
   font-family: var(--font-bold);
   padding: 0px 0px 5.6px 0px;
 }
-div.product-container > div:first-of-type > div:last-of-type p.product-container__old-price {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
   color: var(--regular-gray);
   text-decoration: line-through;
   font-size: 17.5px;
   filter: opacity(70%);
 }
-div.product-container > div:first-of-type > div:last-of-type p.product-container__price {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type > p:nth-of-type(3) {
   color: var(--regular-green);
   font-size: 28px;
   font-family: var(--font-bold);
 }
-div.product-container > div:first-of-type > div:last-of-type p.product-container__installment {
+div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type > p:last-of-type {
   color: var(--regular-gray);
   font-size: 17.5px;
+  filter: opacity(70%);
 }
-div.product-container a {
+div.product-section-container > div > div:last-of-type > div a {
   display: flex;
   gap: 5.6px;
   align-items: center;
   justify-content: center;
   color: white;
-  padding: 17.5px 0px;
+  padding: 18.9px 0px;
   font-size: 17.5px;
   font-family: var(--font-bold);
   background-color: var(--regular-green);
+  transition: ease-in-out 0.35s;
 }
-div.product-container a i {
+div.product-section-container > div > div:last-of-type > div a:hover {
+  background-color: var(--dark-green);
+}
+div.product-section-container > div > div:last-of-type > div a i {
   font-size: 21px;
 }
 
@@ -206,9 +215,10 @@ div.propagandas-container > p {
 }
 
 div.product-section-container > div {
-  padding: 84px 0px;
+  padding: 70px 0px;
 }
 div.product-section-container > div.--on {
+  margin: 28px 0px;
   background-color: var(--primary-color);
   position: relative;
 }
@@ -233,7 +243,6 @@ div.product-section-container > div > div:first-of-type {
   width: 100vw;
 }
 div.product-section-container > div > div:first-of-type h1 {
-  z-index: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -243,7 +252,6 @@ div.product-section-container > div > div:first-of-type h1 {
 }
 div.product-section-container > div > div:first-of-type h1::before {
   content: "";
-  z-index: -1;
   width: 10.5px;
   height: 10.5px;
   border-radius: 100%;
@@ -254,13 +262,12 @@ div.product-section-container > div > div:first-of-type h1::before {
   left: 0px;
 }
 div.product-section-container > div > div:last-of-type {
-  width: 100vw;
   display: flex;
+  width: 100vw;
   gap: 14px;
   overflow: scroll;
   padding: 14px 0px;
 }
-
 @media (pointer: none), (pointer: coarse) {
   div.loading-screen-container > img {
     transform: translateY(-200%);

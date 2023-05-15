@@ -87,15 +87,6 @@ export class GlobalS3Modules {
 export class GlobalMiddlewareModules {
 	public static readonly frontEndFolderPath = path.join(cwd(), 'src/front-end');
 
-	public static apiLimiter(minutes: number, max: number) {
-		return rateLimit({
-			windowMs: minutes * 60 * 1000,
-			max: max,
-			standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-			legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-		})
-	}
-
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
 	public static handleMiddlewareError(res: express.Response, err: any) {

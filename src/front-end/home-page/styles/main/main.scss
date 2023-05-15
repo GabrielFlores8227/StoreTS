@@ -1,7 +1,7 @@
-@import "../global/global";
+@import '../global/global';
 
 main {
-     padding: 126px 0px 140px 0px;
+	padding: 126px 0px 140px 0px;
 	background-color: var(--light-gray);
 }
 
@@ -26,7 +26,6 @@ div.loading-screen-container {
 	top: 0px;
 	left: 0px;
 
-
 	& > img {
 		&.--on {
 			filter: opacity(100%);
@@ -47,11 +46,11 @@ div.propagandas-container {
 		}
 
 		&:first-of-type {
-			left: 0px
+			left: 0px;
 		}
 
 		&:last-of-type {
-			right: 0px
+			right: 0px;
 		}
 
 		width: 50%;
@@ -88,7 +87,7 @@ div.product-section-container {
 	& > div {
 		&.--on {
 			&::before {
-				content: "";
+				content: '';
 				width: 350px;
 				height: 350px;
 				border-radius: 100%;
@@ -99,9 +98,10 @@ div.product-section-container {
 				left: 0px;
 			}
 
+			margin: 28px 0px;
 			background-color: var(--primary-color);
 			position: relative;
-			
+
 			h1 {
 				&::before {
 					background-color: white !important;
@@ -111,7 +111,7 @@ div.product-section-container {
 			}
 		}
 
-		padding: 84px 0px;
+		padding: 70px 0px;
 
 		& > div:first-of-type {
 			@extend %default-padding-size;
@@ -119,8 +119,7 @@ div.product-section-container {
 
 			h1 {
 				&::before {
-					content: "";
-					z-index: -1;
+					content: '';
 					width: 10.5px;
 					height: 10.5px;
 					border-radius: 100%;
@@ -128,11 +127,10 @@ div.product-section-container {
 					transform: translateY(-50%);
 					position: absolute;
 					top: 50%;
-					left: 0px
+					left: 0px;
 				}
 
 				@extend %big-font-size;
-				z-index: 1;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -144,27 +142,31 @@ div.product-section-container {
 
 		& > div:last-of-type {
 			@extend %default-padding-size;
-			width: 100vw;
 			display: flex;
+			width: 100vw;
 			gap: 14px;
 			overflow: scroll;
 			padding: 14px 0px;
+
+			& > div {
+				@extend %product-container;
+			}
 		}
 	}
 }
 
-@media (pointer:none), (pointer:coarse) {
+@media (pointer: none), (pointer: coarse) {
 	div.loading-screen-container {
 		& > img {
-			transform: translateY(-200%)
+			transform: translateY(-200%);
 		}
 	}
 }
 
 @media (min-width: 700px) {
-     main {
+	main {
 		padding: 84px 0px 140px 0px;
-     }
+	}
 
 	div.product-section-container {
 		& > div {
@@ -175,7 +177,7 @@ div.product-section-container {
 				}
 
 				&::after {
-					content: "";
+					content: '';
 					width: 420px;
 					height: 420px;
 					border-radius: 100%;
@@ -185,8 +187,7 @@ div.product-section-container {
 					right: 0px;
 					bottom: -50%;
 				}
-			}		
+			}
 		}
 	}
 }
-
