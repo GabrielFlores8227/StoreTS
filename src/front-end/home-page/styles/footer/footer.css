@@ -1,40 +1,47 @@
-footer {
+footer > div:first-of-type {
   padding-right: 24.5px !important;
   padding-left: 24.5px !important;
 }
 
-footer > div:last-of-type > div h1 {
+footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
+  font-size: 12.6px;
+}
+
+footer > div:first-of-type > div:last-of-type > div h1 {
   font-size: 28px;
 }
 
 @media (min-width: 700px) {
-  footer {
+  footer > div:first-of-type {
     padding-right: 35px !important;
     padding-left: 35px !important;
   }
-  footer > div:last-of-type > div h1 {
+  footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
+    font-size: 14px;
+  }
+  footer > div:first-of-type > div:last-of-type > div h1 {
     font-size: 31.5px;
   }
 }
 @media (min-width: 1000px) {
-  footer {
+  footer > div:first-of-type {
     padding-right: 84px !important;
     padding-left: 84px !important;
   }
 }
 @media (min-width: 1200px) {
-  footer {
+  footer > div:first-of-type {
     padding-right: 140px !important;
     padding-left: 140px !important;
   }
 }
-footer {
+footer > div:first-of-type {
   width: 100%;
-  padding: 119px 0px 28px 0px;
+  padding: 119px 0px 56px 0px;
   background-color: var(--primary-color);
   position: relative;
 }
-footer > div:first-of-type {
+footer > div:first-of-type > div:first-of-type {
   width: 100%;
   height: 100px;
   overflow: hidden;
@@ -43,14 +50,14 @@ footer > div:first-of-type {
   top: -51.8px;
   left: 50%;
 }
-footer > div:first-of-type svg path {
+footer > div:first-of-type > div:first-of-type svg path {
   fill: var(--primary-color);
 }
-footer > div:last-of-type {
+footer > div:first-of-type > div:last-of-type {
   display: flex;
   justify-content: center;
 }
-footer > div:last-of-type > div {
+footer > div:first-of-type > div:last-of-type > div {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -58,14 +65,15 @@ footer > div:last-of-type > div {
   width: 100%;
   max-width: 385px;
 }
-footer > div:last-of-type > div h1 {
+footer > div:first-of-type > div:last-of-type > div h1 {
   color: white;
 }
-footer > div:last-of-type > div p {
+footer > div:first-of-type > div:last-of-type > div p {
   color: white;
+  word-break: break-all;
   padding: 0px 0px 21px 0px;
 }
-footer > div:last-of-type > div a {
+footer > div:first-of-type > div:last-of-type > div a {
   background-color: white;
   color: var(--primary-color);
   transition: ease-in-out 0.35s;
@@ -80,14 +88,17 @@ footer > div:last-of-type > div a {
   font-family: var(--font-bold);
   border-radius: 70px;
 }
-footer > div:last-of-type > div a:hover {
+footer > div:first-of-type > div:last-of-type > div a:hover {
   background-color: var(--primary-color);
   color: white;
 }
-footer > div:last-of-type > div a i {
+footer > div:first-of-type > div:last-of-type > div a i {
   font-size: 18.9px;
 }
-footer > div:last-of-type > div > div:first-of-type {
+footer > div:first-of-type > div:last-of-type > div > div:first-of-type {
   display: flex;
   gap: 7px;
+}
+footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
+  padding: 105px 0px 0px 0px;
 }/*# sourceMappingURL=footer.css.map */

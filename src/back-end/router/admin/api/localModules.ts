@@ -160,8 +160,8 @@ class InputMask {
 			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
 			text: typeof body.text === 'string' && body.text.length > 1 && body.text.length <= 255,
 			whatsapp: typeof body.whatsapp === 'string' && !isNaN(Number(body.whatsapp)) && body.whatsapp.length === 13,
-			instagram: typeof body.instagram === 'string' && body.instagram.length > 1 && body.instagram.length <= 50,
-			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 50,
+			instagram: typeof body.instagram === 'string' && body.instagram.length > 1 && body.instagram.length <= 255,
+			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 255,
 			location: typeof body.location === 'string' && body.location.length > 1 && body.location.length <= 65535,
 			storeInfo: typeof body.storeInfo === 'string' && body.storeInfo.length > 1 && body.storeInfo.length <= 50,
 			completeStoreInfo: typeof body.completeStoreInfo === 'string' && body.completeStoreInfo.length > 1 && body.completeStoreInfo.length <= 100

@@ -3,7 +3,7 @@ header > div:last-of-type, header > div:first-of-type > div:first-of-type > div,
   padding-left: 24.5px !important;
 }
 
-header > div:first-of-type > img:first-of-type {
+header > div:first-of-type > a > img:first-of-type {
   height: 17.5px;
 }
 
@@ -11,24 +11,12 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
   font-size: 17.5px;
 }
 
-header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
-  width: 42px;
-  min-width: 42px;
-  height: 42px;
-  min-height: 42px;
-  border-radius: 100%;
-  transition: ease-in-out 0.35s;
-}
-header > div:last-of-type > button:hover, header > div:first-of-type > div:last-of-type > button:hover {
-  background-color: rgba(0, 0, 0, 0.089);
-}
-
 @media (min-width: 700px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
     padding-right: 35px !important;
     padding-left: 35px !important;
   }
-  header > div:first-of-type > img:first-of-type {
+  header > div:first-of-type > a > img:first-of-type {
     height: 18.9px;
   }
   header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
@@ -40,7 +28,7 @@ header > div:last-of-type > button:hover, header > div:first-of-type > div:last-
     padding-right: 84px !important;
     padding-left: 84px !important;
   }
-  header > div:first-of-type > img:first-of-type {
+  header > div:first-of-type > a > img:first-of-type {
     height: 19.6px;
   }
   header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
@@ -68,7 +56,10 @@ header > div:first-of-type {
   padding: 21px 0px;
   background-color: var(--primary-color);
 }
-header > div:first-of-type > img:first-of-type {
+header > div:first-of-type > a {
+  display: flex;
+}
+header > div:first-of-type > a > img:first-of-type {
   filter: grayscale(100%) brightness(200%);
 }
 header > div:first-of-type > div:first-of-type {
@@ -79,6 +70,11 @@ header > div:first-of-type > div:last-of-type {
   gap: 7px;
 }
 header > div:first-of-type > div:last-of-type > button {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  border-radius: 100%;
   color: white;
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
@@ -93,6 +89,11 @@ header > div:last-of-type {
   padding: 10.5px 0px;
 }
 header > div:last-of-type > button {
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  min-height: 42px;
+  border-radius: 100%;
   color: var(--primary-color);
 }
 
@@ -178,5 +179,13 @@ div.search-container > div > div > button > div > p:last-of-type {
   }
   div.search-container > input {
     font-size: 14px;
+  }
+}
+@media screen and (min-width: 500px) {
+  header button {
+    transition: ease-in-out 0.35s;
+  }
+  header button:hover {
+    background-color: rgba(0, 0, 0, 0.089);
   }
 }/*# sourceMappingURL=header.css.map */

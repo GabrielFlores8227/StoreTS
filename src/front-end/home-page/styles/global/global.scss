@@ -12,7 +12,7 @@
 }
 
 %small-font-size {
-	font-size: 11.2px;
+	font-size: 12.6px;
 }
 
 %default-font-size {
@@ -23,27 +23,10 @@
 	font-size: 28px;
 }
 
-%icon-button {
-	&:hover {
-		background-color: rgba(0, 0, 0, 0.089);
-	}
-
-	@extend %default-font-size;
-	width: 42px;
-	min-width: 42px;
-	height: 42px;
-	min-height: 42px;
-	border-radius: 100%;
-	transition: ease-in-out 0.35s;
-}
-
 %product-container {
 	z-index: 2;
 	display: flex;
 	flex-direction: column;
-	min-width: 280px;
-	max-width: 100%;
-	width: 100%;
 	border-radius: 14px;
 	user-select: none;
 	overflow: hidden;
@@ -130,20 +113,26 @@
 	}
 
 	a {
-          &:hover {
-               background-color: var(--dark-green);
-          }
+		&:focus {
+			outline: none;
+			border: 2.1px solid rgb(0, 162, 255);
+		}
+
+		&:hover {
+			background-color: var(--dark-green);
+		}
 
 		display: flex;
 		gap: 5.6px;
 		align-items: center;
 		justify-content: center;
+		border-radius: 0px 0px 14px 14px;
 		color: white;
 		padding: 18.9px 0px;
 		font-size: 17.5px;
 		font-family: var(--font-bold);
 		background-color: var(--regular-green);
-          transition: ease-in-out 0.35s;
+		transition: ease-in-out 0.35s;
 
 		i {
 			font-size: 21px;
@@ -163,6 +152,10 @@
 
 	%big-height-size {
 		height: 21px;
+	}
+
+	%small-font-size {
+		font-size: 14px;
 	}
 
 	%default-font-size {

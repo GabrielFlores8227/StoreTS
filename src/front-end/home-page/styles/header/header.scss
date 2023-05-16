@@ -16,9 +16,13 @@ header {
 		padding: 21px 0px;
 		background-color: var(--primary-color);
 
-		& > img:first-of-type {
-			@extend %default-height-size;
-			filter: grayscale(100%) brightness(200%);
+		& > a {
+			display: flex;
+
+			& > img:first-of-type {
+				@extend %default-height-size;
+				filter: grayscale(100%) brightness(200%);
+			}
 		}
 
 		& > div:first-of-type {
@@ -35,7 +39,12 @@ header {
 			gap: 7px;
 
 			& > button {
-				@extend %icon-button;
+				@extend %default-font-size;
+				width: 42px;
+				min-width: 42px;
+				height: 42px;
+				min-height: 42px;
+				border-radius: 100%;
 				color: white;
 			}
 
@@ -55,7 +64,12 @@ header {
 		padding: 10.5px 0px;
 
 		& > button {
-			@extend %icon-button;
+			@extend %default-font-size;
+			width: 42px;
+			min-width: 42px;
+			height: 42px;
+			min-height: 42px;
+			border-radius: 100%;
 			color: var(--primary-color);
 		}
 	}
@@ -169,6 +183,18 @@ div.search-container {
 	div.search-container {
 		& > input {
 			font-size: 14px;
+		}
+	}
+}
+
+@media screen and (min-width: 500px) {
+	header {
+		button {
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.089);
+			}
+
+			transition: ease-in-out 0.35s;
 		}
 	}
 }

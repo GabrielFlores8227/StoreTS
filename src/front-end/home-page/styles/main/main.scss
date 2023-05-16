@@ -11,13 +11,10 @@ div.loading-screen-container {
 		pointer-events: none;
 	}
 
-	filter: opacity(0%);
-	pointer-events: none;
-
+	z-index: 4;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 4;
 	width: 100%;
 	height: 100vh;
 	background-color: var(--primary-color);
@@ -26,14 +23,29 @@ div.loading-screen-container {
 	top: 0px;
 	left: 0px;
 
-	& > img {
+	& > div {
 		&.--on {
 			filter: opacity(100%);
 		}
 
-		@extend %big-height-size;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 14px;
 		filter: opacity(0%);
-		transition: ease-in-out 0.56s;
+
+		& > img {
+			@extend %big-height-size;
+			transition: ease-in-out 0.56s;
+		}
+
+		& > div {
+			width: 0%;
+			transition: ease-in-out 0.35s;
+			height: 2.8px;
+			background-color: white;
+			border-radius: 70px;
+		}
 	}
 }
 
@@ -66,6 +78,7 @@ div.propagandas-container {
 		img {
 			width: 100vw;
 			object-fit: cover;
+			object-position: bottom;
 		}
 	}
 
@@ -150,15 +163,24 @@ div.product-section-container {
 
 			& > div {
 				@extend %product-container;
+				width: 100%;
+				min-width: 280px;
 			}
 		}
 	}
 }
 
-@media (pointer: none), (pointer: coarse) {
-	div.loading-screen-container {
-		& > img {
-			transform: translateY(-200%);
+@media (min-width: 500px) {
+	main {
+		padding-top: 140px;
+	}
+
+	div.propagandas-container {
+		& > div:first-of-type {
+			img {
+				width: 100vw;
+				height: 35vw;
+			}
 		}
 	}
 }
@@ -166,6 +188,15 @@ div.product-section-container {
 @media (min-width: 700px) {
 	main {
 		padding: 84px 0px 140px 0px;
+	}
+
+	div.propagandas-container {
+		& > div:first-of-type {
+			img {
+				width: 100vw;
+				height: auto;
+			}
+		}
 	}
 
 	div.product-section-container {
