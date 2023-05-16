@@ -97,7 +97,7 @@ div.cart-product-container > div > div a {
   background-color: var(--regular-green);
   transition: ease-in-out 0.35s;
 }
-div.cart-product-container > div > div a:focus {
+div.cart-product-container > div > div a:focus-visible {
   outline: none;
   border: 2.1px solid rgb(0, 162, 255);
 }

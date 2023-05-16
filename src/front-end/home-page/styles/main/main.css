@@ -106,7 +106,7 @@ div.product-section-container > div > div:last-of-type > div a {
   background-color: var(--regular-green);
   transition: ease-in-out 0.35s;
 }
-div.product-section-container > div > div:last-of-type > div a:focus {
+div.product-section-container > div > div:last-of-type > div a:focus-visible {
   outline: none;
   border: 2.1px solid rgb(0, 162, 255);
 }
@@ -145,7 +145,7 @@ div.product-section-container > div > div:last-of-type > div a i {
   }
 }
 main {
-  padding: 126px 0px 140px 0px;
+  padding: 140px 0px;
   background-color: var(--light-gray);
 }
 
