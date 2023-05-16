@@ -24,7 +24,7 @@
 		image.addEventListener('load', function () {
 			loadedCount++;
 
-			updateLoadingProgessBar((images.length / 100) * loadedCount)
+			updateLoadingProgessBar((loadedCount / images.length) * 100)
 
 			if (loadedCount === images.length) {
 				removeLoadingScreen();

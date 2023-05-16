@@ -11,7 +11,9 @@ function updateLoadingProgessBar(progress) {
 }
 
 function removeLoadingScreen() {
-	window.document.querySelector('div[loading-screen-container]').classList.add('--off');
+	setTimeout(() => {
+		window.document.querySelector('div[loading-screen-container]').classList.add('--off');
+	}, 1400)
 }
 
 function buildHead(header) {

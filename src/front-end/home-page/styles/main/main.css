@@ -169,7 +169,7 @@ div.loading-screen-container.--off {
 div.loading-screen-container > div {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   gap: 14px;
   filter: opacity(0%);
 }
@@ -181,7 +181,7 @@ div.loading-screen-container > div > img {
 }
 div.loading-screen-container > div > div {
   width: 0%;
-  transition: ease-in-out 0.35s;
+  transition: ease-in-out 1.4s;
   height: 2.8px;
   background-color: white;
   border-radius: 70px;
@@ -288,6 +288,11 @@ div.product-section-container > div > div:last-of-type > div {
   min-width: 280px;
 }
 
+@media (hover: none) {
+  div.loading-screen-container > div {
+    transform: translateY(-100%);
+  }
+}
 @media (min-width: 500px) {
   main {
     padding-top: 140px;

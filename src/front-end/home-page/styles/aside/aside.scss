@@ -65,7 +65,7 @@ aside {
 
 					p {
 						text-align: center;
-						font-size: 14px;
+						font-size: 13.3px;
 						font-family: var(--font-bold);
 						padding: 14px;
 						background-color: var(--primary-color);
@@ -99,7 +99,7 @@ div.cart-product-container {
 
 		transition: ease-in-out 0.35s;
 		overflow: hidden;
-		margin: 14px 0px;
+		margin: 21px 0px;
 
 		& > div {
 			@extend %product-container;

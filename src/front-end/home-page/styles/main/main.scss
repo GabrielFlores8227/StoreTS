@@ -30,7 +30,7 @@ div.loading-screen-container {
 
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		align-items: left;
 		gap: 14px;
 		filter: opacity(0%);
 
@@ -41,7 +41,7 @@ div.loading-screen-container {
 
 		& > div {
 			width: 0%;
-			transition: ease-in-out 0.35s;
+			transition: ease-in-out 1.4s;
 			height: 2.8px;
 			background-color: white;
 			border-radius: 70px;
@@ -166,6 +166,14 @@ div.product-section-container {
 				width: 100%;
 				min-width: 280px;
 			}
+		}
+	}
+}
+
+@media (hover: none) {
+	div.loading-screen-container {
+		& > div {
+			transform: translateY(-100%);
 		}
 	}
 }

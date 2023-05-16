@@ -176,7 +176,7 @@ aside > div > div:first-of-type > div > div::before {
 }
 aside > div > div:first-of-type > div > div p {
   text-align: center;
-  font-size: 14px;
+  font-size: 13.3px;
   font-family: var(--font-bold);
   padding: 14px;
   background-color: var(--primary-color);
@@ -195,7 +195,7 @@ aside > div > div:last-of-type {
 div.cart-product-container > div {
   transition: ease-in-out 0.35s;
   overflow: hidden;
-  margin: 14px 0px;
+  margin: 21px 0px;
 }
 div.cart-product-container > div:first-of-type {
   margin-top: 0px;
