@@ -3,20 +3,32 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
+
+		<!--icon-->
 		<link rel="shortcut icon" />
+
+		<!--title & description-->
 		<title></title>
 		<meta name="description" />
+
+		<!--css-->
 		<link rel="stylesheet" href="home-page/styles/global/global.css" />
 		<link rel="stylesheet" href="home-page/styles/index/index.css" />
 		<link rel="stylesheet" href="home-page/styles/aside/aside.css" />
 		<link rel="stylesheet" href="home-page/styles/header/header.css" />
 		<link rel="stylesheet" href="home-page/styles/main/main.css" />
 		<link rel="stylesheet" href="home-page/styles/footer/footer.css" />
+
+		<!--font-awesome-->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-		<aside cart-aside-menu>
-			<button close-cart-aside-menu-button></button>
+		<!--scripts-->
+		<script defer type="module" src="home-page/scripts/controller.js"></script>
+
+		<!--saved-aside-menu-->
+		<aside saved-aside-menu>
+			<button close-saved-aside-menu-button></button>
 			<div>
 				<div>
 					<div>
@@ -27,13 +39,13 @@
 					</div>
 				</div>
 				<div>
-					<div cart-product-container class="cart-product-container">
+					<div saved-product-container class="saved-product-container">
 						<template>
 							<div>
 								<div>
 									<div>
 										<div>
-											<button remove-from-cart-button>
+											<button remove-from-saved-button>
 												<i class="fa-solid fa-bookmark"></i>
 												Remove
 											</button>
@@ -60,6 +72,8 @@
 				</div>
 			</div>
 		</aside>
+
+		<!--categories-aside-menu-->
 		<aside categories-aside-menu>
 			<button close-categories-aside-menu-button></button>
 			<div>
@@ -85,6 +99,8 @@
 				</div>
 			</div>
 		</aside>
+
+		<!--header-->
 		<header>
 			<div>
 				<a href="/">
@@ -107,7 +123,7 @@
 					</div>
 				</div>
 				<div>
-					<button open-cart-aside-menu-button>
+					<button open-saved-aside-menu-button>
 						<i class="fa-solid fa-bookmark"></i>
 					</button>
 					<button open-categories-aside-menu-button>
@@ -137,13 +153,18 @@
 				</div>
 			</div>
 		</header>
+
+		<!--main-->
 		<main>
+			<!--loading-screen-->
 			<div loading-screen-container class="loading-screen-container">
 				<div>
 					<img store-logo alt="Store Logo" />
 					<div loading-progess-bar></div>
 				</div>
 			</div>
+
+			<!--propagandas-->
 			<div image-slider-container class="propagandas-container">
 				<button></button>
 				<div propagandas-container>
@@ -157,6 +178,8 @@
 				<button></button>
 				<p store-info></p>
 			</div>
+
+			<!--products-->
 			<div product-section-container class="product-section-container">
 				<template>
 					<div>
@@ -168,7 +191,7 @@
 								<div>
 									<div>
 										<div>
-											<button add-to-cart-button>
+											<button add-to-saved-button>
 												<i class="fa-solid fa-bookmark"></i>
 												Save
 											</button>
@@ -192,6 +215,8 @@
 				</template>
 			</div>
 		</main>
+
+		<!--footer-->
 		<footer>
 			<div>
 				<div>
@@ -405,7 +430,7 @@
 								Facebook
 							</a>
 						</div>
-						<a target="_blank">
+						<a location-link target="_blank">
 							<i class="fa-solid fa-location-dot"></i>
 							Location
 						</a>
@@ -414,8 +439,5 @@
 				</div>
 			</div>
 		</footer>
-		<script src="home-page/scripts/modules.js"></script>
-		<script src="home-page/scripts/builders.js"></script>
-		<script src="home-page/scripts/controller.js"></script>
 	</body>
 </html>

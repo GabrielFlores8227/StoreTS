@@ -97,8 +97,10 @@ div.propagandas-container {
 }
 
 div.product-section-container {
+	padding: 35px 0px;
+
 	& > div {
-		&.--on {
+		&.--special {
 			&::before {
 				content: '';
 				width: 350px;
@@ -111,7 +113,8 @@ div.product-section-container {
 				left: 0px;
 			}
 
-			margin: 28px 0px;
+			margin: 42px 0px;
+			padding: 56px 0px;
 			background-color: var(--primary-color);
 			position: relative;
 
@@ -124,7 +127,7 @@ div.product-section-container {
 			}
 		}
 
-		padding: 70px 0px;
+		padding: 42px 0px;
 
 		& > div:first-of-type {
 			@extend %default-padding-size;
@@ -159,7 +162,8 @@ div.product-section-container {
 			width: 100vw;
 			gap: 14px;
 			overflow: scroll;
-			padding: 14px 0px;
+			padding-top: 14px;
+			padding-bottom: 14px;
 
 			& > div {
 				@extend %product-container;

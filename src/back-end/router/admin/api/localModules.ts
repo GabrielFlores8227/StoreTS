@@ -31,14 +31,14 @@ class InputMask {
 	};
 
 	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
-		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', "image/webp"].includes(Object(file).mimetype)) {
+		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', 'image/webp'].includes(Object(file).mimetype)) {
 			throw {
 				status: 400,
 				message: 'Please provide valid image(s) to fulfill the request',
 			};
 		}
 
-		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255)
+		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
 			Object(file).buffer = await sharp(Object(file).buffer)
@@ -84,7 +84,7 @@ class InputMask {
 			executeChecker: async (body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) => await this.productsChecker(body),
 		},
 		footer: {
-			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string, storeInfo: string, completeStoreInfo: string }) => this.footerChecker(body),
+			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string; storeInfo: string; completeStoreInfo: string }) => this.footerChecker(body),
 		},
 	};
 
@@ -155,7 +155,7 @@ class InputMask {
 		};
 	}
 
-	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string, storeInfo: string, completeStoreInfo: string }) {
+	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string; storeInfo: string; completeStoreInfo: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
 			text: typeof body.text === 'string' && body.text.length > 1 && body.text.length <= 255,
@@ -164,7 +164,7 @@ class InputMask {
 			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 50,
 			location: typeof body.location === 'string' && body.location.length > 1 && body.location.length <= 65535,
 			storeInfo: typeof body.storeInfo === 'string' && body.storeInfo.length > 1 && body.storeInfo.length <= 50,
-			completeStoreInfo: typeof body.completeStoreInfo === 'string' && body.completeStoreInfo.length > 1 && body.completeStoreInfo.length <= 100
+			completeStoreInfo: typeof body.completeStoreInfo === 'string' && body.completeStoreInfo.length > 1 && body.completeStoreInfo.length <= 100,
 		};
 	}
 }

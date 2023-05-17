@@ -1,6 +1,6 @@
 footer > div:first-of-type {
-  padding-right: 24.5px !important;
-  padding-left: 24.5px !important;
+  padding-right: 24.5px;
+  padding-left: 24.5px;
 }
 
 footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
@@ -13,8 +13,8 @@ footer > div:first-of-type > div:last-of-type > div h1 {
 
 @media (min-width: 700px) {
   footer > div:first-of-type {
-    padding-right: 35px !important;
-    padding-left: 35px !important;
+    padding-right: 35px;
+    padding-left: 35px;
   }
   footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
     font-size: 14px;
@@ -25,19 +25,20 @@ footer > div:first-of-type > div:last-of-type > div h1 {
 }
 @media (min-width: 1000px) {
   footer > div:first-of-type {
-    padding-right: 84px !important;
-    padding-left: 84px !important;
+    padding-right: 84px;
+    padding-left: 84px;
   }
 }
 @media (min-width: 1200px) {
   footer > div:first-of-type {
-    padding-right: 140px !important;
-    padding-left: 140px !important;
+    padding-right: 140px;
+    padding-left: 140px;
   }
 }
 footer > div:first-of-type {
   width: 100%;
-  padding: 119px 0px 56px 0px;
+  padding-top: 119px;
+  padding-bottom: 56px;
   background-color: var(--primary-color);
   position: relative;
 }

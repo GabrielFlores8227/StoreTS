@@ -1,6 +1,6 @@
 %default-padding-size {
-	padding-right: 24.5px !important;
-	padding-left: 24.5px !important;
+	padding-right: 24.5px;
+	padding-left: 24.5px;
 }
 
 %default-height-size {
@@ -115,7 +115,9 @@
 	a {
 		&:focus-visible {
 			outline: none;
-			border: 2.1px solid rgb(0, 162, 255);
+			-webkit-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+			-moz-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+			box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
 		}
 
 		&:hover {
@@ -142,8 +144,8 @@
 
 @media (min-width: 700px) {
 	%default-padding-size {
-		padding-right: 35px !important;
-		padding-left: 35px !important;
+		padding-right: 35px;
+		padding-left: 35px;
 	}
 
 	%default-height-size {
@@ -169,8 +171,8 @@
 
 @media (min-width: 1000px) {
 	%default-padding-size {
-		padding-right: 84px !important;
-		padding-left: 84px !important;
+		padding-right: 84px;
+		padding-left: 84px;
 	}
 
 	%default-height-size {
@@ -188,7 +190,7 @@
 
 @media (min-width: 1200px) {
 	%default-padding-size {
-		padding-right: 140px !important;
-		padding-left: 140px !important;
+		padding-right: 140px;
+		padding-left: 140px;
 	}
 }

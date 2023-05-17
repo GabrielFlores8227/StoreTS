@@ -4,7 +4,8 @@ footer {
 	& > div:first-of-type {
 		@extend %default-padding-size;
 		width: 100%;
-		padding: 119px 0px 56px 0px;
+		padding-top: 119px;
+		padding-bottom: 56px;
 		background-color: var(--primary-color);
 		position: relative;
 

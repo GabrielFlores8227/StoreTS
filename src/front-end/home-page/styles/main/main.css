@@ -1,6 +1,6 @@
 div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-  padding-right: 24.5px !important;
-  padding-left: 24.5px !important;
+  padding-right: 24.5px;
+  padding-left: 24.5px;
 }
 
 div.loading-screen-container > div > img {
@@ -108,7 +108,7 @@ div.product-section-container > div > div:last-of-type > div a {
 }
 div.product-section-container > div > div:last-of-type > div a:focus-visible {
   outline: none;
-  border: 2.1px solid rgb(0, 162, 255);
+  box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
 }
 div.product-section-container > div > div:last-of-type > div a:hover {
   background-color: var(--dark-green);
@@ -119,8 +119,8 @@ div.product-section-container > div > div:last-of-type > div a i {
 
 @media (min-width: 700px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-    padding-right: 35px !important;
-    padding-left: 35px !important;
+    padding-right: 35px;
+    padding-left: 35px;
   }
   div.loading-screen-container > div > img {
     height: 21px;
@@ -131,8 +131,8 @@ div.product-section-container > div > div:last-of-type > div a i {
 }
 @media (min-width: 1000px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-    padding-right: 84px !important;
-    padding-left: 84px !important;
+    padding-right: 84px;
+    padding-left: 84px;
   }
   div.loading-screen-container > div > img {
     height: 22.4px;
@@ -140,8 +140,8 @@ div.product-section-container > div > div:last-of-type > div a i {
 }
 @media (min-width: 1200px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-    padding-right: 140px !important;
-    padding-left: 140px !important;
+    padding-right: 140px;
+    padding-left: 140px;
   }
 }
 main {
@@ -229,15 +229,19 @@ div.propagandas-container > p {
   left: 50%;
 }
 
-div.product-section-container > div {
-  padding: 70px 0px;
+div.product-section-container {
+  padding: 35px 0px;
 }
-div.product-section-container > div.--on {
-  margin: 28px 0px;
+div.product-section-container > div {
+  padding: 42px 0px;
+}
+div.product-section-container > div.--special {
+  margin: 42px 0px;
+  padding: 56px 0px;
   background-color: var(--primary-color);
   position: relative;
 }
-div.product-section-container > div.--on::before {
+div.product-section-container > div.--special::before {
   content: "";
   width: 350px;
   height: 350px;
@@ -248,10 +252,10 @@ div.product-section-container > div.--on::before {
   top: 0px;
   left: 0px;
 }
-div.product-section-container > div.--on h1 {
+div.product-section-container > div.--special h1 {
   color: white !important;
 }
-div.product-section-container > div.--on h1::before {
+div.product-section-container > div.--special h1::before {
   background-color: white !important;
 }
 div.product-section-container > div > div:first-of-type {
@@ -281,7 +285,8 @@ div.product-section-container > div > div:last-of-type {
   width: 100vw;
   gap: 14px;
   overflow: scroll;
-  padding: 14px 0px;
+  padding-top: 14px;
+  padding-bottom: 14px;
 }
 div.product-section-container > div > div:last-of-type > div {
   width: 100%;

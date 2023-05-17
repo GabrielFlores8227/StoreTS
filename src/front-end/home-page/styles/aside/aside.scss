@@ -87,19 +87,15 @@ aside {
 	}
 }
 
-div.cart-product-container {
+div.saved-product-container {
 	& > div {
-		&:first-of-type {
-			margin-top: 0px;
-		}
-
-		&:last-of-type {
-			margin-bottom: 0px;
+		&.--off {
+			filter: opacity(0%);
+			margin: 0px;
 		}
 
 		transition: ease-in-out 0.35s;
 		overflow: hidden;
-		margin: 21px 0px;
 
 		& > div {
 			@extend %product-container;

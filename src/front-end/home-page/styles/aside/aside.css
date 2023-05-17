@@ -2,7 +2,7 @@ aside > div > div:first-of-type > div > img {
   height: 17.5px;
 }
 
-div.cart-product-container > div > div {
+div.saved-product-container > div > div {
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@ div.cart-product-container > div > div {
           user-select: none;
   overflow: hidden;
 }
-div.cart-product-container > div > div > div:first-of-type {
+div.saved-product-container > div > div > div:first-of-type {
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -21,11 +21,11 @@ div.cart-product-container > div > div > div:first-of-type {
   background-color: white;
   padding: 21px;
 }
-div.cart-product-container > div > div > div:first-of-type > div:first-of-type {
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type {
   width: 100%;
   padding-bottom: 14px;
 }
-div.cart-product-container > div > div > div:first-of-type > div:first-of-type button {
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,52 +39,52 @@ div.cart-product-container > div > div > div:first-of-type > div:first-of-type b
   background-color: var(--primary-color);
   color: white;
 }
-div.cart-product-container > div > div > div:first-of-type > div:first-of-type button i {
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type button i {
   color: white;
   font-size: 11.9px;
 }
-div.cart-product-container > div > div > div:first-of-type img {
+div.saved-product-container > div > div > div:first-of-type img {
   width: 182px;
   height: 182px;
   border-radius: 14px;
   -o-object-fit: contain;
      object-fit: contain;
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 100%;
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type p {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type p {
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type > p:first-of-type {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:first-of-type {
   color: var(--regular-gray);
   font-size: 19.6px;
   font-family: var(--font-bold);
   padding: 0px 0px 5.6px 0px;
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
   color: var(--regular-gray);
   text-decoration: line-through;
   font-size: 17.5px;
   filter: opacity(70%);
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(3) {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(3) {
   color: var(--regular-green);
   font-size: 28px;
   font-family: var(--font-bold);
 }
-div.cart-product-container > div > div > div:first-of-type > div:last-of-type > p:last-of-type {
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:last-of-type {
   color: var(--regular-gray);
   font-size: 17.5px;
   filter: opacity(70%);
 }
-div.cart-product-container > div > div a {
+div.saved-product-container > div > div a {
   display: flex;
   gap: 5.6px;
   align-items: center;
@@ -97,14 +97,14 @@ div.cart-product-container > div > div a {
   background-color: var(--regular-green);
   transition: ease-in-out 0.35s;
 }
-div.cart-product-container > div > div a:focus-visible {
+div.saved-product-container > div > div a:focus-visible {
   outline: none;
-  border: 2.1px solid rgb(0, 162, 255);
+  box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
 }
-div.cart-product-container > div > div a:hover {
+div.saved-product-container > div > div a:hover {
   background-color: var(--dark-green);
 }
-div.cart-product-container > div > div a i {
+div.saved-product-container > div > div a i {
   font-size: 21px;
 }
 
@@ -192,18 +192,15 @@ aside > div > div:last-of-type {
   height: 100%;
 }
 
-div.cart-product-container > div {
+div.saved-product-container > div {
   transition: ease-in-out 0.35s;
   overflow: hidden;
-  margin: 21px 0px;
 }
-div.cart-product-container > div:first-of-type {
-  margin-top: 0px;
+div.saved-product-container > div.--off {
+  filter: opacity(0%);
+  margin: 0px;
 }
-div.cart-product-container > div:last-of-type {
-  margin-bottom: 0px;
-}
-div.cart-product-container > div > div {
+div.saved-product-container > div > div {
   width: 100%;
 }
 

@@ -1,6 +1,6 @@
 header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-  padding-right: 24.5px !important;
-  padding-left: 24.5px !important;
+  padding-right: 24.5px;
+  padding-left: 24.5px;
 }
 
 header > div:first-of-type > a > img:first-of-type {
@@ -13,8 +13,8 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
 
 @media (min-width: 700px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-    padding-right: 35px !important;
-    padding-left: 35px !important;
+    padding-right: 35px;
+    padding-left: 35px;
   }
   header > div:first-of-type > a > img:first-of-type {
     height: 18.9px;
@@ -25,8 +25,8 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
 }
 @media (min-width: 1000px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-    padding-right: 84px !important;
-    padding-left: 84px !important;
+    padding-right: 84px;
+    padding-left: 84px;
   }
   header > div:first-of-type > a > img:first-of-type {
     height: 19.6px;
@@ -37,8 +37,8 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
 }
 @media (min-width: 1200px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-    padding-right: 140px !important;
-    padding-left: 140px !important;
+    padding-right: 140px;
+    padding-left: 140px;
   }
 }
 header {
@@ -53,11 +53,13 @@ header > div:first-of-type {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 21px 0px;
   background-color: var(--primary-color);
+  padding-top: 21px;
+  padding-bottom: 21px;
 }
 header > div:first-of-type > a {
   display: flex;
+  padding: 14px 0px;
 }
 header > div:first-of-type > a > img:first-of-type {
   filter: grayscale(100%) brightness(200%);
@@ -70,12 +72,16 @@ header > div:first-of-type > div:last-of-type {
   gap: 7px;
 }
 header > div:first-of-type > div:last-of-type > button {
+  color: white;
   width: 42px;
   min-width: 42px;
   height: 42px;
+  transition: ease-in-out 0.35s;
   min-height: 42px;
   border-radius: 100%;
-  color: white;
+}
+header > div:first-of-type > div:last-of-type > button:hover {
+  background-color: rgba(0, 0, 0, 0.123);
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
   display: none;
@@ -84,15 +90,12 @@ header > div:last-of-type {
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 7px;
+  gap: 17.5px;
   background-color: var(--light-gray);
-  padding: 10.5px 0px;
+  padding-top: 10.5px;
+  padding-bottom: 10.5px;
 }
 header > div:last-of-type > button {
-  width: 42px;
-  min-width: 42px;
-  height: 42px;
-  min-height: 42px;
   border-radius: 100%;
   color: var(--primary-color);
 }
@@ -179,13 +182,5 @@ div.search-container > div > div > button > div > p:last-of-type {
   }
   div.search-container > input {
     font-size: 14px;
-  }
-}
-@media screen and (min-width: 500px) {
-  header button {
-    transition: ease-in-out 0.35s;
-  }
-  header button:hover {
-    background-color: rgba(0, 0, 0, 0.089);
   }
 }/*# sourceMappingURL=header.css.map */
