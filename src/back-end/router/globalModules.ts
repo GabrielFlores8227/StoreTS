@@ -1,5 +1,4 @@
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';

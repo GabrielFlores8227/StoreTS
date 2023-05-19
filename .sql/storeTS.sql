@@ -103,10 +103,10 @@ CREATE TABLE `products` (
   `installment` varchar(50) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
   `message` varchar(255) NOT NULL,
-  `position` smallint DEFAULT NULL,
   `clicks` bigint NOT NULL DEFAULT '0',
   `lastClick` datetime DEFAULT NULL,
   `creation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -127,7 +127,6 @@ CREATE TABLE `propagandas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
