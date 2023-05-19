@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Linux (x86_64)
 --
 -- Host: localhost    Database: storeTS
 -- ------------------------------------------------------
--- Server version	8.0.32-0ubuntu0.22.04.2
+-- Server version	8.0.33-0ubuntu0.22.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -77,8 +77,8 @@ DROP TABLE IF EXISTS `header`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `header` (
   `id` enum('only') NOT NULL DEFAULT 'only',
-  `icon` varchar(255) NOT NULL,
-  `logo` varchar(255) NOT NULL,
+  `icon` varchar(4) NOT NULL DEFAULT 'icon',
+  `logo` varchar(4) NOT NULL DEFAULT 'logo',
   `title` varchar(50) NOT NULL,
   `description` varchar(255) NOT NULL,
   `color` varchar(7) NOT NULL,
@@ -127,6 +127,7 @@ CREATE TABLE `propagandas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -135,4 +136,4 @@ CREATE TABLE `propagandas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-19 14:09:20
+-- Dump completed on 2023-05-19 15:40:49
