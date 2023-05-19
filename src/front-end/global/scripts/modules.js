@@ -16,9 +16,10 @@ function removeLoadingScreen() {
 	}, 1400);
 }
 
-function buildLogo(logo) {
+function buildLogo(header) {
 	window.document.querySelectorAll('img[store-logo]').forEach((element) => {
-		element.setAttribute('src', logo);
+		element.setAttribute('src', header.logo);
+		element.setAttribute('alt', header.title)
 	});
 }
 
@@ -333,8 +334,8 @@ function buildFooter(footer) {
 	window.document.querySelector('h1[footer-title]').innerText = footer.title;
 	window.document.querySelector('p[title-text]').innerText = footer.text;
 	window.document.querySelector('a[whatsapp-link]').setAttribute('href', 'https://wa.me/' + footer.whatsapp);
-	window.document.querySelector('a[instagram-link]').setAttribute('href', 'https://www.instagram.com/' + footer.instagram.replace('@', ''));
-	window.document.querySelector('a[facebook-link]').setAttribute('href', 'https://www.facebook.com/' + footer.facebook.replace('@', ''));
+	window.document.querySelector('a[instagram-link]').setAttribute('href', 'https://www.instagram.com/' + footer);
+	window.document.querySelector('a[facebook-link]').setAttribute('href', 'https://www.facebook.com/' + footer);
 	window.document.querySelector('a[location-link]').setAttribute('href', footer.location);
 	window.document.querySelector('p[complete-store-info]').innerText = footer.completeStoreInfo;
 }

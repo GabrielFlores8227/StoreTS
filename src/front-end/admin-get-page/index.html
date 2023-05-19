@@ -18,13 +18,54 @@
 		<link rel="stylesheet" href="global/styles/modules/modules.css" />
 		<link rel="stylesheet" href="global/styles/index/index.css" />
 		<link rel="stylesheet" href="admin-get-page/styles/main/main.css" />
+		<link rel="stylesheet" href="admin-get-page/styles/header/header.css" />
+
+		<!--font-awesome-->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
 		<!--scripts-->
 		<script defer src="global/scripts/modules.js"></script>
 		<script defer src="admin-get-page/scripts/controller.js"></script>
 
+		<!--header-->
+		<header>
+			<div>
+				<a href="/">
+					<img store-logo alt="Store Logo" />
+				</a>
+			</div>
+		</header>
+
+		<!--main-->
 		<main>
+			<div>
+				<div>
+					<h1>
+						Admin Page
+					</h1>
+					<div>
+						<form>
+							<div>
+								<div class="custom-input">
+									<input id="username" type="text" name="username" placeholder="username" />
+									<label for="username">username</label>
+								</div>
+							</div>
+							<div>
+								<div class="custom-input">
+									<input id="password" type="password" name="password" placeholder="password" />
+									<label for="password">password</label>
+								</div>
+							</div>
+							<button>
+								<i class="fa-solid fa-right-to-bracket"></i>
+								Login
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
 			<div>
 				<div>
 					<svg xmlns="http://www.w3.org/2000/svg" height="0.611111in" viewBox="0 0 1600 55">

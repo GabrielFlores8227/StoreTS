@@ -17,7 +17,7 @@ div.saved-product-container > div > div > div:first-of-type {
   height: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 21px;
   background-color: white;
   padding: 21px;
 }
@@ -43,13 +43,13 @@ div.saved-product-container > div > div > div:first-of-type > div:first-of-type 
   font-size: 11.9px;
 }
 div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) {
-  display: inline-block;
   width: 100%;
+  padding-bottom: 5.6px;
 }
 div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) > hr {
   border: 0px;
   height: 1px;
-  background-color: rgba(0, 0, 0, 0.37);
+  background-color: rgba(0, 0, 0, 0.178);
 }
 div.saved-product-container > div > div > div:first-of-type img {
   width: 182px;

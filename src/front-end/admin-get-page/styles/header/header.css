@@ -1,0 +1,62 @@
+header > div:first-of-type {
+  padding-right: 24.5px;
+  padding-left: 24.5px;
+}
+
+header > div:first-of-type > a > img:first-of-type {
+  height: 17.5px;
+}
+
+@media (min-width: 700px) {
+  header > div:first-of-type {
+    padding-right: 35px;
+    padding-left: 35px;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 18.9px;
+  }
+}
+@media (min-width: 800px) {
+  header > div:first-of-type {
+    padding-right: 7vw;
+    padding-left: 7vw;
+  }
+}
+@media (min-width: 1000px) {
+  header > div:first-of-type {
+    padding-right: 9.8vw;
+    padding-left: 9.8vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 19.6px;
+  }
+}
+@media (min-width: 1300px) {
+  header > div:first-of-type {
+    padding-right: 14vw;
+    padding-left: 14vw;
+  }
+}
+header {
+  z-index: 3;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+header > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--primary-color);
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+header > div:first-of-type > a {
+  display: flex;
+  padding: 14px 0px;
+}
+header > div:first-of-type > a > img:first-of-type {
+  filter: grayscale(100%) brightness(200%);
+}/*# sourceMappingURL=header.css.map */
