@@ -233,6 +233,10 @@ function buildPropagandas(propagandas, footer) {
 	const storeInfoParagraph = document.querySelector('p[store-info]');
 	storeInfoParagraph.innerText = footer.storeInfo;
 
+	if (propagandas.length > 0) {
+		templateParent.classList.add("--on")
+	}
+
 	propagandas.forEach((propaganda) => {
 		const template = templateParent.querySelector('template').cloneNode(true).content.children[0];
 
@@ -334,8 +338,8 @@ function buildFooter(footer) {
 	window.document.querySelector('h1[footer-title]').innerText = footer.title;
 	window.document.querySelector('p[title-text]').innerText = footer.text;
 	window.document.querySelector('a[whatsapp-link]').setAttribute('href', 'https://wa.me/' + footer.whatsapp);
-	window.document.querySelector('a[instagram-link]').setAttribute('href', 'https://www.instagram.com/' + footer);
-	window.document.querySelector('a[facebook-link]').setAttribute('href', 'https://www.facebook.com/' + footer);
+	window.document.querySelector('a[instagram-link]').setAttribute('href', 'https://www.instagram.com/' + footer.instagram);
+	window.document.querySelector('a[facebook-link]').setAttribute('href', 'https://www.facebook.com/' + footer.facebook);
 	window.document.querySelector('a[location-link]').setAttribute('href', footer.location);
 	window.document.querySelector('p[complete-store-info]').innerText = footer.completeStoreInfo;
 }

@@ -205,3 +205,12 @@ div.search-container {
 		}
 	}
 }
+
+@media (min-width: 1700px) {
+	div.search-container {
+		& > input {
+			font-size: 14.7px;
+			padding: 6.3px 12.6px;
+		}
+	}
+}

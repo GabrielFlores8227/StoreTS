@@ -37,6 +37,15 @@ header > div:first-of-type > a > img:first-of-type {
     padding-left: 14vw;
   }
 }
+@media (min-width: 1700px) {
+  header > div:first-of-type {
+    padding-right: 17.5vw;
+    padding-left: 17.5vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 21px;
+  }
+}
 header {
   z-index: 3;
   width: 100%;

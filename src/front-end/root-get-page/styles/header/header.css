@@ -47,6 +47,18 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
     padding-left: 14vw;
   }
 }
+@media (min-width: 1700px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 17.5vw;
+    padding-left: 17.5vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 21px;
+  }
+  header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
+    font-size: 21px;
+  }
+}
 header {
   z-index: 3;
   width: 100%;
@@ -198,5 +210,11 @@ div.search-container > div > div > button > div > p:last-of-type {
   header > div:first-of-type > div:first-of-type > div {
     padding-right: 126px;
     padding-left: 126px;
+  }
+}
+@media (min-width: 1700px) {
+  div.search-container > input {
+    font-size: 14.7px;
+    padding: 6.3px 12.6px;
   }
 }/*# sourceMappingURL=header.css.map */

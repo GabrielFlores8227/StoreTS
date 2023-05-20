@@ -158,6 +158,12 @@ div.product-section-container > div > div:last-of-type > div a i {
     padding-left: 14vw;
   }
 }
+@media (min-width: 1700px) {
+  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+    padding-right: 17.5vw;
+    padding-left: 17.5vw;
+  }
+}
 main {
   padding: 140px 0px;
   background-color: var(--light-gray);
@@ -204,7 +210,11 @@ div.loading-screen-container > div > div {
 }
 
 div.propagandas-container {
+  display: none;
   position: relative;
+}
+div.propagandas-container.--on {
+  display: block;
 }
 div.propagandas-container button {
   width: 50%;

@@ -6,7 +6,7 @@ footer {
 	& > div:first-of-type {
 		@extend %default-padding-size;
 		width: 100%;
-		padding-top: 119px;
+		padding-top: 133px;
 		padding-bottom: 56px;
 		background-color: var(--primary-color);
 
@@ -19,8 +19,10 @@ footer {
 			top: -51.8px;
 			left: 50%;
 
-			svg path {
-				fill: var(--primary-color);
+			& > svg {
+				& > path {
+					fill: var(--primary-color);
+				}
 			}
 		}
 

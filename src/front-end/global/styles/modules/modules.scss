@@ -211,3 +211,18 @@
 		padding-left: 14vw;
 	}
 }
+
+@media (min-width: 1700px) {
+	%default-padding-size {
+		padding-right: 17.5vw;
+		padding-left: 17.5vw;
+	}
+
+	%default-height-size {
+		height: 21px;
+	}
+
+	%default-font-size {
+		font-size: 21px;
+	}
+}

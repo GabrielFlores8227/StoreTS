@@ -53,6 +53,11 @@ div.loading-screen-container {
 }
 
 div.propagandas-container {
+	&.--on {
+		display: block;
+	}
+
+	display: none;
 	position: relative;
 
 	button {

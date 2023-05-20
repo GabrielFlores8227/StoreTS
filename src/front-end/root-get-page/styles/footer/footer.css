@@ -41,12 +41,18 @@ footer > div:first-of-type > div:last-of-type > div h1 {
     padding-left: 14vw;
   }
 }
+@media (min-width: 1700px) {
+  footer > div:first-of-type {
+    padding-right: 17.5vw;
+    padding-left: 17.5vw;
+  }
+}
 footer {
   position: relative;
 }
 footer > div:first-of-type {
   width: 100%;
-  padding-top: 119px;
+  padding-top: 133px;
   padding-bottom: 56px;
   background-color: var(--primary-color);
 }
@@ -59,7 +65,7 @@ footer > div:first-of-type > div:first-of-type {
   top: -51.8px;
   left: 50%;
 }
-footer > div:first-of-type > div:first-of-type svg path {
+footer > div:first-of-type > div:first-of-type > svg > path {
   fill: var(--primary-color);
 }
 footer > div:first-of-type > div:last-of-type {

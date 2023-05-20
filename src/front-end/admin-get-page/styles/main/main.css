@@ -27,6 +27,12 @@ main > div:last-of-type {
     padding-left: 14vw;
   }
 }
+@media (min-width: 1700px) {
+  main > div:last-of-type {
+    padding-right: 17.5vw;
+    padding-left: 17.5vw;
+  }
+}
 main {
   z-index: 1;
   display: flex;

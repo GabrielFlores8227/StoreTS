@@ -139,3 +139,12 @@ ul.categories-list {
 		}
 	}
 }
+
+@media (min-width: 1700px) {
+	aside {
+		& > div {
+			width: 364px;
+			min-width: 364px;
+		}
+	}
+}

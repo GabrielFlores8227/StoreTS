@@ -126,6 +126,11 @@ div.saved-product-container > div > div a i {
     height: 19.6px;
   }
 }
+@media (min-width: 1700px) {
+  aside > div > div:first-of-type > div > img {
+    height: 21px;
+  }
+}
 aside {
   pointer-events: none;
   filter: opacity(0%);
@@ -239,4 +244,11 @@ ul.categories-list li button i:last-of-type {
 }
 ul.categories-list li button i:last-of-type:hover {
   color: var(--primary-color);
+}
+
+@media (min-width: 1700px) {
+  aside > div {
+    width: 364px;
+    min-width: 364px;
+  }
 }/*# sourceMappingURL=aside.css.map */
