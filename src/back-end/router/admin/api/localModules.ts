@@ -2,7 +2,7 @@ import express from 'express';
 import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../globalModules';
 import multer from 'multer';
 import sharp from 'sharp';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 import { IncomingHttpHeaders } from 'http';
 
 class InputMask {
@@ -155,7 +155,7 @@ class InputMask {
 			};
 		}
 
-		file!.originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
+		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
 			file!.buffer = await sharp(file!.buffer)
@@ -524,7 +524,7 @@ export default class LocalModules {
 	 * @param res The Express response object.
 	 * @param next The next middleware function.
 	 */
-	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 
@@ -553,7 +553,7 @@ export default class LocalModules {
 	 * @param res The Express response object.
 	 * @param next The next middleware function.
 	 */
-	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 
@@ -573,7 +573,7 @@ export default class LocalModules {
 	 * @param res The Express response object.
 	 * @param next The next middleware function.
 	 */
-	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 
@@ -606,7 +606,7 @@ export default class LocalModules {
 	 * @param res The Express response object.
 	 * @param next The next middleware function.
 	 */
-	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 			const file = req.file;
@@ -629,7 +629,7 @@ export default class LocalModules {
 	 * @param res The Express response object.
 	 * @param next The next middleware function.
 	 */
-	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
 

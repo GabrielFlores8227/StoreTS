@@ -4,31 +4,19 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-		<!--theme-color-->
 		<meta name="theme-color" content="#ffffff" />
-
-		<!--icon-->
 		<link rel="shortcut icon" />
-
-		<!--title-->
 		<title></title>
-
-		<!--styles-->
 		<link rel="stylesheet" href="global/styles/modules/modules.css" />
 		<link rel="stylesheet" href="global/styles/index/index.css" />
 		<link rel="stylesheet" href="admin-get-page/styles/main/main.css" />
 		<link rel="stylesheet" href="admin-get-page/styles/header/header.css" />
-
-		<!--font-awesome-->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-		<!--scripts-->
 		<script defer src="global/scripts/modules.js"></script>
+		<script defer src="admin-get-page/scripts/modules.js"></script>
 		<script defer src="admin-get-page/scripts/controller.js"></script>
-
-		<!--header-->
 		<header>
 			<div>
 				<a href="/">
@@ -36,32 +24,34 @@
 				</a>
 			</div>
 		</header>
-
-		<!--main-->
 		<main>
 			<div>
 				<div>
-					<h1>
-						Admin Page
-					</h1>
+					<h1>Admin Page</h1>
 					<div>
-						<form>
+						<form login-form method="POST" action="/admin">
+							<span message-container>
+								<i class="fa-solid fa-circle-info"></i>
+								<i message></i>
+							</span>
 							<div>
-								<div class="custom-input">
-									<input id="username" type="text" name="username" placeholder="username" />
-									<label for="username">username</label>
+								<div>
+									<div class="custom-input">
+										<input id="username" type="text" name="username" placeholder="username" />
+										<label for="username">username</label>
+									</div>
 								</div>
-							</div>
-							<div>
-								<div class="custom-input">
-									<input id="password" type="password" name="password" placeholder="password" />
-									<label for="password">password</label>
+								<div>
+									<div class="custom-input">
+										<input id="password" type="password" name="password" placeholder="password" />
+										<label for="password">password</label>
+									</div>
 								</div>
+								<button>
+									<i class="fa-solid fa-right-to-bracket"></i>
+									Login
+								</button>
 							</div>
-							<button>
-								<i class="fa-solid fa-right-to-bracket"></i>
-								Login
-							</button>
 						</form>
 					</div>
 				</div>
@@ -69,7 +59,8 @@
 			<div>
 				<div>
 					<svg xmlns="http://www.w3.org/2000/svg" height="0.611111in" viewBox="0 0 8000 55">
-						<path id="Selection"
+						<path
+							id="Selection"
 							d="M 0.00,2.00
 							C 1.80,1.45 4.15,0.52 6.00,0.47
 								6.00,0.47 14.00,2.05 14.00,2.05
@@ -938,7 +929,8 @@
 							M 6135.00,33.00
 							C 6135.00,33.00 6134.00,33.00 6134.00,33.00
 								6134.00,33.00 6135.00,34.00 6135.00,34.00
-								6135.00,34.00 6135.00,33.00 6135.00,33.00 Z" />
+								6135.00,34.00 6135.00,33.00 6135.00,33.00 Z"
+						/>
 					</svg>
 				</div>
 			</div>

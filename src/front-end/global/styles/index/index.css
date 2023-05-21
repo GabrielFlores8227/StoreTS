@@ -48,6 +48,7 @@
 
 body {
   overflow-x: hidden;
+  position: static;
 }
 
 body,

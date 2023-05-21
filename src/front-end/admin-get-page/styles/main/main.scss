@@ -9,6 +9,7 @@ main {
 	justify-content: center;
 	width: 100%;
 	height: 100vh;
+	min-height: 700px;
 	background-color: var(--light-gray);
 	position: relative;
 
@@ -33,29 +34,48 @@ main {
 
 			& > div:first-of-type {
 				width: 100%;
-				padding-top: 28px;
+				padding-top: 21px;
 
 				& > form {
-					display: flex;
 					width: 100%;
-					flex-direction: column;
-					gap: 18.9px;
 
-					& > button {
-						&:hover {
-							background-color: white;
-							color: var(--primary-color);
+					& > span {
+						&.--on {
+							display: block;
 						}
 
-						gap: 7px;
-						padding: 9.1px;
-						border: 2px solid var(--primary-color);
-						font-size: 15.4px;
-						font-family: var(--font-bold);
-						background-color: var(--primary-color);
-						border-radius: 14px;
-						color: white;
-						transition: ease-in-out 0.35s;
+						display: none;
+						color: red;
+						font-size: 13.3px;
+						padding-bottom: 10.5px;
+
+						i {
+							font-style: normal;
+						}
+					}
+
+					& > div {
+						display: flex;
+						flex-direction: column;
+						gap: 18.9px;
+
+						& > button {
+							&:hover {
+								background-color: white;
+								color: var(--primary-color);
+							}
+
+							width: 100%;
+							gap: 7px;
+							padding: 9.1px;
+							border: 2px solid var(--primary-color);
+							font-size: 15.4px;
+							font-family: var(--font-bold);
+							background-color: var(--primary-color);
+							border-radius: 14px;
+							color: white;
+							transition: ease-in-out 0.35s;
+						}
 					}
 				}
 			}

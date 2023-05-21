@@ -1,6 +1,9 @@
 (async () => {
-     const header = await (await fetch('/api/header')).json();
+	const header = await (await fetch('/api/header')).json();
 
 	buildLogo(header);
 	buildHead(header);
-})()
+	checkUrl();
+
+	setAdminTitle();
+})();

@@ -291,7 +291,7 @@ div.product-section-container > div.--special::after {
   transform: translateY(-60%);
   position: absolute;
   bottom: -480px;
-  right: -41px;
+  right: 40px;
 }
 div.product-section-container > div.--special h1 {
   color: white !important;

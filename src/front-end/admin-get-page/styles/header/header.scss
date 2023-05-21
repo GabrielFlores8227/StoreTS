@@ -11,7 +11,7 @@ header {
 		@extend %default-padding-size;
 		display: flex;
 		align-items: center;
-          justify-content: center;
+		justify-content: center;
 		width: 100%;
 		background-color: var(--primary-color);
 		padding-top: 21px;
@@ -26,5 +26,5 @@ header {
 				filter: grayscale(100%) brightness(200%);
 			}
 		}
-     }
+	}
 }
