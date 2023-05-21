@@ -8,7 +8,7 @@ main {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-    height: 100vh;
+	height: 100vh;
 	background-color: var(--light-gray);
 	position: relative;
 
@@ -39,7 +39,7 @@ main {
 					display: flex;
 					width: 100%;
 					flex-direction: column;
-					gap: 21px;
+					gap: 18.9px;
 
 					& > button {
 						&:hover {
@@ -66,10 +66,10 @@ main {
 		z-index: 1;
 		@extend %default-padding-size;
 		width: 100%;
-        height: 40vh;
+		height: 40vh;
 		background-color: var(--primary-color);
-        position: absolute;
-        bottom: 0px;
+		position: absolute;
+		bottom: 0px;
 
 		& > div:first-of-type {
 			width: 100%;
@@ -84,7 +84,7 @@ main {
 				fill: var(--primary-color);
 			}
 		}
-     }
+	}
 }
 
 div.custom-input {

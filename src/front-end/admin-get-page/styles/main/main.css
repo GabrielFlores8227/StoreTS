@@ -81,7 +81,7 @@ main > div:first-of-type > div > div:first-of-type > form {
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: 21px;
+  gap: 18.9px;
 }
 main > div:first-of-type > div > div:first-of-type > form > button {
   gap: 7px;

@@ -33,7 +33,7 @@ api.get(
 //prettier-ignore
 api.get(
 	"/product/order/:id",
-	LocalModules.middlewareGetProduct,
+	LocalModules.middlewareOrderProduct,
 	LocalModules.middlewareRedirect
 )
 

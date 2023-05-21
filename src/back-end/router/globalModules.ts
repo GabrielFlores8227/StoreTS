@@ -10,11 +10,15 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: path.resolve(cwd(), '.env') });
 
+/**
+ * A class that provides global SQL modules.
+ */
 export class GlobalSqlModules {
 	private static readonly sqlHost = process.env.SQL_HOST!;
 	private static readonly sqlDatabase = process.env.SQL_DATABASE!;
 	private static readonly sqlSocketPath = process.env.SQL_SOCKET_PATH!;
 
+	// Connection pool for ordinary user
 	public static readonly sqlOrdinaryConn = mysql2.createPool({
 		connectionLimit: 16,
 		host: this.sqlHost,
@@ -24,6 +28,7 @@ export class GlobalSqlModules {
 		password: process.env.SQL_ORDINARY_PASSWORD!,
 	});
 
+	// Connection pool for master user
 	public static readonly sqlMasterConn = mysql2.createPool({
 		connectionLimit: 16,
 		host: this.sqlHost,
@@ -33,11 +38,21 @@ export class GlobalSqlModules {
 		password: process.env.SQL_MASTER_PASSWORD!,
 	});
 
-	public static async sqlQuery(conn: mysql2.Pool, command: string, values: string[] = []): Promise<[mysql2.RowDataPacket[] | mysql2.RowDataPacket[][] | mysql2.OkPacket | mysql2.OkPacket[] | mysql2.ResultSetHeader, mysql2.FieldPacket[]]> {
+	/**
+	 * Executes a SQL query using the provided connection pool.
+	 * @param conn The MySQL connection pool.
+	 * @param command The SQL command to execute.
+	 * @param values Optional values to bind to the SQL command.
+	 * @returns A promise that resolves to the query result.
+	 */
+	public static async sqlQuery(conn: mysql2.Pool, command: string, values: string[] = []) {
 		return await conn.query(command, values);
 	}
 }
 
+/**
+ * A class that provides global S3 modules.
+ */
 export class GlobalS3Modules {
 	private static readonly s3BucketName = process.env.S3_BUCKET_NAME!;
 	private static readonly s3BucketRegion = process.env.S3_BUCKET_REGION!;
@@ -51,6 +66,11 @@ export class GlobalS3Modules {
 		},
 	});
 
+	/**
+	 * Generates a signed URL for accessing a file in the S3 bucket.
+	 * @param fileName The name of the file in the S3 bucket.
+	 * @returns A promise that resolves to the signed URL.
+	 */
 	public static async generateSignedUrlForS3BucketFile(fileName: string) {
 		return await getSignedUrl(
 			this.s3DataClient,
@@ -62,6 +82,12 @@ export class GlobalS3Modules {
 		);
 	}
 
+	/**
+	 * Uploads a file to the S3 bucket.
+	 * @param fileBuffer The file content as a string.
+	 * @param fileName The name of the file in the S3 bucket.
+	 * @param mimeType The MIME type of the file.
+	 */
 	public static async uploadFileToS3Bucket(fileBuffer: string, fileName: string, mimeType: string): Promise<void> {
 		await this.s3DataClient.send(
 			new PutObjectCommand({
@@ -73,6 +99,10 @@ export class GlobalS3Modules {
 		);
 	}
 
+	/**
+	 * Deletes a file from the S3 bucket.
+	 * @param fileName The name of the file in the S3 bucket.
+	 */
 	public static async deleteFileFromS3Bucket(fileName: string): Promise<void> {
 		await this.s3DataClient.send(
 			new DeleteObjectCommand({
@@ -83,15 +113,22 @@ export class GlobalS3Modules {
 	}
 }
 
+/**
+ * A class that provides global middleware modules.
+ */
 export class GlobalMiddlewareModules {
 	public static readonly frontEndFolderPath = path.join(cwd(), 'src/front-end');
 
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
+	/**
+	 * Handles middleware errors and sends an appropriate response.
+	 * @param res The Express response object.
+	 * @param err The error object.
+	 */
 	public static handleMiddlewareError(res: express.Response, err: any) {
 		if (err.status) {
 			res.status(err.status).json(err);
-
 			return;
 		}
 
@@ -110,7 +147,6 @@ export class GlobalMiddlewareModules {
 			}
 
 			fs.writeFileSync(errorLogFilePath, errorMessage);
-
 			return;
 		}
 

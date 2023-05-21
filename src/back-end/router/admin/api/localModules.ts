@@ -6,42 +6,159 @@ import crypto from 'crypto';
 import { IncomingHttpHeaders } from 'http';
 
 class InputMask {
+	/**
+	 * Represents the image masks for various sections.
+	 */
 	public static readonly imageMask = {
 		header: {
 			icon: {
+				/**
+				 * Validates and resizes the icon image file.
+				 * @param file The image file to validate and resize.
+				 * @param width The desired width of the image.
+				 * @param height The desired height of the image.
+				 * @param fit The desired fit mode for the image.
+				 */
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 50, 50, 'contain'),
 			},
 			logo: {
+				/**
+				 * Validates and resizes the logo image file.
+				 * @param file The image file to validate and resize.
+				 * @param width The desired width of the image.
+				 * @param height The desired height of the image.
+				 * @param fit The desired fit mode for the image.
+				 */
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 437, 36, 'contain'),
 			},
 		},
 		propagandas: {
 			bigImage: {
+				/**
+				 * Validates and resizes the big propaganda image file.
+				 * @param file The image file to validate and resize.
+				 * @param width The desired width of the image.
+				 * @param height The desired height of the image.
+				 * @param fit The desired fit mode for the image.
+				 */
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1920, 460, 'contain'),
 			},
 			smallImage: {
+				/**
+				 * Validates and resizes the small propaganda image file.
+				 * @param file The image file to validate and resize.
+				 * @param width The desired width of the image.
+				 * @param height The desired height of the image.
+				 * @param fit The desired fit mode for the image.
+				 */
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1080, 1080, 'contain'),
 			},
 		},
 		products: {
 			image: {
+				/**
+				 * Validates and resizes the product image file.
+				 * @param file The image file to validate and resize.
+				 * @param width The desired width of the image.
+				 * @param height The desired height of the image.
+				 * @param fit The desired fit mode for the image.
+				 */
 				sharpFile: async (file: Express.Multer.File | undefined) => await this.sharpFile(file, 1080, 1080, 'contain'),
 			},
 		},
 	};
 
+	/**
+	 * Masks for executing various text checks.
+	 */
+	public static readonly textMask = {
+		authorization: {
+			/**
+			 * Executes the authorization checker.
+			 * @param headers The incoming HTTP headers.
+			 * @returns The result of the authorization check.
+			 */
+			executeChecker: (headers: IncomingHttpHeaders) => this.checkAuthorization(headers),
+		},
+		id: {
+			/**
+			 * Executes the ID checker.
+			 * @param body The body containing the ID.
+			 * @returns The result of the ID check.
+			 */
+			executeChecker: (body: { id: string }) => this.idChecker(body),
+		},
+		ids: {
+			/**
+			 * Executes the IDs checker.
+			 * @param table The name of the table to check.
+			 * @param body The body containing the IDs.
+			 * @returns The result of the IDs check.
+			 */
+			executeChecker: async (table: string, body: { ids: string[] }) => await this.idsChecker(table, body),
+		},
+		header: {
+			/**
+			 * Executes the header checker.
+			 * @param body The body containing the header information.
+			 * @returns The result of the header check.
+			 */
+			executeChecker: (body: { title: string; description: string; color: string }) => this.headerChecker(body),
+		},
+		propagandas: {
+			/**
+			 * Executes the propagandas checker.
+			 * @param body The body containing the images context.
+			 * @returns The result of the propagandas check.
+			 */
+			executeChecker: (body: { imagesContext: string[] }) => this.propagandasChecker(body),
+		},
+		categories: {
+			/**
+			 * Executes the categories checker.
+			 * @param body The body containing the category name.
+			 * @returns The result of the categories check.
+			 */
+			executeChecker: (body: { name: string }) => this.categoriesChecker(body),
+		},
+		products: {
+			/**
+			 * Executes the products checker.
+			 * @param body The body containing the product information.
+			 * @returns The result of the products check.
+			 */
+			executeChecker: async (body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) => await this.productsChecker(body),
+		},
+		footer: {
+			/**
+			 * Executes the footer checker.
+			 * @param body The body containing the footer information.
+			 * @returns The result of the footer check.
+			 */
+			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string; storeInfo: string; completeStoreInfo: string }) => this.footerChecker(body),
+		},
+	};
+
+	/**
+	 * Resizes and processes the image file using the sharp library.
+	 * @param file The image file to resize and process.
+	 * @param width The desired width of the image.
+	 * @param height The desired height of the image.
+	 * @param fit The desired fit mode for the image.
+	 * @throws Will throw an error if the provided image file is invalid or the resizing process fails.
+	 */
 	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
-		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', 'image/webp'].includes(Object(file).mimetype)) {
+		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', 'image/webp'].includes(file!.mimetype)) {
 			throw {
 				status: 400,
 				message: 'Please provide valid image(s) to fulfill the request',
 			};
 		}
 
-		Object(file).originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
+		file!.originalname = crypto.randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
-			Object(file).buffer = await sharp(Object(file).buffer)
+			file!.buffer = await sharp(file!.buffer)
 				.resize({
 					width,
 					height,
@@ -61,56 +178,51 @@ class InputMask {
 		}
 	}
 
-	public static readonly textMask = {
-		authorization: {
-			executeChecker: (headers: IncomingHttpHeaders) => this.checkAuthorization(headers),
-		},
-		id: {
-			executeChecker: (body: { id: string }) => this.idChecker(body),
-		},
-		ids: {
-			executeChecker: async (table: string, body: { ids: string[] }) => await this.idsChecker(table, body),
-		},
-		header: {
-			executeChecker: (body: { title: string; description: string; color: string }) => this.headerChecker(body),
-		},
-		propagandas: {
-			executeChecker: (body: { imagesContext: string[] }) => this.propagandasChecker(body),
-		},
-		categories: {
-			executeChecker: (body: { name: string }) => this.categoriesChecker(body),
-		},
-		products: {
-			executeChecker: async (body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) => await this.productsChecker(body),
-		},
-		footer: {
-			executeChecker: (body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string; storeInfo: string; completeStoreInfo: string }) => this.footerChecker(body),
-		},
-	};
-
+	/**
+	 * Executes a checker object to validate multiple conditions.
+	 * @param checker The checker object containing the conditions to validate.
+	 * @param status The HTTP status code to use for the error response (default: 400).
+	 * @param message The error message to use for the error response (default: "Please ensure that the '<key>' entry is provided accurately to fulfill the request").
+	 */
 	public static executeChecker(checker: { [key: string]: boolean }, status?: number, message?: string) {
 		Object.keys(checker).forEach((key: string) => {
 			if (!checker[key]) {
 				throw {
 					status: status || 400,
-					message: message || "Please ensure that the key '" + key + "' is provided accurately to fulfill the request",
+					message: message || 'Please ensure that the "' + key + '" entry is provided accurately to fulfill the request',
 				};
 			}
 		});
 	}
 
+	/**
+	 * Checks the authorization header in the incoming HTTP headers.
+	 * @param headers The incoming HTTP headers object.
+	 * @returns An object indicating if the authorization header is present or not.
+	 */
 	private static checkAuthorization(headers: IncomingHttpHeaders) {
 		return {
 			authorization: typeof headers.authorization === 'string',
 		};
 	}
 
+	/**
+	 * Checks the "id" property in the request body.
+	 * @param body The request body object.
+	 * @returns An object indicating if the "id" property is present or not.
+	 */
 	private static idChecker(body: { id: string }) {
 		return {
 			id: typeof body.id === 'string',
 		};
 	}
 
+	/**
+	 * Checks the "ids" property in the request body against the provided table.
+	 * @param table The table name to query against.
+	 * @param body The request body object.
+	 * @returns An object indicating if the "ids" property matches the values in the table.
+	 */
 	private static async idsChecker(table: string, body: { ids: string[] }) {
 		return {
 			ids:
@@ -123,6 +235,11 @@ class InputMask {
 		};
 	}
 
+	/**
+	 * Checks the properties of the header in the request body.
+	 * @param body The request body object containing the header properties.
+	 * @returns An object indicating if the header properties are valid.
+	 */
 	private static headerChecker(body: { title: string; description: string; color: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length >= 1 && body.title.length <= 50,
@@ -131,18 +248,33 @@ class InputMask {
 		};
 	}
 
+	/**
+	 * Checks the properties of the propagandas in the request body.
+	 * @param body The request body object containing the propagandas properties.
+	 * @returns An object indicating if the propagandas properties are valid.
+	 */
 	private static propagandasChecker(body: { imagesContext: string[] }) {
 		return {
 			imagesContext: typeof body.imagesContext === 'object' && JSON.stringify(['bigImage', 'smallImage'].sort()) === JSON.stringify(body.imagesContext.sort()),
 		};
 	}
 
+	/**
+	 * Checks the properties of the categories in the request body.
+	 * @param body The request body object containing the categories properties.
+	 * @returns An object indicating if the categories properties are valid.
+	 */
 	private static categoriesChecker(body: { name: string }) {
 		return {
 			name: typeof body.name === 'string' && body.name.length >= 1 && body.name.length <= 50,
 		};
 	}
 
+	/**
+	 * Checks the properties of the products in the request body.
+	 * @param body The request body object containing the products properties.
+	 * @returns An object indicating if the products properties are valid.
+	 */
 	private static async productsChecker(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }) {
 		return {
 			category: typeof body.category === 'string' && Object(await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT name FROM categories WHERE id = ?;', [body.category]))[0].length === 1,
@@ -155,13 +287,18 @@ class InputMask {
 		};
 	}
 
+	/**
+	 * Checks the properties of the footer in the request body.
+	 * @param body The request body object containing the footer properties.
+	 * @returns An object indicating if the footer properties are valid.
+	 */
 	private static footerChecker(body: { title: string; text: string; whatsapp: string; instagram: string; facebook: string; location: string; storeInfo: string; completeStoreInfo: string }) {
 		return {
 			title: typeof body.title === 'string' && body.title.length > 1 && body.title.length <= 50,
 			text: typeof body.text === 'string' && body.text.length > 1 && body.text.length <= 255,
 			whatsapp: typeof body.whatsapp === 'string' && !isNaN(Number(body.whatsapp)) && body.whatsapp.length === 13,
-			instagram: typeof body.instagram === 'string' && body.instagram.length > 1 && body.instagram.length <= 50,
-			facebook: typeof body.facebook === 'string' && body.facebook.length > 1 && body.facebook.length <= 50,
+			instagram: typeof body.instagram === 'string' && body.instagram.charAt(0) === '@' && body.instagram.length > 1 && body.instagram.length <= 50,
+			facebook: typeof body.facebook === 'string' && body.facebook.charAt(0) === '@' && body.facebook.length > 1 && body.facebook.length <= 50,
 			location: typeof body.location === 'string' && body.location.length > 1 && body.location.length <= 65535,
 			storeInfo: typeof body.storeInfo === 'string' && body.storeInfo.length > 1 && body.storeInfo.length <= 50,
 			completeStoreInfo: typeof body.completeStoreInfo === 'string' && body.completeStoreInfo.length > 1 && body.completeStoreInfo.length <= 100,
@@ -170,15 +307,26 @@ class InputMask {
 }
 
 class LocalModulesUtil {
+	/**
+	 * Validates the data form middleware and checks the authorization headers.
+	 * @param headers The request headers object.
+	 */
 	public static validateDataFormMiddlewareCheckAuth(headers: IncomingHttpHeaders) {
 		const checker = InputMask.textMask.authorization.executeChecker(headers);
+
 		InputMask.executeChecker(checker, 401, 'unauthorized');
 
 		headers.authorization = headers.authorization!.replace('Bearer ', '');
 	}
 
+	/**
+	 * Validates the data for the middleware used in POST propaganda requests.
+	 * @param body The request body object.
+	 * @param files The uploaded files object.
+	 */
 	public static async validateDataForMiddlewarePostPropaganda(body: { imagesContext: string[] }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
 		const checker = InputMask.textMask.propagandas.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 
 		const bigImage = Object(files)[body.imagesContext.indexOf('bigImage')];
@@ -188,61 +336,116 @@ class LocalModulesUtil {
 		await InputMask.imageMask.propagandas.smallImage.sharpFile(smallImage);
 	}
 
+	/**
+	 * Validates the data for the middleware used in DELETE propaganda requests.
+	 * @param body The request body object containing the ID of the propaganda to delete.
+	 */
 	public static validateDataForMiddlewareDeletePropaganda(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 	}
 
+	/**
+	 * Validates the data for the middleware used in POST category requests.
+	 * @param body The request body object containing the name of the category.
+	 */
 	public static validateDataForMiddlewarePostCategory(body: { name: string }) {
 		const checker = InputMask.textMask.categories.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 	}
 
+	/**
+	 * Validates the data for the middleware used in DELETE category requests.
+	 * @param body The request body object containing the ID of the category.
+	 */
 	public static validateDataForMiddlewareDeleteCategory(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 	}
 
+	/**
+	 * Validates the data for the middleware used in POST product requests.
+	 * @param body The request body object containing product details.
+	 * @param file The image file for the product.
+	 */
 	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, file: Express.Multer.File | undefined) {
 		const checker = await InputMask.textMask.products.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 
 		await InputMask.imageMask.products.image.sharpFile(file);
 	}
 
+	/**
+	 * Validates the data for the middleware used in DELETE product requests.
+	 * @param body The request body object containing the product ID.
+	 */
 	public static validateDataForMiddlewareDeleteProduct(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 	}
 
+	/**
+	 * Validates the data for the middleware used in PUT text requests.
+	 * @param table The table name for the text.
+	 * @param column The column name for the text.
+	 * @param body The request body object containing the text ID and text value.
+	 */
 	public static async validateDataForMiddlewarePutText(table: string, column: string, body: { id: string; [key: string]: string }) {
 		const checker1 = InputMask.textMask.id.executeChecker(body);
+
 		InputMask.executeChecker(checker1);
 
 		const { [column]: columnValue } = await Object(InputMask).textMask[table].executeChecker(body);
+
 		InputMask.executeChecker({ [column]: columnValue });
 	}
 
+	/**
+	 * Validates the data for the middleware used in PUT image requests.
+	 * @param table The table name for the image.
+	 * @param column The column name for the image.
+	 * @param body The request body object containing the image ID.
+	 * @param file The image file to validate and resize.
+	 */
 	public static async validateDataForMiddlewarePutImage(table: string, column: string, body: { id: string }, file: Express.Multer.File | undefined) {
 		const checker = InputMask.textMask.id.executeChecker(body);
+
 		InputMask.executeChecker(checker);
 
 		await Object(InputMask).imageMask[table][column].sharpFile(file);
 	}
 
+	/**
+	 * Validates the data for the middleware used in PUT position requests.
+	 * @param table The table name for the positions.
+	 * @param body The request body object containing the IDs of the positions.
+	 */
 	public static async validateDataForMiddlewarePutPosition(table: string, body: { ids: string[] }) {
 		const checker = await InputMask.textMask.ids.executeChecker(table, body);
+
 		InputMask.executeChecker(checker);
 	}
 }
 
 export default class LocalModules {
+	/**
+	 * Creates a middleware function to handle file uploads.
+	 * @param minCount The minimum number of files required.
+	 * @param maxCount The maximum number of files allowed.
+	 * @returns The middleware function to handle file uploads.
+	 */
 	public static middlewareUploadFiles(minCount: number, maxCount: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
 		return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
-			if (maxCount == 1) {
-				var upload = GlobalMiddlewareModules.multer.single('file');
+			var upload;
+			if (maxCount === 1) {
+				upload = GlobalMiddlewareModules.multer.single('file');
 			} else {
-				var upload = GlobalMiddlewareModules.multer.array('files', maxCount);
+				upload = GlobalMiddlewareModules.multer.array('files', maxCount);
 			}
 
 			upload(req, res, (err: any) => {
@@ -264,13 +467,19 @@ export default class LocalModules {
 		};
 	}
 
+	/**
+	 * Middleware function to perform authentication checks.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewareCheckAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const headers = req.headers;
 
 			LocalModulesUtil.validateDataFormMiddlewareCheckAuth(headers);
 
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [Object(headers).authorization, 'only']);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [headers!.authorization!, 'only']);
 
 			if (Object(query).length !== 1) {
 				throw { status: 401, message: 'unauthorized' };
@@ -282,6 +491,12 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a POST request to create a propaganda.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePostPropaganda(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -289,13 +504,13 @@ export default class LocalModules {
 
 			await LocalModulesUtil.validateDataForMiddlewarePostPropaganda(body, files);
 
-			const bigImage: { [key: string]: string | Buffer } = Object(Object(files)[Object(body).imagesContext.indexOf('bigImage')]);
-			const smallImage: { [key: string]: string | Buffer } = Object(files)[Object(body).imagesContext.indexOf('smallImage')];
+			const bigImage: Express.Multer.File = Object(files)[Object(body).imagesContext.indexOf('bigImage')];
+			const smallImage: Express.Multer.File = Object(files)[Object(body).imagesContext.indexOf('smallImage')];
 
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(bigImage).buffer, Object(bigImage).originalname, Object(bigImage).mimetype);
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(smallImage).buffer, Object(smallImage).originalname, Object(smallImage).mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(bigImage.buffer.toString(), bigImage.originalname, bigImage.mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(smallImage.buffer.toString(), smallImage.originalname, smallImage.mimetype);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);', [Object(bigImage).originalname, Object(smallImage).originalname]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);', [bigImage.originalname, smallImage.originalname]);
 
 			return next();
 		} catch (err) {
@@ -303,13 +518,19 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a DELETE request to delete a propaganda.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewareDeletePropaganda(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeletePropaganda(body);
 
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;', [Object(body).id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;', [body.id]);
 
 			if (Object(query).length !== 1) {
 				return next();
@@ -318,7 +539,7 @@ export default class LocalModules {
 			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].bigImage);
 			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].smallImage);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM propagandas WHERE id = ?;', [Object(body).id]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM propagandas WHERE id = ?;', [body.id]);
 
 			return next();
 		} catch (err) {
@@ -326,13 +547,19 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a POST request to create a new category.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePostCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewarePostCategory(body);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT IGNORE INTO categories (name) VALUES (?);', [Object(body).name]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT IGNORE INTO categories (name) VALUES (?);', [body.name]);
 
 			return next();
 		} catch (err) {
@@ -340,27 +567,32 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a DELETE request to delete a category.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewareDeleteCategory(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeleteCategory(body);
 
-			const [query1] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM categories WHERE id = ?;', [Object(body).id]);
+			const [query1] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id FROM categories WHERE id = ?;', [body.id]);
 
 			if (Object(query1).length !== 1) {
 				return next();
 			}
 
-			const [query2] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id, image FROM products WHERE category = ?;', [Object(body).id]);
+			const [query2] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT id, image FROM products WHERE category = ?;', [body.id]);
 
 			Object(query2).forEach(async (row: { id: number; image: string }) => {
 				await GlobalS3Modules.deleteFileFromS3Bucket(row.image);
-
 				await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [String(row.id)]);
 			});
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM categories WHERE id = ?;', [Object(body).id]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM categories WHERE id = ?;', [body.id]);
 
 			return next();
 		} catch (err) {
@@ -368,6 +600,12 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a POST request to create a new product.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePostProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
@@ -375,9 +613,9 @@ export default class LocalModules {
 
 			await LocalModulesUtil.validateDataForMiddlewarePostProduct(body, file);
 
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(file).originalname, Object(file).mimeType);
+			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer.toString(), file!.originalname, file!.mimetype!);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [Object(body).category, Object(body).name, Object(file).originalname, Object(body).price, Object(body).off, Object(body).installment, Object(body).whatsapp, Object(body).message]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [body.category, body.name, file!.originalname, body.price, body.off, body.installment, body.whatsapp, body.message]);
 
 			return next();
 		} catch (err) {
@@ -385,13 +623,19 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a DELETE request to delete a product.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewareDeleteProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
 		try {
 			const body = req.body;
 
 			LocalModulesUtil.validateDataForMiddlewareDeleteProduct(body);
 
-			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT image FROM products WHERE id = ?;', [Object(body).id]);
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT image FROM products WHERE id = ?;', [body.id]);
 
 			if (Object(query).length !== 1) {
 				return next();
@@ -399,7 +643,7 @@ export default class LocalModules {
 
 			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].image);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [Object(body).id]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'DELETE FROM products WHERE id = ?;', [body.id]);
 
 			return next();
 		} catch (err) {
@@ -407,6 +651,12 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a PUT request to update a specific column of a table.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePutText(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -430,6 +680,12 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a PUT request to update an image column of a table.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePutImage(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -446,7 +702,7 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalS3Modules.uploadFileToS3Bucket(Object(file).buffer, Object(query)[0][column], Object(file).mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer.toString(), Object(query)[0][column], file!.mimetype);
 
 			return next();
 		} catch (err) {
@@ -454,6 +710,12 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function to handle a PUT request to update the position of rows in a table.
+	 * @param req The Express request object.
+	 * @param res The Express response object.
+	 * @param next The next middleware function.
+	 */
 	public static async middlewarePutPosition(req: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
 			const body = req.body;
@@ -472,6 +734,11 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Returns a middleware function that sends a JSON response with the specified status and message.
+	 * @param status The HTTP status code for the response.
+	 * @returns The middleware function that sends the response.
+	 */
 	public static middlewareSendResponse(status: number): (req: express.Request, res: express.Response, next: express.NextFunction) => void {
 		return function (_: express.Request, res: express.Response) {
 			res.json({

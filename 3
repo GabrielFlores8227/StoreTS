@@ -1,7 +1,7 @@
 @import '../../../global/styles/modules/modules.scss';
 
 main {
-	padding: 140px 0;
+	padding: 140px 0px;
 	background-color: var(--light-gray);
 }
 
@@ -20,8 +20,8 @@ div.loading-screen-container {
 	background-color: var(--primary-color);
 	transition: ease-in-out 1s;
 	position: fixed;
-	top: 0;
-	left: 0;
+	top: 0px;
+	left: 0px;
 
 	& > div {
 		&.--on {
@@ -58,17 +58,17 @@ div.propagandas-container {
 		}
 
 		&:first-of-type {
-			left: 0;
+			left: 0px;
 		}
 
 		&:last-of-type {
-			right: 0;
+			right: 0px;
 		}
 
 		width: 50%;
 		height: 100%;
 		position: absolute;
-		top: 0;
+		top: 0px;
 	}
 
 	& > div:first-of-type {
@@ -101,7 +101,7 @@ div.propagandas-container {
 }
 
 div.product-section-container {
-	padding: 35px 0;
+	padding: 35px 0px;
 
 	& > div {
 		&.--special {
@@ -113,8 +113,8 @@ div.product-section-container {
 				border: 4.9px solid var(--primary-color);
 				transform: translateY(-50%);
 				position: absolute;
-				top: 0;
-				left: 0;
+				top: 0px;
+				left: 0px;
 			}
 
 			&::after {
@@ -126,12 +126,12 @@ div.product-section-container {
 				border: 4.9px solid var(--primary-color);
 				transform: translateY(-60%);
 				position: absolute;
-				bottom: -480px;
-				right: -41px;
+				bottom: -70%;
+				right: 0px;
 			}
 
-			margin: 42px 0;
-			padding: 56px 0;
+			margin: 42px 0px;
+			padding: 56px 0px;
 			background-color: var(--primary-color);
 			position: relative;
 
@@ -144,7 +144,7 @@ div.product-section-container {
 			}
 		}
 
-		padding: 42px 0;
+		padding: 42px 0px;
 
 		& > div:first-of-type {
 			@extend %default-padding-size;
@@ -160,7 +160,7 @@ div.product-section-container {
 					transform: translateY(-50%);
 					position: absolute;
 					top: 50%;
-					left: 0;
+					left: 0px;
 				}
 
 				@extend %big-font-size;
@@ -168,7 +168,7 @@ div.product-section-container {
 				overflow: hidden;
 				text-overflow: ellipsis;
 				color: var(--dark-gray);
-				padding: 10.5px 0 10.5px 19.6px;
+				padding: 10.5px 0px 10.5px 19.6px;
 				position: relative;
 			}
 		}
@@ -234,15 +234,19 @@ div.product-section-container {
 
 @media (min-width: 700px) {
 	main {
-		padding: 84px 0 140px 0;
+		padding: 84px 0px 140px 0px;
 	}
 
 	div.product-section-container {
-		padding: 35px 0;
+		padding: 35px 0px;
 
 		& > div {
 			&.--special {
-				&::before,
+				&::before {
+					width: 420px;
+					height: 420px;
+				}
+
 				&::after {
 					filter: opacity(100%);
 					width: 420px;
