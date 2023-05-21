@@ -12,7 +12,7 @@ aside {
 
 	pointer-events: none;
 	filter: opacity(0%);
-	background-color: rgba(0, 0, 0, 0.253);
+	background-color: rgba(0, 0, 0, 0.5);
 	transition: ease-in-out 0.35s;
 	z-index: 4;
 	width: 100%;
@@ -145,6 +145,16 @@ ul.categories-list {
 		& > div {
 			width: 364px;
 			min-width: 364px;
+		}
+	}
+
+	ul.categories-list {
+		li {
+			button {
+				i:last-of-type {
+					font-size: 15.4px;
+				}
+			}
 		}
 	}
 }

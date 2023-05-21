@@ -11,10 +11,6 @@
 	height: 20.3px;
 }
 
-%small-font-size {
-	font-size: 12.6px;
-}
-
 %default-font-size {
 	font-size: 17.5px;
 }
@@ -152,6 +148,13 @@
 	}
 }
 
+@media (min-width: 375px) {
+	%default-padding-size {
+		padding-right: 28px;
+		padding-left: 28px;
+	}
+}
+
 @media (min-width: 700px) {
 	%default-padding-size {
 		padding-right: 35px;
@@ -164,10 +167,6 @@
 
 	%big-height-size {
 		height: 21px;
-	}
-
-	%small-font-size {
-		font-size: 14px;
 	}
 
 	%default-font-size {
@@ -214,8 +213,8 @@
 
 @media (min-width: 1700px) {
 	%default-padding-size {
-		padding-right: 17.5vw;
-		padding-left: 17.5vw;
+		padding-right: 19.6vw;
+		padding-left: 19.6vw;
 	}
 
 	%default-height-size {
@@ -224,5 +223,12 @@
 
 	%default-font-size {
 		font-size: 21px;
+	}
+}
+
+@media (min-width: 2880px) {
+	%default-padding-size {
+		padding-right: 30%;
+		padding-left: 30%;
 	}
 }

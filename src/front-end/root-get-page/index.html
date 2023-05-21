@@ -3,40 +3,28 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-
-		<!--theme-color-->
-		<meta name="theme-color" content="#ffffff" />
-
-		<!--icon-->
+		<meta name="theme-color" />
 		<link rel="shortcut icon" />
-
-		<!--title & description-->
 		<title></title>
 		<meta name="description" />
-
-		<!--css-->
 		<link rel="stylesheet" href="global/styles/modules/modules.css" />
 		<link rel="stylesheet" href="global/styles/index/index.css" />
 		<link rel="stylesheet" href="root-get-page/styles/aside/aside.css" />
 		<link rel="stylesheet" href="root-get-page/styles/header/header.css" />
 		<link rel="stylesheet" href="root-get-page/styles/main/main.css" />
 		<link rel="stylesheet" href="root-get-page/styles/footer/footer.css" />
-
-		<!--font-awesome-->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-		<!--scripts-->
 		<script defer src="global/scripts/modules.js"></script>
+		<script defer src="root-get-page/scripts/modules.js"></script>
 		<script defer src="root-get-page/scripts/controller.js"></script>
-
-		<!--saved-aside-menu-->
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>
 			<div>
 				<div>
 					<div>
-						<img store-logo/>
+						<img draggable="false" store-logo />
 						<div>
 							<p>Saved</p>
 						</div>
@@ -55,12 +43,9 @@
 											</button>
 										</div>
 										<div>
-											<hr>
+											<hr />
 										</div>
-										<img
-											product-image
-											src="https://papelaria-menck-unstructured-data-bucket.s3.us-east-1.amazonaws.com/746ba08dc1fc5f0254d56af21790735e9b1a5731640a04e7453f2b7c1594ddff7511d902a9f3204e72a15eb15bf92d4780fdbef6eb003fcea41725752dd503eefab847c394491b80da90d0c75863ceecbebd81e93eb56cbd9aa24eb03102af20c89ba5e5219d7da0b3e6857873ccbdaa5214738a031fab9920c751a539e96e5?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIA5ZFMY7RZ6WZRSBQ6%2F20230516%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230516T123119Z&X-Amz-Expires=3600&X-Amz-Signature=e9baf736a8cbf20f888cd9cf51b27cd7bba9596d52e51a2e986a360684a08752&X-Amz-SignedHeaders=host&x-id=GetObject"
-										/>
+										<img draggable="false" product-image />
 										<div>
 											<p product-name></p>
 											<p product-old-price></p>
@@ -79,14 +64,12 @@
 				</div>
 			</div>
 		</aside>
-
-		<!--categories-aside-menu-->
 		<aside categories-aside-menu>
 			<button close-categories-aside-menu-button></button>
 			<div>
 				<div>
 					<div>
-						<img store-logo />
+						<img draggable="false" store-logo />
 						<div>
 							<p>Categories</p>
 						</div>
@@ -106,12 +89,10 @@
 				</div>
 			</div>
 		</aside>
-
-		<!--header-->
 		<header>
 			<div>
 				<a href="/">
-					<img store-logo alt="Store Logo" />
+					<img draggable="false" store-logo alt="Store Logo" />
 				</a>
 				<div search-container class="search-container">
 					<input type="text" placeholder="What are you looking for?" />
@@ -119,7 +100,7 @@
 						<div search-results>
 							<template>
 								<button>
-									<img product-image />
+									<img draggable="false" product-image />
 									<div>
 										<p product-name></p>
 										<p product-price></p>
@@ -148,7 +129,7 @@
 						<div search-results>
 							<template>
 								<button>
-									<img product-image />
+									<img draggable="false" product-image />
 									<div>
 										<p product-name></p>
 										<p product-price></p>
@@ -160,33 +141,26 @@
 				</div>
 			</div>
 		</header>
-
-		<!--main-->
 		<main>
-			<!--loading-screen-->
 			<div loading-screen-container class="loading-screen-container">
 				<div>
-					<img store-logo alt="Store Logo" />
-					<div loading-progess-bar></div>
+					<img draggable="false" store-logo alt="Store Logo" />
+					<div loading-progress-bar></div>
 				</div>
 			</div>
-
-			<!--propagandas-->
 			<div image-slider-container class="propagandas-container">
 				<button></button>
 				<div propagandas-container>
 					<template>
 						<picture>
 							<source big-image media="(min-width: 490px)" />
-							<img small-image alt="Propaganda" />
+							<img draggable="false" small-image alt="Propaganda" />
 						</picture>
 					</template>
 				</div>
 				<button></button>
 				<p store-info></p>
 			</div>
-
-			<!--products-->
 			<div product-section-container class="product-section-container">
 				<template>
 					<div>
@@ -204,9 +178,9 @@
 											</button>
 										</div>
 										<div>
-											<hr>
+											<hr />
 										</div>
-										<img product-image />
+										<img draggable="false" product-image />
 										<div>
 											<p product-name></p>
 											<p product-old-price></p>
@@ -225,13 +199,12 @@
 				</template>
 			</div>
 		</main>
-
-		<!--footer-->
 		<footer>
 			<div>
 				<div>
 					<svg xmlns="http://www.w3.org/2000/svg" height="0.611111in" viewBox="0 0 8000 55">
-						  <path id="Selection"
+						<path
+							id="Selection"
 							d="M 0.00,2.00
 							C 1.80,1.45 4.15,0.52 6.00,0.47
 								6.00,0.47 14.00,2.05 14.00,2.05
@@ -1100,31 +1073,34 @@
 							M 6135.00,33.00
 							C 6135.00,33.00 6134.00,33.00 6134.00,33.00
 								6134.00,33.00 6135.00,34.00 6135.00,34.00
-								6135.00,34.00 6135.00,33.00 6135.00,33.00 Z" />
+								6135.00,34.00 6135.00,33.00 6135.00,33.00 Z"
+						/>
 					</svg>
 				</div>
 				<div>
 					<div>
 						<h1 footer-title></h1>
 						<p title-text></p>
-						<a whatsapp-link target="_blank">
-							<i class="fa-brands fa-whatsapp"></i>
-							Whatsapp
-						</a>
 						<div>
-							<a instagram-link target="_blank">
-								<i class="fa-brands fa-instagram"></i>
-								Instagram
+							<a whatsapp-link target="_blank">
+								<i class="fa-brands fa-whatsapp"></i>
+								Whatsapp
 							</a>
-							<a facebook-link target="_blank">
-								<i class="fa-brands fa-square-facebook"></i>
-								Facebook
+							<div>
+								<a instagram-link target="_blank">
+									<i class="fa-brands fa-instagram"></i>
+									Instagram
+								</a>
+								<a facebook-link target="_blank">
+									<i class="fa-brands fa-square-facebook"></i>
+									Facebook
+								</a>
+							</div>
+							<a location-link target="_blank">
+								<i class="fa-solid fa-location-dot"></i>
+								Location
 							</a>
 						</div>
-						<a location-link target="_blank">
-							<i class="fa-solid fa-location-dot"></i>
-							Location
-						</a>
 						<p complete-store-info></p>
 					</div>
 				</div>

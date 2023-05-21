@@ -11,6 +11,12 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
   font-size: 17.5px;
 }
 
+@media (min-width: 375px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
 @media (min-width: 700px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
     padding-right: 35px;
@@ -49,14 +55,20 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
 }
 @media (min-width: 1700px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-    padding-right: 17.5vw;
-    padding-left: 17.5vw;
+    padding-right: 19.6vw;
+    padding-left: 19.6vw;
   }
   header > div:first-of-type > a > img:first-of-type {
     height: 21px;
   }
   header > div:last-of-type > button, header > div:first-of-type > div:last-of-type > button {
     font-size: 21px;
+  }
+}
+@media (min-width: 2880px) {
+  header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
   }
 }
 header {
@@ -99,7 +111,7 @@ header > div:first-of-type > div:last-of-type > button {
   border-radius: 100%;
 }
 header > div:first-of-type > div:last-of-type > button:hover {
-  background-color: rgba(0, 0, 0, 0.123);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
   display: none;
@@ -110,8 +122,8 @@ header > div:last-of-type {
   width: 100%;
   gap: 17.5px;
   background-color: var(--light-gray);
-  padding-top: 10.5px;
-  padding-bottom: 10.5px;
+  padding-top: 11.2px;
+  padding-bottom: 11.2px;
 }
 header > div:last-of-type > button {
   border-radius: 100%;
@@ -170,8 +182,7 @@ div.search-container > div > div > button:not(:last-of-type)::after {
 div.search-container > div > div > button > img {
   width: 73.5px;
   height: 73.5px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 div.search-container > div > div > button > div p {
   cursor: pointer;
@@ -217,4 +228,6 @@ div.search-container > div > div > button > div > p:last-of-type {
     font-size: 14.7px;
     padding: 6.3px 12.6px;
   }
-}/*# sourceMappingURL=header.css.map */
+}
+
+/*# sourceMappingURL=header.css.map */

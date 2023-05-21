@@ -3,6 +3,12 @@ main > div:last-of-type {
   padding-left: 24.5px;
 }
 
+@media (min-width: 375px) {
+  main > div:last-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
 @media (min-width: 700px) {
   main > div:last-of-type {
     padding-right: 35px;
@@ -29,8 +35,14 @@ main > div:last-of-type {
 }
 @media (min-width: 1700px) {
   main > div:last-of-type {
-    padding-right: 17.5vw;
-    padding-left: 17.5vw;
+    padding-right: 19.6vw;
+    padding-left: 19.6vw;
+  }
+}
+@media (min-width: 2880px) {
+  main > div:last-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
   }
 }
 main {
@@ -46,6 +58,8 @@ main {
 main > div:first-of-type {
   z-index: 2;
   padding: 28px;
+  max-width: 462px;
+  width: 100%;
 }
 main > div:first-of-type > div {
   display: flex;
@@ -54,18 +68,18 @@ main > div:first-of-type > div {
   justify-content: center;
   border-radius: 14px;
   padding: 28px;
-  max-width: 385px;
-  width: 100%;
   background-color: white;
 }
 main > div:first-of-type > div > h1 {
   color: var(--primary-color);
 }
 main > div:first-of-type > div > div:first-of-type {
+  width: 100%;
   padding-top: 28px;
 }
 main > div:first-of-type > div > div:first-of-type > form {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 21px;
 }
@@ -127,13 +141,6 @@ div.custom-input input {
   transition: ease-in-out 0.28s;
   color: var(--dark-gray);
 }
-div.custom-input input:not(:-moz-placeholder-shown) + label {
-  color: var(--regular-gray);
-  padding: 0px 7px;
-  font-size: 11.9px;
-  background-color: white;
-  transform: translateY(-170%);
-}
 div.custom-input input:not(:placeholder-shown) + label {
   color: var(--regular-gray);
   padding: 0px 7px;
@@ -151,9 +158,6 @@ div.custom-input input:focus + label {
 div.custom-input input:focus {
   outline: none;
   border: 2px solid var(--primary-color);
-}
-div.custom-input input::-moz-placeholder {
-  filter: opacity(0%);
 }
 div.custom-input input::placeholder {
   filter: opacity(0%);
@@ -175,6 +179,7 @@ div.custom-input input:-ms-input-placeholder {
   color: transparent;
 }
 div.custom-input input:-webkit-autofill, div.custom-input input:-webkit-autofill:hover, div.custom-input input:-webkit-autofill:focus, div.custom-input input:-webkit-autofill:active {
-  -webkit-transition: background-color 5000s ease-in-out 0s;
   transition: background-color 5000s ease-in-out 0s;
-}/*# sourceMappingURL=main.css.map */
+}
+
+/*# sourceMappingURL=main.css.map */

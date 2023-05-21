@@ -7,9 +7,7 @@ div.saved-product-container > div > div {
   display: flex;
   flex-direction: column;
   border-radius: 14px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  user-select: none;
   overflow: hidden;
 }
 div.saved-product-container > div > div > div:first-of-type {
@@ -29,7 +27,6 @@ div.saved-product-container > div > div > div:first-of-type > div:first-of-type 
   align-items: center;
   justify-content: center;
   gap: 5.6px;
-  width: -moz-fit-content;
   width: fit-content;
   border-radius: 7px;
   font-size: 11.9px;
@@ -55,8 +52,7 @@ div.saved-product-container > div > div > div:first-of-type img {
   width: 182px;
   height: 182px;
   border-radius: 14px;
-  -o-object-fit: contain;
-     object-fit: contain;
+  object-fit: contain;
 }
 div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
   display: flex;
@@ -107,6 +103,8 @@ div.saved-product-container > div > div a {
 }
 div.saved-product-container > div > div a:focus-visible {
   outline: none;
+  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+  -moz-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
   box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
 }
 div.saved-product-container > div > div a:hover {
@@ -134,7 +132,7 @@ div.saved-product-container > div > div a i {
 aside {
   pointer-events: none;
   filter: opacity(0%);
-  background-color: rgba(0, 0, 0, 0.253);
+  background-color: rgba(0, 0, 0, 0.5);
   transition: ease-in-out 0.35s;
   z-index: 4;
   width: 100%;
@@ -251,4 +249,9 @@ ul.categories-list li button i:last-of-type:hover {
     width: 364px;
     min-width: 364px;
   }
-}/*# sourceMappingURL=aside.css.map */
+  ul.categories-list li button i:last-of-type {
+    font-size: 15.4px;
+  }
+}
+
+/*# sourceMappingURL=aside.css.map */

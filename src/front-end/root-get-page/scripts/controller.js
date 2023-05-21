@@ -2,7 +2,6 @@
 	const header = await (await fetch('/api/header')).json();
 
 	buildLogo(header);
-
 	displayLoadingScreen();
 
 	const propagandas = await (await fetch('/api/propagandas')).json();
@@ -24,8 +23,7 @@
 	images.forEach(function (image) {
 		image.addEventListener('load', function () {
 			loadedCount++;
-
-			updateLoadingProgessBar((loadedCount / images.length) * 100);
+			updateLoadingProgressBar((loadedCount / images.length) * 100);
 
 			if (loadedCount === images.length) {
 				removeLoadingScreen();
