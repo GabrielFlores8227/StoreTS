@@ -12,55 +12,27 @@ function displayLoadingScreen() {
 }
 
 /**
- * Updates the width of the loading progress bar based on the given progress percentage.
- *
- * @param {number} progress - The progress percentage to update the loading progress bar.
+ * Sets up the image load event listeners and handles the loading progress.
+ * When an image is loaded, it updates the loading progress bar based on the number of loaded images.
+ * If all images are loaded, it removes the loading screen and triggers notifications after a delay.
  */
+function setImagesListener() {
+	const images = window.document.querySelectorAll('img');
+	let loadedCount = 0;
 
-function updateLoadingProgressBar(progress) {
-	window.document.querySelector('div[loading-progress-bar]').style.width = progress + '%';
-}
+	images.forEach(function (image) {
+		image.addEventListener('load', function () {
+			loadedCount++;
+			const progress = (loadedCount / images.length) * 100;
+			window.document.querySelector('div[loading-progress-bar]').style.width = progress + '%';
 
-/**
- * Removes the loading screen by adding the CSS class '--off' to the loading screen container element
- * after a delay of 1400 milliseconds.
- */
-function removeLoadingScreen() {
-	setTimeout(() => {
-		window.document.querySelector('div[loading-screen-container]').classList.add('--off');
-	}, 1400);
-}
-
-/**
- * Builds the aside menus using the provided products data.
- *
- * @param {Object} products - The products data used to build the aside menus.
- */
-function buildAsideMenus(products) {
-	const savedAsideMenu = document.querySelector('aside[saved-aside-menu]');
-	const categoriesAsideMenu = document.querySelector('aside[categories-aside-menu]');
-
-	const addClickHandler = (selector, element, action) => {
-		document.querySelectorAll(`button[${selector}]`).forEach((button) => {
-			button.addEventListener('click', () => {
-				element.classList[action]('--on');
-			});
+			if (loadedCount === images.length) {
+				setTimeout(() => {
+					window.document.querySelector('div[loading-screen-container]').classList.add('--off');
+				}, 1400);
+			}
 		});
-	};
-
-	const asideButtonHandlers = [
-		{ selector: 'open-saved-aside-menu-button', element: savedAsideMenu, action: 'add' },
-		{ selector: 'close-saved-aside-menu-button', element: savedAsideMenu, action: 'remove' },
-		{ selector: 'open-categories-aside-menu-button', element: categoriesAsideMenu, action: 'add' },
-		{ selector: 'close-categories-aside-menu-button', element: categoriesAsideMenu, action: 'remove' },
-	];
-
-	asideButtonHandlers.forEach(({ selector, element, action }) => {
-		addClickHandler(selector, element, action);
 	});
-
-	buildSavedAsideMenu(products);
-	buildCategoriesAsideMenu(products);
 }
 
 /**
@@ -234,9 +206,10 @@ function buildCategoriesAsideMenu(products) {
 		categoryName.innerText = categoryKey;
 
 		categoryButton.addEventListener('click', () => {
-			const productSliderContainer = document.querySelectorAll('[product-slider-container]')[index];
-			scrollTop(productSliderContainer);
-			document.querySelector('aside[categories-aside-menu]').classList.remove('--on');
+			setTimeout(() => {
+				const productSliderContainer = document.querySelectorAll('[product-slider-container]')[index];
+				scrollTop(productSliderContainer);
+			}, 120);
 		});
 
 		templateParent.appendChild(categoryButton);

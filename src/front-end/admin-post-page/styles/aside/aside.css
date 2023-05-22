@@ -1,0 +1,222 @@
+aside > div > div:first-of-type > div > img {
+  height: 17.5px;
+}
+
+div.aside-block > form > div > div input, div.aside-block > form > div > div label, div.aside-block > form > div > button {
+  font-size: 14px;
+}
+
+aside {
+  pointer-events: none;
+  filter: opacity(0%);
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: ease-in-out 0.35s;
+  z-index: 4;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  top: 0px;
+}
+aside.--on {
+  pointer-events: all;
+  filter: opacity(100%);
+}
+aside.--on > div {
+  transform: translate(0%);
+}
+aside > button {
+  width: 100%;
+}
+aside > div {
+  width: 315px;
+  min-width: 315px;
+  background-color: var(--light-gray);
+  transition: ease-in-out 0.35s;
+  transform: translate(100%);
+  position: relative;
+}
+aside > div > div:first-of-type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 42px 21px 35px 21px;
+  width: 100%;
+  background-color: var(--primary-color);
+}
+aside > div > div:first-of-type > div > img {
+  filter: grayscale(100%) brightness(200%);
+}
+aside > div > div:first-of-type > div > div {
+  width: 100%;
+  margin-top: 35px;
+  position: relative;
+}
+aside > div > div:first-of-type > div > div::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+aside > div > div:first-of-type > div > div p {
+  text-align: center;
+  font-size: 13.3px;
+  font-family: var(--font-bold);
+  padding: 14px;
+  background-color: var(--primary-color);
+  color: white;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+aside > div > div:last-of-type {
+  padding: 21px 21px 224px 21px;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+div.aside-block > form {
+  width: 100%;
+  padding-top: 24.5px;
+}
+div.aside-block > form > span {
+  display: none;
+  font-size: 13.3px;
+  padding-bottom: 10.5px;
+}
+div.aside-block > form > span.--not-ok {
+  display: block;
+  color: red;
+}
+div.aside-block > form > span.--ok {
+  display: block;
+  color: green;
+}
+div.aside-block > form > span i {
+  font-style: normal;
+}
+div.aside-block > form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 18.9px;
+}
+div.aside-block > form > div > button {
+  width: 100%;
+  gap: 7px;
+  padding: 9.1px;
+  border: 2px solid var(--primary-color);
+  font-family: var(--font-bold);
+  background-color: var(--primary-color);
+  border-radius: 14px;
+  color: white;
+  transition: ease-in-out 0.35s;
+}
+div.aside-block > form > div > button:hover {
+  background-color: white;
+  color: var(--primary-color);
+}
+div.aside-block > form > div > div {
+  position: relative;
+}
+div.aside-block > form > div > div label {
+  cursor: text;
+  color: var(--regular-gray);
+  transition: ease-in-out 0.28s;
+  transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 14px;
+}
+div.aside-block > form > div > div input {
+  width: 100%;
+  padding: 9.1px 14px;
+  border-radius: 11.9px;
+  border: 2px solid var(--regular-gray);
+  transition: ease-in-out 0.28s;
+  color: var(--dark-gray);
+}
+div.aside-block > form > div > div input:not(:placeholder-shown) + label {
+  color: var(--regular-gray);
+  padding: 0px 7px;
+  font-size: 11.9px;
+  background-color: white;
+  transform: translateY(-170%);
+}
+div.aside-block > form > div > div input:focus + label {
+  color: var(--primary-color);
+  padding: 0px 7px;
+  font-size: 11.9px;
+  background-color: white;
+  transform: translateY(-170%);
+}
+div.aside-block > form > div > div input:focus {
+  outline: none;
+  border: 2px solid var(--primary-color);
+}
+div.aside-block > form > div > div input::placeholder {
+  filter: opacity(0%);
+}
+div.aside-block > form > div > div input::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: transparent;
+}
+div.aside-block > form > div > div input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: transparent;
+}
+div.aside-block > form > div > div input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: transparent;
+}
+div.aside-block > form > div > div input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: transparent;
+}
+div.aside-block > form > div > div input:-webkit-autofill {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+@media (min-width: 375px) {
+  aside > div {
+    width: 336px;
+    min-width: 336px;
+  }
+}
+@media (min-width: 700px) {
+  aside > div > div:first-of-type > div > img {
+    height: 18.9px;
+  }
+}
+@media (min-width: 1000px) {
+  aside > div > div:first-of-type > div > img {
+    height: 19.6px;
+  }
+}
+@media (min-width: 1700px) {
+  aside > div > div:first-of-type > div > img {
+    height: 21px;
+  }
+  div.aside-block > form > div > button, div.aside-block > form > div > div label, div.aside-block > form > div > div input {
+    font-size: 15.4px;
+  }
+  aside > div {
+    width: 364px;
+    min-width: 364px;
+  }
+}
+div.aside-block {
+  padding: 28px;
+  border-radius: 14px;
+  background-color: white;
+}
+div.aside-block > h2 {
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/*# sourceMappingURL=aside.css.map */

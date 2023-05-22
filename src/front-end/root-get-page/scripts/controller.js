@@ -9,29 +9,21 @@
 	const footer = await (await fetch('/api/footer')).json();
 
 	clearLocalStorage(products);
-
 	buildHead(header);
-	buildAsideMenus(products);
+	buildSavedAsideMenu(products);
+	buildCategoriesAsideMenu(products);
+	buildAsideMenus([
+		{ selector: 'open-saved-aside-menu-button', element: document.querySelector('aside[saved-aside-menu]'), action: 'add' },
+		{ selector: 'close-saved-aside-menu-button', element: document.querySelector('aside[saved-aside-menu]'), action: 'remove' },
+		{ selector: 'open-categories-aside-menu-button', element: document.querySelector('aside[categories-aside-menu]'), action: 'add' },
+		{ selector: 'close-categories-aside-menu-button', element: document.querySelector('aside[categories-aside-menu]'), action: 'remove' },
+	]);
 	buildSearchBar(products);
 	buildPropagandas(propagandas, footer);
 	buildProducts(products);
 	buildFooter(footer);
-
-	const images = window.document.querySelectorAll('img');
-	let loadedCount = 0;
-
-	images.forEach(function (image) {
-		image.addEventListener('load', function () {
-			loadedCount++;
-			updateLoadingProgressBar((loadedCount / images.length) * 100);
-
-			if (loadedCount === images.length) {
-				removeLoadingScreen();
-
-				setTimeout(() => {
-					handleNotifications(header, products);
-				}, 3500);
-			}
-		});
-	});
+	setImagesListener();
+	setTimeout(() => {
+		handleNotifications(header, products);
+	}, 7000);
 })();

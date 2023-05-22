@@ -19,22 +19,7 @@
 
 /* Width and Height */
 *::-webkit-scrollbar {
-  width: 13.3px;
-  height: 13.3px;
-}
-
-*::-webkit-scrollbar-track {
-  background-color: var(--light-gray);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: rgb(120, 120, 120);
-  border: 3.5px solid var(--light-gray);
-  border-radius: 21px;
-}
-
-*:focus-visible {
-  outline: 2.1px solid rgb(0, 162, 255);
+  display: none;
 }
 
 * {

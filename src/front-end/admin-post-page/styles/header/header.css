@@ -1,0 +1,113 @@
+header > div:first-of-type {
+  padding-right: 24.5px;
+  padding-left: 24.5px;
+}
+
+header > div:first-of-type > a > img:first-of-type {
+  height: 17.5px;
+}
+
+header > div:first-of-type > div:last-of-type > button {
+  font-size: 17.5px;
+}
+
+@media (min-width: 375px) {
+  header > div:first-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+@media (min-width: 700px) {
+  header > div:first-of-type {
+    padding-right: 35px;
+    padding-left: 35px;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 18.9px;
+  }
+  header > div:first-of-type > div:last-of-type > button {
+    font-size: 18.9px;
+  }
+}
+@media (min-width: 800px) {
+  header > div:first-of-type {
+    padding-right: 7vw;
+    padding-left: 7vw;
+  }
+}
+@media (min-width: 1000px) {
+  header > div:first-of-type {
+    padding-right: 9.8vw;
+    padding-left: 9.8vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 19.6px;
+  }
+  header > div:first-of-type > div:last-of-type > button {
+    font-size: 19.6px;
+  }
+}
+@media (min-width: 1300px) {
+  header > div:first-of-type {
+    padding-right: 14vw;
+    padding-left: 14vw;
+  }
+}
+@media (min-width: 1700px) {
+  header > div:first-of-type {
+    padding-right: 19.6vw;
+    padding-left: 19.6vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 21px;
+  }
+  header > div:first-of-type > div:last-of-type > button {
+    font-size: 21px;
+  }
+}
+@media (min-width: 2880px) {
+  header > div:first-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
+  }
+}
+header {
+  z-index: 3;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+header > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--primary-color);
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+header > div:first-of-type > a {
+  display: flex;
+  padding: 14px 0px;
+}
+header > div:first-of-type > a > img:first-of-type {
+  filter: grayscale(100%) brightness(200%);
+}
+header > div:first-of-type > div:last-of-type {
+  display: flex;
+}
+header > div:first-of-type > div:last-of-type > button {
+  color: white;
+  width: 42px;
+  min-width: 42px;
+  height: 42px;
+  transition: ease-in-out 0.35s;
+  min-height: 42px;
+  border-radius: 100%;
+}
+header > div:first-of-type > div:last-of-type > button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/*# sourceMappingURL=header.css.map */

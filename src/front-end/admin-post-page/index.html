@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="theme-color" />
+		<link rel="shortcut icon" />
+		<title></title>
+		<meta name="description" />
+		<link rel="stylesheet" href="global/styles/modules/modules.css" />
+		<link rel="stylesheet" href="global/styles/index/index.css" />
+		<link rel="stylesheet" href="admin-post-page/styles/header/header.css" />
+		<link rel="stylesheet" href="admin-post-page/styles/aside/aside.css" />
+		<link rel="stylesheet" href="admin-post-page/styles/main/main.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	</head>
+	<body>
+		<script defer src="global/scripts/modules.js"></script>
+		<script defer src="admin-post-page/scripts/modules.js"></script>
+		<script defer src="admin-post-page/scripts/controller.js"></script>
+		<aside config-aside-menu>
+			<button close-config-aside-menu-button></button>
+			<div>
+				<div>
+					<div>
+						<img draggable="false" store-logo />
+						<div>
+							<p>Configurations</p>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div class="aside-block">
+						<h2>Update Password</h2>
+						<form change-password-form>
+							<span message-container>
+								<i class="fa-solid fa-circle-info"></i>
+								<i message></i>
+							</span>
+							<div>
+								<div>
+									<div class="custom-input">
+										<input oldPassword id="old-password" type="password" name="old-password" placeholder="Old Password" />
+										<label for="old-password">Old Password</label>
+									</div>
+								</div>
+								<div>
+									<div class="custom-input">
+										<input newPassword id="new-password" type="password" name="new-password" placeholder="New Password" />
+										<label for="new-password">New Password</label>
+									</div>
+								</div>
+								<button>
+									<i class="fa-solid fa-check"></i>
+									Save
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</aside>
+		<header>
+			<div>
+				<a href="/">
+					<img draggable="false" store-logo alt="Store Logo" />
+				</a>
+				<div>
+					<button open-config-aside-menu-button>
+						<i class="fa-solid fa-gear"></i>
+					</button>
+				</div>
+			</div>
+		</header>
+		<main>
+			<div class="edit-section">
+				<div>
+					<h1>
+						<i class="fa-solid fa-helmet-safety"></i>
+						Header
+					</h1>
+				</div>
+				<div>
+					<table class="edit-section__table">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Description</th>
+								<th>Color</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="edit-section__table__cell">
+										<input type="text" placeholder="Title" />
+										<span>
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</div>
+								</td>
+								<td>
+									<div class="edit-section__table__cell">
+										<input type="text" placeholder="Description" />
+										<span>
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</div>
+								</td>
+								<td>
+									<div class="edit-section__table__cell">
+										<input type="color" placeholder="Color" />
+										<span>
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="edit-section__table">
+						<thead>
+							<tr>
+								<th>Icon</th>
+								<th>Logo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<div class="edit-section__table__cell">
+										<div input-file-container class="edit-section__table__cell__input-file-container">
+											<label for="icon">
+												<i class="fa-solid fa-image"></i>
+												<a target="_blank"> Icon </a>
+											</label>
+											<input id="icon" type="file" />
+										</div>
+										<span>
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</div>
+								</td>
+								<td>
+									<div class="edit-section__table__cell">
+										<div input-file-container class="edit-section__table__cell__input-file-container">
+											<label for="logo">
+												<i class="fa-solid fa-image"></i>
+												<a target="_blank"> Logo </a>
+											</label>
+											<input id="logo" type="file" />
+										</div>
+										<span>
+											<i class="fa-solid fa-circle-info"></i>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

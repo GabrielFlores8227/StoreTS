@@ -5,6 +5,14 @@ const api: express.Router = express.Router();
 
 //prettier-ignore
 api.post(
+	'/password',
+		LocalModules.middlewareCheckAuth, 
+		LocalModules.middlewarePostPassword,
+		LocalModules.middlewareSendResponse(200)
+)
+
+//prettier-ignore
+api.post(
 	'/propaganda', 
 	LocalModules.middlewareUploadFiles(2, 2), 
 	LocalModules.middlewareCheckAuth, 

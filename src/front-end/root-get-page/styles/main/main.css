@@ -167,6 +167,9 @@ div.product-section-container > div > div:last-of-type > div a i {
     padding-right: 19.6vw;
     padding-left: 19.6vw;
   }
+  div.product-section-container > div > div:first-of-type h1 {
+    font-size: 38.5px;
+  }
 }
 @media (min-width: 2880px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
@@ -236,9 +239,6 @@ div.propagandas-container button:last-of-type {
 div.propagandas-container > div:first-of-type {
   display: flex;
   overflow: scroll;
-}
-div.propagandas-container > div:first-of-type::-webkit-scrollbar {
-  display: none;
 }
 div.propagandas-container > div:first-of-type img {
   width: 100vw;

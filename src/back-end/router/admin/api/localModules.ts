@@ -1,8 +1,9 @@
 import express from 'express';
 import { GlobalSqlModules, GlobalS3Modules, GlobalMiddlewareModules } from '../../globalModules';
+import GlobalAdminModules from '../globalAdminModules';
 import multer from 'multer';
 import sharp from 'sharp';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 import { IncomingHttpHeaders } from 'http';
 
 class InputMask {
@@ -97,6 +98,9 @@ class InputMask {
 			 */
 			executeChecker: async (table: string, body: { ids: string[] }) => await this.idsChecker(table, body),
 		},
+		password: {
+			executeChecker: (body: { oldPassword: string; newPassword: string }) => this.passwordChecker(body),
+		},
 		header: {
 			/**
 			 * Executes the header checker.
@@ -179,23 +183,6 @@ class InputMask {
 	}
 
 	/**
-	 * Executes a checker object to validate multiple conditions.
-	 * @param checker The checker object containing the conditions to validate.
-	 * @param status The HTTP status code to use for the error response (default: 400).
-	 * @param message The error message to use for the error response (default: "Please ensure that the '<key>' entry is provided accurately to fulfill the request").
-	 */
-	public static executeChecker(checker: { [key: string]: boolean }, status?: number, message?: string) {
-		Object.keys(checker).forEach((key: string) => {
-			if (!checker[key]) {
-				throw {
-					status: status || 400,
-					message: message || 'Please ensure that the "' + key + '" entry is provided accurately to fulfill the request',
-				};
-			}
-		});
-	}
-
-	/**
 	 * Checks the authorization header in the incoming HTTP headers.
 	 * @param headers The incoming HTTP headers object.
 	 * @returns An object indicating if the authorization header is present or not.
@@ -232,6 +219,13 @@ class InputMask {
 						.map((item: any) => String(item.id))
 						.sort(),
 				) === JSON.stringify(body.ids.sort()),
+		};
+	}
+
+	private static passwordChecker(body: { oldPassword: string; newPassword: string }) {
+		return {
+			oldPassword: typeof body.oldPassword === 'string' && body.oldPassword.length > 1,
+			newPassword: typeof body.newPassword === 'string' && body.newPassword.length > 1,
 		};
 	}
 
@@ -314,9 +308,18 @@ class LocalModulesUtil {
 	public static validateDataFormMiddlewareCheckAuth(headers: IncomingHttpHeaders) {
 		const checker = InputMask.textMask.authorization.executeChecker(headers);
 
-		InputMask.executeChecker(checker, 401, 'unauthorized');
+		GlobalAdminModules.executeChecker(checker, {
+			status: 401,
+			message: 'Unauthorized',
+		});
 
 		headers.authorization = headers.authorization!.replace('Bearer ', '');
+	}
+
+	public static validateDataForMiddlewarePostPassword(body: { newPassword: string; oldPassword: string }) {
+		const checker = InputMask.textMask.password.executeChecker(body);
+
+		GlobalAdminModules.executeChecker(checker);
 	}
 
 	/**
@@ -327,7 +330,7 @@ class LocalModulesUtil {
 	public static async validateDataForMiddlewarePostPropaganda(body: { imagesContext: string[] }, files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] | undefined) {
 		const checker = InputMask.textMask.propagandas.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 
 		const bigImage = Object(files)[body.imagesContext.indexOf('bigImage')];
 		const smallImage = Object(files)[body.imagesContext.indexOf('smallImage')];
@@ -343,7 +346,7 @@ class LocalModulesUtil {
 	public static validateDataForMiddlewareDeletePropaganda(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 	}
 
 	/**
@@ -353,7 +356,7 @@ class LocalModulesUtil {
 	public static validateDataForMiddlewarePostCategory(body: { name: string }) {
 		const checker = InputMask.textMask.categories.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 	}
 
 	/**
@@ -363,7 +366,7 @@ class LocalModulesUtil {
 	public static validateDataForMiddlewareDeleteCategory(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 	}
 
 	/**
@@ -374,7 +377,7 @@ class LocalModulesUtil {
 	public static async validateDataForMiddlewarePostProduct(body: { category: string; name: string; price: string; off: string; installment: string; whatsapp: string; message: string }, file: Express.Multer.File | undefined) {
 		const checker = await InputMask.textMask.products.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 
 		await InputMask.imageMask.products.image.sharpFile(file);
 	}
@@ -386,7 +389,7 @@ class LocalModulesUtil {
 	public static validateDataForMiddlewareDeleteProduct(body: { id: string }) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 	}
 
 	/**
@@ -398,11 +401,11 @@ class LocalModulesUtil {
 	public static async validateDataForMiddlewarePutText(table: string, column: string, body: { id: string; [key: string]: string }) {
 		const checker1 = InputMask.textMask.id.executeChecker(body);
 
-		InputMask.executeChecker(checker1);
+		GlobalAdminModules.executeChecker(checker1);
 
 		const { [column]: columnValue } = await Object(InputMask).textMask[table].executeChecker(body);
 
-		InputMask.executeChecker({ [column]: columnValue });
+		GlobalAdminModules.executeChecker({ [column]: columnValue });
 	}
 
 	/**
@@ -415,7 +418,7 @@ class LocalModulesUtil {
 	public static async validateDataForMiddlewarePutImage(table: string, column: string, body: { id: string }, file: Express.Multer.File | undefined) {
 		const checker = InputMask.textMask.id.executeChecker(body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 
 		await Object(InputMask).imageMask[table][column].sharpFile(file);
 	}
@@ -428,7 +431,7 @@ class LocalModulesUtil {
 	public static async validateDataForMiddlewarePutPosition(table: string, body: { ids: string[] }) {
 		const checker = await InputMask.textMask.ids.executeChecker(table, body);
 
-		InputMask.executeChecker(checker);
+		GlobalAdminModules.executeChecker(checker);
 	}
 }
 
@@ -482,8 +485,31 @@ export default class LocalModules {
 			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT token FROM auth WHERE token = ? AND id = ?;', [headers!.authorization!, 'only']);
 
 			if (Object(query).length !== 1) {
-				throw { status: 401, message: 'unauthorized' };
+				throw { status: 401, message: 'Unauthorized' };
 			}
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewarePostPassword(req: express.Request, res: express.Response, next: express.NextFunction) {
+		try {
+			const body = req.body;
+
+			LocalModulesUtil.validateDataForMiddlewarePostPassword(body);
+
+			const hashedOldPassword = createHash('sha512').update(String(body.oldPassword)).digest('hex');
+			const hashedNewPassword = createHash('sha512').update(String(body.newPassword)).digest('hex');
+
+			const [query] = await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'SELECT password FROM auth WHERE id = ? AND password = ?', ['only', hashedOldPassword]);
+
+			if (Object(query).length !== 1) {
+				throw { status: 401, message: 'Oops! password is incorrect' };
+			}
+
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE auth SET password = ? WHERE id = ?', [hashedNewPassword, 'only']);
 
 			return next();
 		} catch (err) {

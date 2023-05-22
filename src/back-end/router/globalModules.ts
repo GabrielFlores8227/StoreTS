@@ -128,8 +128,11 @@ export class GlobalMiddlewareModules {
 	 */
 	public static handleMiddlewareError(res: express.Response, err: any) {
 		if (err.status) {
-			res.status(err.status).json(err);
-			return;
+			if (err.status === 308 && err.message) {
+				return res.redirect(err.url + '?message=' + err.message);
+			}
+
+			return res.status(err.status).json(err);
 		}
 
 		res.status(500).json({
