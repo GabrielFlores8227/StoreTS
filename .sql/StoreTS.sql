@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.33, for Linux (x86_64)
 --
--- Host: localhost    Database: storeTS
+-- Host: localhost    Database: StoreTS
 -- ------------------------------------------------------
--- Server version	8.0.33-0ubuntu0.22.04.2
+-- Server version	8.0.33
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,12 +24,22 @@ DROP TABLE IF EXISTS `auth`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auth` (
   `id` enum('only') NOT NULL DEFAULT 'only',
-  `user` varchar(128) NOT NULL,
+  `username` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth`
+--
+
+LOCK TABLES `auth` WRITE;
+/*!40000 ALTER TABLE `auth` DISABLE KEYS */;
+INSERT INTO `auth` VALUES ('only','C7AD44CBAD762A5DA0A452F9E854FDC1E0E7A52A38015F23F3EAB1D80B931DD472634DFAC71CD34EBC35D16AB7FB8A90C81F975113D6C7538DC69DD8DE9077EC','C7AD44CBAD762A5DA0A452F9E854FDC1E0E7A52A38015F23F3EAB1D80B931DD472634DFAC71CD34EBC35D16AB7FB8A90C81F975113D6C7538DC69DD8DE9077EC',NULL);
+/*!40000 ALTER TABLE `auth` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `categories`
@@ -46,6 +56,15 @@ CREATE TABLE `categories` (
   UNIQUE KEY `category` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `footer`
@@ -69,6 +88,15 @@ CREATE TABLE `footer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `footer`
+--
+
+LOCK TABLES `footer` WRITE;
+/*!40000 ALTER TABLE `footer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `footer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `header`
 --
 
@@ -85,6 +113,16 @@ CREATE TABLE `header` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `header`
+--
+
+LOCK TABLES `header` WRITE;
+/*!40000 ALTER TABLE `header` DISABLE KEYS */;
+INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','StoreTS Description','#dd2222');
+/*!40000 ALTER TABLE `header` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `products`
@@ -112,6 +150,15 @@ CREATE TABLE `products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `products`
+--
+
+LOCK TABLES `products` WRITE;
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `propagandas`
 --
 
@@ -126,6 +173,15 @@ CREATE TABLE `propagandas` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `propagandas`
+--
+
+LOCK TABLES `propagandas` WRITE;
+/*!40000 ALTER TABLE `propagandas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `propagandas` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -136,4 +192,4 @@ CREATE TABLE `propagandas` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-19 15:40:49
+-- Dump completed on 2023-05-24 11:26:13

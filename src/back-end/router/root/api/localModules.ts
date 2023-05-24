@@ -114,7 +114,7 @@ export default class LocalModules {
 
 			const clicks = String(Object(query)[0].clicks + 1);
 
-			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'UPDATE products SET clicks = ?, lastClick = CURRENT_TIMESTAMP WHERE id = ?;', [clicks, id!]);
+			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlOrdinaryConn, 'UPDATE products SET clicks = ?, lastClick = CURRENT_TIMESTAMP WHERE id = ?;', [clicks, id!]);
 
 			Object(req).redirectTo = 'https://api.whatsapp.com/send?phone=' + Object(query)[0].whatsapp + '&text=' + Object(query)[0].message.replace('###', Object(query)[0].name);
 
