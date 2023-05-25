@@ -251,7 +251,7 @@
 
 		&.--ok {
 			display: block;
-			color: green;
+			color: var(--regular-green);
 		}
 
 		display: none;

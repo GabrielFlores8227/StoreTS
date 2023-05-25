@@ -152,13 +152,6 @@ class InputMask {
 	 * @throws Will throw an error if the provided image file is invalid or the resizing process fails.
 	 */
 	private static async sharpFile(file: Express.Multer.File | undefined, width: number, height: number, fit: keyof sharp.FitEnum) {
-		if (!['image/png', 'image/jpeg', 'image/jpg', 'image/JPG', 'image/webp'].includes(file!.mimetype)) {
-			throw {
-				status: 400,
-				message: 'Please provide valid image(s) to fulfill the request',
-			};
-		}
-
 		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
@@ -533,8 +526,8 @@ export default class LocalModules {
 			const bigImage: Express.Multer.File = Object(files)[Object(body).imagesContext.indexOf('bigImage')];
 			const smallImage: Express.Multer.File = Object(files)[Object(body).imagesContext.indexOf('smallImage')];
 
-			await GlobalS3Modules.uploadFileToS3Bucket(bigImage.buffer.toString(), bigImage.originalname, bigImage.mimetype);
-			await GlobalS3Modules.uploadFileToS3Bucket(smallImage.buffer.toString(), smallImage.originalname, smallImage.mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(bigImage.buffer, bigImage.originalname, bigImage.mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(smallImage.buffer, smallImage.originalname, smallImage.mimetype);
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);', [bigImage.originalname, smallImage.originalname]);
 
@@ -639,7 +632,7 @@ export default class LocalModules {
 
 			await LocalModulesUtil.validateDataForMiddlewarePostProduct(body, file);
 
-			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer.toString(), file!.originalname, file!.mimetype!);
+			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer, file!.originalname, file!.mimetype!);
 
 			await GlobalSqlModules.sqlQuery(GlobalSqlModules.sqlMasterConn, 'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [body.category, body.name, file!.originalname, body.price, body.off, body.installment, body.whatsapp, body.message]);
 
@@ -728,7 +721,7 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer.toString(), Object(query)[0][column], file!.mimetype);
+			await GlobalS3Modules.uploadFileToS3Bucket(file!.buffer, Object(query)[0][column], file!.mimetype);
 
 			return next();
 		} catch (err) {

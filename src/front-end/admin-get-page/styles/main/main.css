@@ -22,7 +22,7 @@ main > div:first-of-type > div > div:first-of-type > form > span.--not-ok {
 }
 main > div:first-of-type > div > div:first-of-type > form > span.--ok {
   display: block;
-  color: green;
+  color: var(--regular-green);
 }
 main > div:first-of-type > div > div:first-of-type > form > span i {
   font-style: normal;

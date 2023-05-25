@@ -11,7 +11,7 @@ admin.get('/', (_: express.Request, res: express.Response) => {
 });
 
 admin.post('/', LocalModules.middlewarePostAdmin, (_: express.Request, res: express.Response) => {
-	res.sendFile(path.join(GlobalMiddlewareModules.frontEndFolderPath, 'admin-post-page/index.html'));
+	res.send(200);
 });
 
 admin.use('/api', api);
