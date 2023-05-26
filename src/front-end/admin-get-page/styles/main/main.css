@@ -55,6 +55,7 @@ main > div:first-of-type > div > div:first-of-type > form > div > div label {
   color: var(--regular-gray);
   transition: ease-in-out 0.28s;
   transform: translateY(-50%);
+  pointer-events: none;
   position: absolute;
   top: 50%;
   left: 14px;
@@ -63,7 +64,7 @@ main > div:first-of-type > div > div:first-of-type > form > div > div input {
   width: 100%;
   padding: 9.1px 14px;
   border-radius: 11.9px;
-  border: 2px solid var(--regular-gray);
+  border: 2px solid rgb(100, 100, 100);
   transition: ease-in-out 0.28s;
   color: var(--dark-gray);
 }

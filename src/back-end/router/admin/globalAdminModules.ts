@@ -8,11 +8,16 @@ export default class GlobalAdminModules {
 	public static executeChecker(checker: { [key: string]: boolean }, options?: { status?: number; message?: string; url?: string }) {
 		Object.keys(checker).forEach((key: string) => {
 			if (!checker[key]) {
-				throw {
+				const throwObject = {
 					status: Object(options).status || 400,
 					message: Object(options).message || 'Please ensure that the ' + key + ' entry is provided accurately to fulfill the request',
-					url: Object(options).url || '/',
 				};
+
+				if (Object(options).url) {
+					Object(throwObject).url = Object(options).url;
+				}
+
+				throw throwObject;
 			}
 		});
 	}
