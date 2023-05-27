@@ -1,0 +1,252 @@
+aside > div > div:first-of-type > div > img {
+  height: 17.5px;
+}
+
+div.saved-product-container > div > div {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  user-select: none;
+  overflow: hidden;
+}
+div.saved-product-container > div > div > div:first-of-type {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 21px;
+  background-color: white;
+  padding: 21px;
+}
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type {
+  width: 100%;
+}
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5.6px;
+  width: fit-content;
+  border-radius: 7px;
+  font-size: 11.9px;
+  padding: 6.3px 10.5px;
+  font-family: var(--font-bold);
+  background-color: var(--primary-color);
+  color: white;
+}
+div.saved-product-container > div > div > div:first-of-type > div:first-of-type button i {
+  color: white;
+  font-size: 11.9px;
+}
+div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) {
+  width: 100%;
+  padding-bottom: 5.6px;
+}
+div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) > hr {
+  border: 0px;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.178);
+}
+div.saved-product-container > div > div > div:first-of-type img {
+  width: 170px;
+  height: 170px;
+  border-radius: 14px;
+  object-fit: contain;
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type p {
+  text-align: center;
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:first-of-type {
+  color: var(--regular-gray);
+  font-size: 19.6px;
+  font-family: var(--font-bold);
+  padding: 0px 0px 5.6px 0px;
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
+  color: var(--regular-gray);
+  text-decoration: line-through;
+  font-size: 17.5px;
+  filter: opacity(70%);
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(3) {
+  color: var(--regular-green);
+  font-size: 28px;
+  font-family: var(--font-bold);
+}
+div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:last-of-type {
+  color: var(--regular-gray);
+  font-size: 17.5px;
+  filter: opacity(70%);
+}
+div.saved-product-container > div > div a {
+  display: flex;
+  gap: 5.6px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px 0px 14px 14px;
+  color: white;
+  padding: 18.9px 0px;
+  font-size: 17.5px;
+  font-family: var(--font-bold);
+  background-color: var(--regular-green);
+  transition: ease-in-out 0.35s;
+}
+div.saved-product-container > div > div a:focus-visible {
+  outline: none;
+  -webkit-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+  -moz-box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+  box-shadow: inset 0px 0px 0px 2px rgb(0, 162, 255);
+}
+div.saved-product-container > div > div a:hover {
+  background-color: var(--dark-green);
+}
+div.saved-product-container > div > div a i {
+  font-size: 21px;
+}
+
+@media (min-width: 870px) {
+  aside > div > div:first-of-type > div > img {
+    height: 18.9px;
+  }
+}
+@media (min-width: 1700px) {
+  aside > div > div:first-of-type > div > img {
+    height: 21px;
+  }
+}
+aside {
+  pointer-events: none;
+  filter: opacity(0%);
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: ease-in-out 0.35s;
+  z-index: 4;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  position: fixed;
+  top: 0px;
+}
+aside.--on {
+  pointer-events: all;
+  filter: opacity(100%);
+}
+aside.--on > div {
+  transform: translate(0%);
+}
+aside > button {
+  width: 100%;
+}
+aside > div {
+  width: 308px;
+  min-width: 308px;
+  background-color: var(--light-gray);
+  transition: ease-in-out 0.35s;
+  transform: translate(100%);
+  position: relative;
+}
+aside > div > div:first-of-type {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 42px 21px 35px 21px;
+  width: 100%;
+  background-color: var(--primary-color);
+}
+aside > div > div:first-of-type > div > img {
+  filter: grayscale(100%) brightness(200%);
+}
+aside > div > div:first-of-type > div > div {
+  width: 100%;
+  margin-top: 35px;
+  position: relative;
+}
+aside > div > div:first-of-type > div > div::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+aside > div > div:first-of-type > div > div p {
+  text-align: center;
+  font-size: 13.3px;
+  font-family: var(--font-bold);
+  padding: 14px;
+  background-color: var(--primary-color);
+  color: white;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+aside > div > div:last-of-type {
+  padding: 21px 21px 224px 21px;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+div.saved-product-container > div {
+  transition: ease-in-out 0.35s;
+  overflow: hidden;
+}
+div.saved-product-container > div.--off {
+  filter: opacity(0%);
+  margin: 0px;
+}
+div.saved-product-container > div > div {
+  width: 100%;
+}
+
+ul.categories-list li button {
+  display: flex;
+  gap: 7px;
+  padding: 8.4px;
+  width: 100%;
+  position: relative;
+}
+ul.categories-list li button i:first-of-type {
+  width: 8.4px;
+  height: 8.4px;
+  border-radius: 100%;
+  background-color: var(--primary-color);
+}
+ul.categories-list li button i:last-of-type {
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  transition: ease-in-out 0.35s;
+  color: var(--dark-gray);
+  font-family: var(--font-bold);
+  font-style: normal;
+  font-size: 16.1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+ul.categories-list li button i:last-of-type:hover {
+  color: var(--primary-color);
+}
+
+@media (min-width: 1700px) {
+  aside > div {
+    width: 322px;
+    min-width: 322px;
+  }
+  ul.categories-list li button i:last-of-type {
+    font-size: 17.5px;
+  }
+}
+
+/*# sourceMappingURL=aside.css.map */

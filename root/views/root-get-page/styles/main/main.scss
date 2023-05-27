@@ -1,0 +1,256 @@
+@import '../modules/modules.scss';
+
+main {
+	padding: 140px 0;
+	background-color: var(--light-gray);
+}
+
+div.loading-screen-container {
+	&.--off {
+		filter: opacity(0%);
+		pointer-events: none;
+	}
+
+	z-index: 4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100vh;
+	background-color: var(--primary-color);
+	transition: ease-in-out 1s;
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	& > div {
+		&.--on {
+			filter: opacity(100%);
+		}
+
+		display: flex;
+		flex-direction: column;
+		align-items: left;
+		gap: 14px;
+		filter: opacity(0%);
+		transition: ease-in-out 1.5s;
+
+		& > img {
+			@extend %big-height-size;
+		}
+
+		& > div {
+			width: 0%;
+			transition: ease-in-out 1.4s;
+			height: 2.8px;
+			background-color: white;
+			border-radius: 70px;
+		}
+	}
+}
+
+div.propagandas-container {
+	position: relative;
+
+	button {
+		&:focus {
+			outline: none;
+		}
+
+		&:first-of-type {
+			left: 0;
+		}
+
+		&:last-of-type {
+			right: 0;
+		}
+
+		width: 50%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+	}
+
+	& > div:first-of-type {
+		display: flex;
+		overflow: scroll;
+
+		img {
+			width: 100vw;
+			object-fit: cover;
+			object-position: bottom;
+		}
+	}
+
+	& > p {
+		border-radius: 4.9px;
+		color: var(--dark-gray);
+		background-color: white;
+		padding: 6.3px 10.5px;
+		font-size: 12.6px;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+	}
+}
+
+div.product-section-container {
+	padding: 35px 0;
+
+	& > div {
+		&.--special {
+			&::before {
+				content: '';
+				width: 350px;
+				height: 350px;
+				border-radius: 100%;
+				border: 4.9px solid var(--primary-color);
+				transform: translateY(-50%);
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			&::after {
+				content: '';
+				width: 350px;
+				height: 350px;
+				border-radius: 100%;
+				filter: opacity(0%);
+				border: 4.9px solid var(--primary-color);
+				transform: translateY(-60%);
+				position: absolute;
+				bottom: -480px;
+				right: 40px;
+			}
+
+			margin: 42px 0;
+			padding: 70px 0;
+			background-color: var(--primary-color);
+			position: relative;
+
+			h1 {
+				&::before {
+					background-color: white !important;
+				}
+
+				color: white !important;
+			}
+		}
+
+		padding: 42px 0;
+
+		& > div:first-of-type {
+			@extend %default-padding-size;
+			width: 100vw;
+
+			h1 {
+				&::before {
+					content: '';
+					width: 10.5px;
+					height: 10.5px;
+					border-radius: 100%;
+					background-color: var(--primary-color);
+					transform: translateY(-50%);
+					position: absolute;
+					top: 50%;
+					left: 0;
+				}
+
+				@extend %big-font-size;
+				color: var(--dark-gray);
+				padding: 10.5px 0 10.5px 22.4px;
+				position: relative;
+			}
+		}
+
+		& > div:last-of-type {
+			&::-webkit-scrollbar {
+				display: none;
+			}
+
+			&.--special {
+				display: grid;
+				grid-template-columns: auto auto;
+				gap: 14px;
+
+				& > div {
+					&.--special:last-of-type {
+						grid-column: span 2;
+					}
+
+					width: 100%;
+				}
+			}
+
+			@extend %default-padding-size;
+			display: flex;
+			gap: 14px;
+			width: 100vw;
+			overflow: scroll;
+			padding-top: 14px;
+			padding-bottom: 14px;
+
+			& > div {
+				@extend %product-container;
+				min-width: 280px;
+				width: 100%;
+			}
+		}
+	}
+}
+
+@media (hover: none) {
+	div.loading-screen-container {
+		& > div {
+			transform: translateY(-150%);
+		}
+	}
+}
+
+@media (min-width: 490px) {
+	main {
+		padding-top: 140px;
+	}
+
+	div.propagandas-container {
+		& > div:first-of-type {
+			img {
+				width: 100vw;
+				height: 41vw;
+			}
+		}
+	}
+}
+
+@media (min-width: 870px) {
+	main {
+		padding: 84px 0 140px 0;
+	}
+
+	div.propagandas-container {
+		& > div:first-of-type {
+			img {
+				width: 100vw;
+				height: auto;
+			}
+		}
+	}
+
+	div.product-section-container {
+		padding: 35px 0;
+
+		& > div {
+			&.--special {
+				&::before,
+				&::after {
+					filter: opacity(100%);
+					width: 420px;
+					height: 420px;
+				}
+			}
+		}
+	}
+}
