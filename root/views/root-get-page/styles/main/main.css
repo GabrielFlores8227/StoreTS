@@ -1,6 +1,6 @@
 div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-  padding-right: 24.5px;
-  padding-left: 24.5px;
+  padding-right: 21px;
+  padding-left: 21px;
 }
 
 div.product-section-container > div > div:first-of-type h1 {
@@ -74,7 +74,6 @@ div.product-section-container > div > div:last-of-type > div > div:first-of-type
   color: var(--regular-gray);
   font-size: 19.6px;
   font-family: var(--font-bold);
-  padding: 0px 0px 5.6px 0px;
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
   color: var(--regular-gray);

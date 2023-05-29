@@ -84,7 +84,7 @@ class LocalModulesUtil {
 }
 
 export default class LocalModules {
-	public static async middlewareGetRoot(
+	public static async middlewareGetBuilder(
 		req: express.Request,
 		res: express.Response,
 		next: NextFunction,

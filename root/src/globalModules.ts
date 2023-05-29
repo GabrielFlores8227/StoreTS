@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { cwd } from 'process';
@@ -48,11 +48,8 @@ export class GlobalS3Modules {
 export class GlobalMiddlewareModules {
 	public static handleMiddlewareError(res: express.Response, err: any) {
 		if (err.status) {
-			if (err.status === 308 && err.message) {
-				return res.redirect(err.url + '?message=' + err.message);
-			}
-
-			return res.status(err.status).json(err);
+			res.status(err.status).json(err);
+			return;
 		}
 
 		res.status(500).json({

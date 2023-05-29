@@ -1,6 +1,6 @@
 header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-  padding-right: 24.5px;
-  padding-left: 24.5px;
+  padding-right: 21px;
+  padding-left: 21px;
 }
 
 header > div:first-of-type > a > img:first-of-type {
@@ -97,8 +97,12 @@ header > div:last-of-type {
   width: 100%;
   gap: 17.5px;
   background-color: var(--light-gray);
+  transition: ease-in-out 0.35s;
   padding-top: 11.2px;
   padding-bottom: 11.2px;
+}
+header > div:last-of-type.--off {
+  transform: translateY(-100%);
 }
 header > div:last-of-type > button {
   border-radius: 100%;

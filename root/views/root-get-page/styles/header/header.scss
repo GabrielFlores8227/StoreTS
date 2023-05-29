@@ -52,12 +52,17 @@ header {
 	}
 
 	& > div:last-of-type {
+		&.--off {
+			transform: translateY(-100%);
+		}
+
 		@extend %default-padding-size;
 		display: flex;
 		align-items: center;
 		width: 100%;
 		gap: 17.5px;
 		background-color: var(--light-gray);
+		transition: ease-in-out 0.35s;
 		padding-top: 11.2px;
 		padding-bottom: 11.2px;
 

@@ -5,14 +5,14 @@
 		<meta name="viewport" content="width=device-width" />
 
 		<!--theme-color-->
-		<meta name="theme-color" content="<%= builder.header.color %>"/>
+		<meta name="theme-color" content="<%= builder.header.color %>" />
 
 		<!--icon-->
-		<link rel="shortcut icon" href="<%= builder.header.icon %>"/>
+		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
 
 		<!--title & description-->
-		<title> <%= builder.header.title%> </title>
-		<meta name="description" content="<%= builder.header.description%>"/>
+		<title><%= builder.header.title%></title>
+		<meta name="description" content="<%= builder.header.description%>" />
 
 		<!--css-->
 		<style type="text/css" media="screen">
@@ -34,25 +34,34 @@
 		<link rel="stylesheet" href="root-get-page/styles/footer/footer.css" />
 
 		<!--font-awesome-->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
 
 		<!--scripts-->
-		<script charset="utf-8"> var builder = <%- JSON.stringify(builder).replace(/\\/g, '\\\\') %> </script>
+		<script charset="utf-8">
+			var builder = <%- JSON.stringify(builder).replace(/\\/g, '\\\\') %>
+		</script>
 		<script defer type="module" src="root-get-page/scripts/index.js"></script>
 	</head>
 	<body>
-
-		<!--asides-->
+		<!--aside-menu-->
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>
 			<div>
 				<div>
 					<div>
-						<img draggable="false" src="<%= builder.header.logo %>" alt="<%= builder.header.title %> Logo" />
+						<img
+							draggable="false"
+							src="<%= builder.header.logo %>"
+							alt="<%= builder.header.title %> Logo"
+						/>
 						<div>
-							<p>
-								Saved Products
-							</p>
+							<p>Saved Products</p>
 						</div>
 					</div>
 				</div>
@@ -90,30 +99,32 @@
 				</div>
 			</div>
 		</aside>
+
+		<!--aside-menu-->
 		<aside categories-aside-menu>
 			<button close-categories-aside-menu-button></button>
 			<div>
 				<div>
 					<div>
-						<img draggable="false" src="<%= builder.header.logo %>" alt="<%= builder.header.title %> Logo" />
+						<img
+							draggable="false"
+							src="<%= builder.header.logo %>"
+							alt="<%= builder.header.title %> Logo"
+						/>
 						<div>
-							<p>
-								Categories
-							</p>
+							<p>Categories</p>
 						</div>
 					</div>
 				</div>
 				<div>
-					<ul categories-list class="categories-list">
+					<ul class="categories-list">
 						<% Object.keys(builder.products).forEach((category) => { %>
-							<li>
-								<button close-categories-aside-menu-button go-to-section-button>
-									<i></i>
-									<i category-name>
-										<%= category %>
-									</i>
-								</button>
-							</li>
+						<li>
+							<button close-categories-aside-menu-button go-to-section-button>
+								<i></i>
+								<i> <%= category %> </i>
+							</button>
+						</li>
 						<% }) %>
 					</ul>
 				</div>
@@ -122,10 +133,17 @@
 
 		<!--header-->
 		<header>
+			<!--logo-->
 			<div>
 				<a href="/">
-					<img draggable="false" src="<%= builder.header.logo %>" alt="<%= builder.header.title %> Logo" />
+					<img
+						draggable="false"
+						src="<%= builder.header.logo %>"
+						alt="<%= builder.header.title %> Logo"
+					/>
 				</a>
+
+				<!--search-container-->
 				<div search-container class="search-container">
 					<input type="text" placeholder="What are you looking for?" />
 					<div>
@@ -142,6 +160,8 @@
 						</div>
 					</div>
 				</div>
+
+				<!--aside-menu-buttons-->
 				<div>
 					<button open-saved-aside-menu-button>
 						<i class="fa-solid fa-bookmark"></i>
@@ -152,9 +172,12 @@
 				</div>
 			</div>
 			<div>
+				<!--aside-menu-button-->
 				<button open-categories-aside-menu-button>
 					<i class="fa-solid fa-bars"></i>
 				</button>
+
+				<!--search-container-->
 				<div search-container class="search-container">
 					<input type="text" placeholder="What are you looking for?" />
 					<div>
@@ -176,76 +199,73 @@
 
 		<!--main-->
 		<main>
-
 			<!--propagandas-->
 			<div image-slider-container class="propagandas-container">
 				<button></button>
-				<div propagandas-container>
+				<div>
 					<% builder.propagandas.forEach((propaganda) => { %>
-						<picture>
-							<source media="(min-width: 490px)" srcset="<%= propaganda.bigImage %>" />
-								<img draggable="false" src="<%= propaganda.smallImage %>"  alt="Propaganda" />
-						</picture>
+					<picture>
+						<source
+							media="(min-width: 490px)"
+							srcset="<%= propaganda.bigImage %>"
+						/>
+						<img
+							draggable="false"
+							src="<%= propaganda.smallImage %>"
+							alt="Propaganda"
+						/>
+					</picture>
 					<% }) %>
 				</div>
 				<button></button>
 			</div>
 
-
 			<!--products-->
-			<div product-section-container class="product-section-container">
+			<div class="product-section-container">
 				<% Object.keys(builder.products).forEach((category) => { %>
-					<div product-section>
-						<div>
-							<h1> 
-								<%= category %>
-							</h1>
-						</div>
-						<div product-slider-container products-container>
-							<% builder.products[category].forEach((product, index) => { %>
-							<div product-container product-id="<%= product.id %>">
-									<div>
-										<div>
-											<button open-saved-aside-menu-button save-product-button>
-												<i class="fa-solid fa-bookmark"></i>
-												Save Product
-											</button>
-										</div>
-										<div>
-											<hr />
-										</div>
-										<img draggable="false" src="<%= product.image %>" alt="<%= product.name %>"/>
-										<div>
-											<p>
-												<%= product.name %> 
-											</p>
-											<% if (product.off !== 0) { %>
-												<p price> 
-													<%= product.price %> 
-												</p>
-												<p price> 
-													<%= product.price / 100 * (100 - product.off) %> 
-												</p>
-											<% } else { %>
-												<p></p>
-												<p price>
-													<%= product.price %>
-												</p>
-											<% } %>
-											<p>
-												<%= product.installment %>
-											</p>
-										</div>
-									</div>
-									<a product-link target="_blank" href="/order/<%= product.id %>">
-										<i class="fa-brands fa-whatsapp"></i>
-										Order Product
-									</a>
-								</div>
-								<% }) %>
-						</div>
+				<div product-section>
+					<div>
+						<h1><%= category %></h1>
 					</div>
-					<% }) %>
+					<div product-slider-container>
+						<% builder.products[category].forEach((product) => { %>
+						<div product-container product-id="<%= product.id %>">
+							<div>
+								<div>
+									<button open-saved-aside-menu-button save-product-button>
+										<i class="fa-solid fa-bookmark"></i>
+										Save Product
+									</button>
+								</div>
+								<div>
+									<hr />
+								</div>
+								<img
+									draggable="false"
+									src="<%= product.image %>"
+									alt="<%= product.name %>"
+								/>
+								<div>
+									<p><%= product.name %></p>
+									<% if (product.off !== 0) { %>
+									<p price><%= product.price %></p>
+									<p price><%= product.price / 100 * (100 - product.off) %></p>
+									<% } else { %>
+									<p></p>
+									<p price><%= product.price %></p>
+									<% } %>
+									<p><%= product.installment %></p>
+								</div>
+							</div>
+							<a target="_blank" href="/api/order/<%= product.id %>">
+								<i class="fa-brands fa-whatsapp"></i>
+								Order Product
+							</a>
+						</div>
+						<% }) %>
+					</div>
+				</div>
+				<% }) %>
 			</div>
 		</main>
 
@@ -253,7 +273,11 @@
 		<footer>
 			<div>
 				<div>
-					<svg xmlns="http://www.w3.org/2000/svg" height="0.611111in" viewBox="0 0 8000 55">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						height="0.611111in"
+						viewBox="0 0 8000 55"
+					>
 						<path
 							id="Selection"
 							d="M 0.00,2.00
@@ -1130,23 +1154,28 @@
 				</div>
 				<div>
 					<div>
-						<h1> 
-							<%= builder.footer.title %> 
-						</h1>
-						<p> 
-							<%= builder.footer.text %>
-						</p>
+						<h1><%= builder.footer.title %></h1>
+						<p><%= builder.footer.text %></p>
 						<div>
-							<a target="_blank" href="https://wa.me/<%= builder.footer.whatsapp %>">
+							<a
+								target="_blank"
+								href="https://wa.me/<%= builder.footer.whatsapp %>"
+							>
 								<i class="fa-brands fa-whatsapp"></i>
 								Whatsapp
 							</a>
 							<div>
-								<a target="_blank" href="https://www.instagram.com/<%= builder.footer.instagram.replace('@', '') %>">
+								<a
+									target="_blank"
+									href="https://www.instagram.com/<%= builder.footer.instagram.replace('@', '') %>"
+								>
 									<i class="fa-brands fa-instagram"></i>
 									Instagram
 								</a>
-								<a facebook-link target="_blank" href="https://www.facebook.com/<%= builder.footer.facebook.replace('@', '') %>">
+								<a
+									target="_blank"
+									href="https://www.facebook.com/<%= builder.footer.facebook.replace('@', '') %>"
+								>
 									<i class="fa-brands fa-square-facebook"></i>
 									Facebook
 								</a>
@@ -1156,9 +1185,7 @@
 								Location
 							</a>
 						</div>
-						<p complete-store-info>
-							<%= builder.footer.completeStoreInfo %>
-						</p>
+						<p><%= builder.footer.completeStoreInfo %></p>
 					</div>
 				</div>
 			</div>

@@ -2,11 +2,28 @@ import {
 	buildAsideMenus,
 	renderSavedProducts,
 	handleProductsGrid,
+	handleSearch,
 	handlePropagandaScroll,
 	convertToMoneyFormat,
-	scrollTop,
-	scrollLeft,
 } from './modules.js';
+
+/**
+ * Slider Functionality for Multiple Product Sliders
+ *
+ * This block of code initializes and controls the functionality of multiple product sliders on a web page.
+ * It iterates over each slider element, sets up event listeners for touch and mouse interactions,
+ * and handles continuous scrolling of the sliders when not being interacted with.
+ * The code also includes a resize event listener to handle resizing of the window.
+ * The 'handleProductsGrid' function is called to handle the products grid for each slider element.
+ *
+ * - The 'sliders' variable stores all elements with the attribute 'product-slider-container'.
+ * - The 'sliderController' array is used to track the state of each slider.
+ * - Variables like 'isDown', 'startX', 'position', 'left', and 'scrollLeft' keep track of slider state and position.
+ * - Event listeners are added to handle touch and mouse events, including movement, click, and release.
+ * - An interval is set up to continuously scroll the sliders when not being interacted with.
+ * - The 'handleProductsGrid' function is called to handle the products grid layout within each slider.
+ * - A resize event listener is added to handle window resizing, applying necessary actions to the sliders.
+ */
 
 const sliderController = [];
 
@@ -16,6 +33,8 @@ const sliderController = [];
 	);
 
 	sliders.forEach((element, index) => {
+		handleProductsGrid(element);
+
 		sliderController.push(true);
 
 		let isDown = false;
@@ -23,7 +42,6 @@ const sliderController = [];
 		let position;
 		let left;
 		let scrollLeft;
-		let sliderControllerSetted = false;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
@@ -60,46 +78,38 @@ const sliderController = [];
 		});
 
 		setInterval(() => {
-			handleProductsGrid(element);
-
 			if (isDown) {
-				sliderController[index] = false;
-			}
-
-			if (sliderController[index]) {
-				if (sliderControllerSetted) {
-					sliderControllerSetted = false;
-				}
-
-				if (position >= element.scrollWidth - element.clientWidth) {
-					left = false;
-				}
-
-				if (position <= 1) {
-					left = true;
-				}
-
-				if (element.scrollWidth - element.clientWidth > 100) {
-					if (left) {
-						position = element.scrollLeft + 1;
-					} else {
-						position = element.scrollLeft - 1;
-					}
-				}
-
-				element.scrollTo({
-					left: position,
-					top: 0,
-				});
-			}
-
-			if (!sliderController[index] && !sliderControllerSetted) {
-				sliderControllerSetted = true;
-
-				setTimeout(() => {
+				if (!sliderController[index]) {
 					sliderController[index] = true;
-				}, 10000);
+				}
+
+				return;
 			}
+
+			if (!sliderController[index]) {
+				return;
+			}
+
+			if (position >= element.scrollWidth - element.clientWidth) {
+				left = false;
+			}
+
+			if (position <= 1) {
+				left = true;
+			}
+
+			if (element.scrollWidth - element.clientWidth > 100) {
+				if (left) {
+					position = element.scrollLeft + 1;
+				} else {
+					position = element.scrollLeft - 1;
+				}
+			}
+
+			element.scrollTo({
+				left: position,
+				top: 0,
+			});
 		}, 14);
 	});
 
@@ -112,17 +122,26 @@ const sliderController = [];
 	});
 })();
 
+/**
+ * Search Functionality for Search Containers
+ *
+ * This block of code sets up search functionality for multiple search containers on a web page.
+ * It selects all elements with the attribute 'search-container' and iterates over each search container.
+ * For each search container, it attaches event listeners to the input field for handling search functionality.
+ * The 'handleSearch' function is called to perform the search and update the search results.
+ *
+ * - The 'products' variable is destructured from the 'builder' object.
+ * - The code selects all elements with the attribute 'search-container' and iterates over them.
+ * - Event listeners are added to the input field for 'input', 'focus', and 'focusout' events.
+ * - When the input value changes or the input field gains focus, the 'handleSearch' function is called.
+ * - The 'handleSearch' function is provided with the necessary parameters for performing the search.
+ * - When the input field loses focus, a timeout is set to remove search results and reset the search container after 120 milliseconds.
+ */
+
 (() => {
 	const { products } = builder;
 
-	const formatString = (str) =>
-		str
-			.toLowerCase()
-			.replace(/ /g, '')
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '');
-
-	document
+	window.document
 		.querySelectorAll('div[search-container]')
 		.forEach((searchContainer) => {
 			const input = searchContainer.querySelector('input');
@@ -131,70 +150,25 @@ const sliderController = [];
 			);
 
 			input.addEventListener('input', (event) => {
-				const value = formatString(event.target.value);
-				const template = templateParent.querySelector('template');
-				let numberOfSelectedProducts = 0;
+				handleSearch(
+					searchContainer,
+					input,
+					templateParent,
+					products,
+					event,
+					sliderController,
+				);
+			});
 
-				templateParent.querySelectorAll('button').forEach((element) => {
-					element.remove();
-				});
-
-				Object.values(products).forEach((productsForKey, i) => {
-					productsForKey.forEach((product) => {
-						const formattedProductName = formatString(product.name);
-
-						if (!formattedProductName.includes(value)) {
-							return;
-						}
-
-						numberOfSelectedProducts++;
-
-						if (numberOfSelectedProducts > 4) {
-							return;
-						}
-
-						const clone = template.cloneNode(true).content.children[0];
-						const templateImg = clone.querySelector('img[product-image]');
-						const templateName = clone.querySelector('p[product-name]');
-						const templatePrice = clone.querySelector('p[product-price]');
-
-						templateImg.src = product.image;
-						templateImg.alt = product.name;
-						templateName.innerText = product.name;
-
-						if (product.off !== '') {
-							templatePrice.innerText = convertToMoneyFormat(
-								(Number(product.price) / 100) * (100 - Number(product.off)),
-							);
-						} else {
-							templatePrice.innerText = convertToMoneyFormat(product.price);
-						}
-
-						clone.addEventListener('mousedown', () => {
-							setTimeout(() => {
-								sliderController[i] = false;
-
-								const productSliderContainer = document.querySelectorAll(
-									'[product-slider-container]',
-								)[i];
-								const productCard = document.querySelector(
-									`[product-id="${product.id}"]`,
-								);
-
-								scrollTop(productCard);
-
-								setTimeout(() => {
-									scrollLeft(productSliderContainer, productCard);
-								}, 2000);
-							}, 120);
-						});
-
-						templateParent.appendChild(clone);
-					});
-				});
-
-				searchContainer.classList.toggle('--on', numberOfSelectedProducts > 0);
-				input.classList.toggle('--none', numberOfSelectedProducts === 0);
+			input.addEventListener('focus', (event) => {
+				handleSearch(
+					searchContainer,
+					input,
+					templateParent,
+					products,
+					event,
+					sliderController,
+				);
 			});
 
 			input.addEventListener('focusout', () => {
@@ -208,6 +182,28 @@ const sliderController = [];
 			});
 		});
 })();
+
+/**
+ * Aside Menus and Scroll-to-Section Functionality
+ *
+ * This block of code sets up functionality for aside menus and scroll-to-section buttons on a web page.
+ * The 'buildAsideMenus' function is called to handle the setup of the aside menus.
+ * The 'renderSavedProducts' function is called to render saved products based on the 'builder' object.
+ * Event listeners are attached to the scroll-to-section buttons to smoothly scroll to the corresponding sections.
+ *
+ * - The 'buildAsideMenus' function is called with an array of objects representing aside menu configurations.
+ *   Each object contains a selector, element, and action for opening or closing the respective aside menu.
+ *   The 'querySelector' method is used to select the menu elements based on their attribute selectors.
+ *
+ * - Event listeners are attached to each 'go-to-section-button' using the 'querySelectorAll' method.
+ *   The buttons are iterated using a forEach loop, and a click event listener is added to each button.
+ *   When a button is clicked, a timeout of 120 milliseconds is set to scroll to the corresponding section.
+ *   The 'scrollTo' method is used to smoothly scroll to the target section based on its index in the slider containers.
+ *   The scroll position is calculated by getting the top position of the target element and accounting for the window size.
+ *
+ * - The 'renderSavedProducts' function is called to render the saved products based on the 'builder' object.
+ *   The 'builder.products' data is passed as an argument to the function.
+ */
 
 (() => {
 	buildAsideMenus([
@@ -238,17 +234,47 @@ const sliderController = [];
 		.forEach((button, index) => {
 			button.addEventListener('click', () => {
 				setTimeout(() => {
-					scrollTop(
-						window.document.querySelectorAll('div[product-slider-container]')[
-							index
-						],
-					);
+					const element = window.document.querySelectorAll(
+						'div[product-slider-container]',
+					)[index];
+
+					window.scrollTo({
+						left: 0,
+						top:
+							element.getBoundingClientRect().top +
+							window.scrollY -
+							(window.innerWidth >= 870 ? 175 : 220),
+						behavior: 'smooth',
+					});
 				}, 120);
 			});
 		});
 
 	renderSavedProducts(builder.products);
 })();
+
+/**
+ * Initialization and Setup for Product Sections and Actions
+ *
+ * This block of code initializes and sets up various actions related to product sections on a web page.
+ * It selects and manipulates elements related to product sections, prices, and product containers.
+ * Event listeners are attached to the save-product buttons to handle saving products.
+ *
+ * - The 'productSections' variable selects all elements with the attribute 'product-section'.
+ *   If the number of product sections is greater than 2, the middle section is given the class '--special'.
+ *   This is done by adding the class '--special' to the product section at the index of Math.floor(productSections.length / 2).
+
+ * - The 'querySelectorAll' method is used to select all elements with the attribute 'price'.
+ *   A forEach loop is used to iterate over each element, and the text content of the element is converted to a money format.
+ *   The 'convertToMoneyFormat' function is called to format the price.
+
+ * - The 'querySelectorAll' method is used to select all elements with the attribute 'product-container'.
+ *   A forEach loop is used to iterate over each product container element.
+ *   An event listener is added to the 'save-product-button' within each product container.
+ *   When the button is clicked, a timeout of 120 milliseconds is set to handle the saving functionality.
+ *   The 'product-id' attribute of the current product container is retrieved and added to the 'savedIds' array stored in local storage.
+ *   The 'renderSavedProducts' function is called to render the updated list of saved products based on the 'builder' object.
+ */
 
 (() => {
 	const productSections = window.document.querySelectorAll(
@@ -280,6 +306,34 @@ const sliderController = [];
 	});
 })();
 
+/**
+ * Image Slider Functionality for Propaganda Container
+ *
+ * This block of code sets up functionality for an image slider within a propaganda container on a web page.
+ * It initializes a controller object to store relevant elements and properties for the image slider.
+ * An interval is set up to automatically scroll the images in the slider.
+ * Event listeners are attached to buttons within the image slider container for touch or mouse interactions.
+ * A resize event listener is added to handle repositioning of the slider on window resize.
+
+ * - The 'controller' object is created to store elements and properties related to the image slider.
+ *   It selects the image slider container, the image slider itself, and counts the number of images in the slider.
+ *   It also initializes properties for the current index, direction of scrolling, and the moving state.
+
+ * - An interval is set up to trigger every 10000 milliseconds (10 seconds).
+ *   Depending on the value of 'controller.goingLeft', the 'handlePropagandaScroll' function is called with the appropriate direction.
+
+ * - A variable 'restoreIsMoving' is declared to track the moving state restoration timeout.
+
+ * - Event listeners are added to the buttons within the image slider container.
+ *   The event type is determined based on the user agent (touchstart for mobile devices, mousedown for desktop).
+ *   When a button is triggered, the 'isMoving' property of the controller is set to true and the 'handlePropagandaScroll' function is called.
+ *   The direction of scrolling is determined based on the index of the button.
+ *   A timeout is set to restore the 'isMoving' property to false after 10000 milliseconds.
+
+ * - A resize event listener is added to the window.
+ *   When the window is resized, the 'scrollLeft' property of the image slider is adjusted to maintain the current position.
+ */
+
 (() => {
 	const controller = {
 		imageSliderContainer: window.document.querySelector(
@@ -293,6 +347,7 @@ const sliderController = [];
 		).length,
 		currentIndex: 0,
 		goingLeft: true,
+		isMoving: false,
 	};
 
 	setInterval(() => {
@@ -303,20 +358,29 @@ const sliderController = [];
 		}
 	}, 10000);
 
-	const event = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-		? 'touchstart'
-		: 'mousedown';
+	let restoreIsMoving;
 
 	controller.imageSliderContainer
-		.querySelector('button:first-of-type')
-		.addEventListener(event, () => {
-			handlePropagandaScroll(controller, false);
-		});
+		.querySelectorAll('button')
+		.forEach((button, index) => {
+			button.addEventListener(
+				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+					? 'touchstart'
+					: 'mousedown',
+				() => {
+					if (restoreIsMoving) {
+						clearTimeout(restoreIsMoving);
+					}
 
-	controller.imageSliderContainer
-		.querySelector('button:last-of-type')
-		.addEventListener(event, () => {
-			handlePropagandaScroll(controller, true);
+					controller.isMoving = true;
+
+					handlePropagandaScroll(controller, index === 0 ? false : true, true);
+
+					restoreIsMoving = setTimeout(() => {
+						controller.isMoving = false;
+					}, 10000);
+				},
+			);
 		});
 
 	window.addEventListener('resize', () => {

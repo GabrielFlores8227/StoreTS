@@ -1,6 +1,6 @@
 footer > div:first-of-type {
-  padding-right: 24.5px;
-  padding-left: 24.5px;
+  padding-right: 21px;
+  padding-left: 21px;
 }
 
 footer > div:first-of-type > div:last-of-type > div h1 {
@@ -102,7 +102,7 @@ footer > div:first-of-type > div:last-of-type > div > div a {
   justify-content: center;
   width: 100%;
   padding: 16.8px 0px;
-  font-size: 15.4px;
+  font-size: 14px;
   font-family: var(--font-bold);
   border-radius: 70px;
 }
@@ -111,7 +111,7 @@ footer > div:first-of-type > div:last-of-type > div > div a:hover {
   color: white;
 }
 footer > div:first-of-type > div:last-of-type > div > div a i {
-  font-size: 18.9px;
+  font-size: 17.5px;
 }
 footer > div:first-of-type > div:last-of-type > div > div > div {
   display: flex;
@@ -122,6 +122,14 @@ footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
   padding: 98px 0px 0px 0px;
 }
 
+@media (min-width: 375px) {
+  footer > div:first-of-type > div:last-of-type > div > div a {
+    font-size: 15.4px;
+  }
+  footer > div:first-of-type > div:last-of-type > div > div a i {
+    font-size: 18.9px;
+  }
+}
 @media (min-width: 1700px) {
   footer > div:first-of-type > div:last-of-type > div > div a {
     font-size: 16.1px;

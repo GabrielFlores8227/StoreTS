@@ -69,7 +69,6 @@ div.saved-product-container > div > div > div:first-of-type > div:last-of-type >
   color: var(--regular-gray);
   font-size: 19.6px;
   font-family: var(--font-bold);
-  padding: 0px 0px 5.6px 0px;
 }
 div.saved-product-container > div > div > div:first-of-type > div:last-of-type > p:nth-of-type(2) {
   color: var(--regular-gray);
