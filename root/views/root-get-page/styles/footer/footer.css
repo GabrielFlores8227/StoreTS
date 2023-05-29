@@ -4,7 +4,7 @@ footer > div:first-of-type {
 }
 
 footer > div:first-of-type > div:last-of-type > div h1 {
-  font-size: 28px;
+  font-size: 30.1px;
 }
 
 @media (min-width: 375px) {
@@ -21,13 +21,13 @@ footer > div:first-of-type > div:last-of-type > div h1 {
 }
 @media (min-width: 870px) {
   footer > div:first-of-type > div:last-of-type > div h1 {
-    font-size: 32.9px;
+    font-size: 33.6px;
   }
 }
 @media (min-width: 1300px) {
   footer > div:first-of-type {
-    padding-right: 14vw;
-    padding-left: 14vw;
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
   }
 }
 @media (min-width: 1700px) {

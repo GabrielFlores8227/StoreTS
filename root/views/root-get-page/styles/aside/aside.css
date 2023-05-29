@@ -49,8 +49,8 @@ div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) >
   background-color: rgba(0, 0, 0, 0.178);
 }
 div.saved-product-container > div > div > div:first-of-type img {
-  width: 170px;
-  height: 170px;
+  width: 154px;
+  height: 154px;
   border-radius: 14px;
   object-fit: contain;
 }
@@ -121,6 +121,10 @@ div.saved-product-container > div > div a i {
 @media (min-width: 1700px) {
   aside > div > div:first-of-type > div > img {
     height: 21px;
+  }
+  div.saved-product-container > div > div > div:first-of-type img {
+    width: 170px;
+    height: 170px;
   }
 }
 aside {

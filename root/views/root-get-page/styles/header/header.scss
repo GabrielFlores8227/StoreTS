@@ -38,21 +38,11 @@ header {
 
 		& > div:last-of-type {
 			display: flex;
-			gap: 7px;
+			gap: 24.5px;
 
 			& > button {
-				&:hover {
-					background-color: rgba(0, 0, 0, 0.1);
-				}
-
 				@extend %default-font-size;
 				color: white;
-				width: 42px;
-				min-width: 42px;
-				height: 42px;
-				transition: ease-in-out 0.35s;
-				min-height: 42px;
-				border-radius: 100%;
 			}
 
 			& > button:last-of-type {

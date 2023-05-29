@@ -33,8 +33,8 @@ header > div:last-of-type > button, header > div:first-of-type > div:last-of-typ
 }
 @media (min-width: 1300px) {
   header > div:last-of-type, header > div:first-of-type > div:first-of-type > div, header > div:first-of-type > div:first-of-type, header > div:first-of-type {
-    padding-right: 14vw;
-    padding-left: 14vw;
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
   }
 }
 @media (min-width: 1700px) {
@@ -83,19 +83,10 @@ header > div:first-of-type > div:first-of-type {
 }
 header > div:first-of-type > div:last-of-type {
   display: flex;
-  gap: 7px;
+  gap: 24.5px;
 }
 header > div:first-of-type > div:last-of-type > button {
   color: white;
-  width: 42px;
-  min-width: 42px;
-  height: 42px;
-  transition: ease-in-out 0.35s;
-  min-height: 42px;
-  border-radius: 100%;
-}
-header > div:first-of-type > div:last-of-type > button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
   display: none;

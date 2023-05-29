@@ -176,23 +176,6 @@
 
 		<!--main-->
 		<main>
-
-			<!--propagandas-->
-			<div image-slider-container class="propagandas-container">
-				<button></button>
-				<div propagandas-container>
-					<% builder.propagandas.forEach((propaganda) => { %>
-						<picture>
-							<source media="(min-width: 490px)" srcset="<%= propaganda.bigImage %>" />
-								<img draggable="false" src="<%= propaganda.smallImage %>"  alt="Propaganda" />
-						</picture>
-					<% }) %>
-				</div>
-				<button></button>
-			</div>
-
-
-			<!--products-->
 			<div product-section-container class="product-section-container">
 				<% Object.keys(builder.products).forEach((category) => { %>
 					<div product-section>
@@ -202,7 +185,7 @@
 							</h1>
 						</div>
 						<div product-slider-container products-container>
-							<% builder.products[category].forEach((product, index) => { %>
+							<% builder.products[category].forEach((product) => { %>
 							<div product-container product-id="<%= product.id %>">
 									<div>
 										<div>
@@ -217,7 +200,7 @@
 										<img draggable="false" src="<%= product.image %>" alt="<%= product.name %>"/>
 										<div>
 											<p>
-												<%= product.name %> 
+												<%= product.name %>
 											</p>
 											<% if (product.off !== 0) { %>
 												<p price> 
