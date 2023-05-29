@@ -1,0 +1,72 @@
+header > div:first-of-type {
+  padding-right: 21px;
+  padding-left: 21px;
+}
+
+header > div:first-of-type > a > img:first-of-type {
+  height: 17.5px;
+}
+
+@media (min-width: 375px) {
+  header > div:first-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+@media (min-width: 650px) {
+  header > div:first-of-type {
+    padding-right: 56px;
+    padding-left: 56px;
+  }
+}
+@media (min-width: 870px) {
+  header > div:first-of-type > a > img:first-of-type {
+    height: 18.9px;
+  }
+}
+@media (min-width: 1300px) {
+  header > div:first-of-type {
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
+  }
+}
+@media (min-width: 1700px) {
+  header > div:first-of-type {
+    padding-right: 21vw;
+    padding-left: 21vw;
+  }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 21px;
+  }
+}
+@media (min-width: 2880px) {
+  header > div:first-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
+  }
+}
+header {
+  z-index: 3;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+header > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--primary-color);
+  padding-top: 21px;
+  padding-bottom: 21px;
+}
+header > div:first-of-type > a {
+  display: flex;
+  padding: 14px 0px;
+}
+header > div:first-of-type > a > img:first-of-type {
+  filter: grayscale(100%) brightness(200%);
+}
+
+/*# sourceMappingURL=header.css.map */

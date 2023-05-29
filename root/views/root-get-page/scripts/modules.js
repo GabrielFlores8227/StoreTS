@@ -100,8 +100,6 @@ export function renderSavedProducts(products) {
 					const updatedSavedIds = JSON.parse(localStorage.getItem('saved'));
 					updatedSavedIds.splice(updatedSavedIds.indexOf(product.id), 1);
 					localStorage.setItem('saved', JSON.stringify(updatedSavedIds));
-
-					renderSavedProducts(products);
 				}, 350);
 			});
 
