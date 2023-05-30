@@ -6,7 +6,7 @@ div.saved-product-container > div > div {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  border-radius: 14px;
+  border-radius: 7px;
   user-select: none;
   overflow: hidden;
 }
@@ -51,7 +51,7 @@ div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) >
 div.saved-product-container > div > div > div:first-of-type img {
   width: 154px;
   height: 154px;
-  border-radius: 14px;
+  border-radius: 7px;
   object-fit: contain;
 }
 div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
@@ -91,7 +91,7 @@ div.saved-product-container > div > div a {
   gap: 5.6px;
   align-items: center;
   justify-content: center;
-  border-radius: 0px 0px 14px 14px;
+  border-radius: 0px 0px 7px 7px;
   color: white;
   padding: 18.9px 0px;
   font-size: 17.5px;

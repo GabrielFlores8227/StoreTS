@@ -114,12 +114,12 @@ div.search-container {
   position: relative;
 }
 div.search-container.--on > input {
-  border-radius: 14px 14px 0px 0px;
+  border-radius: 7px 7px 0px 0px;
 }
 div.search-container > input {
   width: 100%;
   border: 0px;
-  border-radius: 21px;
+  border-radius: 7px;
   padding: 5.6px 11.2px;
   font-size: 13.3px;
   color: var(--dark-gray);
@@ -137,7 +137,7 @@ div.search-container > div {
 }
 div.search-container > div > div {
   background-color: white;
-  border-radius: 0px 0px 14px 14px;
+  border-radius: 0px 0px 7px 7px;
 }
 div.search-container > div > div > button {
   display: flex;
