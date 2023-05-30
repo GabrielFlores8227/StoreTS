@@ -28,6 +28,7 @@
 			}
 		</style>
 		<link rel="stylesheet" href="root-get-page/styles/index/index.css" />
+		<link rel="stylesheet" href="root-get-page/styles/loading-screen/loading-screen.css" />
 		<link rel="stylesheet" href="root-get-page/styles/aside/aside.css" />
 		<link rel="stylesheet" href="root-get-page/styles/header/header.css" />
 		<link rel="stylesheet" href="root-get-page/styles/main/main.css" />
@@ -49,6 +50,18 @@
 		<script defer type="module" src="root-get-page/scripts/index.js"></script>
 	</head>
 	<body>
+		<!--loading-screen-->
+		<div class="loading-screen-container">
+			<div loading-screen>
+				<img
+					draggable="false"
+					src="<%= builder.header.logo %>"
+					alt="<%= builder.header.title %> Logo"
+				/>
+				<hr>
+			</div>
+		</div>
+
 		<!--aside-menu-->
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>

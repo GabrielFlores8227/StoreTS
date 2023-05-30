@@ -1,0 +1,61 @@
+div.loading-screen-container > div > img {
+  height: 17.5px;
+}
+
+@media (min-width: 870px) {
+  div.loading-screen-container > div > img {
+    height: 18.9px;
+  }
+}
+@media (min-width: 1700px) {
+  div.loading-screen-container > div > img {
+    height: 21px;
+  }
+}
+div.loading-screen-container {
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--primary-color);
+  transition: ease-in-out 1.1s;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+div.loading-screen-container.--off {
+  filter: opacity(0%);
+  pointer-events: none;
+}
+div.loading-screen-container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10.5px;
+  filter: opacity(0%);
+  transition: ease-in-out 2s;
+}
+div.loading-screen-container > div.--on {
+  filter: opacity(100%);
+}
+div.loading-screen-container > div > img {
+  filter: grayscale(100%) brightness(200%);
+}
+div.loading-screen-container > div > hr {
+  display: block;
+  width: 0%;
+  height: 2.8px;
+  background-color: white;
+  transition: ease-in-out 1.5s;
+  border-radius: 70px;
+  border: none;
+}
+
+@media only screen and (pointer: coarse) {
+  div.loading-screen-container > div {
+    transform: translateY(-150%);
+  }
+}
+
+/*# sourceMappingURL=loading-screen.css.map */

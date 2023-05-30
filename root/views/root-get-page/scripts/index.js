@@ -1,4 +1,5 @@
 import {
+	handleLoadingImages,
 	buildAsideMenus,
 	renderSavedProducts,
 	handleProductsGrid,
@@ -6,6 +7,26 @@ import {
 	handlePropagandaScroll,
 	convertToMoneyFormat,
 } from './modules.js';
+
+(() => {
+	const loadingScreenContainer = window.document.querySelector(
+		'div[loading-screen]',
+	);
+
+	const logo = loadingScreenContainer.querySelector('img');
+
+	logo.addEventListener('load', () => {
+		loadingScreenContainer.classList.add('--on');
+	});
+
+	if (logo.complete) {
+		loadingScreenContainer.classList.add('--on');
+	}
+
+	setTimeout(() => {
+		handleLoadingImages(loadingScreenContainer);
+	}, 2000);
+})();
 
 /**
  * Slider Functionality for Multiple Product Sliders
@@ -42,6 +63,7 @@ const sliderController = [];
 		let position;
 		let left;
 		let scrollLeft;
+		let wait;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
@@ -78,7 +100,17 @@ const sliderController = [];
 		});
 
 		setInterval(() => {
+			if (wait) {
+				return;
+			}
+
 			if (isDown) {
+				wait = true;
+
+				setTimeout(() => {
+					wait = false;
+				}, 10000);
+
 				if (!sliderController[index]) {
 					sliderController[index] = true;
 				}
