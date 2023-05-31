@@ -4,66 +4,48 @@ import {
 	GlobalMySQLModules,
 } from '../../globalModules';
 import crypto from 'crypto';
-
-class Mask {
-	public static checkLength(
-		data: any,
-		minLength: number,
-		maxLength: number,
-		key: string,
-		redirect?: boolean,
-		url?: string,
-	) {
-		if (data.length < minLength || data.length > maxLength) {
-			const error: any = {
-				status: 401,
-				message:
-					'Please provide the ' + key + ' correctly to fulfill the request',
-			};
-
-			if (redirect && url) {
-				error.redirect = redirect;
-				error.url = url;
-			}
-
-			throw error;
-		}
-	}
-
-	public static checkType(
-		data: any,
-		type: string,
-		key: string,
-		redirect?: boolean,
-		url?: string,
-	) {
-		if (typeof data !== type) {
-			const error: any = {
-				status: 401,
-				message:
-					'Please provide the ' + key + ' correctly to fulfill the request',
-			};
-
-			if (redirect && url) {
-				error.redirect = redirect;
-				error.url = url;
-			}
-
-			throw error;
-		}
-	}
-}
+import AdminModules from './adminModules';
 
 class Support {
 	public static middlewareCheckAuthSupport(body: {
 		username: string;
 		password: string;
 	}) {
-		Mask.checkType(body.username, 'string', 'username', true, '/admin');
-		Mask.checkLength(body.username, 1, 50, 'username', true, '/admin');
+		AdminModules.checkType(
+			body.username,
+			'string',
+			'username',
+			true,
+			true,
+			'/admin',
+		);
+		AdminModules.checkLength(
+			body.username,
+			1,
+			50,
+			'username',
+			true,
+			true,
+			'/admin',
+		);
 
-		Mask.checkType(body.password, 'string', 'password', true, '/admin');
-		Mask.checkLength(body.password, 1, 50, 'password', true, '/admin');
+		AdminModules.checkType(
+			body.password,
+			'string',
+			'password',
+			true,
+			true,
+			'/admin',
+		);
+		AdminModules.checkLength(
+			body.password,
+			1,
+			50,
+			'password',
+			true,
+			true,
+			'/admin',
+		);
 	}
 }
 
