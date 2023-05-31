@@ -67,7 +67,7 @@ form {
 form > span {
   display: none;
   font-size: 13.3px;
-  padding-bottom: 10.5px;
+  padding-bottom: 14px;
 }
 form > span.--not-ok {
   display: block;

@@ -4,11 +4,12 @@ clear
 echo -e "\033[1;33m[!] Please refrain from using this script during the development phase\033[0m"
 echo -e "\033[1;32m[v] Starting processes\033[0m"
 
-ROUTES=("root" "admin")
+END_POINTS=$(find . -name "*EndPoint";)
 
-for ROUTE in "${ROUTES[@]}"; do
+for END_POINT in $END_POINTS; 
+do
   (
-    npm start --prefix "$(pwd)/$ROUTE"
+    npm start --prefix $END_POINT
   ) &
 done
 

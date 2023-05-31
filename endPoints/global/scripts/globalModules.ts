@@ -164,6 +164,13 @@ export class GlobalMiddlewareModules {
 
 	public static handleMiddlewareError(res: express.Response, err: any) {
 		if (err.status) {
+			if (err.redirect && err.url) {
+				res
+					.status(err.status)
+					.redirect(err.url + '&message=' + err.message.replace(/ /g, '%20'));
+				return;
+			}
+
 			res.status(err.status).json(err);
 			return;
 		}
