@@ -1,15 +1,16 @@
 import express from 'express';
 import router from './router/router';
+import { GlobalMiddlewareModules } from './globalModules';
 
 const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(express.static('views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', router);
+app.use(express.static('views'));
+app.use('/admin', router);
 
 const port = 2001;
 app.listen(port, () => {

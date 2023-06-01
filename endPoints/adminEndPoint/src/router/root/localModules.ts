@@ -19,6 +19,7 @@ class Support {
 			true,
 			'/admin',
 		);
+
 		AdminModules.checkLength(
 			body.username,
 			1,
@@ -37,6 +38,7 @@ class Support {
 			true,
 			'/admin',
 		);
+
 		AdminModules.checkLength(
 			body.password,
 			1,

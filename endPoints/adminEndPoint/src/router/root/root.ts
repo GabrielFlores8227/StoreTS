@@ -5,17 +5,18 @@ import api from './api/api';
 
 const root = express.Router();
 
-root.get(
-	'/:message?',
-	GlobalMiddlewareModules.buildHeaderMiddleware,
+root.get('/', GlobalMiddlewareModules.middlewareBuildHeader, (req, res) => {
+	res.render('admin-get-page', { builder: Object(req).builder });
+});
+
+root.post(
+	'/',
+	LocalModules.middlewareCheckAuth,
+	GlobalMiddlewareModules.middlewareBuildHeader,
 	(req, res) => {
-		res.render('admin-get-page', { builder: Object(req).builder });
+		res.sendStatus(200);
 	},
 );
-
-root.post('/', LocalModules.middlewareCheckAuth, (req, res) => {
-	res.sendStatus(200);
-});
 
 root.use('/api', api);
 

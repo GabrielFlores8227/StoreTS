@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use('/', root);
 
-router.get('*', GlobalMiddlewareModules.buildHeaderMiddleware, (req, res) => {
+router.get('*', GlobalMiddlewareModules.middlewareBuildHeader, (req, res) => {
 	res.status(404).render('404-get-page', { builder: Object(req).builder });
 });
 

@@ -1,5 +1,5 @@
 (() => {
-	const message = new URLSearchParams(window.location.href).get('message');
+	const message = new URLSearchParams(window.location.search).get('message');
 
 	if (message) {
 		const element = window.document.querySelector('span[message-container]');

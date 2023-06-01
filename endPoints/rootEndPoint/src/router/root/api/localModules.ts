@@ -14,7 +14,7 @@ export default class LocalModules {
 			const id = req.params.id;
 
 			const [query] = await GlobalMySQLModules.query(
-				'SELECT name, whatsapp, message, clicks FROM products WHERE id = ?;',
+				'SELECT name, whatsapp, message FROM products WHERE id = ?;',
 				[id!],
 			);
 
@@ -23,18 +23,7 @@ export default class LocalModules {
 				return next();
 			}
 
-			let clicks = Object(query)[0].clicks;
-
-			if (!clicks) {
-				clicks = [];
-			}
-
-			clicks.push(new Date());
-
-			await GlobalMySQLModules.query(
-				'UPDATE products SET clicks = ? WHERE id = ?',
-				[JSON.stringify(clicks), id!],
-			);
+			await GlobalMiddlewareModules.addHistory('products', id!);
 
 			Object(req).redirectTo =
 				'https://api.whatsapp.com/send?phone=' +

@@ -1,14 +1,14 @@
 export default class AdminModules {
 	private static throwError(
 		key: string,
-		unthorized?: boolean,
+		message: string,
+		unauthorized?: boolean,
 		redirect?: boolean,
 		url?: string,
 	) {
 		const error: any = {
-			status: unthorized ? 401 : 400,
-			message:
-				'Please provide the ' + key + ' correctly to fulfill the request',
+			status: unauthorized ? 401 : 400,
+			message,
 		};
 
 		if (redirect && url) {
@@ -24,12 +24,28 @@ export default class AdminModules {
 		minLength: number,
 		maxLength: number,
 		key: string,
-		unthorized?: boolean,
+		unauthorized?: boolean,
 		redirect?: boolean,
 		url?: string,
 	) {
-		if (data.length < minLength || data.length > maxLength) {
-			this.throwError(key, unthorized, redirect, url);
+		if (data.trim().length < minLength) {
+			this.throwError(
+				key,
+				'please provide the ' + key + ' correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
+		}
+
+		if (data.trim().length > maxLength) {
+			this.throwError(
+				key,
+				key + ' is too long, please provide the data correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
 		}
 	}
 
@@ -37,12 +53,69 @@ export default class AdminModules {
 		data: any,
 		type: string,
 		key: string,
-		unthorized?: boolean,
+		unauthorized?: boolean,
 		redirect?: boolean,
 		url?: string,
 	) {
 		if (typeof data !== type) {
-			this.throwError(key, unthorized, redirect, url);
+			this.throwError(
+				key,
+				key +
+					' is of type ' +
+					typeof data +
+					', please provide the data correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
+		}
+	}
+
+	public static checkNumber(
+		data: any,
+		key: string,
+		unauthorized?: boolean,
+		redirect?: boolean,
+		url?: string,
+	) {
+		if (isNaN(data)) {
+			this.throwError(
+				key,
+				key + ' is not a number, please provide the data correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
+		}
+	}
+
+	public static checkValue(
+		data: any,
+		minValue: number,
+		maxValue: number,
+		key: string,
+		unauthorized?: boolean,
+		redirect?: boolean,
+		url?: string,
+	) {
+		if (data < minValue) {
+			this.throwError(
+				key,
+				key + ' is too small, please provide the data correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
+		}
+
+		if (data > maxValue) {
+			this.throwError(
+				key,
+				key + ' is too big, please provide the data correctly!',
+				unauthorized,
+				redirect,
+				url,
+			);
 		}
 	}
 }

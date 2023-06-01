@@ -46,68 +46,94 @@ export class GlobalS3Modules {
 }
 
 export class GlobalMiddlewareModules {
-	public static async buildHeaderMiddleware(
+	public static async middlewareBuildWebsite(
 		req: express.Request,
 		res: express.Response,
 		next: express.NextFunction,
 	) {
-		const [query] = await GlobalMySQLModules.query(
-			'SELECT icon, logo, title, description, color FROM header WHERE id = ?;',
-			['only'],
-		);
-
-		Object(query)[0].icon =
-			await GlobalS3Modules.generateSignedUrlForS3BucketFile(
-				Object(query)[0].icon,
-			);
-		Object(query)[0].logo =
-			await GlobalS3Modules.generateSignedUrlForS3BucketFile(
-				Object(query)[0].logo,
+		try {
+			const [query] = await GlobalMySQLModules.query(
+				'SELECT history FROM website;',
 			);
 
-		if (!Object(req).builder) {
-			Object(req).builder = {};
+			if (!Object(req).builder) {
+				Object(req).builder = {};
+			}
+
+			Object(req).builder.website = Object(query)[0];
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
-
-		Object(req).builder.header = Object(query)[0];
-
-		return next();
 	}
 
-	public static async buildPropagandasMiddleware(
+	public static async middlewareBuildHeader(
 		req: express.Request,
 		res: express.Response,
 		next: express.NextFunction,
 	) {
-		const [query] = await GlobalMySQLModules.query(
-			'SELECT bigImage, smallImage FROM propagandas ORDER BY position;',
-		);
+		try {
+			const [query] = await GlobalMySQLModules.query(
+				'SELECT icon, logo, title, description, color FROM header WHERE id = ?;',
+				['only'],
+			);
 
-		for (let c = 0; c < Object(query).length; c++) {
-			Object(query)[c].bigImage =
+			Object(query)[0].icon =
 				await GlobalS3Modules.generateSignedUrlForS3BucketFile(
-					Object(query)[c].bigImage,
+					Object(query)[0].icon,
 				);
-			Object(query)[c].smallImage =
+			Object(query)[0].logo =
 				await GlobalS3Modules.generateSignedUrlForS3BucketFile(
-					Object(query)[c].smallImage,
+					Object(query)[0].logo,
 				);
+
+			if (!Object(req).builder) {
+				Object(req).builder = {};
+			}
+
+			Object(req).builder.header = Object(query)[0];
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
 		}
-
-		if (!Object(req).builder) {
-			Object(req).builder = {};
-		}
-
-		Object(req).builder.propagandas = query;
-
-		return next();
 	}
 
-	public static async buildProductsMiddleware(
+	public static async middlewareBuildPropagandas(
 		req: express.Request,
 		res: express.Response,
 		next: express.NextFunction,
 	) {
+		try {
+			const [query] = await GlobalMySQLModules.query(
+				'SELECT bigImage, smallImage FROM propagandas ORDER BY position;',
+			);
+
+			for (let c = 0; c < Object(query).length; c++) {
+				Object(query)[c].bigImage =
+					await GlobalS3Modules.generateSignedUrlForS3BucketFile(
+						Object(query)[c].bigImage,
+					);
+				Object(query)[c].smallImage =
+					await GlobalS3Modules.generateSignedUrlForS3BucketFile(
+						Object(query)[c].smallImage,
+					);
+			}
+
+			if (!Object(req).builder) {
+				Object(req).builder = {};
+			}
+
+			Object(req).builder.propagandas = query;
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	private static async buildProducts(req: express.Request, admin = false) {
 		const [query1] = await GlobalMySQLModules.query(
 			'SELECT id, name FROM categories ORDER BY position;',
 		);
@@ -116,7 +142,10 @@ export class GlobalMiddlewareModules {
 
 		for (let c = 0; c < Object(query1).length; c++) {
 			const [query2] = await GlobalMySQLModules.query(
-				'SELECT id, name, image, price, off, installment FROM products WHERE category = ? ORDER BY position;',
+				'SELECT ' +
+					'id, name, image, price, off, installment' +
+					(admin ? ', history' : '') +
+					' FROM products WHERE category = ? ORDER BY position;',
 				[Object(query1)[c].id],
 			);
 
@@ -139,27 +168,77 @@ export class GlobalMiddlewareModules {
 		}
 
 		Object(req).builder.products = products;
-
-		return next();
 	}
 
-	public static async buildFooterMiddleware(
+	public static async middlewareBuildProductsForAdmin(
 		req: express.Request,
 		res: express.Response,
 		next: express.NextFunction,
 	) {
+		try {
+			await GlobalMiddlewareModules.buildProducts(req, true);
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewareBuildProductsForClient(
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction,
+	) {
+		try {
+			await GlobalMiddlewareModules.buildProducts(req);
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async middlewareBuildFooter(
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction,
+	) {
+		try {
+			const [query] = await GlobalMySQLModules.query(
+				'SELECT title, text, whatsapp, facebook, instagram, location, storeInfo, completeStoreInfo FROM footer WHERE id = ?;',
+				['only'],
+			);
+
+			if (!Object(req).builder) {
+				Object(req).builder = {};
+			}
+
+			Object(req).builder.footer = Object(query)[0];
+
+			return next();
+		} catch (err) {
+			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+		}
+	}
+
+	public static async addHistory(table: 'website' | 'products', id: string) {
 		const [query] = await GlobalMySQLModules.query(
-			'SELECT title, text, whatsapp, facebook, instagram, location, storeInfo, completeStoreInfo FROM footer WHERE id = ?;',
-			['only'],
+			'SELECT history FROM ' + table + ' WHERE id = ?;',
+			[id],
 		);
 
-		if (!Object(req).builder) {
-			Object(req).builder = {};
+		let history = Object(query)[0].history;
+
+		if (!history) {
+			history = [];
 		}
 
-		Object(req).builder.footer = Object(query)[0];
+		history.push(new Date());
 
-		return next();
+		await GlobalMySQLModules.query(
+			'UPDATE ' + table + ' SET history = ? WHERE id = ?;',
+			[JSON.stringify(history), id],
+		);
 	}
 
 	public static handleMiddlewareError(res: express.Response, err: any) {
@@ -167,7 +246,7 @@ export class GlobalMiddlewareModules {
 			if (err.redirect && err.url) {
 				res
 					.status(err.status)
-					.redirect(err.url + '&message=' + err.message.replace(/ /g, '%20'));
+					.redirect(err.url + '?message=' + err.message.replace(/ /g, '%20'));
 				return;
 			}
 

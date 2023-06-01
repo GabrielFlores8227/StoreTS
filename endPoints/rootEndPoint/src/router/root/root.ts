@@ -1,15 +1,17 @@
 import express from 'express';
 import api from './api/api';
 import { GlobalMiddlewareModules } from '../../globalModules';
+import LocalModules from './localModules';
 
 const root = express.Router();
 
 root.get(
 	'/',
-	GlobalMiddlewareModules.buildHeaderMiddleware,
-	GlobalMiddlewareModules.buildPropagandasMiddleware,
-	GlobalMiddlewareModules.buildProductsMiddleware,
-	GlobalMiddlewareModules.buildFooterMiddleware,
+	LocalModules.middlewareGetRoot,
+	GlobalMiddlewareModules.middlewareBuildHeader,
+	GlobalMiddlewareModules.middlewareBuildPropagandas,
+	GlobalMiddlewareModules.middlewareBuildProductsForClient,
+	GlobalMiddlewareModules.middlewareBuildFooter,
 	(req, res) => {
 		res.render('root-get-page', { builder: Object(req).builder });
 	},
