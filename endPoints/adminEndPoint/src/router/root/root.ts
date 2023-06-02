@@ -13,7 +13,7 @@ root.post(
 	'/',
 	LocalModules.middlewareCheckAuth,
 	GlobalMiddlewareModules.middlewareBuildHeader,
-	(req, res) => {
+	(_, res) => {
 		res.sendStatus(200);
 	},
 );

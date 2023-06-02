@@ -1,6 +1,5 @@
 export default class AdminModules {
 	private static throwError(
-		key: string,
 		message: string,
 		unauthorized?: boolean,
 		redirect?: boolean,
@@ -28,20 +27,22 @@ export default class AdminModules {
 		redirect?: boolean,
 		url?: string,
 	) {
-		if (data.trim().length < minLength) {
+		if (typeof data === 'string') {
+			data = data.trim();
+		}
+
+		if (data.length < minLength) {
 			this.throwError(
-				key,
-				'please provide the ' + key + ' correctly!',
+				'please provide the ' + key + ' correctly',
 				unauthorized,
 				redirect,
 				url,
 			);
 		}
 
-		if (data.trim().length > maxLength) {
+		if (data.length > maxLength) {
 			this.throwError(
-				key,
-				key + ' is too long, please provide the data correctly!',
+				key + ' is too long, please provide the data correctly',
 				unauthorized,
 				redirect,
 				url,
@@ -59,11 +60,7 @@ export default class AdminModules {
 	) {
 		if (typeof data !== type) {
 			this.throwError(
-				key,
-				key +
-					' is of type ' +
-					typeof data +
-					', please provide the data correctly!',
+				key + ' is ' + typeof data + ', please provide the data correctly',
 				unauthorized,
 				redirect,
 				url,
@@ -80,8 +77,7 @@ export default class AdminModules {
 	) {
 		if (isNaN(data)) {
 			this.throwError(
-				key,
-				key + ' is not a number, please provide the data correctly!',
+				key + ' is not a number, please provide the data correctly',
 				unauthorized,
 				redirect,
 				url,
@@ -100,8 +96,7 @@ export default class AdminModules {
 	) {
 		if (data < minValue) {
 			this.throwError(
-				key,
-				key + ' is too small, please provide the data correctly!',
+				key + ' is too small, please provide the data correctly',
 				unauthorized,
 				redirect,
 				url,
@@ -110,8 +105,7 @@ export default class AdminModules {
 
 		if (data > maxValue) {
 			this.throwError(
-				key,
-				key + ' is too big, please provide the data correctly!',
+				key + ' is too big, please provide the data correctly',
 				unauthorized,
 				redirect,
 				url,

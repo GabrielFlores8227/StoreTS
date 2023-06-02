@@ -4,10 +4,8 @@ import LocalModules from './localModules';
 
 const api = express.Router();
 
-api.get('/', (req, res) => res.sendStatus(200));
-
 api.post(
-	'/g/website',
+	'/website',
 	LocalModules.middlewareCheckToken,
 	GlobalMiddlewareModules.middlewareBuildWebsite,
 	(req, res) => {
@@ -16,7 +14,7 @@ api.post(
 );
 
 api.post(
-	'/g/header',
+	'/header',
 	LocalModules.middlewareCheckToken,
 	GlobalMiddlewareModules.middlewareBuildHeader,
 	(req, res) => {
@@ -25,7 +23,7 @@ api.post(
 );
 
 api.post(
-	'/g/propagandas',
+	'/propagandas',
 	LocalModules.middlewareCheckToken,
 	GlobalMiddlewareModules.middlewareBuildPropagandas,
 	(req, res) => {
@@ -34,7 +32,7 @@ api.post(
 );
 
 api.post(
-	'/g/products',
+	'/products',
 	LocalModules.middlewareCheckToken,
 	GlobalMiddlewareModules.middlewareBuildProductsForAdmin,
 	(req, res) => {
@@ -43,7 +41,7 @@ api.post(
 );
 
 api.post(
-	'/g/footer',
+	'/footer',
 	LocalModules.middlewareCheckToken,
 	GlobalMiddlewareModules.middlewareBuildFooter,
 	(req, res) => {
@@ -51,31 +49,103 @@ api.post(
 	},
 );
 
+api.post(
+	'/propaganda',
+	LocalModules.middlewareUploadFiles(2, 2),
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewarePostPropaganda,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/propaganda',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeletePropaganda,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.post(
+	'/category',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewarePostCategory,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/category',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeleteCategory,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.post(
+	'/product',
+	LocalModules.middlewareUploadFiles(1, 1),
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewarePostProduct,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/product',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeleteProduct,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
 api.put(
 	[
-		'/p/header/title',
-		'/p/header/description',
-		'/p/header/color',
-		'/p/categories/name',
-		'/p/products/category',
-		'/p/products/name',
-		'/p/products/price',
-		'/p/products/off',
-		'/p/products/installment',
-		'/p/products/whatsapp',
-		'/p/products/message',
-		'/p/footer/title',
-		'/p/footer/text',
-		'/p/footer/whatsapp',
-		'/p/footer/facebook',
-		'/p/footer/instagram',
-		'/p/footer/storeInfo',
-		'/p/footer/completeStoreInfo',
+		'/header/title',
+		'/header/description',
+		'/header/color',
+		'/categories/name',
+		'/products/category',
+		'/products/name',
+		'/products/price',
+		'/products/off',
+		'/products/installment',
+		'/products/whatsapp',
+		'/products/message',
+		'/footer/title',
+		'/footer/text',
+		'/footer/whatsapp',
+		'/footer/facebook',
+		'/footer/instagram',
+		'/footer/storeInfo',
+		'/footer/completeStoreInfo',
 	],
 	LocalModules.middlewareCheckToken,
 	LocalModules.middlewarePutText,
-	(req, res) => {
-		res.sendStatus(200);
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.put(
+	[
+		'/header/icon',
+		'/header/logo',
+		'/propagandas/bigImage',
+		'/propagandas/smallImage',
+		'/products/image',
+	],
+	LocalModules.middlewareUploadFiles(1, 1),
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewarePutImage,
+	(_, res) => {
+		res.json({ status: 200 });
 	},
 );
 

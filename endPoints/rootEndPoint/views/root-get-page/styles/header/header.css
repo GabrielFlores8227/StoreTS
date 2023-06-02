@@ -161,6 +161,7 @@ div.search-container > div > div > button:not(:last-of-type)::after {
 div.search-container > div > div > button > img {
   width: 73.5px;
   height: 73.5px;
+  border-radius: 7px;
   object-fit: contain;
 }
 div.search-container > div > div > button > div {

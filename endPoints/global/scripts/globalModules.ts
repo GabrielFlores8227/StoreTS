@@ -4,7 +4,12 @@ import path from 'path';
 import { cwd } from 'process';
 import mysql2 from 'mysql2/promise';
 import dotenv from 'dotenv';
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import {
+	S3Client,
+	GetObjectCommand,
+	PutObjectCommand,
+	DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 dotenv.config({ path: path.resolve(cwd(), '.env') });
@@ -41,6 +46,30 @@ export class GlobalS3Modules {
 				Key: fileName,
 			}),
 			{ expiresIn: 30 * 60 },
+		);
+	}
+
+	public static async uploadFileToS3Bucket(
+		fileBuffer: Buffer,
+		fileName: string,
+		mimeType: string,
+	) {
+		await this.s3DataClient.send(
+			new PutObjectCommand({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Body: fileBuffer,
+				Key: fileName,
+				ContentType: mimeType,
+			}),
+		);
+	}
+
+	public static async deleteFileFromS3Bucket(fileName: string) {
+		await this.s3DataClient.send(
+			new DeleteObjectCommand({
+				Bucket: process.env.S3_BUCKET_NAME,
+				Key: fileName,
+			}),
 		);
 	}
 }

@@ -163,6 +163,10 @@ export function handleProductsGrid(element) {
 	) {
 		element.classList.add('--special');
 
+		if (element.children.length === 1) {
+			return;
+		}
+
 		if (element.children.length % 2 !== 0) {
 			element.style.gridTemplateColumns = '1fr 1fr 1fr';
 
@@ -171,6 +175,8 @@ export function handleProductsGrid(element) {
 					'--special',
 				);
 			}
+		} else {
+			element.style.gridTemplateColumns = '1fr 1fr';
 		}
 	}
 }

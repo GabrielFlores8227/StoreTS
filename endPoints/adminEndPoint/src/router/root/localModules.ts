@@ -78,7 +78,7 @@ export default class LocalModules {
 				throw {
 					status: 401,
 					message:
-						'Oops, it seems that either the password or username is incorrect.',
+						'Oops, it seems that either the password or username is incorrect',
 					redirect: true,
 					url: '/admin',
 				};
