@@ -1,5 +1,5 @@
 import express from 'express';
-import { GlobalMiddlewareModules } from '../../globalModules';
+import Middleware from 'storets-middleware';
 
 export default class LocalModules {
 	public static async middlewareGetRoot(
@@ -8,11 +8,11 @@ export default class LocalModules {
 		next: express.NextFunction,
 	) {
 		try {
-			await GlobalMiddlewareModules.addHistory('website', 'only');
+			await Middleware.addHistory('website', 'only');
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 }

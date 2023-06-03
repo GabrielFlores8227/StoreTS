@@ -1,18 +1,18 @@
 import express from 'express';
-import { GlobalMiddlewareModules } from '../../globalModules';
 import LocalModules from './localModules';
 import api from './api/api';
+import Middleware from 'storets-middleware';
 
 const root = express.Router();
 
-root.get('/', GlobalMiddlewareModules.middlewareBuildHeader, (req, res) => {
+root.get('/', Middleware.middlewareBuildHeader, (req, res) => {
 	res.render('admin-get-page', { builder: Object(req).builder });
 });
 
 root.post(
 	'/',
 	LocalModules.middlewareCheckAuth,
-	GlobalMiddlewareModules.middlewareBuildHeader,
+	Middleware.middlewareBuildHeader,
 	(_, res) => {
 		res.sendStatus(200);
 	},

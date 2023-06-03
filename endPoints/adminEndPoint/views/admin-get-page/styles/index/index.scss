@@ -1,0 +1,80 @@
+@font-face {
+	font-family: poppins-regular;
+	src: url(../../assets/fonts/poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+	font-family: poppins-bold;
+	src: url(../../assets/fonts/poppins/Poppins-Medium.ttf);
+}
+
+/* Width and Height */
+*::-webkit-scrollbar {
+	display: none;
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+	box-sizing: border-box;
+	font-family: var(--font-regular);
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+body {
+	overflow-x: hidden;
+	position: static;
+}
+
+body,
+header,
+main,
+footer {
+	min-width: 315px !important;
+}
+
+ul,
+ol {
+	list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	line-height: 112%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+	cursor: default;
+}
+
+img {
+	-webkit-user-drag: none;
+	-khtml-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
+}
+
+button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+a {
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	text-decoration: none;
+}

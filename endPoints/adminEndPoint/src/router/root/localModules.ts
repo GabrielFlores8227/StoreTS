@@ -1,53 +1,21 @@
 import express from 'express';
-import {
-	GlobalMiddlewareModules,
-	GlobalMySQLModules,
-} from '../../globalModules';
 import crypto from 'crypto';
-import AdminModules from './adminModules';
+import Admin from 'storets-admin';
+import Sql from 'storets-sql';
+import Middleware from 'storets-middleware';
 
 class Support {
-	public static middlewareCheckAuthSupport(body: {
+	public static validateDataForMiddlewareCheckAuth(body: {
 		username: string;
 		password: string;
 	}) {
-		AdminModules.checkType(
-			body.username,
-			'string',
-			'username',
-			true,
-			true,
-			'/admin',
-		);
+		Admin.checkType(body.username, 'string', 'username', 401, true, '/admin');
 
-		AdminModules.checkLength(
-			body.username,
-			1,
-			50,
-			'username',
-			true,
-			true,
-			'/admin',
-		);
+		Admin.checkLength(body.username, 1, 50, 'username', 401, true, '/admin');
 
-		AdminModules.checkType(
-			body.password,
-			'string',
-			'password',
-			true,
-			true,
-			'/admin',
-		);
+		Admin.checkType(body.password, 'string', 'password', 401, true, '/admin');
 
-		AdminModules.checkLength(
-			body.password,
-			1,
-			50,
-			'password',
-			true,
-			true,
-			'/admin',
-		);
+		Admin.checkLength(body.password, 1, 50, 'password', 401, true, '/admin');
 	}
 }
 
@@ -58,7 +26,7 @@ export default class LocalModules {
 		next: express.NextFunction,
 	) {
 		try {
-			Support.middlewareCheckAuthSupport(req.body);
+			Support.validateDataForMiddlewareCheckAuth(req.body);
 
 			const hashedUsername = crypto
 				.createHash('sha512')
@@ -69,7 +37,7 @@ export default class LocalModules {
 				.update(String(req.body.password))
 				.digest('hex');
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT username, password, token FROM admin WHERE id = ? AND username = ? AND password = ?',
 				['only', hashedUsername, hashedPassword],
 			);
@@ -89,16 +57,16 @@ export default class LocalModules {
 				.toString('hex')
 				.substring(0, 255);
 
-			await GlobalMySQLModules.query(
-				'UPDATE admin SET token = ? WHERE id = ?',
-				[newToken, 'only'],
-			);
+			await Sql.query('UPDATE admin SET token = ? WHERE id = ?', [
+				newToken,
+				'only',
+			]);
 
 			res.cookie('token', newToken);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 }

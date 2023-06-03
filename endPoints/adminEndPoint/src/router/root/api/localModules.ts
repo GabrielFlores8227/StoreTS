@@ -1,31 +1,29 @@
 import express from 'express';
-import AdminModules from '../adminModules';
+import Admin from 'storets-admin';
 import multer from 'multer';
 import sharp from 'sharp';
 import crypto from 'crypto';
-import {
-	GlobalMiddlewareModules,
-	GlobalS3Modules,
-	GlobalMySQLModules,
-} from '../../../globalModules';
+import Middleware from 'storets-middleware';
+import Sql from 'storets-sql';
+import S3 from 'storets-s3';
 
 class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
-				AdminModules.checkLength(title, 5, 50, 'title');
+				Admin.checkLength(title, 5, 50, 'title');
 			},
 			description: (description: string) => {
-				AdminModules.checkLength(description, 5, 255, 'description');
+				Admin.checkLength(description, 5, 255, 'description');
 			},
 			color: (data: string) => {
-				AdminModules.checkLength(data, 7, 7, 'color');
+				Admin.checkLength(data, 7, 7, 'color');
 			},
 		},
 		propagandas: {
 			imagesContext: (imagesContext: Array<string>) => {
-				AdminModules.checkType(imagesContext, 'object', 'images context');
-				AdminModules.checkLength(imagesContext, 2, 2, 'images context');
+				Admin.checkType(imagesContext, 'object', 'images context');
+				Admin.checkLength(imagesContext, 2, 2, 'images context');
 
 				if (
 					JSON.stringify(imagesContext.sort()) !==
@@ -41,15 +39,15 @@ class Support {
 		},
 		categories: {
 			name: (name: string) => {
-				AdminModules.checkType(name, 'string', 'name');
-				AdminModules.checkLength(name, 5, 50, 'name');
+				Admin.checkType(name, 'string', 'name');
+				Admin.checkLength(name, 5, 50, 'name');
 			},
 		},
 		products: {
 			category: async (category: string) => {
-				AdminModules.checkType(category, 'string', 'category');
+				Admin.checkType(category, 'string', 'category');
 
-				const [query] = await GlobalMySQLModules.query(
+				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE id = ?;',
 					[category, category],
 				);
@@ -65,60 +63,55 @@ class Support {
 				}
 			},
 			name: (name: string) => {
-				AdminModules.checkType(name, 'string', 'name');
-				AdminModules.checkLength(name, 5, 50, 'name');
+				Admin.checkType(name, 'string', 'name');
+				Admin.checkLength(name, 5, 50, 'name');
 			},
 			price: (price: string) => {
-				AdminModules.checkType(price, 'string', 'price');
-				AdminModules.checkNumber(price, 'price');
-				AdminModules.checkValue(price, 0, 999999999999999, 'price');
+				Admin.checkType(price, 'string', 'price');
+				Admin.checkNumber(price, 'price');
+				Admin.checkValue(price, 0, 999999999999999, 'price');
 			},
 			off: (off: string) => {
-				AdminModules.checkType(off, 'string', 'off');
-				AdminModules.checkNumber(off, 'off');
-				AdminModules.checkValue(off, 0, 100, 'off');
+				Admin.checkType(off, 'string', 'off');
+				Admin.checkNumber(off, 'off');
+				Admin.checkValue(off, 0, 100, 'off');
 			},
 			installment: (installment: string) => {
-				AdminModules.checkType(installment, 'string', 'installment');
-				AdminModules.checkLength(installment, 0, 50, 'installment');
+				Admin.checkType(installment, 'string', 'installment');
+				Admin.checkLength(installment, 0, 50, 'installment');
 			},
 			whatsapp: (whatsapp: string) => {
-				AdminModules.checkType(whatsapp, 'string', 'whatsapp');
-				AdminModules.checkNumber(whatsapp, 'whatsapp');
-				AdminModules.checkLength(whatsapp, 13, 13, 'whatsapp');
+				Admin.checkType(whatsapp, 'string', 'whatsapp');
+				Admin.checkNumber(whatsapp, 'whatsapp');
+				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 			},
 			message: (message: string) => {
-				AdminModules.checkType(message, 'string', 'mesage');
-				AdminModules.checkLength(message, 0, 255, 'message');
+				Admin.checkType(message, 'string', 'mesage');
+				Admin.checkLength(message, 0, 255, 'message');
 			},
 		},
 		footer: {
 			title: (title: string) => {
-				AdminModules.checkLength(title, 5, 50, 'title');
+				Admin.checkLength(title, 5, 50, 'title');
 			},
 			text: (text: string) => {
-				AdminModules.checkLength(text, 5, 255, 'text');
+				Admin.checkLength(text, 5, 255, 'text');
 			},
 			whatsapp: (whatsapp: string) => {
-				AdminModules.checkNumber(whatsapp, 'whatsapp');
-				AdminModules.checkLength(whatsapp, 13, 13, 'whatsapp');
+				Admin.checkNumber(whatsapp, 'whatsapp');
+				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
-				AdminModules.checkLength(facebook, 5, 50, 'facebook');
+				Admin.checkLength(facebook, 5, 50, 'facebook');
 			},
 			instagram: (instagram: string) => {
-				AdminModules.checkLength(instagram, 5, 50, 'instagram');
+				Admin.checkLength(instagram, 5, 50, 'instagram');
 			},
 			storeInfo: (storeInfo: string) => {
-				AdminModules.checkLength(storeInfo, 5, 50, 'store info');
+				Admin.checkLength(storeInfo, 5, 50, 'store info');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
-				AdminModules.checkLength(
-					completeStoreInfo,
-					5,
-					50,
-					'complete store info',
-				);
+				Admin.checkLength(completeStoreInfo, 5, 50, 'complete store info');
 			},
 		},
 	};
@@ -195,7 +188,7 @@ class Support {
 	public static async validateDataForMiddlewarePostCategory(name: string) {
 		this.textMask.categories.name(name);
 
-		const [query] = await GlobalMySQLModules.query(
+		const [query] = await Sql.query(
 			'SELECT name FROM categories WHERE name = ?',
 			[name],
 		);
@@ -234,9 +227,9 @@ class Support {
 		table: string,
 		column: string,
 	) {
-		AdminModules.checkType(id, 'string', 'id');
+		Admin.checkType(id, 'string', 'id');
 
-		AdminModules.checkType(data, 'string', column);
+		Admin.checkType(data, 'string', column);
 
 		Object(this.textMask)[table][column](data);
 	}
@@ -247,7 +240,7 @@ class Support {
 		table: string,
 		column: string,
 	) {
-		AdminModules.checkType(id, 'string', 'id');
+		Admin.checkType(id, 'string', 'id');
 
 		await Object(Support.imageMask)[table][column](file);
 	}
@@ -267,7 +260,7 @@ export default class LocalModules {
 				'',
 			);
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT token FROM admin WHERE token = ?;',
 				[authorization],
 			);
@@ -281,7 +274,7 @@ export default class LocalModules {
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -323,7 +316,7 @@ export default class LocalModules {
 
 					return next();
 				} catch (err) {
-					GlobalMiddlewareModules.handleMiddlewareError(res, err);
+					Middleware.handleMiddlewareError(res, err);
 				}
 			});
 		};
@@ -346,26 +339,26 @@ export default class LocalModules {
 			const bigImage = Object(files)[imagesContext.indexOf('bigImage')];
 			const smallImage = Object(files)[imagesContext.indexOf('smallImage')];
 
-			await GlobalS3Modules.uploadFileToS3Bucket(
+			await S3.uploadFileToS3Bucket(
 				bigImage.buffer,
 				bigImage.originalname,
 				bigImage.mimetype,
 			);
 
-			await GlobalS3Modules.uploadFileToS3Bucket(
+			await S3.uploadFileToS3Bucket(
 				smallImage.buffer,
 				smallImage.originalname,
 				smallImage.mimetype,
 			);
 
-			await GlobalMySQLModules.query(
+			await Sql.query(
 				'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?)',
 				[bigImage.originalname, smallImage.originalname],
 			);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -377,9 +370,9 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			AdminModules.checkType(id, 'string', 'id');
+			Admin.checkType(id, 'string', 'id');
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?',
 				[id],
 			);
@@ -388,16 +381,14 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].bigImage);
-			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].smallImage);
+			await S3.deleteFileFromS3Bucket(Object(query)[0].bigImage);
+			await S3.deleteFileFromS3Bucket(Object(query)[0].smallImage);
 
-			await GlobalMySQLModules.query('DELETE FROM propagandas WHERE id = ?', [
-				id,
-			]);
+			await Sql.query('DELETE FROM propagandas WHERE id = ?', [id]);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -411,14 +402,11 @@ export default class LocalModules {
 
 			await Support.validateDataForMiddlewarePostCategory(name);
 
-			await GlobalMySQLModules.query(
-				'INSERT INTO categories (name) VALUES (?)',
-				[name],
-			);
+			await Sql.query('INSERT INTO categories (name) VALUES (?)', [name]);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -430,29 +418,24 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			AdminModules.checkType(id, 'string', 'id');
+			Admin.checkType(id, 'string', 'id');
 
-			await GlobalMySQLModules.query('DELETE FROM categories WHERE id = ?;', [
-				id,
-			]);
+			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT image FROM products WHERE category = ?',
 				[id],
 			);
 
-			await GlobalMySQLModules.query(
-				'DELETE FROM products WHERE category = ?',
-				[id],
-			);
+			await Sql.query('DELETE FROM products WHERE category = ?', [id]);
 
 			for (let c = 0; c < Object(query).length; c++) {
-				await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[c].image);
+				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
 			}
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -477,13 +460,13 @@ export default class LocalModules {
 				file,
 			);
 
-			await GlobalS3Modules.uploadFileToS3Bucket(
+			await S3.uploadFileToS3Bucket(
 				file!.buffer,
 				file!.originalname,
 				file!.mimetype,
 			);
 
-			await GlobalMySQLModules.query(
+			await Sql.query(
 				'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category,
@@ -499,7 +482,7 @@ export default class LocalModules {
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -511,9 +494,9 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			AdminModules.checkType(id, 'string', 'id');
+			Admin.checkType(id, 'string', 'id');
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT id, image FROM products WHERE id = ?;',
 				[id],
 			);
@@ -522,15 +505,13 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalMySQLModules.query('DELETE FROM products WHERE id = ?;', [
-				id,
-			]);
+			await Sql.query('DELETE FROM products WHERE id = ?;', [id]);
 
-			await GlobalS3Modules.deleteFileFromS3Bucket(Object(query)[0].image);
+			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -541,21 +522,21 @@ export default class LocalModules {
 	) {
 		try {
 			const url = req.originalUrl.split('/');
-			const table = String(url[4]);
-			const column = String(url[5]);
+			const table = String(url[3]);
+			const column = String(url[4]);
 			const data = req.body[column];
 			const id = req.body.id;
 
 			Support.validateDataForMiddlewarePutText(id, data, table, column);
 
-			await GlobalMySQLModules.query(
+			await Sql.query(
 				'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;',
 				[data, id],
 			);
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 
@@ -566,14 +547,14 @@ export default class LocalModules {
 	) {
 		try {
 			const url = req.originalUrl.split('/');
-			const table = String(url[4]);
-			const column = String(url[5]);
+			const table = String(url[3]);
+			const column = String(url[4]);
 			const file = req.file;
 			const id = req.body.id;
 
 			await Support.validateDataForMiddlewarePutImage(id, file, table, column);
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?',
 				[id],
 			);
@@ -582,7 +563,7 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalS3Modules.uploadFileToS3Bucket(
+			await S3.uploadFileToS3Bucket(
 				file!.buffer,
 				Object(query)[0][column],
 				file!.mimetype,
@@ -590,7 +571,7 @@ export default class LocalModules {
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 }

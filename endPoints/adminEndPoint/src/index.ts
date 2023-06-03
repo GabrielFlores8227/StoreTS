@@ -1,6 +1,5 @@
 import express from 'express';
 import router from './router/router';
-import { GlobalMiddlewareModules } from './globalModules';
 
 const app = express();
 

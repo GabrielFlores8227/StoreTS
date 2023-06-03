@@ -1,8 +1,6 @@
 import express from 'express';
-import {
-	GlobalMiddlewareModules,
-	GlobalMySQLModules,
-} from '../../../globalModules';
+import Middleware from 'storets-middleware';
+import Sql from 'storets-sql';
 
 export default class LocalModules {
 	public static async middlewareGetOrder(
@@ -13,7 +11,7 @@ export default class LocalModules {
 		try {
 			const id = req.params.id;
 
-			const [query] = await GlobalMySQLModules.query(
+			const [query] = await Sql.query(
 				'SELECT name, whatsapp, message FROM products WHERE id = ?;',
 				[id!],
 			);
@@ -23,7 +21,7 @@ export default class LocalModules {
 				return next();
 			}
 
-			await GlobalMiddlewareModules.addHistory('products', id!);
+			await Middleware.addHistory('products', id!);
 
 			Object(req).redirectTo =
 				'https://api.whatsapp.com/send?phone=' +
@@ -33,7 +31,7 @@ export default class LocalModules {
 
 			return next();
 		} catch (err) {
-			GlobalMiddlewareModules.handleMiddlewareError(res, err);
+			Middleware.handleMiddlewareError(res, err);
 		}
 	}
 }

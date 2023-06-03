@@ -1,5 +1,5 @@
 import express from 'express';
-import { GlobalMiddlewareModules } from '../../../globalModules';
+import Middleware from 'storets-middleware';
 import LocalModules from './localModules';
 
 const api = express.Router();
@@ -7,7 +7,7 @@ const api = express.Router();
 api.post(
 	'/website',
 	LocalModules.middlewareCheckToken,
-	GlobalMiddlewareModules.middlewareBuildWebsite,
+	Middleware.middlewareBuildWebsite,
 	(req, res) => {
 		res.json(Object(req).builder.website);
 	},
@@ -16,7 +16,7 @@ api.post(
 api.post(
 	'/header',
 	LocalModules.middlewareCheckToken,
-	GlobalMiddlewareModules.middlewareBuildHeader,
+	Middleware.middlewareBuildHeader,
 	(req, res) => {
 		res.json(Object(req).builder.header);
 	},
@@ -25,7 +25,7 @@ api.post(
 api.post(
 	'/propagandas',
 	LocalModules.middlewareCheckToken,
-	GlobalMiddlewareModules.middlewareBuildPropagandas,
+	Middleware.middlewareBuildPropagandas,
 	(req, res) => {
 		res.json(Object(req).builder.propagandas);
 	},
@@ -34,7 +34,7 @@ api.post(
 api.post(
 	'/products',
 	LocalModules.middlewareCheckToken,
-	GlobalMiddlewareModules.middlewareBuildProductsForAdmin,
+	Middleware.middlewareBuildProductsForAdmin,
 	(req, res) => {
 		res.json(Object(req).builder.products);
 	},
@@ -43,7 +43,7 @@ api.post(
 api.post(
 	'/footer',
 	LocalModules.middlewareCheckToken,
-	GlobalMiddlewareModules.middlewareBuildFooter,
+	Middleware.middlewareBuildFooter,
 	(req, res) => {
 		res.json(Object(req).builder.footer);
 	},
