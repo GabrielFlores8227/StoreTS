@@ -31,8 +31,7 @@ class Support {
 				) {
 					throw {
 						status: 400,
-						message:
-							'images context is missing required data, please provide the data correctly',
+						message: 'images context is missing required data!',
 					};
 				}
 			},
@@ -55,10 +54,7 @@ class Support {
 				if (Object(query).length === 0) {
 					throw {
 						status: 400,
-						message:
-							'category ' +
-							category +
-							' does not exist, please provide the data correctly',
+						message: 'category ' + category + ' does not exist!',
 					};
 				}
 			},
@@ -159,7 +155,7 @@ class Support {
 			if (err.message === 'Input buffer contains unsupported image format') {
 				throw {
 					status: 400,
-					message: 'Please provide valid images to fulfill the request',
+					message: 'Please provide valid images!',
 				};
 			}
 
@@ -189,14 +185,14 @@ class Support {
 		this.textMask.categories.name(name);
 
 		const [query] = await Sql.query(
-			'SELECT name FROM categories WHERE name = ?',
+			'SELECT name FROM categories WHERE name = ?;',
 			[name],
 		);
 
 		if (Object(query).length !== 0) {
 			throw {
 				status: 400,
-				message: name + ' already exists, please provide the data correctly',
+				message: name + ' already exists, try to use another name!',
 			};
 		}
 	}
@@ -255,10 +251,7 @@ export default class LocalModules {
 		next: express.NextFunction,
 	) {
 		try {
-			let authorization = String(req.headers.authorization).replace(
-				'Bearer ',
-				'',
-			);
+			const authorization = String(req.headers.authorization).substring(7);
 
 			const [query] = await Sql.query(
 				'SELECT token FROM admin WHERE token = ?;',
@@ -307,8 +300,7 @@ export default class LocalModules {
 					) {
 						throw {
 							status: 400,
-							message:
-								'Please provide the appropriate number of images to fulfill the request',
+							message: 'Please provide the required image(s) correctly!',
 						};
 					} else if (err) {
 						throw err;
@@ -352,7 +344,7 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?)',
+				'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);',
 				[bigImage.originalname, smallImage.originalname],
 			);
 
@@ -373,7 +365,7 @@ export default class LocalModules {
 			Admin.checkType(id, 'string', 'id');
 
 			const [query] = await Sql.query(
-				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?',
+				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;',
 				[id],
 			);
 
@@ -384,7 +376,7 @@ export default class LocalModules {
 			await S3.deleteFileFromS3Bucket(Object(query)[0].bigImage);
 			await S3.deleteFileFromS3Bucket(Object(query)[0].smallImage);
 
-			await Sql.query('DELETE FROM propagandas WHERE id = ?', [id]);
+			await Sql.query('DELETE FROM propagandas WHERE id = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -402,7 +394,7 @@ export default class LocalModules {
 
 			await Support.validateDataForMiddlewarePostCategory(name);
 
-			await Sql.query('INSERT INTO categories (name) VALUES (?)', [name]);
+			await Sql.query('INSERT INTO categories (name) VALUES (?);', [name]);
 
 			return next();
 		} catch (err) {
@@ -423,11 +415,11 @@ export default class LocalModules {
 			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
 
 			const [query] = await Sql.query(
-				'SELECT image FROM products WHERE category = ?',
+				'SELECT image FROM products WHERE category = ?;',
 				[id],
 			);
 
-			await Sql.query('DELETE FROM products WHERE category = ?', [id]);
+			await Sql.query('DELETE FROM products WHERE category = ?;', [id]);
 
 			for (let c = 0; c < Object(query).length; c++) {
 				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
@@ -555,7 +547,7 @@ export default class LocalModules {
 			await Support.validateDataForMiddlewarePutImage(id, file, table, column);
 
 			const [query] = await Sql.query(
-				'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?',
+				'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?;',
 				[id],
 			);
 
