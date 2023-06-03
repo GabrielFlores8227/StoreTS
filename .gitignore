@@ -1,6 +1,5 @@
 # Logs
-*.log
+**/.log/
 
-# Node
-node_modules
-
+# Node.js
+**/node_modules/

@@ -1,0 +1,139 @@
+footer > div:first-of-type {
+  padding-right: 21px;
+  padding-left: 21px;
+}
+
+footer > div:first-of-type > div:last-of-type > div h1 {
+  font-size: 30.1px;
+}
+
+@media (min-width: 375px) {
+  footer > div:first-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+@media (min-width: 650px) {
+  footer > div:first-of-type {
+    padding-right: 56px;
+    padding-left: 56px;
+  }
+}
+@media (min-width: 870px) {
+  footer > div:first-of-type > div:last-of-type > div h1 {
+    font-size: 33.6px;
+  }
+}
+@media (min-width: 1300px) {
+  footer > div:first-of-type {
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
+  }
+}
+@media (min-width: 1700px) {
+  footer > div:first-of-type {
+    padding-right: 21vw;
+    padding-left: 21vw;
+  }
+}
+@media (min-width: 2880px) {
+  footer > div:first-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
+  }
+}
+footer {
+  position: relative;
+}
+footer > div:first-of-type {
+  width: 100%;
+  padding-top: 133px;
+  padding-bottom: 56px;
+  background-color: var(--primary-color);
+}
+footer > div:first-of-type > div:first-of-type {
+  width: 100%;
+  height: 100px;
+  overflow: hidden;
+  transform: translateX(-50%);
+  position: absolute;
+  top: -51.8px;
+  left: 50%;
+}
+footer > div:first-of-type > div:first-of-type > svg > path {
+  fill: var(--primary-color);
+}
+footer > div:first-of-type > div:last-of-type {
+  display: flex;
+  justify-content: center;
+}
+footer > div:first-of-type > div:last-of-type > div {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 17.5px;
+  width: 100%;
+  max-width: 385px;
+}
+footer > div:first-of-type > div:last-of-type > div h1 {
+  color: white;
+}
+footer > div:first-of-type > div:last-of-type > div p {
+  color: white;
+  word-break: break-all;
+  padding-bottom: 10.5px;
+}
+footer > div:first-of-type > div:last-of-type > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+footer > div:first-of-type > div:last-of-type > div > div a {
+  background-color: white;
+  color: var(--primary-color);
+  transition: ease-in-out 0.35s;
+  border: 2px solid white;
+  display: flex;
+  gap: 5.6px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16.8px 0px;
+  font-size: 14px;
+  font-family: var(--font-bold);
+  border-radius: 70px;
+}
+footer > div:first-of-type > div:last-of-type > div > div a:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+footer > div:first-of-type > div:last-of-type > div > div a i {
+  font-size: 17.5px;
+}
+footer > div:first-of-type > div:last-of-type > div > div > div {
+  display: flex;
+  gap: 7px;
+}
+footer > div:first-of-type > div:last-of-type > div > p:last-of-type {
+  font-size: 13.3px;
+  padding: 98px 0px 0px 0px;
+}
+
+@media (min-width: 375px) {
+  footer > div:first-of-type > div:last-of-type > div > div a {
+    font-size: 15.4px;
+  }
+  footer > div:first-of-type > div:last-of-type > div > div a i {
+    font-size: 18.9px;
+  }
+}
+@media (min-width: 1700px) {
+  footer > div:first-of-type > div:last-of-type > div > div a {
+    font-size: 16.1px;
+  }
+  footer > div:first-of-type > div:last-of-type > div > div a i {
+    font-size: 19.6px;
+  }
+}
+
+/*# sourceMappingURL=footer.css.map */

@@ -1,0 +1,135 @@
+@import '../modules/modules.scss';
+
+footer {
+	position: relative;
+
+	& > div:first-of-type {
+		@extend %default-padding-size;
+		width: 100%;
+		padding-top: 133px;
+		padding-bottom: 56px;
+		background-color: var(--primary-color);
+
+		& > div:first-of-type {
+			width: 100%;
+			height: 100px;
+			overflow: hidden;
+			transform: translateX(-50%);
+			position: absolute;
+			top: -51.8px;
+			left: 50%;
+
+			& > svg {
+				& > path {
+					fill: var(--primary-color);
+				}
+			}
+		}
+
+		& > div:last-of-type {
+			display: flex;
+			justify-content: center;
+
+			& > div {
+				display: flex;
+				flex-direction: column;
+				text-align: center;
+				gap: 17.5px;
+				width: 100%;
+				max-width: 385px;
+
+				h1 {
+					@extend %big-font-size;
+					color: white;
+				}
+
+				p {
+					color: white;
+					word-break: break-all;
+					padding-bottom: 10.5px;
+				}
+
+				& > div {
+					display: flex;
+					flex-direction: column;
+					gap: 7px;
+
+					a {
+						&:hover {
+							background-color: var(--primary-color);
+							color: white;
+						}
+
+						background-color: white;
+						color: var(--primary-color);
+						transition: ease-in-out 0.35s;
+						border: 2px solid white;
+						display: flex;
+						gap: 5.6px;
+						align-items: center;
+						justify-content: center;
+						width: 100%;
+						padding: 16.8px 0px;
+						font-size: 14px;
+						font-family: var(--font-bold);
+						border-radius: 70px;
+
+						i {
+							font-size: 17.5px;
+						}
+					}
+
+					& > div {
+						display: flex;
+						gap: 7px;
+					}
+				}
+
+				& > p:last-of-type {
+					font-size: 13.3px;
+					padding: 98px 0px 0px 0px;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 375px) {
+	footer {
+		& > div:first-of-type {
+			& > div:last-of-type {
+				& > div {
+					& > div {
+						a {
+							font-size: 15.4px;
+
+							i {
+								font-size: 18.9px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1700px) {
+	footer {
+		& > div:first-of-type {
+			& > div:last-of-type {
+				& > div {
+					& > div {
+						a {
+							font-size: 16.1px;
+
+							i {
+								font-size: 19.6px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
