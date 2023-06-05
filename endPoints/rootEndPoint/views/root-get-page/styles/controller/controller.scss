@@ -1,0 +1,81 @@
+%default-padding-size {
+	padding-right: 21px;
+	padding-left: 21px;
+}
+
+%default-height-size {
+	height: 17.5px;
+}
+
+%small-font-size {
+	font-size: 14px;
+}
+
+%default-font-size {
+	font-size: 17.5px;
+}
+
+%big-font-size {
+	font-size: 30.1px;
+}
+
+@media (min-width: 375px) {
+	%default-padding-size {
+		padding-right: 28px;
+		padding-left: 28px;
+	}
+}
+
+@media (min-width: 650px) {
+	%default-padding-size {
+		padding-right: 56px;
+		padding-left: 56px;
+	}
+}
+
+@media (min-width: 870px) {
+	%default-height-size {
+		height: 18.9px;
+	}
+
+	%default-font-size {
+		font-size: 18.9px;
+	}
+
+	%big-font-size {
+		font-size: 33.6px;
+	}
+}
+
+@media (min-width: 1300px) {
+	%default-padding-size {
+		padding-right: 15.4vw;
+		padding-left: 15.4vw;
+	}
+}
+
+@media (min-width: 1700px) {
+	%default-padding-size {
+		padding-right: 21vw;
+		padding-left: 21vw;
+	}
+
+	%default-height-size {
+		height: 21px;
+	}
+
+	%small-font-size {
+		font-size: 15.4px;
+	}
+
+	%default-font-size {
+		font-size: 21px;
+	}
+}
+
+@media (min-width: 2880px) {
+	%default-padding-size {
+		padding-right: 30%;
+		padding-left: 30%;
+	}
+}

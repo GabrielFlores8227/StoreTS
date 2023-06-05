@@ -1,12 +1,3 @@
-div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
-  padding-right: 21px;
-  padding-left: 21px;
-}
-
-div.product-section-container > div > div:first-of-type h1 {
-  font-size: 30.1px;
-}
-
 div.product-section-container > div > div:last-of-type > div {
   z-index: 2;
   display: flex;
@@ -117,6 +108,21 @@ div.product-section-container > div > div:last-of-type > div a i {
   font-size: 21px;
 }
 
+@media (min-width: 1700px) {
+  div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
+    width: 170px;
+    height: 170px;
+  }
+}
+div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  padding-right: 21px;
+  padding-left: 21px;
+}
+
+div.product-section-container > div > div:first-of-type h1 {
+  font-size: 30.1px;
+}
+
 @media (min-width: 375px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 28px;
@@ -144,10 +150,6 @@ div.product-section-container > div > div:last-of-type > div a i {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 21vw;
     padding-left: 21vw;
-  }
-  div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
-    width: 170px;
-    height: 170px;
   }
 }
 @media (min-width: 2880px) {

@@ -10,11 +10,8 @@ class Support {
 		password: string;
 	}) {
 		Admin.checkType(body.username, 'string', 'username', 401, true, '/admin');
-
 		Admin.checkLength(body.username, 1, 50, 'username', 401, true, '/admin');
-
 		Admin.checkType(body.password, 'string', 'password', 401, true, '/admin');
-
 		Admin.checkLength(body.password, 1, 50, 'password', 401, true, '/admin');
 	}
 }
