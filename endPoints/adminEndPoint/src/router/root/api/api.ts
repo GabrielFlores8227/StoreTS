@@ -59,28 +59,10 @@ api.post(
 	},
 );
 
-api.delete(
-	'/propaganda',
-	LocalModules.middlewareCheckToken,
-	LocalModules.middlewareDeletePropaganda,
-	(_, res) => {
-		res.json({ status: 200 });
-	},
-);
-
 api.post(
 	'/category',
 	LocalModules.middlewareCheckToken,
 	LocalModules.middlewarePostCategory,
-	(_, res) => {
-		res.json({ status: 200 });
-	},
-);
-
-api.delete(
-	'/category',
-	LocalModules.middlewareCheckToken,
-	LocalModules.middlewareDeleteCategory,
 	(_, res) => {
 		res.json({ status: 200 });
 	},
@@ -91,15 +73,6 @@ api.post(
 	LocalModules.middlewareUploadFiles(1, 1),
 	LocalModules.middlewareCheckToken,
 	LocalModules.middlewarePostProduct,
-	(_, res) => {
-		res.json({ status: 200 });
-	},
-);
-
-api.delete(
-	'/product',
-	LocalModules.middlewareCheckToken,
-	LocalModules.middlewareDeleteProduct,
 	(_, res) => {
 		res.json({ status: 200 });
 	},
@@ -144,6 +117,33 @@ api.put(
 	LocalModules.middlewareUploadFiles(1, 1),
 	LocalModules.middlewareCheckToken,
 	LocalModules.middlewarePutImage,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/propaganda',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeletePropaganda,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/category',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeleteCategory,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/product',
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewareDeleteProduct,
 	(_, res) => {
 		res.json({ status: 200 });
 	},

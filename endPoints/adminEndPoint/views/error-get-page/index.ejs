@@ -11,7 +11,7 @@
 		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
 
 		<!--title & description-->
-		<title><%= builder.header.title%> | Not Found</title>
+		<title><%= builder.header.title%> | <%= message %></title>
 		<meta name="description" content="<%= builder.header.description%>" />
 
 		<!--css-->
@@ -27,9 +27,9 @@
 				--dark-gray: rgb(20, 20, 20);
 			}
 		</style>
-		<link rel="stylesheet" href="/404-get-page/styles/index/index.css" />
-		<link rel="stylesheet" href="/404-get-page/styles/header/header.css" />
-		<link rel="stylesheet" href="/404-get-page/styles/main/main.css" />
+		<link rel="stylesheet" href="/error-get-page/styles/index/index.css" />
+		<link rel="stylesheet" href="/error-get-page/styles/header/header.css" />
+		<link rel="stylesheet" href="/error-get-page/styles/main/main.css" />
 
 		<!--font-awesome-->
 		<link
@@ -60,16 +60,17 @@
 			<div>
 				<h1>
 					<i class="fa-solid fa-bug"></i>
-					404
+					<%= status %>
 				</h1>
-				<h2>Page not found</h2>
+				<h2>
+					<%= message %>
+				</h2>
 				<p>
-					We sincerely apologize for the inconvenience caused. 
-					It seems that the page you are looking for cannot 
-					be found. Please go back to the homepage or contact 
-					us.
+					<%= text %>
 				</p>
+				<% if (homePage) { %>
 				<a href="/">Homepage</a>
+				<% } %>
 			</div>
 		</main>
 	</body>
