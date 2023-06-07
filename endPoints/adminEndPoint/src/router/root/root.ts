@@ -13,8 +13,8 @@ root.post(
 	'/',
 	LocalModules.middlewareCheckAuth,
 	Middleware.middlewareBuildHeader,
-	(_, res) => {
-		res.sendStatus(200);
+	(req, res) => {
+		res.render('admin-post-page', { builder: Object(req).builder });
 	},
 );
 

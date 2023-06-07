@@ -5,7 +5,6 @@
 ##
 
 clear 
-echo -e "\033[1;33m[!] Launch Nginx before starting the application\033[0m"
 echo -e "\033[1;32m[v] Starting processes...\033[0m"
 
 END_POINTS=$(find . -name "*EndPoint";)

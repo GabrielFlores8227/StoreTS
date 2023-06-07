@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<meta name="robots" content="noindex">
+
+		<!--theme-color-->
+		<meta name="theme-color" content="<%= builder.header.color %>" />
+
+		<!--icon-->
+		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
+
+		<!--title & description-->
+		<title><%= builder.header.title%> | Admin</title>
+
+		<!--css-->
+		<style type="text/css" media="screen">
+			:root {
+				--font-regular: poppins-regular, Arial, Helvetica, sans-serif;
+				--font-bold: poppins-bold, Arial, Helvetica, sans-serif;
+				--primary-color: <%= builder.header.color %>;
+				--regular-green: rgb(93, 212, 104);
+				--dark-green: rgb(76, 172, 85);
+				--light-gray: rgb(236, 236, 236);
+				--regular-gray: rgb(59, 59, 59);
+				--dark-gray: rgb(20, 20, 20);
+			}
+		</style>
+		<link rel="stylesheet" href="/admin-post-page/styles/index/index.css" />
+		<link rel="stylesheet" href="/admin-post-page/styles/header/header.css" />
+		<link rel="stylesheet" href="/admin-post-page/styles/aside/aside.css" />
+
+		<!--font-awesome-->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+
+		<!--scripts-->
+		<script defer type="module" src="/admin-post-page/scripts/index.js"></script>
+	</head>
+	<body>
+
+		<!--aside-menu-->
+		<aside settings-aside-menu>
+			<button close-settings-aside-menu-button></button>
+			<div>
+				<div>
+					<div>
+						<img
+							draggable="false"
+							src="<%= builder.header.logo %>"
+							alt="<%= builder.header.title %> Logo"
+						/>
+						<div>
+							<p>Settings</p>
+						</div>
+					</div>
+				</div>
+				<div>
+					<!--content-->
+				</div>
+			</div>
+		</aside>
+
+		<!--header-->
+		<header>
+			<div>
+
+				<!--logo-->
+				<a href="/">
+					<img
+						draggable="false"
+						src="<%= builder.header.logo %>"
+						alt="<%= builder.header.title %> Logo"
+					/>
+				</a>
+
+				<!--aside-menu-button-->
+				<div>
+					<button open-settings-aside-menu-button>
+						<i class="fa-solid fa-gear"></i>
+					</button>
+				</div>
+			</div>
+		</header>
+	</body>
+</html>

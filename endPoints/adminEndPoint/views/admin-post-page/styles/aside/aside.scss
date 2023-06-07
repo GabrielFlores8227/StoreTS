@@ -1,0 +1,6 @@
+@import '../modules/modules.scss';
+@import '../controller/controller.scss';
+
+aside {
+	@extend %aside-menu;
+}
