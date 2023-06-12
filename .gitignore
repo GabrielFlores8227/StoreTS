@@ -1,5 +1,8 @@
 # Logs
 **/.log/
 
+# Logs
+**/.env/
+
 # Node.js
 **/node_modules/
