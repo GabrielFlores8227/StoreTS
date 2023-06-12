@@ -125,7 +125,7 @@
 								<!--icon-->
 								<td>
 									<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="icon"> 
-										<div file-input-container class="cell__file-input-container">
+										<div file-input-container class="cell__input-container cell__file-input-container">
 											<label for="icon">
 												<i class="fa-solid fa-image"></i>
 											</label>
@@ -143,7 +143,7 @@
 								<!--logo-->
 								<td>
 									<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="logo">
-										<div file-input-container class="cell__file-input-container">
+										<div file-input-container class="cell__input-container cell__file-input-container">
 											<label for="logo">
 												<i class="fa-solid fa-image"></i>
 											</label>
@@ -178,11 +178,11 @@
 
 							<tr>
 
-								<!--icon-->
+								<!--Title-->
 								<td>
 									<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="title"> 
-										<div class="cell__text-input-container">
-											<input type="text" placeholder="Title"/>
+										<div class="cell__input-container cell__text-input-container">
+											<input type="text" placeholder="Title" maxlength="20"/>
 										</div>
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
@@ -192,16 +192,12 @@
 									</div>
 								</td>
 
-								<!--logo-->
+								<!--Color-->
 								<td>
 									<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="color">
-										<div file-input class="cell__file-input-container">
-											<label for="logo">
-												<i class="fa-solid fa-image"></i>
-											</label>
-											<input id="logo" type="file" accept="image/*" />
-											<a target="_blank">Logo</a>
-										</div>
+										<div class="cell__input-container cell__color-input-container">
+											<input type="color"/>
+										</div>									
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
 											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>

@@ -39,9 +39,14 @@ div.table-section-container__table-container {
 		tbody {
 			background-color: var(--primary-color);
 			font-size: 14px;
+
+			tr {
+				width: min-content;
+			}
 		}
 
 		& > thead {
+			width: 100%;
 			user-select: none;
 			height: 41px;
 			color: white;
@@ -65,7 +70,6 @@ div.cell {
 	gap: 14px;
 	align-items: center;
 	justify-content: center;
-	padding: 0px 28px;
 	position: relative;
 
 	& > div.cell__info-container {
@@ -115,13 +119,15 @@ div.cell {
 	}
 }
 
-div.cell__file-input-container {
+div.cell__input-container {
 	display: flex;
 	gap: 7px;
 	align-items: center;
 	justify-content: center;
-	width: auto;
+	width: 100%;
+}
 
+div.cell__file-input-container {
 	label {
 		color: var(--primary-color);
 		cursor: pointer;
@@ -140,21 +146,40 @@ div.cell__file-input-container {
 }
 
 div.cell__text-input-container {
-	display: flex;
-	gap: 7px;
-	align-items: center;
-	justify-content: center;
-	width: auto;
-
 	input {
 		&:focus {
 			outline: none;
 		}
 
-		width: 100%;
+		width: 80%;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		text-align: center;
 		border: 0px;
 		font-size: 15.4px;
+	}
+}
+
+div.cell__color-input-container {
+	input {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		width: 48px;
+		height: 35px;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+	}
+
+	input::-webkit-color-swatch {
+		border-radius: 7px;
+		border: none;
+	}
+
+	input::-moz-color-swatch {
+		border-radius: 7px;
+		border: none;
 	}
 }
 
