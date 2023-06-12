@@ -19,11 +19,11 @@ header {
 
 		& > a {
 			display: flex;
-			padding: 14px 0px;
+			padding: 7px 0px;
 
 			& > img:first-of-type {
 				@extend %default-height-size;
-				filter: grayscale(100%) brightness(200%);
+				filter: grayscale(100%) brightness(0) invert(1);
 			}
 		}
 

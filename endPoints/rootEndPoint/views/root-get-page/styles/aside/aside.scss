@@ -27,7 +27,7 @@ ul.categories-list {
 		button {
 			display: flex;
 			gap: 7px;
-			padding: 8.4px;
+			padding: 7px;
 			width: 100%;
 			position: relative;
 
@@ -50,7 +50,7 @@ ul.categories-list {
 				color: var(--dark-gray);
 				font-family: var(--font-bold);
 				font-style: normal;
-				font-size: 16.1px;
+				font-size: 15.4px;
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
@@ -63,7 +63,7 @@ ul.categories-list {
 		li {
 			button {
 				i:last-of-type {
-					font-size: 16.8px;
+					font-size: 16.1px;
 				}
 			}
 		}

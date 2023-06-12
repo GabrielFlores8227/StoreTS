@@ -20,18 +20,20 @@ buildAsideMenus([
 ]);
 
 (() => {
-	window.document.querySelectorAll('div[file-input]').forEach((div) => {
-		const link = div.querySelector('a');
-		const fileInput = div.querySelector('input');
+	window.document
+		.querySelectorAll('div[file-input-container]')
+		.forEach((div) => {
+			const link = div.querySelector('a');
+			const fileInput = div.querySelector('input');
 
-		fileInput.addEventListener('input', (e) => {
-			const file = e.target.files[0];
-			const fileURL = URL.createObjectURL(file);
+			fileInput.addEventListener('input', (e) => {
+				const file = e.target.files[0];
+				const fileURL = URL.createObjectURL(file);
 
-			link.href = fileURL;
-			link.innerText = e.target.files[0].name;
+				link.href = fileURL;
+				link.innerText = e.target.files[0].name;
+			});
 		});
-	});
 })();
 
 (() => {
@@ -41,19 +43,21 @@ buildAsideMenus([
 	};
 
 	window.document.querySelectorAll('div[cell]').forEach((cell) => {
-		const input = cell.querySelector('input');
+		const forItem = cell.getAttribute('for');
 
-		input.addEventListener('change', async (e) => {
-			const form = new FormData();
+		cell.querySelectorAll('input[type="file"]').forEach((input) => {
+			input.addEventListener('input', async (e) => {
+				const form = new FormData();
 
-			form.append('file', e.target.files[0]);
-			form.append('id', cell.getAttribute('identifier'));
+				form.append('file', e.target.files[0]);
+				form.append('id', cell.getAttribute('identifier'));
 
-			await handleCellRequest(token, cell, form);
+				await handleCellRequest(token, cell, form);
 
-			if (callBack[cell.getAttribute('for')]) {
-				await callBack[cell.getAttribute('for')]();
-			}
+				if (forItem) {
+					await callBack[forItem]();
+				}
+			});
 		});
 	});
 })();

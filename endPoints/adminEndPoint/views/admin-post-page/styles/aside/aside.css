@@ -32,16 +32,20 @@ aside > div > div:first-of-type {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 42px 21px 35px 21px;
+  padding: 35px 21px;
   width: 100%;
   background-color: var(--primary-color);
 }
+aside > div > div:first-of-type > div {
+  min-width: 70%;
+  text-align: center;
+}
 aside > div > div:first-of-type > div > img {
-  filter: grayscale(100%) brightness(200%);
+  filter: grayscale(100%) brightness(0) invert(1);
 }
 aside > div > div:first-of-type > div > div {
   width: 100%;
-  margin-top: 35px;
+  margin-top: 28px;
   position: relative;
 }
 aside > div > div:first-of-type > div > div::before {
@@ -73,18 +77,19 @@ aside > div > div:last-of-type {
   height: 100%;
 }
 
-aside > div > div:first-of-type > div > img {
-  height: 17.5px;
-}
-
-@media (min-width: 870px) {
-  aside > div > div:first-of-type > div > img {
-    height: 18.9px;
+@media (min-width: 1700px) {
+  aside > div {
+    width: 322px;
+    min-width: 322px;
   }
 }
-@media (min-width: 1700px) {
+aside > div > div:first-of-type > div > img {
+  height: 28px;
+}
+
+@media (min-width: 1300px) {
   aside > div > div:first-of-type > div > img {
-    height: 21px;
+    height: 31.5px;
   }
 }
 

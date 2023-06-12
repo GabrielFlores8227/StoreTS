@@ -106,58 +106,112 @@
 					</h1>
 				</div>
 
-				<!--table-->
 				<div class="table-section-container__table-container">
-
 					<table>
 						<thead>
-							<th>
-								Icon
-							</th>
-							<th>
-								Logo
-							</th>
+							<tr>
+								<th>
+									Icon
+								</th>
+								<th>
+									Logo
+								</th>
+							</tr>
 						</thead>
 						<tbody>
 
-							<!--icon-->
-							<td>
-								<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="icon"> 
-									<div file-input class="cell__file-input-container">
-										<label for="icon">
-											<i class="fa-solid fa-image"></i>
-										</label>
-										<input id="icon" type="file" accept="image/*" />
-										<a target="_blank">Icon</a>
-									</div>
-									<div info class="cell__info-container">
-										<i class="cell__info-container__loading"></i>
-										<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
-										<i class="fa-solid fa-circle-check"></i>
-									</div>
-								</div>
-							</td>
+							<tr>
 
-							<!--logo-->
-							<td>
-								<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="logo">
-									<div file-input class="cell__file-input-container">
-										<label for="logo">
-											<i class="fa-solid fa-image"></i>
-										</label>
-										<input id="logo" type="file" accept="image/*" />
-										<a target="_blank">Logo</a>
+								<!--icon-->
+								<td>
+									<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="icon"> 
+										<div file-input-container class="cell__file-input-container">
+											<label for="icon">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input id="icon" type="file" accept="image/*" />
+											<a target="_blank">Icon</a>
+										</div>
+										<div info class="cell__info-container">
+											<i class="cell__info-container__loading"></i>
+											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
 									</div>
-									<div info class="cell__info-container">
-										<i class="cell__info-container__loading"></i>
-										<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
-										<i class="fa-solid fa-circle-check"></i>
+								</td>
+
+								<!--logo-->
+								<td>
+									<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="logo">
+										<div file-input-container class="cell__file-input-container">
+											<label for="logo">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input id="logo" type="file" accept="image/*" />
+											<a target="_blank">Logo</a>
+										</div>
+										<div info class="cell__info-container">
+											<i class="cell__info-container__loading"></i>
+											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
 									</div>
-								</div>
-							</td>
+								</td>
+							</tr>
 						</tbody>
 					</table>
-					
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>
+									Title
+								</th>
+								<th>
+									Color
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+
+								<!--icon-->
+								<td>
+									<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="title"> 
+										<div class="cell__text-input-container">
+											<input type="text" placeholder="Title"/>
+										</div>
+										<div info class="cell__info-container">
+											<i class="cell__info-container__loading"></i>
+											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+
+								<!--logo-->
+								<td>
+									<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="color">
+										<div file-input class="cell__file-input-container">
+											<label for="logo">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input id="logo" type="file" accept="image/*" />
+											<a target="_blank">Logo</a>
+										</div>
+										<div info class="cell__info-container">
+											<i class="cell__info-container__loading"></i>
+											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
 			</div>

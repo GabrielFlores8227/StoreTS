@@ -142,16 +142,20 @@ aside > div > div:first-of-type {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 42px 21px 35px 21px;
+  padding: 35px 21px;
   width: 100%;
   background-color: var(--primary-color);
 }
+aside > div > div:first-of-type > div {
+  min-width: 70%;
+  text-align: center;
+}
 aside > div > div:first-of-type > div > img {
-  filter: grayscale(100%) brightness(200%);
+  filter: grayscale(100%) brightness(0) invert(1);
 }
 aside > div > div:first-of-type > div > div {
   width: 100%;
-  margin-top: 35px;
+  margin-top: 28px;
   position: relative;
 }
 aside > div > div:first-of-type > div > div::before {
@@ -194,17 +198,12 @@ aside > div > div:last-of-type {
   }
 }
 aside > div > div:first-of-type > div > img {
-  height: 17.5px;
+  height: 28px;
 }
 
-@media (min-width: 870px) {
+@media (min-width: 1300px) {
   aside > div > div:first-of-type > div > img {
-    height: 18.9px;
-  }
-}
-@media (min-width: 1700px) {
-  aside > div > div:first-of-type > div > img {
-    height: 21px;
+    height: 31.5px;
   }
 }
 div.saved-product-container > div {
@@ -222,7 +221,7 @@ div.saved-product-container > div > div {
 ul.categories-list li button {
   display: flex;
   gap: 7px;
-  padding: 8.4px;
+  padding: 7px;
   width: 100%;
   position: relative;
 }
@@ -240,7 +239,7 @@ ul.categories-list li button i:last-of-type {
   color: var(--dark-gray);
   font-family: var(--font-bold);
   font-style: normal;
-  font-size: 16.1px;
+  font-size: 15.4px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -250,7 +249,7 @@ ul.categories-list li button i:last-of-type:hover {
 
 @media (min-width: 1700px) {
   ul.categories-list li button i:last-of-type {
-    font-size: 16.8px;
+    font-size: 16.1px;
   }
 }
 

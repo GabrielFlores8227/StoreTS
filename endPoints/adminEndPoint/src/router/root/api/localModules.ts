@@ -115,36 +115,43 @@ class Support {
 	public static readonly imageMask = {
 		header: {
 			icon: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 50, 50, 'cover'),
+				await this.sharpFile(file, 'cover', { width: 50, height: 50 }),
 			logo: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 437, 36, 'cover'),
+				await this.sharpFile(file, 'contain', { height: 70, maxScale: 7.5 }),
 		},
 		propagandas: {
 			bigImage: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 1920, 460, 'cover'),
+				await this.sharpFile(file, 'cover', { width: 1920, height: 460 }),
 			smallImage: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 1080, 1080, 'cover'),
+				await this.sharpFile(file, 'cover', { width: 1080, height: 1080 }),
 		},
 		products: {
 			image: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 1080, 1080, 'cover'),
+				await this.sharpFile(file, 'cover', { width: 1080, height: 1080 }),
 		},
 	};
 
 	/**
-	 * Processes a file using the Sharp library.
-	 * Modifies the file's original name and resizes the image based on the provided dimensions and fit.
+	 * Applies image processing operations using the 'sharp' library to the provided file.
+	 * The function trims the image, resizes it based on the specified dimensions and fit mode,
+	 * and applies a white background with transparency. It also supports an optional maximum scale constraint.
 	 *
-	 * @param {Express.Multer.File | undefined} file - The file to be processed.
-	 * @param {number} width - The desired width of the resized image.
-	 * @param {number} height - The desired height of the resized image.
-	 * @param {keyof sharp.FitEnum} fit - The fit option for resizing the image (e.g., 'cover', 'contain').
+	 * @param file - The file object representing the image to be processed.
+	 * @param fit - The fit mode for resizing the image. Possible values are 'cover', 'contain', 'fill', 'inside', or 'outside'.
+	 * @param size - An object specifying the desired width, height, and/or maximum scale of the image.
+	 *               - width: Optional. The desired width of the image.
+	 *               - height: Optional. The desired height of the image.
+	 *               - maxScale: Optional. The maximum scale constraint for the image, where scale = width / height.
+	 * @throws {status: number, message: string} - Throws an error with status code 400 and a message if the image format is unsupported or the buffer is empty.
 	 */
 	private static async sharpFile(
 		file: Express.Multer.File | undefined,
-		width: number,
-		height: number,
 		fit: keyof sharp.FitEnum,
+		size: {
+			width?: number;
+			height?: number;
+			maxScale?: number;
+		},
 	) {
 		file!.originalname = crypto
 			.randomBytes(128)
@@ -153,13 +160,31 @@ class Support {
 
 		try {
 			file!.buffer = await sharp(file!.buffer)
+				.trim()
 				.resize({
-					width,
-					height,
+					width: size.width,
+					height: size.height,
 					fit,
-					background: { r: 255, g: 255, b: 255, alpha: 255 },
+					background: { r: 255, g: 255, b: 255, alpha: 0 },
 				})
 				.toBuffer();
+
+			if (size.maxScale) {
+				const imageMetadata = await sharp(file!.buffer).metadata();
+				const scale =
+					Object(imageMetadata).width / Object(imageMetadata).height;
+
+				if (scale > size.maxScale) {
+					file!.buffer = await sharp(file!.buffer)
+						.resize({
+							width: size.maxScale * Object(imageMetadata).height,
+							height: Object(imageMetadata).height,
+							fit: 'contain',
+							background: { r: 255, g: 255, b: 255, alpha: 0 },
+						})
+						.toBuffer();
+				}
+			}
 		} catch (err: any) {
 			if (
 				err.message === 'Input buffer contains unsupported image format' ||

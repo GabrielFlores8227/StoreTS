@@ -162,14 +162,17 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding: 42px 21px 35px 21px;
+			padding: 35px 21px;
 			width: 100%;
 			background-color: var(--primary-color);
 
 			& > div {
+				min-width: 70%;
+				text-align: center;
+
 				& > img {
 					@extend %default-height-size !optional;
-					filter: grayscale(100%) brightness(200%);
+					filter: grayscale(100%) brightness(0) invert(1);
 				}
 
 				& > div {
@@ -185,7 +188,7 @@
 					}
 
 					width: 100%;
-					margin-top: 35px;
+					margin-top: 28px;
 					position: relative;
 
 					p {

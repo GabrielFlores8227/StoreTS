@@ -1,15 +1,10 @@
 div.loading-screen-container > div > img {
-  height: 17.5px;
+  height: 28px;
 }
 
-@media (min-width: 870px) {
+@media (min-width: 1300px) {
   div.loading-screen-container > div > img {
-    height: 18.9px;
-  }
-}
-@media (min-width: 1700px) {
-  div.loading-screen-container > div > img {
-    height: 21px;
+    height: 31.5px;
   }
 }
 div.loading-screen-container {
@@ -40,7 +35,7 @@ div.loading-screen-container > div.--on {
   filter: opacity(100%);
 }
 div.loading-screen-container > div > img {
-  filter: grayscale(100%) brightness(200%);
+  filter: grayscale(100%) brightness(0) invert(1);
 }
 div.loading-screen-container > div > hr {
   display: block;
