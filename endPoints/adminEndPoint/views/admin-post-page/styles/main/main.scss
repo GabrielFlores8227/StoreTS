@@ -2,9 +2,10 @@
 
 main {
 	padding: 84px 0px;
+	background-color: var(--light-gray);
 }
 
-div.section-container {
+div.table-section-container {
 	padding: 70px 0px;
 
 	& > div:first-of-type {
@@ -16,6 +17,151 @@ div.section-container {
 
 			& > i {
 				color: var(--primary-color);
+			}
+		}
+	}
+}
+
+div.table-section-container__table-container {
+	@extend %default-padding-size;
+	padding-top: 14px;
+	padding-bottom: 14px;
+	width: 100%;
+	overflow-x: scroll;
+
+	& > table {
+		width: 100%;
+		border-collapse: collapse;
+		border-radius: 7px;
+		overflow: hidden;
+
+		& > thead {
+			user-select: none;
+			background-color: var(--primary-color);
+			height: 41px;
+			color: white;
+		}
+
+		& > tbody {
+			background-color: white;
+			height: 48px;
+
+			td {
+				min-width: 301px;
+			}
+		}
+
+		thead,
+		tbody {
+			font-size: 14px;
+		}
+	}
+}
+
+div.cell {
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	justify-content: center;
+	padding: 0px 28px;
+	position: relative;
+
+	& > div.cell__info-container {
+		&.--loading {
+			i.cell__info-container__loading {
+				display: block;
+			}
+		}
+
+		&.--error {
+			i:nth-of-type(2) {
+				display: block;
+			}
+		}
+
+		&.--ok {
+			i:last-of-type {
+				display: block;
+			}
+		}
+
+		transform: translateY(-50%);
+		position: absolute;
+		top: 50%;
+		right: 28px;
+
+		i {
+			display: none;
+		}
+
+		i.cell__info-container__loading {
+			width: 16.1px;
+			height: 16.1px;
+			border-radius: 100%;
+			border: 2.8px solid var(--regular-green);
+			border-top: 2.8px solid transparent;
+			animation: spinner 1.4s linear infinite forwards;
+		}
+
+		& > i:nth-of-type(2) {
+			color: red;
+		}
+
+		& > i:last-of-type {
+			color: var(--regular-green);
+		}
+	}
+}
+
+div.cell__file-input-container {
+	display: flex;
+	gap: 7px;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+
+	label {
+		color: var(--primary-color);
+		cursor: pointer;
+	}
+
+	input {
+		display: none;
+	}
+
+	a {
+		white-space: nowrap;
+		max-width: 140px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+@keyframes spinner {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (min-width: 1000px) {
+	div.table-section-container__table-container {
+		& > table {
+			thead,
+			tbody {
+				font-size: 16.8px;
+			}
+		}
+	}
+
+	div.cell {
+		& > div:last-of-type {
+			i.cell__info-container__loading {
+				border: 3.5px solid var(--regular-green);
+				border-top: 3.5px solid transparent;
 			}
 		}
 	}

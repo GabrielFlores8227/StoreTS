@@ -115,15 +115,15 @@ class Support {
 	public static readonly imageMask = {
 		header: {
 			icon: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 50, 50, 'contain'),
+				await this.sharpFile(file, 50, 50, 'cover'),
 			logo: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 437, 36, 'contain'),
+				await this.sharpFile(file, 437, 36, 'cover'),
 		},
 		propagandas: {
 			bigImage: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 1920, 460, 'contain'),
+				await this.sharpFile(file, 1920, 460, 'cover'),
 			smallImage: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 1080, 1080, 'contain'),
+				await this.sharpFile(file, 1080, 1080, 'cover'),
 		},
 		products: {
 			image: async (file: Express.Multer.File | undefined) =>
@@ -161,7 +161,10 @@ class Support {
 				})
 				.toBuffer();
 		} catch (err: any) {
-			if (err.message === 'Input buffer contains unsupported image format') {
+			if (
+				err.message === 'Input buffer contains unsupported image format' ||
+				err.message === 'Input Buffer is empty'
+			) {
 				throw {
 					status: 400,
 					message: 'Please provide valid images!',

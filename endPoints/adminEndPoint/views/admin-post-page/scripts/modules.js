@@ -1,22 +1,42 @@
-export function getCookie(name) {
+////
+// Cookie
+////
+
+function getToken() {
 	const cookies = document.cookie.split(';');
 
 	for (let i = 0; i < cookies.length; i++) {
 		const cookie = cookies[i].trim();
 
-		// Check if the cookie starts with the given name
-		if (cookie.startsWith(name + '=')) {
-			// Return the cookie value (substring after the equals sign)
-			return cookie.substring(name.length + 1);
+		if (cookie.startsWith('token' + '=')) {
+			document.cookie =
+				'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+			return cookie.substring('token'.length + 1);
 		}
 	}
 
-	return null; // Return null if cookie with the given name is not found
+	return null;
 }
 
-export function clearCookie(name) {
-	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+export const token = getToken();
+
+////
+// Get
+////
+
+export async function getHeader(token) {
+	return await (
+		await fetch('/admin/api/header', {
+			method: 'POST',
+			headers: { authorization: 'Bearer ' + token },
+		})
+	).json();
 }
+
+////
+// Others
+////
 
 export function buildAsideMenus(asideButtonHandler) {
 	const addClickHandler = (selector, element, action) => {
@@ -31,5 +51,65 @@ export function buildAsideMenus(asideButtonHandler) {
 
 	asideButtonHandler.forEach(({ selector, element, action }) => {
 		addClickHandler(selector, element, action);
+	});
+}
+
+export async function handleCellRequest(token, cell, body) {
+	$('--loading');
+
+	const action = cell.getAttribute('action');
+	const method = cell.getAttribute('method');
+
+	const req = await fetch(action, {
+		headers: {
+			authorization: 'Bearer ' + token,
+		},
+		method,
+		body,
+	});
+
+	const { status, message } = await req.json();
+
+	if (status === 200) {
+		$('--ok');
+	} else {
+		$('--error', message);
+	}
+
+	function $(add, title = undefined) {
+		const states = ['--loading', '--error', '--ok'];
+		const info = cell.querySelector('div[info]');
+
+		states.forEach((state) => {
+			if (info.classList.contains(state)) {
+				info.classList.remove(state);
+			}
+		});
+
+		info.classList.add(add);
+
+		if (title) {
+			info.querySelector('i[info-error]').setAttribute('title', title);
+		}
+	}
+}
+
+////
+// CallBack
+////
+
+export async function handleIconCallBack() {
+	const { icon } = await getHeader(token);
+
+	window.document
+		.querySelector('link[rel="shortcut icon"]')
+		.setAttribute('href', icon);
+}
+
+export async function handleLogoCallBack() {
+	const { logo } = await getHeader(token);
+
+	window.document.querySelectorAll('img[logo]').forEach((img) => {
+		img.setAttribute('src', logo);
 	});
 }

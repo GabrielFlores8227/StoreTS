@@ -115,6 +115,12 @@ div.search-container {
 }
 div.search-container.--on > input {
   border-radius: 7px 7px 0px 0px;
+  border: 1px solid lightgray;
+  border-bottom: 1px solid transparent;
+}
+div.search-container.--on > div > div {
+  border: 1px solid lightgray;
+  border-top: 1px solid transparent;
 }
 div.search-container > input {
   width: 100%;
