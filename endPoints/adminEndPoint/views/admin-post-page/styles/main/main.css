@@ -1,0 +1,59 @@
+div.section-container > div:first-of-type {
+  padding-right: 21px;
+  padding-left: 21px;
+}
+
+div.section-container > div:first-of-type > h1 {
+  font-size: 30.1px;
+}
+
+@media (min-width: 375px) {
+  div.section-container > div:first-of-type {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+@media (min-width: 650px) {
+  div.section-container > div:first-of-type {
+    padding-right: 56px;
+    padding-left: 56px;
+  }
+}
+@media (min-width: 870px) {
+  div.section-container > div:first-of-type > h1 {
+    font-size: 33.6px;
+  }
+}
+@media (min-width: 1300px) {
+  div.section-container > div:first-of-type {
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
+  }
+}
+@media (min-width: 1700px) {
+  div.section-container > div:first-of-type {
+    padding-right: 21vw;
+    padding-left: 21vw;
+  }
+}
+@media (min-width: 2880px) {
+  div.section-container > div:first-of-type {
+    padding-right: 30%;
+    padding-left: 30%;
+  }
+}
+main {
+  padding: 84px 0px;
+}
+
+div.section-container {
+  padding: 70px 0px;
+}
+div.section-container > div:first-of-type > h1 {
+  color: var(--dark-gray);
+}
+div.section-container > div:first-of-type > h1 > i {
+  color: var(--primary-color);
+}
+
+/*# sourceMappingURL=main.css.map */
