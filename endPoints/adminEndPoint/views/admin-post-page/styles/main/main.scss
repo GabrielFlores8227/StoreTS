@@ -1,0 +1,22 @@
+@import '../controller/controller.scss';
+
+main {
+	padding: 84px 0px;
+}
+
+div.section-container {
+	padding: 70px 0px;
+
+	& > div:first-of-type {
+		@extend %default-padding-size;
+
+		& > h1 {
+			@extend %big-font-size;
+			color: var(--dark-gray);
+
+			& > i {
+				color: var(--primary-color);
+			}
+		}
+	}
+}

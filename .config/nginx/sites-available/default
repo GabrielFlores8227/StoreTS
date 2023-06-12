@@ -2,7 +2,7 @@ server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
 
-	server_name storeTS;
+	server_name StoreTS;
 
 	location / {
 			proxy_pass http://127.0.0.1:2000/;

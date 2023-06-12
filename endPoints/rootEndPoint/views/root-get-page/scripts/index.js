@@ -277,7 +277,7 @@ const sliderController = [];
 							? window.scrollY -
 							  window.innerHeight / 2 +
 							  element.offsetHeight / 2 +
-							  -60
+							  -80
 							: window.scrollY - (window.innerWidth >= 870 ? 175 : 220);
 
 					window.scrollTo({
