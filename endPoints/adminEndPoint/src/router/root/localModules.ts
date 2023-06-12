@@ -5,21 +5,38 @@ import Sql from 'storets-sql';
 import Middleware from 'storets-middleware';
 
 class Support {
+	/**
+	 * Validates the data received in the request body for the middleware checkAuth.
+	 *
+	 * @param {Object} body - The request body object containing the username and password.
+	 *     - username: The username to be validated.
+	 *     - password: The password to be validated.
+	 *
+	 * @returns {void}
+	 */
 	public static validateDataForMiddlewareCheckAuth(body: {
 		username: string;
 		password: string;
 	}) {
 		Admin.checkType(body.username, 'string', 'username', 401, true, '/admin');
-
 		Admin.checkLength(body.username, 1, 50, 'username', 401, true, '/admin');
-
 		Admin.checkType(body.password, 'string', 'password', 401, true, '/admin');
-
 		Admin.checkLength(body.password, 1, 50, 'password', 401, true, '/admin');
 	}
 }
 
 export default class LocalModules {
+	/**
+	 * Middleware function for authentication check.
+	 * Validates the request body, hashes the username and password,
+	 * performs a database query to check the credentials,
+	 * generates a new token, updates the token in the database,
+	 * sets the token as a cookie in the response, and calls the next middleware.
+	 *
+	 * @param {express.Request} req - The Express request object.
+	 * @param {express.Response} res - The Express response object.
+	 * @param {express.NextFunction} next - The Express next function.
+	 */
 	public static async middlewareCheckAuth(
 		req: express.Request,
 		res: express.Response,
@@ -62,7 +79,11 @@ export default class LocalModules {
 				'only',
 			]);
 
-			res.cookie('token', newToken);
+			const currentDate = new Date();
+			const futureDate = new Date();
+			futureDate.setMinutes(currentDate.getMinutes() + 1);
+
+			res.cookie('token', newToken, { expires: futureDate });
 
 			return next();
 		} catch (err) {

@@ -1,8 +1,11 @@
 #!/bin/bash
 
+##
+# Start
+##
+
 clear 
-echo -e "\033[1;33m[!] Please refrain from using this script during the development phase\033[0m"
-echo -e "\033[1;32m[v] Starting processes\033[0m"
+echo -e "\033[1;32m[v] Starting processes...\033[0m"
 
 END_POINTS=$(find . -name "*EndPoint";)
 
@@ -12,6 +15,10 @@ do
     npm start --prefix $END_POINT
   ) &
 done
+
+##
+# Ctrl + c
+##
 
 cleanup() {
   echo -ne "\n\033[1;31m[x] "

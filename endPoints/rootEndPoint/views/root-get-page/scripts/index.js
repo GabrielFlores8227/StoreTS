@@ -56,6 +56,8 @@ const sliderController = [];
 	sliders.forEach((element, index) => {
 		handleProductsGrid(element);
 
+		element.scrollLeft = index % 2 === 0 ? element.scrollWidth : 0;
+
 		sliderController.push(true);
 
 		let isDown = false;
@@ -270,12 +272,17 @@ const sliderController = [];
 						'div[product-slider-container]',
 					)[index];
 
+					let add =
+						element.offsetHeight < 700
+							? window.scrollY -
+							  window.innerHeight / 2 +
+							  element.offsetHeight / 2 +
+							  -80
+							: window.scrollY - (window.innerWidth >= 870 ? 175 : 220);
+
 					window.scrollTo({
 						left: 0,
-						top:
-							element.getBoundingClientRect().top +
-							window.scrollY -
-							(window.innerWidth >= 870 ? 175 : 220),
+						top: element.getBoundingClientRect().top + add,
 						behavior: 'smooth',
 					});
 				}, 120);

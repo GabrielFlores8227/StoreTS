@@ -131,6 +131,15 @@ class Support {
 		},
 	};
 
+	/**
+	 * Processes a file using the Sharp library.
+	 * Modifies the file's original name and resizes the image based on the provided dimensions and fit.
+	 *
+	 * @param {Express.Multer.File | undefined} file - The file to be processed.
+	 * @param {number} width - The desired width of the resized image.
+	 * @param {number} height - The desired height of the resized image.
+	 * @param {keyof sharp.FitEnum} fit - The fit option for resizing the image (e.g., 'cover', 'contain').
+	 */
 	private static async sharpFile(
 		file: Express.Multer.File | undefined,
 		width: number,
@@ -163,6 +172,12 @@ class Support {
 		}
 	}
 
+	/**
+	 * Validates data for the middleware handling the "post propaganda" operation.
+	 *
+	 * @param {Array<string>} imagesContext - The context of the images being validated.
+	 * @param {object | object[] | undefined} files - The files to be validated.
+	 */
 	public static async validateDataForMiddlewarePostPropaganda(
 		imagesContext: Array<string>,
 		files:
@@ -181,6 +196,11 @@ class Support {
 		);
 	}
 
+	/**
+	 * Validates data for the middleware handling the "post category" operation.
+	 *
+	 * @param {string} name - The name of the category to be validated.
+	 */
 	public static async validateDataForMiddlewarePostCategory(name: string) {
 		this.textMask.categories.name(name);
 
@@ -197,6 +217,18 @@ class Support {
 		}
 	}
 
+	/**
+	 * Validates data for the middleware handling the "post product" operation.
+	 *
+	 * @param {string} category - The category of the product.
+	 * @param {string} name - The name of the product.
+	 * @param {string} price - The price of the product.
+	 * @param {string} off - The discount/offers for the product.
+	 * @param {string} installment - The installment options for the product.
+	 * @param {string} whatsapp - The WhatsApp contact for the product.
+	 * @param {string} message - The message associated with the product.
+	 * @param {Express.Multer.File | undefined} file - The file/image associated with the product.
+	 */
 	public static async validateDataForMiddlewarePostProduct(
 		category: string,
 		name: string,
@@ -217,6 +249,14 @@ class Support {
 		await this.imageMask.products.image(file);
 	}
 
+	/**
+	 * Validates data for the middleware handling the "put text" operation.
+	 *
+	 * @param {string} id - The ID of the text entry.
+	 * @param {string} data - The updated text data.
+	 * @param {string} table - The table name where the text entry is stored.
+	 * @param {string} column - The column name for the text data.
+	 */
 	public static validateDataForMiddlewarePutText(
 		id: string,
 		data: string,
@@ -230,6 +270,14 @@ class Support {
 		Object(this.textMask)[table][column](data);
 	}
 
+	/**
+	 * Validates data for the middleware handling the "put image" operation.
+	 *
+	 * @param {string} id - The ID of the image entry.
+	 * @param {Express.Multer.File} file - The updated image file.
+	 * @param {string} table - The table name where the image entry is stored.
+	 * @param {string} column - The column name for the image file.
+	 */
 	public static async validateDataForMiddlewarePutImage(
 		id: string,
 		file: Express.Multer.File | undefined,
@@ -245,6 +293,14 @@ class Support {
 export default class LocalModules {
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
 
+	/**
+	 * Middleware function to check the validity of a token in the request headers.
+	 * Throws an error if the token is invalid or missing.
+	 *
+	 * @param {express.Request} req - The Express request object.
+	 * @param {express.Response} res - The Express response object.
+	 * @param {express.NextFunction} next - The next middleware function.
+	 */
 	public static async middlewareCheckToken(
 		req: express.Request,
 		res: express.Response,
@@ -271,6 +327,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling file uploads using multer.
+	 * Validates the number of uploaded files based on the specified minimum and maximum counts.
+	 * Throws an error if the file upload is not valid.
+	 *
+	 * @param {number} minCount - The minimum number of files required.
+	 * @param {number} maxCount - The maximum number of files allowed.
+	 * @returns {Function} - The middleware function to handle file uploads.
+	 */
 	public static middlewareUploadFiles(
 		minCount: number,
 		maxCount: number,
@@ -314,6 +379,16 @@ export default class LocalModules {
 		};
 	}
 
+	/**
+	 * Middleware function for handling the creation of a propaganda.
+	 * Validates the request data for creating a propaganda and performs necessary operations.
+	 * Uploads the bigImage and smallImage files to an S3 bucket.
+	 * Inserts the file names into the propagandas table in the database.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewarePostPropaganda(
 		req: express.Request,
 		res: express.Response,
@@ -354,6 +429,16 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the deletion of a propaganda.
+	 * Validates the request data for deleting a propaganda and performs necessary operations.
+	 * Deletes the associated bigImage and smallImage files from the S3 bucket.
+	 * Removes the propaganda entry from the propagandas table in the database.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewareDeletePropaganda(
 		req: express.Request,
 		res: express.Response,
@@ -384,6 +469,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the creation of a category.
+	 * Validates the request data for creating a category and performs necessary operations.
+	 * Inserts the category name into the categories table in the database.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewarePostCategory(
 		req: express.Request,
 		res: express.Response,
@@ -402,6 +496,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the deletion of a category.
+	 * Validates the request data for deleting a category and performs necessary operations.
+	 * Deletes the category from the categories table in the database and deletes associated products and their images.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewareDeleteCategory(
 		req: express.Request,
 		res: express.Response,
@@ -431,6 +534,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the creation of a product.
+	 * Validates the request data for creating a product and performs necessary operations.
+	 * Uploads the product image to an S3 bucket, inserts the product details into the products table in the database.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewarePostProduct(
 		req: express.Request,
 		res: express.Response,
@@ -478,6 +590,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the deletion of a product.
+	 * Validates the request data for deleting a product and performs necessary operations.
+	 * Deletes the product from the database and removes the associated image file from the S3 bucket.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewareDeleteProduct(
 		req: express.Request,
 		res: express.Response,
@@ -507,6 +628,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the update of a text value.
+	 * Validates the request data for updating a text value and performs necessary operations.
+	 * Updates the specified text column in the given table with the provided data for the given id.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewarePutText(
 		req: express.Request,
 		res: express.Response,
@@ -532,6 +662,15 @@ export default class LocalModules {
 		}
 	}
 
+	/**
+	 * Middleware function for handling the update of an image file.
+	 * Validates the request data for updating an image file and performs necessary operations.
+	 * Updates the specified image column in the given table with the provided file for the given id.
+	 *
+	 * @param {express.Request} req - The express request object.
+	 * @param {express.Response} res - The express response object.
+	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 */
 	public static async middlewarePutImage(
 		req: express.Request,
 		res: express.Response,

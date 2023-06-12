@@ -1,8 +1,8 @@
-# Log
-**/.log/
-
 # Env
 **/.env
+
+# Log
+**/.log/
 
 # Node.js
 **/node_modules/

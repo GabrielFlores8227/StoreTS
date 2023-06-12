@@ -3,6 +3,16 @@ import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 
 export default class LocalModules {
+	/**
+	 * Middleware function for handling GET requests to the order endpoint.
+	 * Retrieves information from the 'products' table based on the provided ID.
+	 * Adds a history entry for the 'products' resource with the specified ID.
+	 * Sets the redirection URL to a WhatsApp API link for ordering the product.
+	 *
+	 * @param {express.Request} req - The request object.
+	 * @param {express.Response} res - The response object.
+	 * @param {express.NextFunction} next - The next function.
+	 */
 	public static async middlewareGetOrder(
 		req: express.Request,
 		res: express.Response,
@@ -18,6 +28,7 @@ export default class LocalModules {
 
 			if (Object(query).length === 0) {
 				Object(req).redirectTo = '/';
+
 				return next();
 			}
 

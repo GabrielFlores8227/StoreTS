@@ -1,7 +1,3 @@
-aside > div > div:first-of-type > div > img {
-  height: 17.5px;
-}
-
 div.saved-product-container > div > div {
   z-index: 2;
   display: flex;
@@ -112,20 +108,6 @@ div.saved-product-container > div > div a i {
   font-size: 21px;
 }
 
-@media (min-width: 870px) {
-  aside > div > div:first-of-type > div > img {
-    height: 18.9px;
-  }
-}
-@media (min-width: 1700px) {
-  aside > div > div:first-of-type > div > img {
-    height: 21px;
-  }
-  div.saved-product-container > div > div > div:first-of-type img {
-    width: 170px;
-    height: 170px;
-  }
-}
 aside {
   pointer-events: none;
   filter: opacity(0%);
@@ -201,6 +183,30 @@ aside > div > div:last-of-type {
   height: 100%;
 }
 
+@media (min-width: 1700px) {
+  div.saved-product-container > div > div > div:first-of-type img {
+    width: 170px;
+    height: 170px;
+  }
+  aside > div {
+    width: 322px;
+    min-width: 322px;
+  }
+}
+aside > div > div:first-of-type > div > img {
+  height: 17.5px;
+}
+
+@media (min-width: 870px) {
+  aside > div > div:first-of-type > div > img {
+    height: 18.9px;
+  }
+}
+@media (min-width: 1700px) {
+  aside > div > div:first-of-type > div > img {
+    height: 21px;
+  }
+}
 div.saved-product-container > div {
   transition: ease-in-out 0.35s;
   overflow: hidden;
@@ -243,12 +249,8 @@ ul.categories-list li button i:last-of-type:hover {
 }
 
 @media (min-width: 1700px) {
-  aside > div {
-    width: 322px;
-    min-width: 322px;
-  }
   ul.categories-list li button i:last-of-type {
-    font-size: 17.5px;
+    font-size: 16.8px;
   }
 }
 

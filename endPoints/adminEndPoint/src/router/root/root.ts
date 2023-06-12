@@ -1,7 +1,7 @@
 import express from 'express';
+import Middleware from 'storets-middleware';
 import LocalModules from './localModules';
 import api from './api/api';
-import Middleware from 'storets-middleware';
 
 const root = express.Router();
 
@@ -13,8 +13,8 @@ root.post(
 	'/',
 	LocalModules.middlewareCheckAuth,
 	Middleware.middlewareBuildHeader,
-	(_, res) => {
-		res.sendStatus(200);
+	(req, res) => {
+		res.render('admin-post-page', { builder: Object(req).builder });
 	},
 );
 
