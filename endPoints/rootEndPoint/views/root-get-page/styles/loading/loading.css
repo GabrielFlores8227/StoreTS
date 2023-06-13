@@ -1,18 +1,18 @@
-div.loading-screen-container > div > img {
+div.loading-container > div > img {
   height: 25.2px;
 }
 
 @media (min-width: 650px) {
-  div.loading-screen-container > div > img {
+  div.loading-container > div > img {
     height: 28px;
   }
 }
 @media (min-width: 870px) {
-  div.loading-screen-container > div > img {
+  div.loading-container > div > img {
     height: 31.5px;
   }
 }
-div.loading-screen-container {
+div.loading-container {
   z-index: 4;
   display: flex;
   align-items: center;
@@ -25,21 +25,21 @@ div.loading-screen-container {
   top: 0px;
   left: 0px;
 }
-div.loading-screen-container.--off {
+div.loading-container.--off {
   filter: opacity(0%);
   pointer-events: none;
 }
-div.loading-screen-container > div {
+div.loading-container > div {
   display: flex;
   flex-direction: column;
   gap: 10.5px;
   filter: opacity(0%);
   transition: ease-in-out 2s;
 }
-div.loading-screen-container > div.--on {
+div.loading-container > div.--on {
   filter: opacity(100%);
 }
-div.loading-screen-container > div > img {
+div.loading-container > div > img {
   transform: scale(114%, 114%);
   filter: grayscale(100%) brightness(0) invert(1);
   animation: loadingImage infinite 7s;
@@ -57,9 +57,9 @@ div.loading-screen-container > div > img {
   }
 }
 @media only screen and (pointer: coarse) {
-  div.loading-screen-container > div {
+  div.loading-container > div {
     transform: translateY(-150%);
   }
 }
 
-/*# sourceMappingURL=loading-screen.css.map */
+/*# sourceMappingURL=loading.css.map */

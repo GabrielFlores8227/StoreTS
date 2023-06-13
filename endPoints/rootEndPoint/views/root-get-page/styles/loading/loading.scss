@@ -1,6 +1,6 @@
 @import '../controller/controller.scss';
 
-div.loading-screen-container {
+div.loading-container {
 	&.--off {
 		filter: opacity(0%);
 		pointer-events: none;
@@ -53,7 +53,7 @@ div.loading-screen-container {
 }
 
 @media only screen and (pointer: coarse) {
-	div.loading-screen-container {
+	div.loading-container {
 		& > div {
 			transform: translateY(-150%);
 		}

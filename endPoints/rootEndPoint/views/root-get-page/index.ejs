@@ -28,7 +28,7 @@
 			}
 		</style>
 		<link rel="stylesheet" href="/root-get-page/styles/index/index.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/loading-screen/loading-screen.css" />
+		<link rel="stylesheet" href="/root-get-page/styles/loading/loading.css" />
 		<link rel="stylesheet" href="/root-get-page/styles/aside/aside.css" />
 		<link rel="stylesheet" href="/root-get-page/styles/header/header.css" />
 		<link rel="stylesheet" href="/root-get-page/styles/main/main.css" />
@@ -52,7 +52,7 @@
 	<body>
 
 		<!--loading-screen-->
-		<div class="loading-screen-container">
+		<div class="loading-container">
 			<div loading-screen>
 				<img
 					draggable="false"
@@ -216,6 +216,7 @@
 		<main>
 
 			<!--propagandas-->
+			<% if (builder.propagandas.length > 0) { %>
 			<div image-slider-container class="propagandas-container">
 				<button></button>
 				<div>
@@ -236,6 +237,7 @@
 				<p><%= builder.footer.storeInfo %></p>
 				<button></button>
 			</div>
+			<% } %>
 
 			<!--products-->
 			<div class="product-section-container">

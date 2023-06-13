@@ -516,7 +516,9 @@ export default class LocalModules {
 
 			await Support.validateDataForMiddlewarePostCategory(name);
 
-			await Sql.query('INSERT INTO categories (name) VALUES (?);', [name]);
+			await Sql.query('INSERT INTO categories (name) VALUES (?);', [
+				name.trim(),
+			]);
 
 			return next();
 		} catch (err) {
@@ -601,14 +603,14 @@ export default class LocalModules {
 			await Sql.query(
 				'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
 				[
-					category,
-					name,
+					category.trim(),
+					name.trim(),
 					file!.originalname,
-					price,
-					off,
-					installment,
-					whatsapp,
-					message,
+					price.trim(),
+					off.trim(),
+					installment.trim(),
+					whatsapp.trim(),
+					message.trim(),
 				],
 			);
 
@@ -646,9 +648,9 @@ export default class LocalModules {
 				return next();
 			}
 
-			await Sql.query('DELETE FROM products WHERE id = ?;', [id]);
-
 			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
+
+			await Sql.query('DELETE FROM products WHERE id = ?;', [id]);
 
 			return next();
 		} catch (err) {

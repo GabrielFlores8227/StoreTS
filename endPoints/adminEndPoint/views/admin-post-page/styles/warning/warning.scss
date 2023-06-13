@@ -1,0 +1,69 @@
+@import '../controller/controller.scss';
+
+div.warning-container {
+	&.--on {
+		filter: opacity(100%);
+		pointer-events: all;
+	}
+
+	@extend %default-padding-size;
+	filter: opacity(0%);
+	pointer-events: none;
+	z-index: 4;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	transition: ease-in-out 0.35s;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+
+	& > div {
+		display: flex;
+		flex-direction: column;
+		gap: 17.5px;
+		padding: 28px 21px;
+		border-radius: 7px;
+		background-color: white;
+		max-width: 420px;
+		transform: translateY(-50%);
+
+		& > h2 {
+			text-align: center;
+			font-size: 24.5px;
+			color: var(--primary-color);
+			text-align: center;
+		}
+
+		& > p {
+			text-align: center;
+			font-size: 15.4px;
+		}
+
+		& > div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 24.5px;
+
+			& > button {
+				font-family: var(--font-bold);
+				font-size: 15.4px;
+			}
+
+			& > button:first-of-type {
+				color: var(--primary-color);
+			}
+
+			& > button:last-of-type {
+				color: white;
+				background-color: var(--primary-color);
+				border-radius: 7px;
+				padding: 7px 14px;
+			}
+		}
+	}
+}

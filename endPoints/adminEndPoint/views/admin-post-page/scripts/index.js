@@ -1,12 +1,25 @@
 import {
 	token,
 	buildAsideMenus,
+	buildPropagandasTemplate,
+	handleImageInput,
 	handleCellRequest,
 	buildIcon,
 	buildLogo,
 	buildTitle,
 	buildColor,
+	handleTableVisibility,
 } from './modules.js';
+
+console.log(token);
+
+(() => {
+	window.document
+		.querySelector('div[warning] button')
+		.addEventListener('click', () => {
+			location.reload(true);
+		});
+})();
 
 buildAsideMenus([
 	{
@@ -25,16 +38,7 @@ buildAsideMenus([
 	window.document
 		.querySelectorAll('div[file-input-container]')
 		.forEach((div) => {
-			const link = div.querySelector('a');
-			const fileInput = div.querySelector('input');
-
-			fileInput.addEventListener('input', (e) => {
-				const file = e.target.files[0];
-				const fileURL = URL.createObjectURL(file);
-
-				link.href = fileURL;
-				link.innerText = e.target.files[0].name;
-			});
+			handleImageInput(div);
 		});
 })();
 
@@ -69,7 +73,11 @@ buildAsideMenus([
 		textarea.style.height = textarea.scrollHeight + 'px';
 
 		textarea.addEventListener('input', () => {
-			console.log(textarea.offsetHeight);
+			textarea.style.height = 'auto';
+			textarea.style.height = textarea.scrollHeight + 'px';
+		});
+
+		window.addEventListener('resize', () => {
 			textarea.style.height = 'auto';
 			textarea.style.height = textarea.scrollHeight + 'px';
 		});
@@ -84,7 +92,7 @@ buildAsideMenus([
 		color: async () => await buildColor(),
 	};
 
-	window.document.querySelectorAll('div[cell]').forEach((cell) => {
+	window.document.querySelectorAll('div[cell-container]').forEach((cell) => {
 		const forItem = cell.getAttribute('for');
 		const identifier = cell.getAttribute('identifier');
 
@@ -141,4 +149,29 @@ buildAsideMenus([
 			}
 		}
 	});
+})();
+
+(() => {
+	const buildTemplate = [
+		(specialSection) => buildPropagandasTemplate(specialSection),
+	];
+
+	window.document
+		.querySelectorAll('div[special-section]')
+		.forEach((div, index) => {
+			handleTableVisibility(div);
+
+			div
+				.querySelector('button[add-item-to-table-button]')
+				.addEventListener('click', () => {
+					const template = div.querySelector('template');
+					const templateParent = template.parentElement;
+
+					const templateUsable = buildTemplate[index](div);
+
+					templateParent.append(templateUsable);
+
+					handleTableVisibility(div);
+				});
+		});
 })();
