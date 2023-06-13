@@ -31,18 +31,24 @@ div.loading-screen-container {
 
 		& > img {
 			@extend %default-height-size;
+			transform: scale(114%, 114%);
 			filter: grayscale(100%) brightness(0) invert(1);
+			animation: loadingImage infinite 7s;
 		}
+	}
+}
 
-		& > hr {
-			display: block;
-			width: 0%;
-			height: 2.8px;
-			background-color: white;
-			transition: ease-in-out 1.5s;
-			border-radius: 70px;
-			border: none;
-		}
+@keyframes loadingImage {
+	80% {
+		opacity: 100%;
+	}
+
+	90% {
+		opacity: 41%;
+	}
+
+	100% {
+		opacity: 100%;
 	}
 }
 

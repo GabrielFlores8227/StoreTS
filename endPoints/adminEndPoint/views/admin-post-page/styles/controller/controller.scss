@@ -4,7 +4,7 @@
 }
 
 %default-height-size {
-	height: 28px;
+	height: 25.2px;
 }
 
 %small-font-size {
@@ -31,11 +31,19 @@
 		padding-right: 56px;
 		padding-left: 56px;
 	}
+
+	%default-height-size {
+		height: 28px;
+	}
 }
 
 @media (min-width: 870px) {
 	%default-font-size {
 		font-size: 18.9px;
+	}
+
+	%default-height-size {
+		height: 31.5px;
 	}
 
 	%big-font-size {
@@ -44,13 +52,13 @@
 }
 
 @media (min-width: 1300px) {
-	%default-height-size {
-		height: 31.5px;
-	}
-
 	%default-padding-size {
 		padding-right: 15.4vw;
 		padding-left: 15.4vw;
+	}
+
+	%default-font-size {
+		font-size: 19.6px;
 	}
 }
 

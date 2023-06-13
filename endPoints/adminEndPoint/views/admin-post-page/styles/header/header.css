@@ -4,7 +4,7 @@ header > div:first-of-type {
 }
 
 header > div:first-of-type > a > img:first-of-type {
-  height: 28px;
+  height: 25.2px;
 }
 
 header > div:first-of-type > div:last-of-type > button {
@@ -22,19 +22,25 @@ header > div:first-of-type > div:last-of-type > button {
     padding-right: 56px;
     padding-left: 56px;
   }
+  header > div:first-of-type > a > img:first-of-type {
+    height: 28px;
+  }
 }
 @media (min-width: 870px) {
   header > div:first-of-type > div:last-of-type > button {
     font-size: 18.9px;
   }
-}
-@media (min-width: 1300px) {
   header > div:first-of-type > a > img:first-of-type {
     height: 31.5px;
   }
+}
+@media (min-width: 1300px) {
   header > div:first-of-type {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
+  }
+  header > div:first-of-type > div:last-of-type > button {
+    font-size: 19.6px;
   }
 }
 @media (min-width: 1700px) {

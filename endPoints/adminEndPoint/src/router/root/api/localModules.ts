@@ -681,7 +681,7 @@ export default class LocalModules {
 
 			await Sql.query(
 				'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;',
-				[data, id],
+				[data.trim(), id],
 			);
 
 			return next();

@@ -35,6 +35,38 @@ export async function getHeader(token) {
 }
 
 ////
+// Builder
+////
+
+export async function buildIcon() {
+	const { icon } = await getHeader(token);
+
+	window.document
+		.querySelector('link[rel="shortcut icon"]')
+		.setAttribute('href', icon);
+}
+
+export async function buildLogo() {
+	const { logo } = await getHeader(token);
+
+	window.document.querySelectorAll('img[logo]').forEach((img) => {
+		img.setAttribute('src', logo);
+	});
+}
+
+export async function buildTitle() {
+	const { title } = await getHeader(token);
+
+	window.document.querySelector('title').innerText = title + ' | Admin';
+}
+
+export async function buildColor() {
+	const { color } = await getHeader(token);
+
+	window.document.documentElement.style.setProperty('--primary-color', color);
+}
+
+////
 // Others
 ////
 
@@ -54,16 +86,22 @@ export function buildAsideMenus(asideButtonHandler) {
 	});
 }
 
-export async function handleCellRequest(token, cell, body) {
+export async function handleCellRequest(token, cell, body, contentType) {
 	$('--loading');
 
 	const action = cell.getAttribute('action');
 	const method = cell.getAttribute('method');
 
+	const headers = {
+		authorization: 'Bearer ' + token,
+	};
+
+	if (contentType) {
+		headers['Content-Type'] = contentType;
+	}
+
 	const req = await fetch(action, {
-		headers: {
-			authorization: 'Bearer ' + token,
-		},
+		headers,
 		method,
 		body,
 	});
@@ -72,8 +110,12 @@ export async function handleCellRequest(token, cell, body) {
 
 	if (status === 200) {
 		$('--ok');
+
+		return true;
 	} else {
 		$('--error', message);
+
+		return false;
 	}
 
 	function $(add, title = undefined) {
@@ -92,24 +134,4 @@ export async function handleCellRequest(token, cell, body) {
 			info.querySelector('i[info-error]').setAttribute('title', title);
 		}
 	}
-}
-
-////
-// CallBack
-////
-
-export async function handleIconCallBack() {
-	const { icon } = await getHeader(token);
-
-	window.document
-		.querySelector('link[rel="shortcut icon"]')
-		.setAttribute('href', icon);
-}
-
-export async function handleLogoCallBack() {
-	const { logo } = await getHeader(token);
-
-	window.document.querySelectorAll('img[logo]').forEach((img) => {
-		img.setAttribute('src', logo);
-	});
 }

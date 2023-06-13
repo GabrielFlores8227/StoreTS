@@ -6,51 +6,26 @@
 export function handleLoadingImages(loadingScreenContainer) {
 	const allImages = window.document.querySelectorAll('img');
 	let loadedImages = 0;
-	const loadingBar = loadingScreenContainer.querySelector('hr');
 
 	allImages.forEach((img) => {
 		if (img.complete) {
 			loadedImages++;
-			handleLoadingUpdate(
-				loadingScreenContainer,
-				loadingBar,
-				allImages,
-				loadedImages,
-			);
-		} else {
-			img.addEventListener('load', () => {
-				loadedImages++;
-				handleLoadingUpdate(
-					loadingScreenContainer,
-					loadingBar,
-					allImages,
-					loadedImages,
-				);
-			});
+			$(loadingScreenContainer, allImages, loadedImages);
+			return;
 		}
+
+		img.addEventListener('load', () => {
+			loadedImages++;
+			$(loadingScreenContainer, allImages, loadedImages);
+		});
 	});
-}
 
-/**
- * Function to update the loading progress and hide the loading screen when all images are loaded.
- * @param {HTMLElement} loadingScreenContainer - The container element for the loading screen.
- * @param {HTMLElement} loadingBar - The loading progress bar element.
- * @param {NodeList} allImages - The collection of all images on the page.
- * @param {number} loadedImages - The number of images that have been loaded.
- */
-
-function handleLoadingUpdate(
-	loadingScreenContainer,
-	loadingBar,
-	allImages,
-	loadedImages,
-) {
-	loadingBar.style.width = (loadedImages / allImages.length) * 100 + '%';
-
-	if (allImages.length === loadedImages) {
-		setTimeout(() => {
-			loadingScreenContainer.parentElement.classList.add('--off');
-		}, 1500);
+	function $(loadingScreenContainer, allImages, loadedImages) {
+		if (allImages.length === loadedImages) {
+			setTimeout(() => {
+				loadingScreenContainer.parentElement.classList.add('--off');
+			}, 1500);
+		}
 	}
 }
 

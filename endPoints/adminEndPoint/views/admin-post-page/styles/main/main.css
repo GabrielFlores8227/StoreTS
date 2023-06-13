@@ -52,6 +52,7 @@ div.table-section-container {
 }
 div.table-section-container > div:first-of-type > h1 {
   color: var(--dark-gray);
+  padding: 7px 0px;
 }
 div.table-section-container > div:first-of-type > h1 > i {
   color: var(--primary-color);
@@ -85,7 +86,7 @@ div.table-section-container__table-container > table > thead {
   color: white;
 }
 div.table-section-container__table-container > table > tbody > tr {
-  height: 48px;
+  height: 52.5px;
 }
 div.table-section-container__table-container > table > tbody > tr > td {
   min-width: 280px;
@@ -154,15 +155,33 @@ div.cell__file-input-container a {
   text-overflow: ellipsis;
 }
 
-div.cell__text-input-container input {
-  width: 80%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+div.cell__text-input-container div[pseudo-input] {
+  width: 100%;
+  padding: 0px 21px;
   text-align: center;
-  border: 0px;
-  font-size: 15.4px;
 }
-div.cell__text-input-container input:focus {
+div.cell__text-input-container div[pseudo-input]:empty:before {
+  content: attr(placeholder);
+  color: gray;
+}
+div.cell__text-input-container div[pseudo-input]:focus {
+  outline: none;
+}
+
+div.cell__text-area-container {
+  justify-content: left;
+}
+div.cell__text-area-container textarea {
+  padding: 14px;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  font-size: 14px;
+  height: 52.5px;
+  border: none;
+  text-align: center;
+}
+div.cell__text-area-container textarea:focus {
   outline: none;
 }
 

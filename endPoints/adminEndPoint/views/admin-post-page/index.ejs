@@ -130,7 +130,7 @@
 												<i class="fa-solid fa-image"></i>
 											</label>
 											<input id="icon" type="file" accept="image/*" />
-											<a target="_blank">Icon</a>
+											<a href="<%= builder.header.icon %>" target="_blank">Icon</a>
 										</div>
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
@@ -148,7 +148,7 @@
 												<i class="fa-solid fa-image"></i>
 											</label>
 											<input id="logo" type="file" accept="image/*" />
-											<a target="_blank">Logo</a>
+											<a href="<%= builder.header.logo %>" target="_blank">Logo</a>
 										</div>
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
@@ -180,9 +180,11 @@
 
 								<!--Title-->
 								<td>
-									<div cell class="cell" action="/admin/api/header/icon" method="PUT" identifier="only" for="title"> 
+									<div cell class="cell" action="/admin/api/header/title" method="PUT" identifier="only" for="title"> 
 										<div class="cell__input-container cell__text-input-container">
-											<input type="text" placeholder="Title" maxlength="20"/>
+											<div pseudo-input contenteditable="true" placeholder="Title" maxlength="30">
+												<%= builder.header.title %>
+											</div>
 										</div>
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
@@ -194,10 +196,41 @@
 
 								<!--Color-->
 								<td>
-									<div cell class="cell" action="/admin/api/header/logo" method="PUT" identifier="only" for="color">
+									<div cell class="cell" action="/admin/api/header/color" method="PUT" identifier="only" for="color">
 										<div class="cell__input-container cell__color-input-container">
-											<input type="color"/>
+											<input type="color" value="<%= builder.header.color %>"/>
 										</div>									
+										<div info class="cell__info-container">
+											<i class="cell__info-container__loading"></i>
+											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>
+									Description
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+
+								<!--Description-->
+								<td>
+									<div cell class="cell" action="/admin/api/header/description" method="PUT" identifier="only" for="description"> 
+										<div class="cell__input-container cell__text-area-container">
+											<textarea maxlength="255"><%= builder.header.description %></textarea>
+										</div>
 										<div info class="cell__info-container">
 											<i class="cell__info-container__loading"></i>
 											<i info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>

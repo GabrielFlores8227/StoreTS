@@ -198,10 +198,15 @@ aside > div > div:last-of-type {
   }
 }
 aside > div > div:first-of-type > div > img {
-  height: 28px;
+  height: 25.2px;
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 650px) {
+  aside > div > div:first-of-type > div > img {
+    height: 28px;
+  }
+}
+@media (min-width: 870px) {
   aside > div > div:first-of-type > div > img {
     height: 31.5px;
   }
