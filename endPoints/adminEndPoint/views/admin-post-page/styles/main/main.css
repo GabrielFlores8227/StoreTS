@@ -85,15 +85,19 @@ div.table-section-container__table-container > table {
   border-collapse: collapse;
   border-radius: 7px;
   overflow: hidden;
+  background-color: var(--primary-color);
 }
 div.table-section-container__table-container > table thead,
 div.table-section-container__table-container > table tbody {
-  background-color: var(--primary-color);
   font-size: 14px;
 }
 div.table-section-container__table-container > table thead tr,
 div.table-section-container__table-container > table tbody tr {
   width: min-content;
+}
+div.table-section-container__table-container > table thead tr > *,
+div.table-section-container__table-container > table tbody tr > * {
+  user-select: none;
 }
 div.table-section-container__table-container > table > thead {
   width: 100%;
@@ -102,11 +106,14 @@ div.table-section-container__table-container > table > thead {
   color: white;
 }
 div.table-section-container__table-container > table > tbody > tr {
-  height: 52.5px;
+  background-color: white;
 }
 div.table-section-container__table-container > table > tbody > tr > td {
   min-width: 280px;
-  background-color: white;
+  height: 52.5px;
+}
+div.table-section-container__table-container > table > tbody > tr > td.--sortable-item {
+  width: 100%;
 }
 
 div.cell-container {

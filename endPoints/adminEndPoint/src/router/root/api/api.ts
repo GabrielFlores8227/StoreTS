@@ -122,6 +122,15 @@ api.put(
 	},
 );
 
+api.put(
+	['/propagandas', '/products'],
+	LocalModules.middlewareCheckToken,
+	LocalModules.middlewarePutPosition,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
 api.delete(
 	'/propaganda',
 	LocalModules.middlewareCheckToken,

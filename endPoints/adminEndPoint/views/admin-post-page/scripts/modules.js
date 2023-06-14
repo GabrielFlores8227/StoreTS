@@ -79,7 +79,7 @@ export async function buildColor() {
 // Build
 ////
 
-export async function buildPropagandas() {
+export async function buildPropagandas(isLastItemNew = false) {
 	const propagandas = await getPropagandas(token);
 
 	const template = window.document.querySelector(
@@ -92,10 +92,14 @@ export async function buildPropagandas() {
 		handleTableVisibility();
 	});
 
-	propagandas.reverse().forEach((propaganda) => {
+	propagandas.reverse().forEach((propaganda, index) => {
 		const templateUsable = template.content.cloneNode(true).children[0];
 
 		templateUsable.setAttribute('original-item', '');
+		templateUsable
+			.querySelector('td[action-container]')
+			.classList.add('--delete-only');
+		templateUsable.setAttribute('identifier', propaganda.id);
 
 		templateUsable
 			.querySelectorAll('div[cell-container]')
@@ -133,10 +137,6 @@ export async function buildPropagandas() {
 				});
 			});
 
-		templateUsable
-			.querySelector('td[action-container]')
-			.classList.add('--delete-only');
-
 		const actionContainer = templateUsable.querySelector(
 			'td[action-container]',
 		);
@@ -163,8 +163,43 @@ export async function buildPropagandas() {
 			}
 		});
 
+		if (isLastItemNew && index === 0) {
+			templateUsable.querySelector('div[action-info]').classList.add('--ok');
+		}
+
 		template.parentElement.prepend(templateUsable);
 	});
+
+	template.parentElement.setAttribute('sortable-propagandas', '');
+
+	addSortableList('sortable-propagandas', async () => {
+		let ids = [];
+
+		template.parentElement
+			.querySelectorAll('tr[original-item]')
+			.forEach((tr) => {
+				ids.push(tr.getAttribute('identifier'));
+			});
+
+		const form = JSON.stringify({
+			ids,
+		});
+
+		await fetch('/admin/api/propagandas', {
+			method: 'PUT',
+			headers: {
+				authorization: 'Bearer ' + token,
+				'Content-Type': 'application/json',
+			},
+			body: form,
+		});
+	});
+
+	if (
+		template.parentElement.querySelectorAll('tr[original-item]').length <= 1
+	) {
+		destorySortableList('sortable-propagandas');
+	}
 
 	handleTableVisibility();
 }
@@ -173,6 +208,8 @@ export function buildPropagandasTemplate(specialSection) {
 	const template = specialSection
 		.querySelector('template[propaganda-template]')
 		.content.cloneNode(true).children[0];
+
+	template.setAttribute('pseudo-item', '');
 
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
 		const key = generateRandomString(30);
@@ -206,7 +243,7 @@ export function buildPropagandasTemplate(specialSection) {
 
 		if (req) {
 			template.setAttribute('original-item', '');
-			buildPropagandas();
+			buildPropagandas(true);
 		}
 	});
 
@@ -221,6 +258,22 @@ export function buildPropagandasTemplate(specialSection) {
 ////
 // Others
 ////
+
+function addSortableList(container, callBack) {
+	$(function () {
+		$('[' + container + ']').sortable({
+			items: 'tr:not([pseudo-item])',
+			cancel: '[pseudo-item]',
+			stop: callBack,
+		});
+	});
+}
+
+function destorySortableList(container) {
+	$(function () {
+		$('[' + container + ']').sortable('destroy');
+	});
+}
 
 export async function handleActionRequest(
 	token,

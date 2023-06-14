@@ -55,14 +55,18 @@ div.table-section-container__table-container {
 		border-collapse: collapse;
 		border-radius: 7px;
 		overflow: hidden;
+		background-color: var(--primary-color);
 
 		thead,
 		tbody {
-			background-color: var(--primary-color);
 			font-size: 14px;
 
 			tr {
 				width: min-content;
+
+				& > * {
+					user-select: none;
+				}
 			}
 		}
 
@@ -75,11 +79,15 @@ div.table-section-container__table-container {
 
 		& > tbody {
 			& > tr {
-				height: 52.5px;
+				background-color: white;
 
 				& > td {
+					&.--sortable-item {
+						width: 100%;
+					}
+
 					min-width: 280px;
-					background-color: white;
+					height: 52.5px;
 				}
 			}
 		}

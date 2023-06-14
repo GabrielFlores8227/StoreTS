@@ -67,6 +67,15 @@ buildAsideMenus([
 			}
 		});
 	});
+
+	window.document.querySelectorAll('textarea').forEach((textarea) => {
+		textarea.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.target.blur();
+				return e.preventDefault();
+			}
+		});
+	});
 })();
 
 (() => {
@@ -113,8 +122,18 @@ buildAsideMenus([
 		});
 
 		cell.querySelectorAll('div[pseudo-input]').forEach((div) => {
+			let lastInnerText = div.innerText;
+
 			div.addEventListener('focusout', async () => {
-				handleInputValue(div.innerText);
+				const currentInnerText = div.innerText;
+
+				if (currentInnerText === lastInnerText) {
+					return;
+				}
+
+				handleInputValue(currentInnerText);
+
+				lastInnerText = currentInnerText;
 			});
 		});
 

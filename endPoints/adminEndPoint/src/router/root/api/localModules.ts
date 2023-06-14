@@ -318,6 +318,38 @@ class Support {
 
 		await Object(Support.imageMask)[table][column](file);
 	}
+
+	/**
+	 * Validates data for a middleware used in a PUT position operation.
+	 * @param ids - Array of strings representing the IDs to be validated.
+	 * @param column - String representing the column name to be queried for existing IDs.
+	 */
+	public static async validateDataForMiddlewarePutPosition(
+		ids: Array<string>,
+		column: string,
+	) {
+		Admin.checkType(ids, 'object', 'ids');
+		Admin.checkLength(ids, 1, -1, 'ids');
+
+		const [query] = await Sql.query('SELECT id FROM ' + column);
+
+		const queryIds: string[] = [];
+
+		Object(query).forEach((item: object) => {
+			queryIds.push(String(Object(item).id));
+		});
+
+		if (
+			JSON.stringify(JSON.parse(JSON.stringify(ids)).sort()) !==
+			JSON.stringify(queryIds.sort())
+		) {
+			throw {
+				status: 400,
+				message:
+					'ids do not match, try providing a list of ids that match the existing ones!',
+			};
+		}
+	}
 }
 
 export default class LocalModules {
@@ -734,6 +766,37 @@ export default class LocalModules {
 				Object(query)[0][column],
 				file!.mimetype,
 			);
+
+			return next();
+		} catch (err) {
+			Middleware.handleMiddlewareError(res, err);
+		}
+	}
+
+	/**
+	 * Middleware function for handling a PUT position operation.
+	 * @param req - Express request object.
+	 * @param res - Express response object.
+	 * @param next - Express next function.
+	 */
+	public static async middlewarePutPosition(
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction,
+	) {
+		try {
+			const url = req.originalUrl.split('/');
+			const column = String(url[3]);
+			const ids = req.body.ids;
+
+			await Support.validateDataForMiddlewarePutPosition(ids, column);
+
+			for (let c = 0; c < ids.length; c++) {
+				await Sql.query(
+					'UPDATE ' + column + ' SET position = ? WHERE id = ?;',
+					[c, ids[c]],
+				);
+			}
 
 			return next();
 		} catch (err) {

@@ -21,7 +21,6 @@ done
 ##
 
 cleanup() {
-  echo -ne "\n\033[1;31m[x] "
   kill -- -$$
   exit
 }
