@@ -25,7 +25,7 @@ api.post(
 api.post(
 	'/propagandas',
 	LocalModules.middlewareCheckToken,
-	Middleware.middlewareBuildPropagandas,
+	Middleware.middlewareBuildPropagandasForAdmin,
 	(req, res) => {
 		res.json(Object(req).builder.propagandas);
 	},

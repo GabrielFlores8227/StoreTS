@@ -292,6 +292,7 @@ class Support {
 		column: string,
 	) {
 		Admin.checkType(id, 'string', 'id');
+		Admin.checkLength(id, 1, -1, 'id');
 
 		Admin.checkType(data, 'string', column);
 
@@ -313,6 +314,7 @@ class Support {
 		column: string,
 	) {
 		Admin.checkType(id, 'string', 'id');
+		Admin.checkLength(id, 1, -1, 'id');
 
 		await Object(Support.imageMask)[table][column](file);
 	}
@@ -476,6 +478,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
+			Admin.checkLength(id, 1, -1, 'id');
 
 			const [query] = await Sql.query(
 				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;',
@@ -544,6 +547,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
+			Admin.checkLength(id, 1, -1, 'id');
 
 			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
 
@@ -638,6 +642,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
+			Admin.checkLength(id, 1, -1, 'id');
 
 			const [query] = await Sql.query(
 				'SELECT id, image FROM products WHERE id = ?;',

@@ -3,6 +3,7 @@ import {
 	buildAsideMenus,
 	buildPropagandasTemplate,
 	handleImageInput,
+	buildPropagandas,
 	handleCellRequest,
 	buildIcon,
 	buildLogo,
@@ -152,26 +153,27 @@ buildAsideMenus([
 })();
 
 (() => {
+	const build = [() => buildPropagandas()];
+
 	const buildTemplate = [
 		(specialSection) => buildPropagandasTemplate(specialSection),
 	];
 
 	window.document
 		.querySelectorAll('div[special-section]')
-		.forEach((div, index) => {
-			handleTableVisibility(div);
+		.forEach(async (div, index) => {
+			await build[index]();
+
+			handleTableVisibility();
 
 			div
 				.querySelector('button[add-item-to-table-button]')
 				.addEventListener('click', () => {
-					const template = div.querySelector('template');
-					const templateParent = template.parentElement;
-
 					const templateUsable = buildTemplate[index](div);
 
-					templateParent.append(templateUsable);
+					div.querySelector('template').parentElement.append(templateUsable);
 
-					handleTableVisibility(div);
+					handleTableVisibility();
 				});
 		});
 })();

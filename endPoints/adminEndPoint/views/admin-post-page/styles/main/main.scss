@@ -223,6 +223,16 @@ div.cell-container__color-input-container {
 }
 
 td.action-container {
+	&.--delete-only {
+		& > div {
+			& > div {
+				& > button:first-of-type {
+					display: none;
+				}
+			}
+		}
+	}
+
 	& > div {
 		display: flex;
 		align-items: center;

@@ -34,6 +34,15 @@ export async function getHeader(token) {
 	).json();
 }
 
+export async function getPropagandas(token) {
+	return await (
+		await fetch('/admin/api/propagandas', {
+			method: 'POST',
+			headers: { authorization: 'Bearer ' + token },
+		})
+	).json();
+}
+
 ////
 // Builder
 ////
@@ -70,9 +79,99 @@ export async function buildColor() {
 // Build
 ////
 
+export async function buildPropagandas() {
+	const propagandas = await getPropagandas(token);
+
+	const template = window.document.querySelector(
+		'template[propaganda-template]',
+	);
+
+	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
+		tr.remove();
+
+		handleTableVisibility();
+	});
+
+	propagandas.reverse().forEach((propaganda) => {
+		const templateUsable = template.content.cloneNode(true).children[0];
+
+		templateUsable.setAttribute('original-item', '');
+
+		templateUsable
+			.querySelectorAll('div[cell-container]')
+			.forEach((cell, index) => {
+				cell.setAttribute(
+					'action',
+					'/admin/api/propagandas/' + (index === 0 ? 'bigImage' : 'smallImage'),
+				);
+
+				cell.querySelectorAll('div[file-input-container]').forEach((div) => {
+					const key = generateRandomString(30);
+
+					div.querySelector('label').setAttribute('for', key);
+					const input = div.querySelector('input');
+
+					input.setAttribute('id', key);
+
+					input.addEventListener('input', async (e) => {
+						const form = new FormData();
+
+						form.append('file', e.target.files[0]);
+						form.append('id', String(propaganda.id));
+
+						await handleCellRequest(token, cell, form);
+					});
+
+					const link = div.querySelector('a');
+					link.setAttribute(
+						'href',
+						index === 0 ? propaganda.bigImage : propaganda.smallImage,
+					);
+					link.innerText = link.innerText + ' ' + propaganda.id;
+
+					handleImageInput(div);
+				});
+			});
+
+		templateUsable
+			.querySelector('td[action-container]')
+			.classList.add('--delete-only');
+
+		const actionContainer = templateUsable.querySelector(
+			'td[action-container]',
+		);
+		const actionButtons = actionContainer.querySelectorAll('button');
+
+		actionButtons[1].addEventListener('click', async () => {
+			let form = {};
+
+			form['id'] = String(propaganda.id);
+
+			form = JSON.stringify(form);
+
+			const req = await handleActionRequest(
+				token,
+				actionContainer,
+				'/admin/api/propaganda',
+				'DELETE',
+				form,
+				'application/json',
+			);
+
+			if (req) {
+				buildPropagandas();
+			}
+		});
+
+		template.parentElement.prepend(templateUsable);
+	});
+
+	handleTableVisibility();
+}
+
 export function buildPropagandasTemplate(specialSection) {
 	const template = specialSection
-		.querySelector('template')
+		.querySelector('template[propaganda-template]')
 		.content.cloneNode(true).children[0];
 
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
@@ -97,17 +196,23 @@ export function buildPropagandasTemplate(specialSection) {
 		form.append('imagesContext', 'bigImage');
 		form.append('imagesContext', 'smallImage');
 
-		await handleActionRequest(
+		const req = await handleActionRequest(
 			token,
 			actionContainer,
 			'/admin/api/propaganda',
+			'POST',
 			form,
 		);
+
+		if (req) {
+			template.setAttribute('original-item', '');
+			buildPropagandas();
+		}
 	});
 
 	actionButtons[1].addEventListener('click', () => {
 		template.remove();
-		handleTableVisibility(specialSection);
+		handleTableVisibility();
 	});
 
 	return template;
@@ -121,6 +226,7 @@ export async function handleActionRequest(
 	token,
 	actionContainer,
 	url,
+	method,
 	body,
 	contentType = undefined,
 ) {
@@ -135,8 +241,8 @@ export async function handleActionRequest(
 	}
 
 	const req = await fetch(url, {
+		method,
 		headers,
-		method: 'POST',
 		body,
 	});
 
@@ -193,8 +299,8 @@ export async function handleCellRequest(
 	}
 
 	const req = await fetch(action, {
-		headers,
 		method: 'PUT',
+		headers,
 		body,
 	});
 
@@ -261,14 +367,16 @@ export function handleImageInput(div) {
 	});
 }
 
-export function handleTableVisibility(div) {
-	const rows = div.querySelectorAll('tr[table-row]');
+export function handleTableVisibility() {
+	window.document.querySelectorAll('div[special-section]').forEach((div) => {
+		const rows = div.querySelectorAll('tr[table-row]');
 
-	if (rows.length === 0) {
-		div.querySelector('div[table-container]').classList.add('--off');
-	} else {
-		div.querySelector('div[table-container]').classList.remove('--off');
-	}
+		if (rows.length === 0) {
+			div.querySelector('div[table-container]').classList.add('--off');
+		} else {
+			div.querySelector('div[table-container]').classList.remove('--off');
+		}
+	});
 }
 
 function generateRandomString(length) {

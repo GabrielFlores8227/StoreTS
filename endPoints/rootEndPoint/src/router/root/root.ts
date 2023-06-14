@@ -9,7 +9,7 @@ root.get(
 	'/',
 	LocalModules.middlewareGetRoot,
 	Middleware.middlewareBuildHeader,
-	Middleware.middlewareBuildPropagandas,
+	Middleware.middlewareBuildPropagandasForClient,
 	Middleware.middlewareBuildProductsForClient,
 	Middleware.middlewareBuildFooter,
 	(req, res) => {

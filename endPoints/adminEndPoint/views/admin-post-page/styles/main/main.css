@@ -216,6 +216,9 @@ div.cell-container__color-input-container input::-moz-color-swatch {
   border: none;
 }
 
+td.action-container.--delete-only > div > div > button:first-of-type {
+  display: none;
+}
 td.action-container > div {
   display: flex;
   align-items: center;
