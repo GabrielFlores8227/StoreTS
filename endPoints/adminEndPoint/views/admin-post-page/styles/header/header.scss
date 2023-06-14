@@ -31,7 +31,8 @@ header {
 			display: flex;
 			gap: 24.5px;
 
-			& > button {
+			& > button,
+			a {
 				@extend %default-font-size;
 				color: white;
 			}

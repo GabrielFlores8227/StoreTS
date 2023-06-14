@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import router from './router/router';
 
 const app = express();
@@ -8,6 +9,15 @@ app.set('trust proxy', 1);
 
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
+
+// Set express-session
+app.use(
+	session({
+		secret: process.env.SECRET!,
+		resave: false,
+		saveUninitialized: true,
+	}),
+);
 
 // Parse JSON bodies
 app.use(express.json());

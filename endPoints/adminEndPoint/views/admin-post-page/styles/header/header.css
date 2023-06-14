@@ -7,7 +7,8 @@ header > div:first-of-type > a > img:first-of-type {
   height: 25.2px;
 }
 
-header > div:first-of-type > div:last-of-type > button {
+header > div:first-of-type > div:last-of-type > button,
+header > div:first-of-type > div:last-of-type a {
   font-size: 17.5px;
 }
 
@@ -27,7 +28,8 @@ header > div:first-of-type > div:last-of-type > button {
   }
 }
 @media (min-width: 870px) {
-  header > div:first-of-type > div:last-of-type > button {
+  header > div:first-of-type > div:last-of-type > button,
+  header > div:first-of-type > div:last-of-type a {
     font-size: 18.9px;
   }
   header > div:first-of-type > a > img:first-of-type {
@@ -39,7 +41,8 @@ header > div:first-of-type > div:last-of-type > button {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
   }
-  header > div:first-of-type > div:last-of-type > button {
+  header > div:first-of-type > div:last-of-type > button,
+  header > div:first-of-type > div:last-of-type a {
     font-size: 19.6px;
   }
 }
@@ -48,7 +51,8 @@ header > div:first-of-type > div:last-of-type > button {
     padding-right: 21vw;
     padding-left: 21vw;
   }
-  header > div:first-of-type > div:last-of-type > button {
+  header > div:first-of-type > div:last-of-type > button,
+  header > div:first-of-type > div:last-of-type a {
     font-size: 21px;
   }
 }
@@ -85,7 +89,8 @@ header > div:first-of-type > div:last-of-type {
   display: flex;
   gap: 24.5px;
 }
-header > div:first-of-type > div:last-of-type > button {
+header > div:first-of-type > div:last-of-type > button,
+header > div:first-of-type > div:last-of-type a {
   color: white;
 }
 
