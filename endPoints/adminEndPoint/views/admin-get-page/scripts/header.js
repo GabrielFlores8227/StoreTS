@@ -1,6 +1,6 @@
 import {
 	token,
-	handleImageInput,
+	loadFileInputProperties,
 	handleCellRequest,
 	buildIcon,
 	buildLogo,
@@ -13,7 +13,7 @@ import {
 	window.document
 		.querySelectorAll('div[file-input-container]')
 		.forEach((div) => {
-			handleImageInput(div);
+			loadFileInputProperties(div);
 		});
 })();
 

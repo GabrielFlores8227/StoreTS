@@ -64,11 +64,15 @@ div.table-section-container > div:last-of-type > button {
   gap: 7px;
   font-family: var(--font-bold);
   background-color: var(--regular-green);
+  transition: ease-in-out 0.35s;
   color: white;
   width: 100%;
   font-size: 15.4px;
   padding: 14px;
   border-radius: 7px;
+}
+div.table-section-container > div:last-of-type > button:hover {
+  background-color: var(--dark-green);
 }
 
 div.table-section-container__table-container {
@@ -216,6 +220,20 @@ div.cell-container__color-input-container input::-moz-color-swatch {
   border: none;
 }
 
+div.cell-container__select-container select {
+  width: 80%;
+  text-align: center;
+  border: none;
+  background-color: white;
+  font-size: 15.4px;
+}
+div.cell-container__select-container select:focus {
+  outline: none;
+}
+div.cell-container__select-container select > option {
+  font-size: 15.4px;
+}
+
 td.action-container.--no-drag-button > div > div > button:first-of-type {
   display: none;
 }
@@ -279,6 +297,11 @@ td.action-container > div > div > div.action-container__action-info-container > 
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@media (pointer: coarse) {
+  button[draggable] {
+    display: none;
   }
 }
 @media (min-width: 1000px) {

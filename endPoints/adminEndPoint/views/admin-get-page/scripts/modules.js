@@ -34,7 +34,7 @@ export async function getHeader(token) {
 	).json();
 }
 
-export async function getPropagandas(token) {
+async function getPropagandas(token) {
 	return await (
 		await fetch('/admin/api/propagandas', {
 			method: 'POST',
@@ -43,9 +43,18 @@ export async function getPropagandas(token) {
 	).json();
 }
 
-export async function getCategories(token) {
+async function getCategories(token) {
 	return await (
 		await fetch('/admin/api/categories', {
+			method: 'POST',
+			headers: { authorization: 'Bearer ' + token },
+		})
+	).json();
+}
+
+async function getProducts(token) {
+	return await (
+		await fetch('/admin/api/products', {
 			method: 'POST',
 			headers: { authorization: 'Bearer ' + token },
 		})
@@ -118,57 +127,61 @@ async function buildComplexTable(
 		tr.remove();
 	});
 
-	apiList.reverse().forEach((apiItem, index) => {
-		const templateUsable = template.content.cloneNode(true).children[0];
+	if (sectionName === 'products') {
+		//todo: build products
+	} else {
+		apiList.reverse().forEach((apiItem, index) => {
+			const templateUsable = template.content.cloneNode(true).children[0];
 
-		templateUsable.setAttribute('original-item', '');
-		templateUsable.setAttribute('identifier', apiItem.id);
-		templateUsable
-			.querySelector('td[action-container]')
-			.classList.add('--no-send-button');
+			templateUsable.setAttribute('original-item', '');
+			templateUsable.setAttribute('identifier', apiItem.id);
+			templateUsable
+				.querySelector('td[action-container]')
+				.classList.add('--no-send-button');
 
-		templateUsable
-			.querySelectorAll('div[cell-container]')
-			.forEach((cell, index) => cellFunction(apiItem, cell, index));
+			templateUsable
+				.querySelectorAll('div[cell-container]')
+				.forEach((cell, index) => cellFunction(apiItem, cell, index));
 
-		const actionContainer = templateUsable.querySelector(
-			'td[action-container]',
-		);
-		const actionButtons = actionContainer.querySelectorAll('button');
-
-		actionButtons[2].addEventListener('click', async () => {
-			let form = {};
-
-			form['id'] = String(apiItem.id);
-
-			form = JSON.stringify(form);
-
-			const req = await handleActionRequest(
-				token,
-				actionContainer,
-				deleteItemApiUrl,
-				'DELETE',
-				form,
-				'application/json',
+			const actionContainer = templateUsable.querySelector(
+				'td[action-container]',
 			);
+			const actionButtons = actionContainer.querySelectorAll('button');
 
-			if (req) {
-				buildComplexTable(
-					apiListBuilder,
-					sectionName,
-					cellFunction,
+			actionButtons[2].addEventListener('click', async () => {
+				let form = {};
+
+				form['id'] = String(apiItem.id);
+
+				form = JSON.stringify(form);
+
+				const req = await handleActionRequest(
+					token,
+					actionContainer,
 					deleteItemApiUrl,
-					reorderItemsApiUrl,
+					'DELETE',
+					form,
+					'application/json',
 				);
+
+				if (req) {
+					buildComplexTable(
+						apiListBuilder,
+						sectionName,
+						cellFunction,
+						deleteItemApiUrl,
+						reorderItemsApiUrl,
+					);
+				}
+			});
+
+			if (isLastItemNew && index === 0) {
+				templateUsable.querySelector('div[action-info]').classList.add('--ok');
 			}
+
+			template.parentElement.prepend(templateUsable);
 		});
-
-		if (isLastItemNew && index === 0) {
-			templateUsable.querySelector('div[action-info]').classList.add('--ok');
-		}
-
-		template.parentElement.prepend(templateUsable);
-	});
+	}
 
 	template.parentElement.setAttribute(`sortable-${sectionName}`, '');
 
@@ -239,7 +252,7 @@ export function buildPropagandas(isLastItemNew = false) {
 			);
 			link.innerText = link.innerText + ' ' + apiItem.id;
 
-			handleImageInput(div);
+			loadFileInputProperties(div);
 		});
 	};
 
@@ -299,6 +312,25 @@ export function buildCategories(isLastItemNew = false) {
 	);
 }
 
+export function buildProducts(isLastItemNew = false) {
+	const apiListBuilder = async () => await getProducts(token);
+	const sectionName = 'products';
+	const deleteItemApiUrl = '/admin/api/product';
+	const reorderItemsApiUrl = '/admin/api/products';
+	const cellFunction = (apiItem, cell, index) => {
+		//todo: create cellFunction for products (here)
+	};
+
+	buildComplexTable(
+		apiListBuilder,
+		sectionName,
+		cellFunction,
+		deleteItemApiUrl,
+		reorderItemsApiUrl,
+		isLastItemNew,
+	);
+}
+
 //
 // Build Template
 //
@@ -320,7 +352,7 @@ export function buildPropagandasTemplate(specialSection) {
 		div.querySelector('label').setAttribute('for', key);
 		div.querySelector('input').setAttribute('id', key);
 
-		handleImageInput(div);
+		loadFileInputProperties(div);
 	});
 
 	const actionContainer = template.querySelector('td[action-container]');
@@ -380,7 +412,6 @@ export function buildCategoriesTemplate(specialSection) {
 		let form = {
 			name: template.querySelector('div[pseudo-input]').innerText,
 		};
-		console.log(form);
 
 		form = JSON.stringify(form);
 
@@ -407,9 +438,61 @@ export function buildCategoriesTemplate(specialSection) {
 	return template;
 }
 
+export function buildProductsTemplate(specialSection) {
+	const template = specialSection
+		.querySelector('template[products-template]')
+		.content.cloneNode(true).children[0];
+
+	template.setAttribute('pseudo-item', '');
+
+	template
+		.querySelector('td[action-container]')
+		.classList.add('--no-drag-button');
+
+	template.querySelectorAll('div[file-input-container]').forEach((div) => {
+		const key = generateRandomString(30);
+
+		div.querySelector('label').setAttribute('for', key);
+		div.querySelector('input').setAttribute('id', key);
+
+		loadFileInputProperties(div);
+	});
+
+	template.querySelectorAll('div[pseudo-input]').forEach((div) => {
+		loadPseudoInputProperties(div);
+	});
+
+	const actionContainer = template.querySelector('td[action-container]');
+	const actionButtons = actionContainer.querySelectorAll('button');
+
+	actionButtons[1].addEventListener('click', async () => {
+		console.log('make request');
+	});
+
+	actionButtons[2].addEventListener('click', () => {
+		template.remove();
+		handleTableVisibility();
+	});
+
+	return template;
+}
+
 //
 // Others
 //
+
+export function loadFileInputProperties(div) {
+	const link = div.querySelector('a');
+	const fileInput = div.querySelector('input');
+
+	fileInput.addEventListener('input', (e) => {
+		const file = e.target.files[0];
+		const fileURL = URL.createObjectURL(file);
+
+		link.href = fileURL;
+		link.innerText = e.target.files[0].name;
+	});
+}
 
 export function loadPseudoInputProperties(div) {
 	let lastInput = div.innerText;
@@ -444,18 +527,25 @@ function addSortableList(container, callBack) {
 			tolerance: 'pointer',
 		});
 
-		if (
-			window.document.querySelectorAll(`[${container}] [original-item]`)
-				.length < 2
-		) {
-			return;
-		}
-
 		$(`[${container}]`).on('mousedown', '[draggable]', function () {
+			if (
+				window.document.querySelectorAll(`[${container}] [original-item]`)
+					.length < 2
+			) {
+				return;
+			}
+
 			sortable.sortable('enable');
 		});
 
 		$(document).on('mouseup', function (e) {
+			if (
+				window.document.querySelectorAll(`[${container}] [original-item]`)
+					.length < 2
+			) {
+				return;
+			}
+
 			if (!$(e.target).closest('[draggable]').length) {
 				sortable.sortable('disable');
 			}
@@ -583,19 +673,6 @@ export async function handleCellRequest(
 			info.querySelector('i[cell-info-error]').setAttribute('title', title);
 		}
 	}
-}
-
-export function handleImageInput(div) {
-	const link = div.querySelector('a');
-	const fileInput = div.querySelector('input');
-
-	fileInput.addEventListener('input', (e) => {
-		const file = e.target.files[0];
-		const fileURL = URL.createObjectURL(file);
-
-		link.href = fileURL;
-		link.innerText = e.target.files[0].name;
-	});
 }
 
 export function handleTableVisibility() {

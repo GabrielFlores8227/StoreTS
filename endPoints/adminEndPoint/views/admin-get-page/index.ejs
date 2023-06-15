@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width">
-		<meta name="robots" content="noindex">
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex" />
 
 		<!--theme-color-->
 		<meta name="theme-color" content="<%= builder.header.color %>" />
@@ -48,11 +48,18 @@
 
 		<!--scripts-->
 		<script defer type="module" src="/admin-get-page/scripts/index.js"></script>
-		<script defer type="module" src="/admin-get-page/scripts/header.js"></script>
-		<script defer type="module" src="/admin-get-page/scripts/builder.js"></script>
+		<script
+			defer
+			type="module"
+			src="/admin-get-page/scripts/header.js"
+		></script>
+		<script
+			defer
+			type="module"
+			src="/admin-get-page/scripts/builder.js"
+		></script>
 	</head>
 	<body>
-
 		<!--warning-->
 		<div warning class="warning-container">
 			<div>
@@ -61,7 +68,8 @@
 					Multi-Window
 				</h2>
 				<p>
-					Admin page is open in another window. Click "Use Here" to use Admin page in this window.
+					Admin page is open in another window. Click "Use Here" to use Admin
+					page in this window.
 				</p>
 				<div>
 					<button>USE HERE</button>
@@ -93,11 +101,10 @@
 		<!--header-->
 		<header>
 			<div>
-
 				<!--logo-->
 				<a href="/">
 					<img
-			 			logo
+						logo
 						draggable="false"
 						src="<%= builder.header.logo %>"
 						alt="<%= builder.header.title %> Logo"
@@ -118,10 +125,8 @@
 
 		<!--main-->
 		<main>
-
 			<!--header-section-->
 			<div class="table-section-container">
-
 				<!--table-title-->
 				<div>
 					<h1>
@@ -135,31 +140,41 @@
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Icon
-								</th>
-								<th>
-									Logo
-								</th>
+								<th>Icon</th>
+								<th>Logo</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							<tr>
-
 								<!--icon-->
 								<td>
-									<div cell-container class="cell-container" action="/admin/api/header/icon" identifier="only" for="icon"> 
-										<div file-input-container class="cell-container__input-container cell-container__file-input-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/icon"
+										identifier="only"
+										for="icon"
+									>
+										<div
+											file-input-container
+											class="cell-container__input-container cell-container__file-input-container"
+										>
 											<label for="icon">
 												<i class="fa-solid fa-image"></i>
 											</label>
 											<input id="icon" type="file" accept="image/*" />
-											<a href="<%= builder.header.icon %>" target="_blank">Icon</a>
+											<a href="<%= builder.header.icon %>" target="_blank"
+												>Icon</a
+											>
 										</div>
 										<div cell-info class="cell-container__cell-info-container">
-											<i class="cell-container__cell-info-container__loading"></i>
-											<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
 											<i class="fa-solid fa-circle-check"></i>
 										</div>
 									</div>
@@ -167,17 +182,33 @@
 
 								<!--logo-->
 								<td>
-									<div cell-container class="cell-container" action="/admin/api/header/logo" identifier="only" for="logo">
-										<div file-input-container class="cell-container__input-container cell-container__file-input-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/logo"
+										identifier="only"
+										for="logo"
+									>
+										<div
+											file-input-container
+											class="cell-container__input-container cell-container__file-input-container"
+										>
 											<label for="logo">
 												<i class="fa-solid fa-image"></i>
 											</label>
 											<input id="logo" type="file" accept="image/*" />
-											<a href="<%= builder.header.logo %>" target="_blank">Logo</a>
+											<a href="<%= builder.header.logo %>" target="_blank"
+												>Logo</a
+											>
 										</div>
 										<div cell-info class="cell-container__cell-info-container">
-											<i class="cell-container__cell-info-container__loading"></i>
-											<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
 											<i class="fa-solid fa-circle-check"></i>
 										</div>
 									</div>
@@ -191,29 +222,41 @@
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Title
-								</th>
-								<th>
-									Color
-								</th>
+								<th>Title</th>
+								<th>Color</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							<tr>
-
 								<!--title-->
 								<td>
-									<div cell-container class="cell-container" action="/admin/api/header/title" identifier="only" for="title"> 
-										<div class="cell-container__input-container cell-container__text-input-container">
-											<div pseudo-input contenteditable="true" placeholder="Title" maxlength="30">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/title"
+										identifier="only"
+										for="title"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Title"
+												maxlength="30"
+											>
 												<%= builder.header.title %>
 											</div>
 										</div>
 										<div cell-info class="cell-container__cell-info-container">
-											<i class="cell-container__cell-info-container__loading"></i>
-											<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
 											<i class="fa-solid fa-circle-check"></i>
 										</div>
 									</div>
@@ -221,13 +264,26 @@
 
 								<!--color-->
 								<td>
-									<div cell-container class="cell-container" action="/admin/api/header/color" identifier="only" for="color">
-										<div class="cell-container__input-container cell-container__color-input-container">
-											<input type="color" value="<%= builder.header.color %>"/>
-										</div>									
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/color"
+										identifier="only"
+										for="color"
+									>
+										<div
+											class="cell-container__input-container cell-container__color-input-container"
+										>
+											<input type="color" value="<%= builder.header.color %>" />
+										</div>
 										<div cell-info class="cell-container__cell-info-container">
-											<i class="cell-container__cell-info-container__loading"></i>
-											<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
 											<i class="fa-solid fa-circle-check"></i>
 										</div>
 									</div>
@@ -241,24 +297,35 @@
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Description
-								</th>
+								<th>Description</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							<tr>
-
 								<!--description-->
 								<td>
-									<div cell-container class="cell-container" action="/admin/api/header/description" identifier="only" for="description"> 
-										<div class="cell-container__input-container cell-container__text-area-container">
-											<textarea maxlength="255" placeholder="Description"><%= builder.header.description %></textarea>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/description"
+										identifier="only"
+										for="description"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Description">
+<%= builder.header.description %></textarea
+											>
 										</div>
 										<div cell-info class="cell-container__cell-info-container">
-											<i class="cell-container__cell-info-container__loading"></i>
-											<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
 											<i class="fa-solid fa-circle-check"></i>
 										</div>
 									</div>
@@ -271,7 +338,6 @@
 
 			<!--propagandas-->
 			<div special-section class="table-section-container">
-
 				<!--table-title-->
 				<div>
 					<h1>
@@ -285,34 +351,38 @@
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Big Image
-								</th>
-								<th>
-									Small Image
-								</th>
-								<th>
-									Actions
-								</th>
+								<th>Big Image</th>
+								<th>Small Image</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							<template propagandas-template>
 								<tr table-row>
-
 									<!--big-image-->
 									<td class="--sortable-item">
-										<div cell-container class="cell-container"> 
-											<div file-input-container class="cell-container__input-container cell-container__file-input-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
 												<label>
 													<i class="fa-solid fa-image"></i>
 												</label>
 												<input type="file" accept="image/*" />
 												<a target="_blank">Big Image</a>
 											</div>
-											<div cell-info class="cell-container__cell-info-container">
-												<i class="cell-container__cell-info-container__loading"></i>
-												<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
 												<i class="fa-solid fa-circle-check"></i>
 											</div>
 										</div>
@@ -320,17 +390,28 @@
 
 									<!--small-image-->
 									<td class="--sortable-item">
-										<div cell-container class="cell-container"> 
-											<div file-input-container class="cell-container__input-container cell-container__file-input-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
 												<label>
 													<i class="fa-solid fa-image"></i>
 												</label>
 												<input type="file" accept="image/*" />
 												<a target="_blank">Small Image</a>
 											</div>
-											<div cell-info class="cell-container__cell-info-container">
-												<i class="cell-container__cell-info-container__loading"></i>
-												<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
 												<i class="fa-solid fa-circle-check"></i>
 											</div>
 										</div>
@@ -349,10 +430,18 @@
 												<button>
 													<i class="fa-solid fa-trash"></i>
 												</button>
-												<div action-info class="action-container__action-info-container">
-													<i class="action-container__cell-info-container__loading"></i>
-													<i action-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
-													<i class="fa-solid fa-circle-check"></i>											
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
 												</div>
 											</div>
 										</div>
@@ -374,7 +463,6 @@
 
 			<!--categories-section-->
 			<div special-section class="table-section-container">
-
 				<!--table-title-->
 				<div>
 					<h1>
@@ -388,28 +476,37 @@
 					<table>
 						<thead>
 							<tr>
-								<th>
-									Category Name
-								</th>
-								<th>
-									Actions
-								</th>
+								<th>Category Name</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							<template categories-template>
 								<tr table-row>
-
 									<!--category-->
 									<td class="--sortable-item">
-										<div cell-container class="cell-container"> 
-											<div class="cell-container__input-container cell-container__text-input-container">
-												<div pseudo-input contenteditable="true" placeholder="Category Name" maxlength="30"></div>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Category Name"
+													maxlength="30"
+												></div>
 											</div>
-											<div cell-info class="cell-container__cell-info-container">
-												<i class="cell-container__cell-info-container__loading"></i>
-												<i cell-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
 												<i class="fa-solid fa-circle-check"></i>
 											</div>
 										</div>
@@ -428,10 +525,18 @@
 												<button>
 													<i class="fa-solid fa-trash"></i>
 												</button>
-												<div action-info class="action-container__action-info-container">
-													<i class="action-container__cell-info-container__loading"></i>
-													<i action-info-error class="fa-sharp fa-solid fa-circle-exclamation"></i>
-													<i class="fa-solid fa-circle-check"></i>											
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
 												</div>
 											</div>
 										</div>
@@ -451,6 +556,311 @@
 				</div>
 			</div>
 
+			<!--products-->
+			<div special-section class="table-section-container">
+				<!--table-title-->
+				<div>
+					<h1>
+						<i class="fa-solid fa-pen"></i>
+						Products
+					</h1>
+				</div>
+
+				<!--table-->
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Image</th>
+								<th>Category</th>
+								<th>Name</th>
+								<th>Price</th>
+								<th>Off</th>
+								<th>Installment</th>
+								<th>Whatsapp</th>
+								<th>Message</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template products-template>
+								<tr table-row>
+									<!--image-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input type="file" accept="image/*" />
+												<a target="_blank">Image</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--category-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__select-container"
+											>
+												<select>
+													<% builder.categories.forEach(category => { %>
+													<option value="<%= category.id %>">
+														<%= category.name %>
+													</option>
+													<% }) %>
+												</select>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--name-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Name"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--price-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Price"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--off-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Off"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--installment-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Installment"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--whatsapp-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Whatsapp"
+													maxlength="13"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--message-->
+									<td>
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Message"
+													maxlength="255"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+
+									<!--actions-->
+									<td action-container class="action-container">
+										<div>
+											<div>
+												<button draggable>
+													<i class="fa-solid fa-sort"></i>
+												</button>
+												<button>
+													<i class="fa-sharp fa-solid fa-paper-plane"></i>
+												</button>
+												<button>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+
+				<!--add-button-->
+				<div>
+					<button add-item-to-table-button>
+						<i class="fa-solid fa-pen"></i>
+						Add Product
+					</button>
+				</div>
+			</div>
 		</main>
 	</body>
 </html>

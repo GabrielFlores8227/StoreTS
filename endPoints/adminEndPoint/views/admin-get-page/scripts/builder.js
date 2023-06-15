@@ -2,22 +2,29 @@ import {
 	handleTableVisibility,
 	buildPropagandas,
 	buildCategories,
+	buildProducts,
 	buildPropagandasTemplate,
 	buildCategoriesTemplate,
+	buildProductsTemplate,
 } from './modules.js';
 
 (() => {
-	const build = [() => buildPropagandas(), () => buildCategories()];
+	const build = [
+		() => buildPropagandas(),
+		() => buildCategories(),
+		() => buildProducts(),
+	];
 
 	const buildTemplate = [
 		(specialSection) => buildPropagandasTemplate(specialSection),
 		(specialSection) => buildCategoriesTemplate(specialSection),
+		(specialSection) => buildProductsTemplate(specialSection),
 	];
 
 	window.document
 		.querySelectorAll('div[special-section]')
-		.forEach(async (div, index) => {
-			await build[index]();
+		.forEach((div, index) => {
+			build[index]();
 
 			handleTableVisibility();
 

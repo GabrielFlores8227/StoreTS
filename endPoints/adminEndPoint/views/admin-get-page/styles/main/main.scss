@@ -27,9 +27,14 @@ div.table-section-container {
 		padding-top: 7px;
 
 		& > button {
+			&:hover {
+				background-color: var(--dark-green);
+			}
+
 			gap: 7px;
 			font-family: var(--font-bold);
 			background-color: var(--regular-green);
+			transition: ease-in-out 0.35s;
 			color: white;
 			width: 100%;
 			font-size: 15.4px;
@@ -223,6 +228,25 @@ div.cell-container__color-input-container {
 	}
 }
 
+div.cell-container__select-container {
+	select {
+		&:focus {
+			outline: none;
+		}
+
+		width: 80%;
+		text-align: center;
+		border: none;
+		background-color: white;
+
+		font-size: 15.4px;
+
+		& > option {
+			font-size: 15.4px;
+		}
+	}
+}
+
 td.action-container {
 	&.--no-drag-button {
 		& > div {
@@ -319,6 +343,12 @@ td.action-container {
 
 	to {
 		transform: rotate(360deg);
+	}
+}
+
+@media (pointer: coarse) {
+	button[draggable] {
+		display: none;
 	}
 }
 
