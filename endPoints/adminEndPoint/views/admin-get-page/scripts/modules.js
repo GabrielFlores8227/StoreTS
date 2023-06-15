@@ -100,61 +100,36 @@ export async function buildColor() {
 	window.document.documentElement.style.setProperty('--primary-color', color);
 }
 
-export async function buildPropagandas(isLastItemNew = false) {
-	const propagandas = await getPropagandas(token);
+async function buildComplexTable(
+	apiListBuilder,
+	sectionName,
+	cellFunction,
+	deleteItemApiUrl,
+	reorderItemsApiUrl,
+	isLastItemNew = false,
+) {
+	const apiList = await apiListBuilder();
 
 	const template = window.document.querySelector(
-		'template[propaganda-template]',
+		`template[${sectionName}-template]`,
 	);
 
 	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
 		tr.remove();
 	});
 
-	propagandas.reverse().forEach((propaganda, index) => {
+	apiList.reverse().forEach((apiItem, index) => {
 		const templateUsable = template.content.cloneNode(true).children[0];
 
 		templateUsable.setAttribute('original-item', '');
+		templateUsable.setAttribute('identifier', apiItem.id);
 		templateUsable
 			.querySelector('td[action-container]')
 			.classList.add('--no-send-button');
-		templateUsable.setAttribute('identifier', propaganda.id);
 
 		templateUsable
 			.querySelectorAll('div[cell-container]')
-			.forEach((cell, index) => {
-				cell.setAttribute(
-					'action',
-					'/admin/api/propagandas/' + (index === 0 ? 'bigImage' : 'smallImage'),
-				);
-
-				cell.querySelectorAll('div[file-input-container]').forEach((div) => {
-					const key = generateRandomString(30);
-
-					div.querySelector('label').setAttribute('for', key);
-					const input = div.querySelector('input');
-
-					input.setAttribute('id', key);
-
-					input.addEventListener('input', async (e) => {
-						const form = new FormData();
-
-						form.append('file', e.target.files[0]);
-						form.append('id', String(propaganda.id));
-
-						await handleCellRequest(token, cell, form);
-					});
-
-					const link = div.querySelector('a');
-					link.setAttribute(
-						'href',
-						index === 0 ? propaganda.bigImage : propaganda.smallImage,
-					);
-					link.innerText = link.innerText + ' ' + propaganda.id;
-
-					handleImageInput(div);
-				});
-			});
+			.forEach((cell, index) => cellFunction(apiItem, cell, index));
 
 		const actionContainer = templateUsable.querySelector(
 			'td[action-container]',
@@ -164,21 +139,27 @@ export async function buildPropagandas(isLastItemNew = false) {
 		actionButtons[2].addEventListener('click', async () => {
 			let form = {};
 
-			form['id'] = String(propaganda.id);
+			form['id'] = String(apiItem.id);
 
 			form = JSON.stringify(form);
 
 			const req = await handleActionRequest(
 				token,
 				actionContainer,
-				'/admin/api/propaganda',
+				deleteItemApiUrl,
 				'DELETE',
 				form,
 				'application/json',
 			);
 
 			if (req) {
-				buildPropagandas();
+				buildComplexTable(
+					apiListBuilder,
+					sectionName,
+					cellFunction,
+					deleteItemApiUrl,
+					reorderItemsApiUrl,
+				);
 			}
 		});
 
@@ -189,11 +170,9 @@ export async function buildPropagandas(isLastItemNew = false) {
 		template.parentElement.prepend(templateUsable);
 	});
 
-	handleTableVisibility();
+	template.parentElement.setAttribute(`sortable-${sectionName}`, '');
 
-	template.parentElement.setAttribute('sortable-propagandas', '');
-
-	addSortableList('sortable-propagandas', async () => {
+	addSortableList(`sortable-${sectionName}`, async () => {
 		let ids = [];
 
 		template.parentElement
@@ -206,7 +185,7 @@ export async function buildPropagandas(isLastItemNew = false) {
 			ids,
 		});
 
-		await fetch('/admin/api/propagandas', {
+		await fetch(reorderItemsApiUrl, {
 			method: 'PUT',
 			headers: {
 				authorization: 'Bearer ' + token,
@@ -219,128 +198,105 @@ export async function buildPropagandas(isLastItemNew = false) {
 	if (
 		template.parentElement.querySelectorAll('tr[original-item]').length <= 1
 	) {
-		destroySortableList('sortable-propagandas');
+		destroySortableList(`sortable-${sectionName}`);
 	}
 
 	handleTableVisibility();
 }
 
-export async function buildCategories(isLastItemNew = false) {
-	const categories = await getCategories(token);
-
-	const template = window.document.querySelector(
-		'template[categories-template]',
-	);
-
-	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
-		tr.remove();
-	});
-
-	categories.reverse().forEach((category, index) => {
-		const templateUsable = template.content.cloneNode(true).children[0];
-
-		templateUsable.setAttribute('original-item', '');
-		templateUsable
-			.querySelector('td[action-container]')
-			.classList.add('--no-send-button');
-		templateUsable.setAttribute('identifier', category.id);
-
-		templateUsable.querySelectorAll('div[cell-container]').forEach((cell) => {
-			cell.setAttribute('action', '/admin/api/categories/name');
-
-			cell.querySelectorAll('div[pseudo-input]').forEach(async (div) => {
-				div.innerText = category.name;
-
-				loadPseudoInputProperties(div);
-
-				let lastValue = div.innerText;
-
-				div.addEventListener('focusout', async () => {
-					const currentValue = div.innerText;
-
-					if (currentValue === lastValue) {
-						return;
-					}
-
-					let form = {
-						id: String(category.id),
-						name: div.innerText,
-					};
-
-					form = JSON.stringify(form);
-
-					await handleCellRequest(token, cell, form, 'application/json');
-
-					lastValue = currentValue;
-				});
-			});
-		});
-
-		const actionContainer = templateUsable.querySelector(
-			'td[action-container]',
+export function buildPropagandas(isLastItemNew = false) {
+	const apiListBuilder = async () => await getPropagandas(token);
+	const sectionName = 'propagandas';
+	const deleteItemApiUrl = '/admin/api/propaganda';
+	const reorderItemsApiUrl = '/admin/api/propagandas';
+	const cellFunction = (apiItem, cell, index) => {
+		cell.setAttribute(
+			'action',
+			'/admin/api/propagandas/' + (index === 0 ? 'bigImage' : 'smallImage'),
 		);
-		const actionButtons = actionContainer.querySelectorAll('button');
 
-		actionButtons[2].addEventListener('click', async () => {
-			let form = {};
+		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
+			const key = generateRandomString(30);
 
-			form['id'] = String(category.id);
+			div.querySelector('label').setAttribute('for', key);
+			const input = div.querySelector('input');
 
-			form = JSON.stringify(form);
+			input.setAttribute('id', key);
 
-			const req = await handleActionRequest(
-				token,
-				actionContainer,
-				'/admin/api/category',
-				'DELETE',
-				form,
-				'application/json',
-			);
+			input.addEventListener('input', async (e) => {
+				const form = new FormData();
 
-			if (req) {
-				buildCategories();
-			}
-		});
+				form.append('file', e.target.files[0]);
+				form.append('id', String(apiItem.id));
 
-		if (isLastItemNew && index === 0) {
-			templateUsable.querySelector('div[action-info]').classList.add('--ok');
-		}
-
-		template.parentElement.prepend(templateUsable);
-	});
-
-	handleTableVisibility();
-
-	template.parentElement.setAttribute('sortable-categories', '');
-
-	addSortableList('sortable-categories', async () => {
-		let ids = [];
-
-		template.parentElement
-			.querySelectorAll('tr[original-item]')
-			.forEach((tr) => {
-				ids.push(tr.getAttribute('identifier'));
+				await handleCellRequest(token, cell, form);
 			});
 
-		const form = JSON.stringify({
-			ids,
-		});
+			const link = div.querySelector('a');
+			link.setAttribute(
+				'href',
+				index === 0 ? apiItem.bigImage : apiItem.smallImage,
+			);
+			link.innerText = link.innerText + ' ' + apiItem.id;
 
-		await fetch('/admin/api/categories', {
-			method: 'PUT',
-			headers: {
-				authorization: 'Bearer ' + token,
-				'Content-Type': 'application/json',
-			},
-			body: form,
+			handleImageInput(div);
 		});
-	});
+	};
 
-	if (
-		template.parentElement.querySelectorAll('tr[original-item]').length <= 1
-	) {
-		destroySortableList('sortable-categories');
-	}
+	buildComplexTable(
+		apiListBuilder,
+		sectionName,
+		cellFunction,
+		deleteItemApiUrl,
+		reorderItemsApiUrl,
+		isLastItemNew,
+	);
+}
+
+export function buildCategories(isLastItemNew = false) {
+	const apiListBuilder = async () => await getCategories(token);
+	const sectionName = 'categories';
+	const deleteItemApiUrl = '/admin/api/category';
+	const reorderItemsApiUrl = '/admin/api/categories';
+	const cellFunction = (apiItem, cell, index) => {
+		cell.setAttribute('action', '/admin/api/categories/name');
+
+		cell.querySelectorAll('div[pseudo-input]').forEach(async (div) => {
+			div.innerText = apiItem.name;
+
+			loadPseudoInputProperties(div);
+
+			let lastValue = div.innerText;
+
+			div.addEventListener('focusout', async () => {
+				const currentValue = div.innerText;
+
+				if (currentValue === lastValue) {
+					return;
+				}
+
+				let form = {
+					id: String(apiItem.id),
+					name: div.innerText,
+				};
+
+				form = JSON.stringify(form);
+
+				await handleCellRequest(token, cell, form, 'application/json');
+
+				lastValue = currentValue;
+			});
+		});
+	};
+
+	buildComplexTable(
+		apiListBuilder,
+		sectionName,
+		cellFunction,
+		deleteItemApiUrl,
+		reorderItemsApiUrl,
+		isLastItemNew,
+	);
 }
 
 //
@@ -349,7 +305,7 @@ export async function buildCategories(isLastItemNew = false) {
 
 export function buildPropagandasTemplate(specialSection) {
 	const template = specialSection
-		.querySelector('template[propaganda-template]')
+		.querySelector('template[propagandas-template]')
 		.content.cloneNode(true).children[0];
 
 	template.setAttribute('pseudo-item', '');
