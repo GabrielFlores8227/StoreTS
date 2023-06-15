@@ -8,9 +8,10 @@ header {
 	left: 0px;
 
 	& > div:first-of-type {
+		@extend %default-padding-size;
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		width: 100%;
 		background-color: var(--primary-color);
 		padding-top: 21px;
@@ -23,6 +24,17 @@ header {
 			& > img:first-of-type {
 				@extend %default-height-size;
 				filter: grayscale(100%) brightness(0) invert(1);
+			}
+		}
+
+		& > div:last-of-type {
+			display: flex;
+			gap: 24.5px;
+
+			& > button,
+			a {
+				@extend %default-font-size;
+				color: white;
 			}
 		}
 	}

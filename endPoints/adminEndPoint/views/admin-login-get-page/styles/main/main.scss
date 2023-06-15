@@ -1,0 +1,182 @@
+@import '../controller/controller.scss';
+
+main {
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100vh;
+	min-height: 700px;
+	background-color: var(--light-gray);
+	position: relative;
+
+	& > div:first-of-type {
+		z-index: 2;
+		padding: 28px;
+		max-width: 462px;
+		width: 100%;
+
+		& > div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			border-radius: 7px;
+			padding: 28px;
+			background-color: white;
+
+			& > h1 {
+				color: var(--primary-color);
+			}
+
+			& > div:first-of-type {
+				width: 100%;
+			}
+		}
+	}
+
+	& > div:last-of-type {
+		z-index: 1;
+		width: 100%;
+		height: 40vh;
+		background-color: var(--primary-color);
+		position: absolute;
+		bottom: 0px;
+
+		& > div:first-of-type {
+			width: 100%;
+			height: 100px;
+			overflow: hidden;
+			transform: translateX(-50%);
+			position: absolute;
+			top: -51.8px;
+			left: 50%;
+
+			svg path {
+				fill: var(--primary-color);
+			}
+		}
+	}
+}
+
+form {
+	width: 100%;
+	padding-top: 24.5px;
+
+	& > span {
+		&.--not-ok {
+			display: block;
+			color: red;
+		}
+
+		&.--ok {
+			display: block;
+			color: var(--regular-green);
+		}
+
+		display: none;
+		font-size: 13.3px;
+		padding-bottom: 14px;
+
+		i {
+			font-style: normal;
+		}
+	}
+
+	& > div {
+		display: flex;
+		flex-direction: column;
+		gap: 18.9px;
+
+		& > button {
+			@extend %small-font-size;
+			width: 100%;
+			gap: 7px;
+			padding: 10.5px;
+			font-family: var(--font-bold);
+			background-color: var(--primary-color);
+			border-radius: 7px;
+			color: white;
+			transition: ease-in-out 0.35s;
+		}
+
+		& > div {
+			position: relative;
+
+			label {
+				@extend %small-font-size;
+				cursor: text;
+				color: var(--regular-gray);
+				transition: ease-in-out 0.28s;
+				transform: translateY(-50%);
+				pointer-events: none;
+				position: absolute;
+				top: 50%;
+				left: 14px;
+			}
+
+			input {
+				&:not(:placeholder-shown) + label {
+					color: var(--regular-gray);
+					padding: 0px 7px;
+					font-size: 11.9px;
+					background-color: white;
+					transform: translateY(-170%);
+				}
+
+				&:focus + label {
+					color: var(--primary-color);
+					padding: 0px 7px;
+					font-size: 11.9px;
+					background-color: white;
+					transform: translateY(-170%);
+				}
+
+				&:focus {
+					outline: none;
+					border: 2px solid var(--primary-color);
+				}
+
+				&::placeholder {
+					filter: opacity(0%);
+				}
+
+				&::-webkit-input-placeholder {
+					/* WebKit browsers */
+					color: transparent;
+				}
+
+				&:-moz-placeholder {
+					/* Mozilla Firefox 4 to 18 */
+					color: transparent;
+				}
+
+				&::-moz-placeholder {
+					/* Mozilla Firefox 19+ */
+					color: transparent;
+				}
+
+				&:-ms-input-placeholder {
+					/* Internet Explorer 10+ */
+					color: transparent;
+				}
+
+				&:-webkit-autofill,
+				&:-webkit-autofill:hover,
+				&:-webkit-autofill:focus,
+				&:-webkit-autofill:active {
+					transition: background-color 5000s ease-in-out 0s;
+				}
+
+				@extend %small-font-size;
+				width: 100%;
+				padding: 9.1px 14px;
+				border-radius: 7px;
+				border: 2px solid rgb(100, 100, 100);
+				transition: ease-in-out 0.28s;
+				color: var(--dark-gray);
+			}
+		}
+	}
+}

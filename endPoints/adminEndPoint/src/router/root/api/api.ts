@@ -32,6 +32,15 @@ api.post(
 );
 
 api.post(
+	'/categories',
+	LocalModules.middlewareCheckToken,
+	Middleware.middlewareBuildCategories(),
+	(req, res) => {
+		res.json(Object(req).builder.categories);
+	},
+);
+
+api.post(
 	'/products',
 	LocalModules.middlewareCheckToken,
 	Middleware.middlewareBuildProducts(true),
@@ -123,7 +132,7 @@ api.put(
 );
 
 api.put(
-	['/propagandas', '/products'],
+	['/propagandas', '/categories', '/products'],
 	LocalModules.middlewareCheckToken,
 	LocalModules.middlewarePutPosition,
 	(_, res) => {

@@ -1,6 +1,6 @@
-////
+//
 // Cookie
-////
+//
 
 function getToken() {
 	const cookies = document.cookie.split(';');
@@ -21,9 +21,9 @@ function getToken() {
 
 export const token = getToken();
 
-////
+//
 // Get
-////
+//
 
 export async function getHeader(token) {
 	return await (
@@ -43,9 +43,34 @@ export async function getPropagandas(token) {
 	).json();
 }
 
-////
-// Builder
-////
+export async function getCategories(token) {
+	return await (
+		await fetch('/admin/api/categories', {
+			method: 'POST',
+			headers: { authorization: 'Bearer ' + token },
+		})
+	).json();
+}
+
+//
+// Build
+//
+
+export function buildAsideMenus(asideButtonHandler) {
+	const addClickHandler = (selector, element, action) => {
+		document.querySelectorAll(`button[${selector}]`).forEach((button) => {
+			button.addEventListener('click', () => {
+				setTimeout(() => {
+					element.classList[action]('--on');
+				}, 120);
+			});
+		});
+	};
+
+	asideButtonHandler.forEach(({ selector, element, action }) => {
+		addClickHandler(selector, element, action);
+	});
+}
 
 export async function buildIcon() {
 	const { icon } = await getHeader(token);
@@ -75,10 +100,6 @@ export async function buildColor() {
 	window.document.documentElement.style.setProperty('--primary-color', color);
 }
 
-////
-// Build
-////
-
 export async function buildPropagandas(isLastItemNew = false) {
 	const propagandas = await getPropagandas(token);
 
@@ -88,8 +109,6 @@ export async function buildPropagandas(isLastItemNew = false) {
 
 	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
 		tr.remove();
-
-		handleTableVisibility();
 	});
 
 	propagandas.reverse().forEach((propaganda, index) => {
@@ -98,7 +117,7 @@ export async function buildPropagandas(isLastItemNew = false) {
 		templateUsable.setAttribute('original-item', '');
 		templateUsable
 			.querySelector('td[action-container]')
-			.classList.add('--delete-only');
+			.classList.add('--no-send-button');
 		templateUsable.setAttribute('identifier', propaganda.id);
 
 		templateUsable
@@ -142,7 +161,7 @@ export async function buildPropagandas(isLastItemNew = false) {
 		);
 		const actionButtons = actionContainer.querySelectorAll('button');
 
-		actionButtons[1].addEventListener('click', async () => {
+		actionButtons[2].addEventListener('click', async () => {
 			let form = {};
 
 			form['id'] = String(propaganda.id);
@@ -169,6 +188,8 @@ export async function buildPropagandas(isLastItemNew = false) {
 
 		template.parentElement.prepend(templateUsable);
 	});
+
+	handleTableVisibility();
 
 	template.parentElement.setAttribute('sortable-propagandas', '');
 
@@ -198,11 +219,133 @@ export async function buildPropagandas(isLastItemNew = false) {
 	if (
 		template.parentElement.querySelectorAll('tr[original-item]').length <= 1
 	) {
-		destorySortableList('sortable-propagandas');
+		destroySortableList('sortable-propagandas');
 	}
 
 	handleTableVisibility();
 }
+
+export async function buildCategories(isLastItemNew = false) {
+	const categories = await getCategories(token);
+
+	const template = window.document.querySelector(
+		'template[categories-template]',
+	);
+
+	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
+		tr.remove();
+	});
+
+	categories.reverse().forEach((category, index) => {
+		const templateUsable = template.content.cloneNode(true).children[0];
+
+		templateUsable.setAttribute('original-item', '');
+		templateUsable
+			.querySelector('td[action-container]')
+			.classList.add('--no-send-button');
+		templateUsable.setAttribute('identifier', category.id);
+
+		templateUsable.querySelectorAll('div[cell-container]').forEach((cell) => {
+			cell.setAttribute('action', '/admin/api/categories/name');
+
+			cell.querySelectorAll('div[pseudo-input]').forEach(async (div) => {
+				div.innerText = category.name;
+
+				loadPseudoInputProperties(div);
+
+				let lastValue = div.innerText;
+
+				div.addEventListener('focusout', async () => {
+					const currentValue = div.innerText;
+
+					if (currentValue === lastValue) {
+						return;
+					}
+
+					let form = {
+						id: String(category.id),
+						name: div.innerText,
+					};
+
+					form = JSON.stringify(form);
+
+					await handleCellRequest(token, cell, form, 'application/json');
+
+					lastValue = currentValue;
+				});
+			});
+		});
+
+		const actionContainer = templateUsable.querySelector(
+			'td[action-container]',
+		);
+		const actionButtons = actionContainer.querySelectorAll('button');
+
+		actionButtons[2].addEventListener('click', async () => {
+			let form = {};
+
+			form['id'] = String(category.id);
+
+			form = JSON.stringify(form);
+
+			const req = await handleActionRequest(
+				token,
+				actionContainer,
+				'/admin/api/category',
+				'DELETE',
+				form,
+				'application/json',
+			);
+
+			if (req) {
+				buildCategories();
+			}
+		});
+
+		if (isLastItemNew && index === 0) {
+			templateUsable.querySelector('div[action-info]').classList.add('--ok');
+		}
+
+		template.parentElement.prepend(templateUsable);
+	});
+
+	handleTableVisibility();
+
+	template.parentElement.setAttribute('sortable-categories', '');
+
+	addSortableList('sortable-categories', async () => {
+		let ids = [];
+
+		template.parentElement
+			.querySelectorAll('tr[original-item]')
+			.forEach((tr) => {
+				ids.push(tr.getAttribute('identifier'));
+			});
+
+		const form = JSON.stringify({
+			ids,
+		});
+
+		await fetch('/admin/api/categories', {
+			method: 'PUT',
+			headers: {
+				authorization: 'Bearer ' + token,
+				'Content-Type': 'application/json',
+			},
+			body: form,
+		});
+	});
+
+	if (
+		template.parentElement.querySelectorAll('tr[original-item]').length <= 1
+	) {
+		destroySortableList('sortable-categories');
+	}
+}
+
+//
+// Build Template
+//
 
 export function buildPropagandasTemplate(specialSection) {
 	const template = specialSection
@@ -210,6 +353,10 @@ export function buildPropagandasTemplate(specialSection) {
 		.content.cloneNode(true).children[0];
 
 	template.setAttribute('pseudo-item', '');
+
+	template
+		.querySelector('td[action-container]')
+		.classList.add('--no-drag-button');
 
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
 		const key = generateRandomString(30);
@@ -223,7 +370,7 @@ export function buildPropagandasTemplate(specialSection) {
 	const actionContainer = template.querySelector('td[action-container]');
 	const actionButtons = actionContainer.querySelectorAll('button');
 
-	actionButtons[0].addEventListener('click', async () => {
+	actionButtons[1].addEventListener('click', async () => {
 		const form = new FormData();
 		const files = template.querySelectorAll('input');
 
@@ -247,7 +394,7 @@ export function buildPropagandasTemplate(specialSection) {
 		}
 	});
 
-	actionButtons[1].addEventListener('click', () => {
+	actionButtons[2].addEventListener('click', () => {
 		template.remove();
 		handleTableVisibility();
 	});
@@ -255,21 +402,112 @@ export function buildPropagandasTemplate(specialSection) {
 	return template;
 }
 
-////
+export function buildCategoriesTemplate(specialSection) {
+	const template = specialSection
+		.querySelector('template[categories-template]')
+		.content.cloneNode(true).children[0];
+
+	template.setAttribute('pseudo-item', '');
+
+	template
+		.querySelector('td[action-container]')
+		.classList.add('--no-drag-button');
+
+	template.querySelectorAll('div[pseudo-input]').forEach((div) => {
+		loadPseudoInputProperties(div);
+	});
+
+	const actionContainer = template.querySelector('td[action-container]');
+	const actionButtons = actionContainer.querySelectorAll('button');
+
+	actionButtons[1].addEventListener('click', async () => {
+		let form = {
+			name: template.querySelector('div[pseudo-input]').innerText,
+		};
+		console.log(form);
+
+		form = JSON.stringify(form);
+
+		const req = await handleActionRequest(
+			token,
+			actionContainer,
+			'/admin/api/category',
+			'POST',
+			form,
+			'application/json',
+		);
+
+		if (req) {
+			template.setAttribute('original-item', '');
+			buildCategories(true);
+		}
+	});
+
+	actionButtons[2].addEventListener('click', () => {
+		template.remove();
+		handleTableVisibility();
+	});
+
+	return template;
+}
+
+//
 // Others
-////
+//
+
+export function loadPseudoInputProperties(div) {
+	let lastInput = div.innerText;
+
+	div.addEventListener('input', () => {
+		const value = div.innerText;
+		const maxLength = Number(div.getAttribute('maxlength'));
+
+		if (value.length > maxLength) {
+			div.innerText = lastInput;
+
+			return;
+		}
+
+		lastInput = value;
+	});
+
+	div.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter') {
+			e.target.blur();
+			return e.preventDefault();
+		}
+	});
+}
 
 function addSortableList(container, callBack) {
 	$(function () {
-		$('[' + container + ']').sortable({
+		const sortable = $(`[${container}]`).sortable({
 			items: 'tr:not([pseudo-item])',
 			cancel: '[pseudo-item]',
 			stop: callBack,
+			tolerance: 'pointer',
+		});
+
+		if (
+			window.document.querySelectorAll(`[${container}] [original-item]`)
+				.length < 2
+		) {
+			return;
+		}
+
+		$(`[${container}]`).on('mousedown', '[draggable]', function () {
+			sortable.sortable('enable');
+		});
+
+		$(document).on('mouseup', function (e) {
+			if (!$(e.target).closest('[draggable]').length) {
+				sortable.sortable('disable');
+			}
 		});
 	});
 }
 
-function destorySortableList(container) {
+function destroySortableList(container) {
 	$(function () {
 		$('[' + container + ']').sortable('destroy');
 	});
@@ -389,22 +627,6 @@ export async function handleCellRequest(
 			info.querySelector('i[cell-info-error]').setAttribute('title', title);
 		}
 	}
-}
-
-export function buildAsideMenus(asideButtonHandler) {
-	const addClickHandler = (selector, element, action) => {
-		document.querySelectorAll(`button[${selector}]`).forEach((button) => {
-			button.addEventListener('click', () => {
-				setTimeout(() => {
-					element.classList[action]('--on');
-				}, 120);
-			});
-		});
-	};
-
-	asideButtonHandler.forEach(({ selector, element, action }) => {
-		addClickHandler(selector, element, action);
-	});
 }
 
 export function handleImageInput(div) {

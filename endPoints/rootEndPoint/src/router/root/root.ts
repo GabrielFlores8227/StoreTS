@@ -11,7 +11,7 @@ root.get(
 	Middleware.middlewareBuildHeader(),
 	Middleware.middlewareBuildPropagandas(),
 	Middleware.middlewareBuildProducts(),
-	Middleware.middlewareBuildFooter,
+	Middleware.middlewareBuildFooter(),
 	(req, res) => {
 		res.render('root-get-page', { builder: Object(req).builder });
 	},

@@ -37,9 +37,21 @@ class Support {
 			},
 		},
 		categories: {
-			name: (name: string) => {
+			name: async (name: string) => {
 				Admin.checkType(name, 'string', 'name');
 				Admin.checkLength(name, 5, 50, 'name');
+
+				const [query] = await Sql.query(
+					'SELECT name FROM categories WHERE name = ?;',
+					[name.trim()],
+				);
+
+				if (Object(query).length !== 0) {
+					throw {
+						status: 400,
+						message: name + ' already exists, try to use another name!',
+					};
+				}
 			},
 		},
 		products: {
@@ -48,7 +60,7 @@ class Support {
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE id = ?;',
-					[category, category],
+					[category],
 				);
 
 				if (Object(query).length === 0) {
@@ -65,7 +77,7 @@ class Support {
 			price: (price: string) => {
 				Admin.checkType(price, 'string', 'price');
 				Admin.checkNumber(price, 'price');
-				Admin.checkValue(price, 0, 999999999999999, 'price');
+				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'price');
 			},
 			off: (off: string) => {
 				Admin.checkType(off, 'string', 'off');
@@ -225,27 +237,6 @@ class Support {
 	}
 
 	/**
-	 * Validates data for the middleware handling the "post category" operation.
-	 *
-	 * @param {string} name - The name of the category to be validated.
-	 */
-	public static async validateDataForMiddlewarePostCategory(name: string) {
-		this.textMask.categories.name(name);
-
-		const [query] = await Sql.query(
-			'SELECT name FROM categories WHERE name = ?;',
-			[name],
-		);
-
-		if (Object(query).length !== 0) {
-			throw {
-				status: 400,
-				message: name + ' already exists, try to use another name!',
-			};
-		}
-	}
-
-	/**
 	 * Validates data for the middleware handling the "post product" operation.
 	 *
 	 * @param {string} category - The category of the product.
@@ -285,7 +276,7 @@ class Support {
 	 * @param {string} table - The table name where the text entry is stored.
 	 * @param {string} column - The column name for the text data.
 	 */
-	public static validateDataForMiddlewarePutText(
+	public static async validateDataForMiddlewarePutText(
 		id: string,
 		data: string,
 		table: string,
@@ -296,7 +287,7 @@ class Support {
 
 		Admin.checkType(data, 'string', column);
 
-		Object(this.textMask)[table][column](data);
+		await Object(this.textMask)[table][column](data);
 	}
 
 	/**
@@ -549,7 +540,7 @@ export default class LocalModules {
 		try {
 			const name = req.body.name;
 
-			await Support.validateDataForMiddlewarePostCategory(name);
+			await Support.textMask.categories.name(name);
 
 			await Sql.query('INSERT INTO categories (name) VALUES (?);', [
 				name.trim(),
@@ -716,7 +707,7 @@ export default class LocalModules {
 			const data = req.body[column];
 			const id = req.body.id;
 
-			Support.validateDataForMiddlewarePutText(id, data, table, column);
+			await Support.validateDataForMiddlewarePutText(id, data, table, column);
 
 			await Sql.query(
 				'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;',

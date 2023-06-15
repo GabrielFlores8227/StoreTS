@@ -1,44 +1,24 @@
-(() => {
-	const message = new URLSearchParams(window.location.search).get('message');
+import { token, buildAsideMenus } from './modules.js';
 
-	if (message) {
-		const element = window.document.querySelector('span[message-container]');
-
-		element.querySelector('i[message]').innerText = message;
-		element.classList.add('--not-ok');
-	}
-})();
+console.log(token);
 
 (() => {
-	const username = window.document.querySelector('[username]');
-	const password = window.document.querySelector('[password]');
-
-	if (!sessionStorage.getItem('auth')) {
-		sessionStorage.setItem(
-			'auth',
-			JSON.stringify({ username: username.value, password: password.value }),
-		);
-	}
-
-	const auth = JSON.parse(sessionStorage.getItem('auth'));
-
-	if (auth.username) {
-		username.value = auth.username;
-	}
-
-	if (auth.password) {
-		password.value = auth.password;
-	}
-
-	username.addEventListener('input', () => {
-		auth.username = username.value;
-
-		sessionStorage.setItem('auth', JSON.stringify(auth));
-	});
-
-	password.addEventListener('input', () => {
-		auth.password = password.value;
-
-		sessionStorage.setItem('auth', JSON.stringify(auth));
-	});
+	window.document
+		.querySelector('div[warning] button')
+		.addEventListener('click', () => {
+			location.reload(true);
+		});
 })();
+
+buildAsideMenus([
+	{
+		selector: 'open-settings-aside-menu-button',
+		element: document.querySelector('aside[settings-aside-menu]'),
+		action: 'add',
+	},
+	{
+		selector: 'close-settings-aside-menu-button',
+		element: document.querySelector('aside[settings-aside-menu]'),
+		action: 'remove',
+	},
+]);
