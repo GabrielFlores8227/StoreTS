@@ -16,7 +16,7 @@ api.post(
 api.post(
 	'/header',
 	LocalModules.middlewareCheckToken,
-	Middleware.middlewareBuildHeader,
+	Middleware.middlewareBuildHeader(true),
 	(req, res) => {
 		res.json(Object(req).builder.header);
 	},
@@ -25,7 +25,7 @@ api.post(
 api.post(
 	'/propagandas',
 	LocalModules.middlewareCheckToken,
-	Middleware.middlewareBuildPropagandasForAdmin,
+	Middleware.middlewareBuildPropagandas(true),
 	(req, res) => {
 		res.json(Object(req).builder.propagandas);
 	},
@@ -34,7 +34,7 @@ api.post(
 api.post(
 	'/products',
 	LocalModules.middlewareCheckToken,
-	Middleware.middlewareBuildProductsForAdmin,
+	Middleware.middlewareBuildProducts(true),
 	(req, res) => {
 		res.json(Object(req).builder.products);
 	},

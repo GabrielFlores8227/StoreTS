@@ -29,7 +29,7 @@ router.use(
 router.use('/', root);
 
 // Handle 404 errors with the error page
-router.get('*', Middleware.middlewareBuildHeader, (req, res) => {
+router.get('*', Middleware.middlewareBuildHeader(), (req, res) => {
 	res.status(404).render('error-get-page', {
 		builder: Object(req).builder,
 		status: 404,
