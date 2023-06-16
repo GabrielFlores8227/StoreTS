@@ -1,5 +1,5 @@
 {
-  "name": "root-end-point",
+  "name": "root-endpoint",
   "version": "1.0.0",
   "description": "",
   "main": "./src/index.ts",

@@ -1,31 +1,82 @@
 #!/bin/bash
 
 ##
-# Start
+# Config
 ##
 
-clear 
-echo -e "\033[1;32m[v] Starting processes...\033[0m"
-
-END_POINTS=$(find . -name "*EndPoint";)
-
-for END_POINT in $END_POINTS; 
-do
-  (
-    npm start --prefix $END_POINT
-  ) &
-done
+APP_PORTS=("2000" "2001")
+APP_END_POINTS=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
 
 ##
-# Ctrl + c
+# Functions
 ##
 
-cleanup() {
-  kill -- -$$
+function START() {
+  clear && echo -e "\033[1;32m[v] Starting StoreTS\033[0m"
+
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
+    APP_END_POINT="${APP_END_POINTS[INDEX]}"
+
+    (
+      npm start --prefix $APP_END_POINT -- --port $APP_PORT 
+    ) &
+  done
+}
+
+CHECK_REPO() {
+  if [[ $(git status --porcelain) ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+function KILL() {
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
+
+    fuser -k $APP_PORT/tcp
+  done
+
+  echo -e "\033[1;31m[x] StoreTS killed\033[0m"
+
   exit
 }
 
-trap cleanup SIGINT
+function STOP() {
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
 
-wait
+    fuser -k $APP_PORT/tcp
+  done
+
+  echo -e "\033[1;31m[x] StoreTS stopped\033[0m"
+}
+
+##
+# Main
+##
+
+START
+trap KILL SIGINT
+
+sleep 10
+
+while true
+do
+  if [ ! $(CHECK_REPO) -eq 0 ]; then
+    echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
+    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
+
+    STOP
+  fi
+
+  sleep 1
+done
+
+
 

@@ -6,19 +6,19 @@ import router from './router/router';
 
 const app = express();
 
-// Apply rate limiting middleware to limit requests
-// Trust the proxy IP address
+// Enable trust for the proxy
 app.set('trust proxy', 1);
 
+// Apply rate limiting middleware
 router.use(
 	rateLimit({
 		windowMs: 15 * 60 * 1000, // 15 minutes
-		max: 400, // Maximum number of requests allowed per window
+		max: 400, // Maximum number of requests allowed within the window
 		handler: async (_: express.Request, res: express.Response) => {
-			// Render the error page for too many requests
+			// Handle rate limit exceeded error
 			res.status(429).render('error-get-page', {
 				builder: {
-					header: await Middleware.buildHeader(), // Build the header data using the Middleware class
+					header: await Middleware.buildHeader(),
 				},
 				status: 429,
 				message: 'Too many requests',
@@ -29,31 +29,36 @@ router.use(
 	}),
 );
 
-// Set the view engine to EJS
+// Set view engine to ejs
 app.set('view engine', 'ejs');
 
-// Set express-session
+// Enable session middleware
 app.use(
 	session({
-		secret: process.env.SECRET!,
-		resave: false,
-		saveUninitialized: true,
+		secret: process.env.SECRET!, // Secret used to sign the session ID cookie
+		resave: false, // Disable session resaving on every request
+		saveUninitialized: true, // Allow uninitialized sessions
 	}),
 );
 
-// Parse JSON bodies
+// Parse request bodies as JSON
 app.use(express.json());
 
-// Parse URL-encoded bodies
+// Parse URL-encoded request bodies
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'views' directory
 app.use(express.static('views'));
 
-// Use the router for handling '/admin' routes
+// Apply the router middleware to the '/admin' path
 app.use('/admin', router);
 
-const port = 2001;
+// Set the desired port
+const port =
+	Number(process.argv.slice(2)[process.argv.slice(2).indexOf('--port') + 1]) ||
+	2003;
+
+// Start the server
 app.listen(port, () => {
 	console.log(
 		'\u001b[1;32m[v] Running\u001b[0m: \t (/admin) \t http://localhost:' + port,

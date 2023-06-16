@@ -5,16 +5,16 @@ import router from './router/router';
 
 const app = express();
 
-// Apply rate limiting middleware to limit requests
-// Trust the proxy IP address
+// Enable trust for the proxy
 app.set('trust proxy', 1);
 
+// Apply rate limiting middleware
 router.use(
 	rateLimit({
 		windowMs: 15 * 60 * 1000, // 15 minutes
-		max: 400, // Maximum number of requests allowed per window
+		max: 400, // Maximum number of requests allowed within the window
 		handler: async (_: express.Request, res: express.Response) => {
-			// Render the error page for too many requests
+			// Handle rate limit exceeded error
 			res.status(429).render('error-get-page', {
 				builder: {
 					header: await Middleware.buildHeader(), // Build the header data using the Middleware class
@@ -28,16 +28,21 @@ router.use(
 	}),
 );
 
-// Set the view engine to EJS
+// Set view engine to ejs
 app.set('view engine', 'ejs');
 
 // Serve static files from the 'views' directory
 app.use(express.static('views'));
 
-// Use the router for handling routes
+// Apply the router middleware
 app.use('/', router);
 
-const port = 2000;
+// Set the desired port
+const port =
+	Number(process.argv.slice(2)[process.argv.slice(2).indexOf('--port') + 1]) ||
+	2003;
+
+// Start the server
 app.listen(port, () => {
 	console.log(
 		'\u001b[1;32m[v] Running\u001b[0m: \t (/) \t\t http://localhost:' + port,
