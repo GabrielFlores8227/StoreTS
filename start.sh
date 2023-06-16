@@ -74,7 +74,8 @@ do
 
     STOP
 
-    git pull
+    git fetch
+    git reset --hard origin/main
 
     clear && echo -e "\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
 
