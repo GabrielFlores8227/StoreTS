@@ -68,7 +68,7 @@ sleep 10
 
 while true
 do
-  if [ ! $(CHECK_REPO) -eq 0 ]; then
+  if [ $(CHECK_REPO) -eq 1 ]; then
     echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
     clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
 
