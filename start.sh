@@ -26,10 +26,12 @@ function START() {
 }
 
 CHECK_REPO() {
-  if [[ $(git status --porcelain) ]]; then
-    echo 1
-  else
+  output=$(git remote show origin)
+
+  if [[ $output =~ "local out of date" ]]; then
     echo 0
+  else
+    echo 1
   fi
 }
 
@@ -68,7 +70,7 @@ sleep 10
 
 while true
 do
-  if [ $(CHECK_REPO) -eq 1 ]; then
+  if [ $(CHECK_REPO) -eq 0 ]; then
     echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
     clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
 
@@ -86,6 +88,3 @@ do
 
   sleep 10
 done
-
-
-
