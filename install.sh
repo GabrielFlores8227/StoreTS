@@ -1,8 +1,10 @@
 #!/bin/bash
 
-DIRECTORIES=$(find . -name "package.json" -exec dirname {} \;)
+APP_END_POINTS=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
 
-for DIRECTORY in $DIRECTORIES;
+for INDEX in "${!APP_END_POINTS[@]}"
 do
-  npm install --prefix $DIRECTORY
+  APP_END_POINT="${APP_END_POINTS[INDEX]}"
+
+  npm install --prefix $APP_END_POINT
 done
