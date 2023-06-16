@@ -73,9 +73,17 @@ do
     clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
 
     STOP
+
+    git pull
+
+    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
+
+    sleep 5
+
+    START
   fi
 
-  sleep 1
+  sleep 10
 done
 
 
