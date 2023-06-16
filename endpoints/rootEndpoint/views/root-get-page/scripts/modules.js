@@ -312,5 +312,8 @@ export function handleSearch(
  */
 
 export function convertToMoneyFormat(number) {
-	return number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+	return number.toLocaleString('pt-BR', {
+		style: 'currency',
+		currency: 'BRL',
+	});
 }

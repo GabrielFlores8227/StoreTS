@@ -66,7 +66,7 @@ function STOP() {
 START
 trap KILL SIGINT
 
-sleep 10
+sleep 60
 
 while true
 do
@@ -79,14 +79,14 @@ do
     git fetch
     git reset --hard origin/main
 
-    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
-
     ./install.sh
+
+    echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
 
     sleep 5
 
     START
   fi
 
-  sleep 10
+  sleep 600
 done

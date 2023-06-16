@@ -3,21 +3,36 @@ import { rateLimit } from 'express-rate-limit';
 import Middleware from 'storets-middleware';
 import router from './router/router';
 
+//
+// App
+//
+
 const app = express();
 
-// Enable trust for the proxy
+//
+// Set
+//
+
+// Enable trust for the reverse proxy
+// 1 = Number of reverse proxies between client and server
 app.set('trust proxy', 1);
 
-// Apply rate limiting middleware
+// Enable view engine (ejs)
+app.set('view engine', 'ejs');
+
+//
+// Use
+//
+
+// Enable request rate limiting
 router.use(
 	rateLimit({
-		windowMs: 15 * 60 * 1000, // 15 minutes
-		max: 400, // Maximum number of requests allowed within the window
+		windowMs: 15 * 60 * 1000,
+		max: 400,
 		handler: async (_: express.Request, res: express.Response) => {
-			// Handle rate limit exceeded error
 			res.status(429).render('error-get-page', {
 				builder: {
-					header: await Middleware.buildHeader(), // Build the header data using the Middleware class
+					header: await Middleware.buildHeader(),
 				},
 				status: 429,
 				message: 'Too many requests',
@@ -28,23 +43,24 @@ router.use(
 	}),
 );
 
-// Set view engine to ejs
-app.set('view engine', 'ejs');
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'views' directory
 app.use(express.static('views'));
 
-// Apply the router middleware
 app.use('/', router);
 
-// Set the desired port
+//
+// Listener
+//
+
+// Use '--port <port>' to change port (default port = 2003)
 const port =
 	Number(process.argv.slice(2)[process.argv.slice(2).indexOf('--port') + 1]) ||
 	2003;
 
-// Start the server
 app.listen(port, () => {
 	console.log(
-		'\u001b[1;32m[v] Running\u001b[0m: \t (/) \t\t http://localhost:' + port,
+		'\u001b[1;32m[v] Running\u001b[0m: \t (/admin) \t http://localhost:' + port,
 	);
 });

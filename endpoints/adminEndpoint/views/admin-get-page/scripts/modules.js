@@ -449,18 +449,7 @@ export function buildProductsTemplate(specialSection) {
 		.querySelector('td[action-container]')
 		.classList.add('--no-drag-button');
 
-	template.querySelectorAll('div[file-input-container]').forEach((div) => {
-		const key = generateRandomString(30);
-
-		div.querySelector('label').setAttribute('for', key);
-		div.querySelector('input').setAttribute('id', key);
-
-		loadFileInputProperties(div);
-	});
-
-	template.querySelectorAll('div[pseudo-input]').forEach((div) => {
-		loadPseudoInputProperties(div);
-	});
+	loadProductInputProperties(template);
 
 	const actionContainer = template.querySelector('td[action-container]');
 	const actionButtons = actionContainer.querySelectorAll('button');
@@ -480,6 +469,16 @@ export function buildProductsTemplate(specialSection) {
 //
 // Others
 //
+
+function handlePseudoInputCursorAsLastProperty(div) {
+	// Set the cursor position to the end of the input
+	const range = document.createRange();
+	const selection = window.getSelection();
+	range.selectNodeContents(div);
+	range.collapse(false);
+	selection.removeAllRanges();
+	selection.addRange(range);
+}
 
 export function loadFileInputProperties(div) {
 	const link = div.querySelector('a');
@@ -503,11 +502,11 @@ export function loadPseudoInputProperties(div) {
 
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
-
-			return;
+		} else {
+			lastInput = value;
 		}
 
-		lastInput = value;
+		handlePseudoInputCursorAsLastProperty(div);
 	});
 
 	div.addEventListener('keydown', (e) => {
@@ -516,6 +515,148 @@ export function loadPseudoInputProperties(div) {
 			return e.preventDefault();
 		}
 	});
+}
+
+function loadProductInputProperties(template) {
+	template.querySelectorAll('div[file-input-container]').forEach((div) => {
+		const key = generateRandomString(30);
+
+		div.querySelector('label').setAttribute('for', key);
+		div.querySelector('input').setAttribute('id', key);
+
+		loadFileInputProperties(div);
+	});
+
+	//category
+	template.querySelectorAll('select').forEach(async (select) => {
+		const categories = await getCategories(token);
+
+		categories.forEach((category) => {
+			const template = select.querySelector('template').content.cloneNode(true)
+				.children[0];
+
+			template.setAttribute('value', category.id);
+			template.innerText = category.name;
+
+			select.append(template);
+		});
+	});
+
+	const pseudoInputs = template.querySelectorAll('div[pseudo-input]');
+
+	pseudoInputs.forEach((div) => {
+		loadPseudoInputProperties(div);
+	});
+
+	//price
+	pseudoInputs[1].addEventListener('input', (event) => {
+		const inputElement = event.target;
+		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
+
+		if (value.length <= 3) {
+			if (value.length === 1) {
+				inputElement.innerText = 'R$ 00,0' + value;
+			} else if (value.length === 2) {
+				inputElement.innerText = 'R$ 00,' + value;
+			} else if (value.length === 3) {
+				inputElement.innerText =
+					'R$ ' + '0' + value.charAt(0) + ',' + value.slice(1, 3);
+			}
+		} else {
+			// Split the value into dollars and cents
+			const dollars = value.slice(0, -2);
+			const cents = value.slice(-2);
+
+			// Format the dollars with dots as thousands separators
+			const formattedDollars = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+			// Concatenate the dollars and cents with a comma separator
+			let formattedValue = formattedDollars + ',' + cents;
+
+			// Add "00" to the cents if there are no cents input
+			if (formattedValue === ',') {
+				formattedValue += '00';
+			}
+
+			inputElement.innerText = 'R$ ' + formattedValue;
+		}
+
+		handlePseudoInputCursorAsLastProperty(inputElement);
+	});
+
+	//off
+	pseudoInputs[2].addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
+
+		if (event.key === 'Backspace') {
+			inputElement.innerText = value.slice(0, -1) + '%';
+		}
+
+		handlePseudoInputCursorAsLastProperty(inputElement);
+	});
+
+	pseudoInputs[2].addEventListener('input', (event) => {
+		const inputElement = event.target;
+		let value = Number(inputElement.innerText.replace(/\D/g, ''));
+
+		if (value > 100) {
+			inputElement.innerText = '100%';
+		} else {
+			inputElement.innerText = value + '%';
+		}
+
+		handlePseudoInputCursorAsLastProperty(inputElement);
+	});
+
+	//whatsapp
+	pseudoInputs[4].addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		let value = String(inputElement.innerText.replace(/\D/g, ''));
+
+		if (event.key === 'Backspace') {
+			if (value.length === 4) {
+				inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 3)})`;
+			}
+
+			if (value.length === 3) {
+				inputElement.innerText = value.slice(0, 3);
+			}
+
+			handlePseudoInputCursorAsLastProperty(inputElement);
+		}
+	});
+
+	pseudoInputs[4].addEventListener('input', (event) => {
+		handleWhatsappInputProperties(event);
+	});
+
+	function handleWhatsappInputProperties(event) {
+		const inputElement = event.target;
+		let value = String(inputElement.innerText.replace(/\D/g, ''));
+
+		if (value.length === 0) {
+			inputElement.innerText = '';
+		} else if (value.length <= 2) {
+			inputElement.innerText = `+${value}`;
+		} else if (value.length === 3) {
+			inputElement.innerText = `+${value.slice(0, 2)} (${value.charAt(2)})`;
+		} else if (value.length <= 4) {
+			inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 4)})`;
+		} else if (value.length <= 8) {
+			inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
+				2,
+				4,
+			)}) ${value.slice(4, 8)}`;
+		} else {
+			inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
+				2,
+				4,
+			)}) ${value.slice(4, 8)}-${value.slice(8, 13)}`;
+		}
+
+		handlePseudoInputCursorAsLastProperty(inputElement);
+	}
 }
 
 function addSortableList(container, callBack) {

@@ -11,7 +11,7 @@
 		<!--icon-->
 		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
 
-		<!--title & description-->
+		<!--title-->
 		<title><%= builder.header.title%> | Admin</title>
 
 		<!--css-->
@@ -621,11 +621,9 @@
 												class="cell-container__input-container cell-container__select-container"
 											>
 												<select>
-													<% builder.categories.forEach(category => { %>
-													<option value="<%= category.id %>">
-														<%= category.name %>
-													</option>
-													<% }) %>
+													<template>
+														<option></option>
+													</template>
 												</select>
 											</div>
 											<div
@@ -683,7 +681,7 @@
 													pseudo-input
 													contenteditable="true"
 													placeholder="Price"
-													maxlength="30"
+													maxlength="25"
 												></div>
 											</div>
 											<div
@@ -770,7 +768,7 @@
 													pseudo-input
 													contenteditable="true"
 													placeholder="Whatsapp"
-													maxlength="13"
+													maxlength="20"
 												></div>
 											</div>
 											<div

@@ -107,7 +107,7 @@ div.table-section-container__table-container > table tbody > tr {
 }
 div.table-section-container__table-container > table tbody > tr > td {
   min-width: 280px;
-  height: 52.5px;
+  height: 54px;
 }
 div.table-section-container__table-container > table tbody > tr > td.--sortable-item {
   width: 100%;
@@ -179,6 +179,7 @@ div.cell-container__text-input-container div[pseudo-input] {
   width: 100%;
   padding: 0px 21px;
   text-align: center;
+  padding: 14px;
 }
 div.cell-container__text-input-container div[pseudo-input]:empty:before {
   content: attr(placeholder);
@@ -193,7 +194,6 @@ div.cell-container__text-area-container textarea {
   width: 80%;
   resize: none;
   font-size: 15.4px;
-  height: 52.5px;
   border: none;
   text-align: center;
 }
