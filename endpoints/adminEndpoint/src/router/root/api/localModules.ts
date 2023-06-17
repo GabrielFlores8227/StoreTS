@@ -11,7 +11,7 @@ class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
-				Admin.checkLength(title, 5, 50, 'title');
+				Admin.checkLength(title, 5, 30, 'title');
 			},
 			description: (description: string) => {
 				Admin.checkLength(description, 5, 255, 'description');
@@ -31,7 +31,8 @@ class Support {
 				) {
 					throw {
 						status: 400,
-						message: 'images context is missing required data!',
+						message:
+							"Oops, necessary data is missing in the 'imagesContext' key",
 					};
 				}
 			},
@@ -39,7 +40,7 @@ class Support {
 		categories: {
 			name: async (name: string) => {
 				Admin.checkType(name, 'string', 'name');
-				Admin.checkLength(name, 5, 50, 'name');
+				Admin.checkLength(name, 5, 30, 'name');
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE name = ?;',
@@ -49,7 +50,7 @@ class Support {
 				if (Object(query).length !== 0) {
 					throw {
 						status: 400,
-						message: name + ' already exists, try to use another name!',
+						message: `Oops, the category '${name}' already exists. Please try using a different name`,
 					};
 				}
 			},
@@ -66,13 +67,13 @@ class Support {
 				if (Object(query).length === 0) {
 					throw {
 						status: 400,
-						message: 'category ' + category + ' does not exist!',
+						message: `Oops, the category '${category}' does not exist. Please try choosing an existing category`,
 					};
 				}
 			},
 			name: (name: string) => {
 				Admin.checkType(name, 'string', 'name');
-				Admin.checkLength(name, 5, 50, 'name');
+				Admin.checkLength(name, 5, 30, 'name');
 			},
 			price: (price: string) => {
 				Admin.checkType(price, 'string', 'price');
@@ -86,7 +87,7 @@ class Support {
 			},
 			installment: (installment: string) => {
 				Admin.checkType(installment, 'string', 'installment');
-				Admin.checkLength(installment, 0, 50, 'installment');
+				Admin.checkLength(installment, 0, 30, 'installment');
 			},
 			whatsapp: (whatsapp: string) => {
 				Admin.checkType(whatsapp, 'string', 'whatsapp');
@@ -100,7 +101,7 @@ class Support {
 		},
 		footer: {
 			title: (title: string) => {
-				Admin.checkLength(title, 5, 50, 'title');
+				Admin.checkLength(title, 5, 30, 'title');
 			},
 			text: (text: string) => {
 				Admin.checkLength(text, 5, 255, 'text');
@@ -110,16 +111,16 @@ class Support {
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
-				Admin.checkLength(facebook, 5, 50, 'facebook');
+				Admin.checkLength(facebook, 5, 30, 'facebook');
 			},
 			instagram: (instagram: string) => {
-				Admin.checkLength(instagram, 5, 50, 'instagram');
+				Admin.checkLength(instagram, 5, 30, 'instagram');
 			},
 			storeInfo: (storeInfo: string) => {
-				Admin.checkLength(storeInfo, 5, 50, 'store info');
+				Admin.checkLength(storeInfo, 5, 30, 'store info');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
-				Admin.checkLength(completeStoreInfo, 5, 50, 'complete store info');
+				Admin.checkLength(completeStoreInfo, 5, 30, 'complete store info');
 			},
 		},
 	};
@@ -129,7 +130,11 @@ class Support {
 			icon: async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'cover', { width: 50, height: 50 }),
 			logo: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'contain', { height: 70, maxScale: 7.5 }),
+				await this.sharpFile(file, 'contain', {
+					height: 70,
+					maxScale: 7.5,
+					fileType: 'png',
+				}),
 		},
 		propagandas: {
 			bigImage: async (file: Express.Multer.File | undefined) =>
@@ -159,12 +164,22 @@ class Support {
 	private static async sharpFile(
 		file: Express.Multer.File | undefined,
 		fit: keyof sharp.FitEnum,
-		size: {
+		options: {
 			width?: number;
 			height?: number;
 			maxScale?: number;
+			fileType?: string;
 		},
 	) {
+		const originalName = file!.originalname;
+
+		if (options.fileType && !file!.mimetype.includes(options.fileType)) {
+			throw {
+				status: 400,
+				message: `Oops, the image '${originalName}' is not a valid image. Please try choosing a png image`,
+			};
+		}
+
 		file!.originalname = crypto
 			.randomBytes(128)
 			.toString('hex')
@@ -174,22 +189,22 @@ class Support {
 			file!.buffer = await sharp(file!.buffer)
 				.trim()
 				.resize({
-					width: size.width,
-					height: size.height,
+					width: options.width,
+					height: options.height,
 					fit,
 					background: { r: 255, g: 255, b: 255, alpha: 0 },
 				})
 				.toBuffer();
 
-			if (size.maxScale) {
+			if (options.maxScale) {
 				const imageMetadata = await sharp(file!.buffer).metadata();
 				const scale =
 					Object(imageMetadata).width / Object(imageMetadata).height;
 
-				if (scale > size.maxScale) {
+				if (scale > options.maxScale) {
 					file!.buffer = await sharp(file!.buffer)
 						.resize({
-							width: size.maxScale * Object(imageMetadata).height,
+							width: options.maxScale * Object(imageMetadata).height,
 							height: Object(imageMetadata).height,
 							fit: 'contain',
 							background: { r: 255, g: 255, b: 255, alpha: 0 },
@@ -204,7 +219,7 @@ class Support {
 			) {
 				throw {
 					status: 400,
-					message: 'Please provide valid images!',
+					message: `Oops, the image '${originalName}' is not a valid image. Please try choosing another image`,
 				};
 			}
 
@@ -336,8 +351,7 @@ class Support {
 		) {
 			throw {
 				status: 400,
-				message:
-					'ids do not match, try providing a list of ids that match the existing ones!',
+				message: 'Oops, the sent IDs are not valid or incomplete',
 			};
 		}
 	}
@@ -411,14 +425,26 @@ export default class LocalModules {
 
 			upload(req, res, (err: any) => {
 				try {
+					if (err instanceof multer.MulterError) {
+						throw {
+							status: 400,
+							message:
+								maxCount === 1
+									? 'Oops, it seems that the sent image is incorrect'
+									: 'Oops, it seems that the sent images are incorrect',
+						};
+					}
+
 					if (
-						err instanceof multer.MulterError ||
 						(maxCount === 1 && typeof req.file !== 'object') ||
 						(maxCount > 1 && Object(req).files.length < minCount)
 					) {
 						throw {
 							status: 400,
-							message: 'Please provide the required image(s) correctly!',
+							message:
+								maxCount === 1
+									? 'Oops, it seems that the required image is missing'
+									: 'Oops, it seems that the required images are missing',
 						};
 					} else if (err) {
 						throw err;

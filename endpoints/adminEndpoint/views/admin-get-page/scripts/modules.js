@@ -115,7 +115,7 @@ async function buildComplexTable(
 	cellFunction,
 	deleteItemApiUrl,
 	reorderItemsApiUrl,
-	isLastItemNew = false,
+	{ isLastItemNew = false, deleteItemCallback = false },
 ) {
 	const apiList = await apiListBuilder();
 
@@ -165,12 +165,17 @@ async function buildComplexTable(
 				);
 
 				if (req) {
+					if (deleteItemCallback) {
+						await deleteItemCallback();
+					}
+
 					buildComplexTable(
 						apiListBuilder,
 						sectionName,
 						cellFunction,
 						deleteItemApiUrl,
 						reorderItemsApiUrl,
+						{ isLastItemNew, deleteItemCallback },
 					);
 				}
 			});
@@ -262,7 +267,9 @@ export function buildPropagandas(isLastItemNew = false) {
 		cellFunction,
 		deleteItemApiUrl,
 		reorderItemsApiUrl,
-		isLastItemNew,
+		{
+			isLastItemNew,
+		},
 	);
 }
 
@@ -295,12 +302,23 @@ export function buildCategories(isLastItemNew = false) {
 
 				form = JSON.stringify(form);
 
-				await handleCellRequest(token, cell, form, 'application/json');
+				const req = await handleCellRequest(
+					token,
+					cell,
+					form,
+					'application/json',
+				);
+
+				if (req) {
+					await buildProductsTemplateCallback();
+				}
 
 				lastValue = currentValue;
 			});
 		});
 	};
+
+	const deleteItemCallback = async () => await buildProductsTemplateCallback();
 
 	buildComplexTable(
 		apiListBuilder,
@@ -308,7 +326,10 @@ export function buildCategories(isLastItemNew = false) {
 		cellFunction,
 		deleteItemApiUrl,
 		reorderItemsApiUrl,
-		isLastItemNew,
+		{
+			isLastItemNew,
+			deleteItemCallback,
+		},
 	);
 }
 
@@ -327,7 +348,9 @@ export function buildProducts(isLastItemNew = false) {
 		cellFunction,
 		deleteItemApiUrl,
 		reorderItemsApiUrl,
-		isLastItemNew,
+		{
+			isLastItemNew,
+		},
 	);
 }
 
@@ -426,7 +449,10 @@ export function buildCategoriesTemplate(specialSection) {
 
 		if (req) {
 			template.setAttribute('original-item', '');
+
 			buildCategories(true);
+
+			await buildProductsTemplateCallback();
 		}
 	});
 
@@ -464,6 +490,33 @@ export function buildProductsTemplate(specialSection) {
 	});
 
 	return template;
+}
+
+//
+// Build Template Callback
+//
+
+export async function buildProductsTemplateCallback() {
+	const categories = await getCategories(token);
+
+	window.document
+		.querySelectorAll('select[product-categories-select]')
+		.forEach(async (select) => {
+			select.querySelectorAll('option').forEach((option) => {
+				option.remove();
+			});
+
+			categories.forEach((category) => {
+				const template = select
+					.querySelector('template')
+					.content.cloneNode(true).children[0];
+
+				template.setAttribute('value', category.id);
+				template.innerText = category.name;
+
+				select.append(template);
+			});
+		});
 }
 
 //
@@ -525,21 +578,6 @@ function loadProductInputProperties(template) {
 		div.querySelector('input').setAttribute('id', key);
 
 		loadFileInputProperties(div);
-	});
-
-	//category
-	template.querySelectorAll('select').forEach(async (select) => {
-		const categories = await getCategories(token);
-
-		categories.forEach((category) => {
-			const template = select.querySelector('template').content.cloneNode(true)
-				.children[0];
-
-			template.setAttribute('value', category.id);
-			template.innerText = category.name;
-
-			select.append(template);
-		});
 	});
 
 	const pseudoInputs = template.querySelectorAll('div[pseudo-input]');
