@@ -144,7 +144,7 @@ const sliderController = [];
 				left: position,
 				top: 0,
 			});
-		}, 14);
+		}, 21);
 	});
 
 	window.addEventListener('resize', () => {

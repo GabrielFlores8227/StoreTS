@@ -37,7 +37,7 @@ div.saved-product-container > div > div > div:first-of-type > div:first-of-type 
 }
 div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) {
   width: 100%;
-  padding-bottom: 5.6px;
+  padding-bottom: 10.5px;
 }
 div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) > hr {
   border: 0px;
@@ -45,16 +45,17 @@ div.saved-product-container > div > div > div:first-of-type > div:nth-child(2) >
   background-color: rgba(0, 0, 0, 0.178);
 }
 div.saved-product-container > div > div > div:first-of-type img {
-  width: 154px;
-  height: 154px;
+  width: 140px;
+  height: 140px;
   border-radius: 7px;
   object-fit: contain;
 }
 div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
   display: flex;
+  flex-direction: column;
+  gap: 3.5px;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
   height: 100%;
 }
@@ -187,6 +188,12 @@ aside > div > div:last-of-type {
   height: 100%;
 }
 
+@media (min-width: 1300px) {
+  div.saved-product-container > div > div > div:first-of-type img {
+    width: 154px;
+    height: 154px;
+  }
+}
 @media (min-width: 1700px) {
   div.saved-product-container > div > div > div:first-of-type img {
     width: 170px;

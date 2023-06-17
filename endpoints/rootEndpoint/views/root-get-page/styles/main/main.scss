@@ -10,10 +10,6 @@ div.propagandas-container {
 	position: relative;
 
 	button {
-		&:focus {
-			outline: none;
-		}
-
 		&:first-of-type {
 			left: 0;
 		}

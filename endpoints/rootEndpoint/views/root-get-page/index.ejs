@@ -50,7 +50,6 @@
 		<script defer type="module" src="/root-get-page/scripts/index.js"></script>
 	</head>
 	<body>
-
 		<!--loading-screen-->
 		<div class="loading-container">
 			<div loading-screen>
@@ -147,7 +146,6 @@
 		<!--header-->
 		<header>
 			<div>
-
 				<!--logo-->
 				<a href="/">
 					<img
@@ -163,7 +161,7 @@
 					<div>
 						<div search-results>
 							<template>
-								<button>
+								<button tabindex="-1">
 									<img draggable="false" product-image />
 									<div>
 										<p product-name></p>
@@ -186,7 +184,6 @@
 				</div>
 			</div>
 			<div>
-
 				<!--aside-menu-button-->
 				<button open-categories-aside-menu-button>
 					<i class="fa-solid fa-bars"></i>
@@ -198,7 +195,7 @@
 					<div>
 						<div search-results>
 							<template>
-								<button>
+								<button tabindex="-1">
 									<img draggable="false" product-image />
 									<div>
 										<p product-name></p>
@@ -214,11 +211,10 @@
 
 		<!--main-->
 		<main>
-
 			<!--propagandas-->
 			<% if (builder.propagandas.length > 0) { %>
 			<div image-slider-container class="propagandas-container">
-				<button></button>
+				<button tabindex="-1"></button>
 				<div>
 					<% builder.propagandas.forEach((propaganda) => { %>
 					<picture>
@@ -235,7 +231,7 @@
 					<% }) %>
 				</div>
 				<p><%= builder.footer.storeInfo %></p>
-				<button></button>
+				<button tabindex="-1"></button>
 			</div>
 			<% } %>
 

@@ -80,18 +80,19 @@ header > div:first-of-type {
 }
 header > div:first-of-type > a {
   display: flex;
-  padding: 7px 0px;
+  padding: 7px;
 }
 header > div:first-of-type > a > img:first-of-type {
   filter: grayscale(100%) brightness(0) invert(1);
 }
 header > div:first-of-type > div:last-of-type {
   display: flex;
-  gap: 24.5px;
+  gap: 14px;
 }
 header > div:first-of-type > div:last-of-type > button,
 header > div:first-of-type > div:last-of-type a {
   color: white;
+  padding: 7px;
 }
 
 /*# sourceMappingURL=header.css.map */

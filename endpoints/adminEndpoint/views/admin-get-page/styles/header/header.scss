@@ -19,7 +19,7 @@ header {
 
 		& > a {
 			display: flex;
-			padding: 7px 0px;
+			padding: 7px;
 
 			& > img:first-of-type {
 				@extend %default-height-size;
@@ -29,12 +29,13 @@ header {
 
 		& > div:last-of-type {
 			display: flex;
-			gap: 24.5px;
+			gap: 14px;
 
 			& > button,
 			a {
 				@extend %default-font-size;
 				color: white;
+				padding: 7px;
 			}
 		}
 	}

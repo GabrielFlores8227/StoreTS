@@ -61,7 +61,6 @@ div.table-section-container__table-container {
 		border-radius: 7px;
 		overflow: hidden;
 		background-color: var(--primary-color);
-		table-layout: auto;
 
 		thead,
 		tbody {
@@ -84,8 +83,8 @@ div.table-section-container__table-container {
 						width: 100%;
 					}
 
-					min-width: 280px;
-					height: 54px;
+					min-width: 301px;
+					height: 59.9px;
 				}
 			}
 		}
@@ -169,6 +168,7 @@ div.cell-container__file-input-container {
 		max-width: 140px;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		padding: 0px 3.5px;
 	}
 }
 
@@ -183,7 +183,7 @@ div.cell-container__text-input-container {
 			outline: none;
 		}
 
-		width: 100%;
+		max-width: 80%;
 		padding: 0px 21px;
 		text-align: center;
 		padding: 14px;
@@ -238,6 +238,8 @@ div.cell-container__select-container {
 		text-align: center;
 		border: none;
 		background-color: white;
+		text-overflow: ellipsis;
+		overflow: hidden;
 
 		font-size: 15.4px;
 
@@ -284,7 +286,7 @@ td.action-container {
 			& > button {
 				color: var(--primary-color);
 				font-size: 16.8px;
-				padding: 0px 7px;
+				padding: 7px;
 			}
 
 			& > div.action-container__action-info-container {

@@ -37,7 +37,7 @@ div.product-section-container > div > div:last-of-type > div > div:first-of-type
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:nth-child(2) {
   width: 100%;
-  padding-bottom: 5.6px;
+  padding-bottom: 10.5px;
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:nth-child(2) > hr {
   border: 0px;
@@ -45,16 +45,17 @@ div.product-section-container > div > div:last-of-type > div > div:first-of-type
   background-color: rgba(0, 0, 0, 0.178);
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
-  width: 154px;
-  height: 154px;
+  width: 140px;
+  height: 140px;
   border-radius: 7px;
   object-fit: contain;
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type {
   display: flex;
+  flex-direction: column;
+  gap: 3.5px;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
   height: 100%;
 }
@@ -108,6 +109,12 @@ div.product-section-container > div > div:last-of-type > div a i {
   font-size: 21px;
 }
 
+@media (min-width: 1300px) {
+  div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
+    width: 154px;
+    height: 154px;
+  }
+}
 @media (min-width: 1700px) {
   div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
     width: 170px;
@@ -171,9 +178,6 @@ div.propagandas-container button {
   height: 100%;
   position: absolute;
   top: 0;
-}
-div.propagandas-container button:focus {
-  outline: none;
 }
 div.propagandas-container button:first-of-type {
   left: 0;

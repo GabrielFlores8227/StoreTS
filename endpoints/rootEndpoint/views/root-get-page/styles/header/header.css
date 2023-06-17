@@ -76,7 +76,7 @@ header > div:first-of-type {
 }
 header > div:first-of-type > a {
   display: flex;
-  padding: 7px 0px;
+  padding: 7px;
 }
 header > div:first-of-type > a > img:first-of-type {
   filter: grayscale(100%) brightness(0) invert(1);
@@ -86,9 +86,10 @@ header > div:first-of-type > div:first-of-type {
 }
 header > div:first-of-type > div:last-of-type {
   display: flex;
-  gap: 24.5px;
+  gap: 14px;
 }
 header > div:first-of-type > div:last-of-type > button {
+  padding: 7px;
   color: white;
 }
 header > div:first-of-type > div:last-of-type > button:last-of-type {
@@ -98,7 +99,7 @@ header > div:last-of-type {
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 17.5px;
+  gap: 14px;
   background-color: var(--light-gray);
   transition: ease-in-out 0.35s;
   padding-top: 11.2px;
@@ -108,7 +109,7 @@ header > div:last-of-type.--off {
   transform: translateY(-100%);
 }
 header > div:last-of-type > button {
-  border-radius: 100%;
+  padding: 7px;
   color: var(--primary-color);
 }
 

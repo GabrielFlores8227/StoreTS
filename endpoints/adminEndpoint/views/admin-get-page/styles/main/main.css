@@ -90,7 +90,6 @@ div.table-section-container__table-container > table {
   border-radius: 7px;
   overflow: hidden;
   background-color: var(--primary-color);
-  table-layout: auto;
 }
 div.table-section-container__table-container > table thead,
 div.table-section-container__table-container > table tbody {
@@ -106,8 +105,8 @@ div.table-section-container__table-container > table tbody > tr {
   background-color: white;
 }
 div.table-section-container__table-container > table tbody > tr > td {
-  min-width: 280px;
-  height: 54px;
+  min-width: 301px;
+  height: 59.9px;
 }
 div.table-section-container__table-container > table tbody > tr > td.--sortable-item {
   width: 100%;
@@ -173,10 +172,11 @@ div.cell-container__file-input-container a {
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 0px 3.5px;
 }
 
 div.cell-container__text-input-container div[pseudo-input] {
-  width: 100%;
+  max-width: 80%;
   padding: 0px 21px;
   text-align: center;
   padding: 14px;
@@ -225,6 +225,8 @@ div.cell-container__select-container select {
   text-align: center;
   border: none;
   background-color: white;
+  text-overflow: ellipsis;
+  overflow: hidden;
   font-size: 15.4px;
 }
 div.cell-container__select-container select:focus {
@@ -256,7 +258,7 @@ td.action-container > div > div {
 td.action-container > div > div > button {
   color: var(--primary-color);
   font-size: 16.8px;
-  padding: 0px 7px;
+  padding: 7px;
 }
 td.action-container > div > div > div.action-container__action-info-container {
   transform: translateY(-50%);

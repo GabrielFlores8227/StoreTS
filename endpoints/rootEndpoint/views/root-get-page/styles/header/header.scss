@@ -19,7 +19,7 @@ header {
 
 		& > a {
 			display: flex;
-			padding: 7px 0px;
+			padding: 7px;
 
 			& > img:first-of-type {
 				@extend %default-height-size;
@@ -38,15 +38,16 @@ header {
 
 		& > div:last-of-type {
 			display: flex;
-			gap: 24.5px;
+			gap: 14px;
 
 			& > button {
-				@extend %default-font-size;
-				color: white;
-			}
+				&:last-of-type {
+					display: none;
+				}
 
-			& > button:last-of-type {
-				display: none;
+				@extend %default-font-size;
+				padding: 7px;
+				color: white;
 			}
 		}
 	}
@@ -60,7 +61,7 @@ header {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		gap: 17.5px;
+		gap: 14px;
 		background-color: var(--light-gray);
 		transition: ease-in-out 0.35s;
 		padding-top: 11.2px;
@@ -68,7 +69,7 @@ header {
 
 		& > button {
 			@extend %default-font-size;
-			border-radius: 100%;
+			padding: 7px;
 			color: var(--primary-color);
 		}
 	}
