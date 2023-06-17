@@ -56,8 +56,8 @@ div.product-section-container {
 		&.--special {
 			&::before {
 				content: '';
-				width: 350px;
-				height: 350px;
+				width: 305px;
+				height: 305px;
 				border-radius: 100%;
 				border: 4.9px solid var(--primary-color);
 				transform: translateY(-50%);
@@ -68,8 +68,8 @@ div.product-section-container {
 
 			&::after {
 				content: '';
-				width: 350px;
-				height: 350px;
+				width: 305px;
+				height: 305px;
 				border-radius: 100%;
 				filter: opacity(0%);
 				border: 4.9px solid var(--primary-color);

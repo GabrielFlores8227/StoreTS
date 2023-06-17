@@ -1,5 +1,4 @@
 import express from 'express';
-import crypto from 'crypto';
 import Middleware from 'storets-middleware';
 import LocalModules from './localModules';
 
@@ -9,7 +8,7 @@ login.get(
 	'/',
 	(req, res, next) => {
 		if (Object(req).session.userId) {
-			return res.redirect('/admin');
+			return res.status(401).redirect('/admin');
 		} else {
 			return next();
 		}
@@ -21,7 +20,7 @@ login.get(
 );
 
 login.post('/', LocalModules.middlewareCheckAuth, (req, res) => {
-	Object(req).session.userId = crypto.randomBytes(64).toString('hex');
+	Object(req).session.sessionID = req.sessionID;
 
 	res.redirect('/admin');
 });

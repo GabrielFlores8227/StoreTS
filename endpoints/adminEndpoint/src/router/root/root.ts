@@ -10,10 +10,10 @@ const root = express.Router();
 root.get(
 	'/',
 	(req, res, next) => {
-		if (!Object(req).session.userId) {
-			return res.redirect('/admin/login');
-		} else {
+		if (Object(req).session.sessionID) {
 			return next();
+		} else {
+			return res.redirect('/admin/login');
 		}
 	},
 	LocalModules.middlewareGenerateToken,

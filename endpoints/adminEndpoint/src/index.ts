@@ -45,11 +45,15 @@ router.use(
 	}),
 );
 
-// Setup MySQL Session (session duration = 7 days)
+// Enable sessions
 const MySQLStore = require('express-mysql-session')(session);
+
+const expiration = 604800000;
+
 const store = new MySQLStore(
 	{
-		expiration: 604800000,
+		checkExpirationInterval: expiration,
+		expiration,
 		createDatabaseTable: true,
 		schema: {
 			tableName: 'sessions',
@@ -63,15 +67,15 @@ const store = new MySQLStore(
 	Sql.mysqlConn,
 );
 
-// Enable Session (session duration = 7 days)
 app.use(
 	session({
+		name: process.env.SESSION_NAME!,
 		secret: process.env.SESSION_SECRET!,
 		resave: false,
 		saveUninitialized: true,
 		store,
 		cookie: {
-			maxAge: 604800000,
+			maxAge: expiration,
 		},
 	}),
 );
