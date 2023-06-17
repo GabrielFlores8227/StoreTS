@@ -66,7 +66,7 @@ const store = new MySQLStore(
 // Enable Session (session duration = 7 days)
 app.use(
 	session({
-		secret: process.env.SECRET!,
+		secret: process.env.SESSION_SECRET!,
 		resave: false,
 		saveUninitialized: true,
 		store,

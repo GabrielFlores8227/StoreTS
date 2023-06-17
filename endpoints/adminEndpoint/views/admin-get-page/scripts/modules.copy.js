@@ -19,13 +19,13 @@ function getToken() {
 	return null;
 }
 
-const token = getToken();
+export const token = getToken();
 
 //
 // Get
 //
 
-export async function getHeader() {
+export async function getHeader(token) {
 	return await (
 		await fetch('/admin/api/header', {
 			method: 'POST',
@@ -34,7 +34,7 @@ export async function getHeader() {
 	).json();
 }
 
-async function getPropagandas() {
+async function getPropagandas(token) {
 	return await (
 		await fetch('/admin/api/propagandas', {
 			method: 'POST',
@@ -43,7 +43,7 @@ async function getPropagandas() {
 	).json();
 }
 
-async function getCategories() {
+async function getCategories(token) {
 	return await (
 		await fetch('/admin/api/categories', {
 			method: 'POST',
@@ -52,7 +52,7 @@ async function getCategories() {
 	).json();
 }
 
-async function getProducts() {
+async function getProducts(token) {
 	return await (
 		await fetch('/admin/api/products', {
 			method: 'POST',
@@ -62,7 +62,7 @@ async function getProducts() {
 }
 
 //
-// Build Interface
+// Build
 //
 
 export function buildAsideMenus(asideButtonHandler) {
@@ -81,12 +81,8 @@ export function buildAsideMenus(asideButtonHandler) {
 	});
 }
 
-//
-// Build Table
-//
-
 export async function buildIcon() {
-	const { icon } = await getHeader();
+	const { icon } = await getHeader(token);
 
 	window.document
 		.querySelector('link[rel="shortcut icon"]')
@@ -94,7 +90,7 @@ export async function buildIcon() {
 }
 
 export async function buildLogo() {
-	const { logo } = await getHeader();
+	const { logo } = await getHeader(token);
 
 	window.document.querySelectorAll('img[logo]').forEach((img) => {
 		img.setAttribute('src', logo);
@@ -102,13 +98,13 @@ export async function buildLogo() {
 }
 
 export async function buildTitle() {
-	const { title } = await getHeader();
+	const { title } = await getHeader(token);
 
 	window.document.querySelector('title').innerText = title + ' | Admin';
 }
 
 export async function buildColor() {
-	const { color } = await getHeader();
+	const { color } = await getHeader(token);
 
 	window.document.documentElement.style.setProperty('--primary-color', color);
 }
@@ -132,7 +128,7 @@ async function buildComplexTable(
 	});
 
 	if (sectionName === 'products') {
-		const categories = await getCategories();
+		const categories = await getCategories(token);
 
 		Object.keys(apiList)
 			.reverse()
@@ -226,6 +222,7 @@ async function buildComplexTable(
 			form = JSON.stringify(form);
 
 			const req = await handleActionRequest(
+				token,
 				actionContainer,
 				deleteItemApiUrl,
 				'DELETE',
@@ -258,7 +255,7 @@ async function buildComplexTable(
 }
 
 export function buildPropagandas(isLastItemNew = false) {
-	const apiListBuilder = async () => await getPropagandas();
+	const apiListBuilder = async () => await getPropagandas(token);
 	const sectionName = 'propagandas';
 	const deleteItemApiUrl = '/admin/api/propaganda';
 	const reorderItemsApiUrl = '/admin/api/propagandas';
@@ -282,7 +279,7 @@ export function buildPropagandas(isLastItemNew = false) {
 				form.append('file', e.target.files[0]);
 				form.append('id', String(apiItem.id));
 
-				await handleCellRequest(cell, form);
+				await handleCellRequest(token, cell, form);
 			});
 
 			const link = div.querySelector('a');
@@ -309,7 +306,7 @@ export function buildPropagandas(isLastItemNew = false) {
 }
 
 export function buildCategories(isLastItemNew = false) {
-	const apiListBuilder = async () => await getCategories();
+	const apiListBuilder = async () => await getCategories(token);
 	const sectionName = 'categories';
 	const deleteItemApiUrl = '/admin/api/category';
 	const reorderItemsApiUrl = '/admin/api/categories';
@@ -326,7 +323,7 @@ export function buildCategories(isLastItemNew = false) {
 			div.addEventListener('focusout', async () => {
 				const currentValue = div.innerText;
 
-				handleTextInputRequest(
+				handleInputValue(
 					lastInnerText,
 					cell,
 					'name',
@@ -397,7 +394,7 @@ function buildProductCategoriesSelect(categories, select, selected = '') {
 }
 
 export async function buildProducts(isLastItemNew = false) {
-	const apiListBuilder = async () => await getProducts();
+	const apiListBuilder = async () => await getProducts(token);
 	const sectionName = 'products';
 	const deleteItemApiUrl = '/admin/api/product';
 	const reorderItemsApiUrl = '/admin/api/products';
@@ -412,7 +409,7 @@ export async function buildProducts(isLastItemNew = false) {
 					form.append('file', e.target.files[0]);
 					form.append('id', apiItem.id);
 
-					await handleCellRequest(cell, form);
+					await handleCellRequest(token, cell, form);
 				});
 			});
 
@@ -425,7 +422,7 @@ export async function buildProducts(isLastItemNew = false) {
 			cell.setAttribute('action', '/admin/api/products/category');
 
 			select.addEventListener('change', async (e) => {
-				await handleTextInputRequest(
+				await handleInputValue(
 					false,
 					cell,
 					'category',
@@ -447,7 +444,7 @@ export async function buildProducts(isLastItemNew = false) {
 			div.addEventListener('focusout', async () => {
 				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'name',
@@ -462,18 +459,15 @@ export async function buildProducts(isLastItemNew = false) {
 		cell.querySelectorAll('div[product-price]').forEach((div) => {
 			cell.setAttribute('action', '/admin/api/products/price');
 
-			div.innerText = convertToMoneyFormat(apiItem.price);
+			div.innerText = apiItem.price;
+			formatPrice(div);
 
-			let lastInnerText = div.innerText
-				.replace(/[^\d,-]/g, '')
-				.replace(',', '.');
+			let lastInnerText = div.innerText;
 
 			div.addEventListener('focusout', async () => {
-				const currentInnerText = div.innerText
-					.replace(/[^\d,-]/g, '')
-					.replace(',', '.');
+				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'price',
@@ -491,12 +485,12 @@ export async function buildProducts(isLastItemNew = false) {
 			div.innerText = apiItem.off;
 			formatOff(div);
 
-			let lastInnerText = div.innerText.replace(/\D/g, '');
+			let lastInnerText = div.innerText;
 
 			div.addEventListener('focusout', async () => {
-				const currentInnerText = div.innerText.replace(/\D/g, '');
+				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'off',
@@ -518,7 +512,7 @@ export async function buildProducts(isLastItemNew = false) {
 			div.addEventListener('focusout', async () => {
 				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'installment',
@@ -536,12 +530,12 @@ export async function buildProducts(isLastItemNew = false) {
 			div.innerText = apiItem.whatsapp;
 			formatWhatsapp(div);
 
-			let lastInnerText = div.innerText.replace(/\D/g, '');
+			let lastInnerText = div.innerText;
 
 			div.addEventListener('focusout', async () => {
-				const currentInnerText = div.innerText.replace(/\D/g, '');
+				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'whatsapp',
@@ -563,7 +557,7 @@ export async function buildProducts(isLastItemNew = false) {
 			div.addEventListener('focusout', async () => {
 				const currentInnerText = div.innerText;
 
-				await handleTextInputRequest(
+				await handleInputValue(
 					lastInnerText,
 					cell,
 					'message',
@@ -626,6 +620,7 @@ export function buildPropagandasTemplate(specialSection) {
 		form.append('imagesContext', 'smallImage');
 
 		const req = await handleActionRequest(
+			token,
 			actionContainer,
 			'/admin/api/propaganda',
 			'POST',
@@ -672,6 +667,7 @@ export function buildCategoriesTemplate(specialSection) {
 		form = JSON.stringify(form);
 
 		const req = await handleActionRequest(
+			token,
 			actionContainer,
 			'/admin/api/category',
 			'POST',
@@ -724,14 +720,9 @@ export function buildProductsTemplate(specialSection) {
 		const name = template.querySelector('div[product-name]').innerText;
 		form.append('name', name);
 
-		const price = String(
-			parseFloat(
-				template
-					.querySelector('div[product-price]')
-					.innerText.replace(/[^\d,-]/g, '')
-					.replace(',', '.'),
-			).toFixed(2),
-		);
+		const price = template
+			.querySelector('div[product-price]')
+			.innerText.replace(/\D/g, '');
 		form.append('price', price);
 
 		const off = template
@@ -753,6 +744,7 @@ export function buildProductsTemplate(specialSection) {
 		form.append('message', message);
 
 		const req = await handleActionRequest(
+			token,
 			actionContainer,
 			'/admin/api/product',
 			'POST',
@@ -779,7 +771,7 @@ export function buildProductsTemplate(specialSection) {
 //
 
 export async function buildProductsTemplateCallback() {
-	const categories = await getCategories();
+	const categories = await getCategories(token);
 
 	window.document
 		.querySelectorAll('select[product-categories-select]')
@@ -792,7 +784,34 @@ export async function buildProductsTemplateCallback() {
 // Others
 //
 
+export async function handleInputValue(
+	lastInnerText,
+	cell,
+	forItem,
+	value,
+	identifier,
+	callBack = undefined,
+) {
+	if (value === lastInnerText) {
+		return;
+	}
+
+	let form = {};
+
+	form[forItem] = value;
+	form['id'] = identifier;
+
+	form = JSON.stringify(form);
+
+	const req = await handleCellRequest(token, cell, form, 'application/json');
+
+	if (req && callBack) {
+		await callBack();
+	}
+}
+
 function handlePseudoInputCursorAsLastProperty(div) {
+	// Set the cursor position to the end of the input
 	const range = document.createRange();
 	const selection = window.getSelection();
 	range.selectNodeContents(div);
@@ -885,13 +904,17 @@ function formatPrice(inputElement) {
 				'R$ ' + '0' + value.charAt(0) + ',' + value.slice(1, 3);
 		}
 	} else {
+		// Split the value into dollars and cents
 		const dollars = value.slice(0, -2);
 		const cents = value.slice(-2);
 
+		// Format the dollars with dots as thousands separators
 		const formattedDollars = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
+		// Concatenate the dollars and cents with a comma separator
 		let formattedValue = formattedDollars + ',' + cents;
 
+		// Add "00" to the cents if there are no cents input
 		if (formattedValue === ',') {
 			formattedValue += '00';
 		}
@@ -918,11 +941,13 @@ function loadProductInputProperties(template) {
 		loadPseudoInputProperties(div);
 	});
 
+	//price
 	pseudoInputs[1].addEventListener('input', (event) => {
 		const inputElement = event.target;
 		formatPrice(inputElement);
 	});
 
+	//off
 	pseudoInputs[2].addEventListener('keydown', (event) => {
 		const inputElement = event.target;
 		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
@@ -942,6 +967,7 @@ function loadProductInputProperties(template) {
 		handlePseudoInputCursorAsLastProperty(inputElement);
 	});
 
+	//whatsapp
 	pseudoInputs[4].addEventListener('keydown', (event) => {
 		const inputElement = event.target;
 		let value = String(inputElement.innerText.replace(/\D/g, ''));
@@ -968,7 +994,49 @@ function loadProductInputProperties(template) {
 	});
 }
 
+function addSortableList(container, callBack) {
+	$(function () {
+		const sortable = $(`[${container}]`).sortable({
+			items: 'tr:not([pseudo-item])',
+			cancel: '[pseudo-item]',
+			stop: callBack,
+			tolerance: 'pointer',
+		});
+
+		$(`[${container}]`).on('mousedown', '[draggable]', function () {
+			if (
+				window.document.querySelectorAll(`[${container}] [original-item]`)
+					.length < 2
+			) {
+				return;
+			}
+
+			sortable.sortable('enable');
+		});
+
+		$(document).on('mouseup', function (e) {
+			if (
+				window.document.querySelectorAll(`[${container}] [original-item]`)
+					.length < 2
+			) {
+				return;
+			}
+
+			if (!$(e.target).closest('[draggable]').length) {
+				sortable.sortable('disable');
+			}
+		});
+	});
+}
+
+function destroySortableList(container) {
+	$(function () {
+		$('[' + container + ']').sortable('destroy');
+	});
+}
+
 export async function handleActionRequest(
+	token,
 	actionContainer,
 	url,
 	method,
@@ -1025,7 +1093,12 @@ export async function handleActionRequest(
 	}
 }
 
-export async function handleCellRequest(cell, body, contentType = undefined) {
+export async function handleCellRequest(
+	token,
+	cell,
+	body,
+	contentType = undefined,
+) {
 	$('--loading');
 
 	const action = cell.getAttribute('action');
@@ -1078,32 +1151,6 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 	}
 }
 
-export async function handleTextInputRequest(
-	lastInnerText,
-	cell,
-	forItem,
-	value,
-	identifier,
-	callBack = undefined,
-) {
-	if (value === lastInnerText) {
-		return;
-	}
-
-	let form = {};
-
-	form[forItem] = value;
-	form['id'] = identifier;
-
-	form = JSON.stringify(form);
-
-	const req = await handleCellRequest(cell, form, 'application/json');
-
-	if (req && callBack) {
-		await callBack();
-	}
-}
-
 export function handleTableVisibility() {
 	window.document.querySelectorAll('div[special-section]').forEach((div) => {
 		const rows = div.querySelectorAll('tr[table-row]');
@@ -1113,47 +1160,6 @@ export function handleTableVisibility() {
 		} else {
 			div.querySelector('div[table-container]').classList.remove('--off');
 		}
-	});
-}
-
-function addSortableList(container, callBack) {
-	$(function () {
-		const sortable = $(`[${container}]`).sortable({
-			items: 'tr:not([pseudo-item])',
-			cancel: '[pseudo-item]',
-			stop: callBack,
-			tolerance: 'pointer',
-		});
-
-		$(`[${container}]`).on('mousedown', '[draggable]', function () {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
-				return;
-			}
-
-			sortable.sortable('enable');
-		});
-
-		$(document).on('mouseup', function (e) {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
-				return;
-			}
-
-			if (!$(e.target).closest('[draggable]').length) {
-				sortable.sortable('disable');
-			}
-		});
-	});
-}
-
-function destroySortableList(container) {
-	$(function () {
-		$('[' + container + ']').sortable('destroy');
 	});
 }
 
@@ -1168,17 +1174,4 @@ function generateRandomString(length) {
 	}
 
 	return result;
-}
-
-/**
- * Function to convert a number to money format.
- * @param {number} number - The number to be converted.
- * @returns {string} - The number in money format.
- */
-
-export function convertToMoneyFormat(number) {
-	return number.toLocaleString('pt-BR', {
-		style: 'currency',
-		currency: 'BRL',
-	});
 }

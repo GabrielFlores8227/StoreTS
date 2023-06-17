@@ -1,6 +1,4 @@
-import { token, buildAsideMenus } from './modules.js';
-
-console.log(token);
+import { buildAsideMenus } from './modules.js';
 
 (() => {
 	window.document

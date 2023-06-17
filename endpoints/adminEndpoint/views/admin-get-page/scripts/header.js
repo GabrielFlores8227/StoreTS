@@ -1,5 +1,4 @@
 import {
-	token,
 	loadFileInputProperties,
 	handleCellRequest,
 	buildIcon,
@@ -7,6 +6,7 @@ import {
 	buildTitle,
 	buildColor,
 	loadPseudoInputProperties,
+	handleTextInputRequest,
 } from './modules.js';
 
 (() => {
@@ -79,7 +79,7 @@ import {
 				form.append('file', e.target.files[0]);
 				form.append('id', identifier);
 
-				const req = await handleCellRequest(token, cell, form);
+				const req = await handleCellRequest(cell, form);
 
 				if (req && callBack[forItem]) {
 					await callBack[forItem]();
@@ -93,11 +93,14 @@ import {
 			div.addEventListener('focusout', async () => {
 				const currentInnerText = div.innerText;
 
-				if (currentInnerText === lastInnerText) {
-					return;
-				}
-
-				handleInputValue(currentInnerText);
+				handleTextInputRequest(
+					lastInnerText,
+					cell,
+					forItem,
+					currentInnerText,
+					identifier,
+					async () => await callBack[forItem](),
+				);
 
 				lastInnerText = currentInnerText;
 			});
@@ -105,34 +108,27 @@ import {
 
 		cell.querySelectorAll('textarea').forEach((input) => {
 			input.addEventListener('change', async (e) => {
-				handleInputValue(e.target.value);
+				handleTextInputRequest(
+					cell,
+					forItem,
+					e.target.value,
+					identifier,
+					async () => await callBack[forItem](),
+				);
 			});
 		});
 
 		cell.querySelectorAll('input[type="color"]').forEach((input) => {
 			input.addEventListener('change', async (e) => {
-				handleInputValue(e.target.value);
+				handleTextInputRequest(
+					false,
+					cell,
+					forItem,
+					e.target.value,
+					identifier,
+					async () => await callBack[forItem](),
+				);
 			});
 		});
-
-		async function handleInputValue(value) {
-			let form = {};
-
-			form[forItem] = value;
-			form['id'] = identifier;
-
-			form = JSON.stringify(form);
-
-			const req = await handleCellRequest(
-				token,
-				cell,
-				form,
-				'application/json',
-			);
-
-			if (req && callBack[forItem]) {
-				await callBack[forItem]();
-			}
-		}
 	});
 })();

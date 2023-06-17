@@ -11,10 +11,10 @@ class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
-				Admin.checkLength(title, 5, 30, 'title');
+				Admin.checkLength(title, 1, 30, 'title');
 			},
 			description: (description: string) => {
-				Admin.checkLength(description, 5, 255, 'description');
+				Admin.checkLength(description, 1, 255, 'description');
 			},
 			color: (data: string) => {
 				Admin.checkLength(data, 7, 7, 'color');
@@ -40,7 +40,7 @@ class Support {
 		categories: {
 			name: async (name: string) => {
 				Admin.checkType(name, 'string', 'name');
-				Admin.checkLength(name, 5, 30, 'name');
+				Admin.checkLength(name, 1, 30, 'name');
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE name = ?;',
@@ -65,23 +65,35 @@ class Support {
 				);
 
 				if (Object(query).length === 0) {
+					let message =
+						'Oops, the category you provided does not exist. Please try choosing an existing category';
+
+					const [query] = await Sql.query('SELECT name FROM categories;');
+
+					if (Object(query).length === 0) {
+						message =
+							'Oops, there are no categories available. Please try to create a category first';
+					}
+
 					throw {
 						status: 400,
-						message: `Oops, the category '${category}' does not exist. Please try choosing an existing category`,
+						message,
 					};
 				}
 			},
 			name: (name: string) => {
 				Admin.checkType(name, 'string', 'name');
-				Admin.checkLength(name, 5, 30, 'name');
+				Admin.checkLength(name, 1, 30, 'name');
 			},
 			price: (price: string) => {
 				Admin.checkType(price, 'string', 'price');
+				Admin.checkLength(price, 1, -1, 'price');
 				Admin.checkNumber(price, 'price');
 				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'price');
 			},
 			off: (off: string) => {
 				Admin.checkType(off, 'string', 'off');
+				Admin.checkLength(off, 1, -1, 'price');
 				Admin.checkNumber(off, 'off');
 				Admin.checkValue(off, 0, 100, 'off');
 			},
@@ -101,23 +113,23 @@ class Support {
 		},
 		footer: {
 			title: (title: string) => {
-				Admin.checkLength(title, 5, 30, 'title');
+				Admin.checkLength(title, 1, 30, 'title');
 			},
 			text: (text: string) => {
-				Admin.checkLength(text, 5, 255, 'text');
+				Admin.checkLength(text, 1, 255, 'text');
 			},
 			whatsapp: (whatsapp: string) => {
 				Admin.checkNumber(whatsapp, 'whatsapp');
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
-				Admin.checkLength(facebook, 5, 30, 'facebook');
+				Admin.checkLength(facebook, 1, 30, 'facebook');
 			},
 			instagram: (instagram: string) => {
-				Admin.checkLength(instagram, 5, 30, 'instagram');
+				Admin.checkLength(instagram, 1, 30, 'instagram');
 			},
 			storeInfo: (storeInfo: string) => {
-				Admin.checkLength(storeInfo, 5, 30, 'store info');
+				Admin.checkLength(storeInfo, 1, 30, 'store info');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
 				Admin.checkLength(completeStoreInfo, 5, 30, 'complete store info');
@@ -133,7 +145,6 @@ class Support {
 				await this.sharpFile(file, 'contain', {
 					height: 70,
 					maxScale: 7.5,
-					fileType: 'png',
 				}),
 		},
 		propagandas: {
@@ -144,7 +155,7 @@ class Support {
 		},
 		products: {
 			image: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'cover', { width: 1080, height: 1080 }),
+				await this.sharpFile(file, 'inside', { width: 1080, height: 1080 }),
 		},
 	};
 
@@ -168,17 +179,9 @@ class Support {
 			width?: number;
 			height?: number;
 			maxScale?: number;
-			fileType?: string;
 		},
 	) {
 		const originalName = file!.originalname;
-
-		if (options.fileType && !file!.mimetype.includes(options.fileType)) {
-			throw {
-				status: 400,
-				message: `Oops, the image '${originalName}' is not a valid image. Please try choosing a png image`,
-			};
-		}
 
 		file!.originalname = crypto
 			.randomBytes(128)

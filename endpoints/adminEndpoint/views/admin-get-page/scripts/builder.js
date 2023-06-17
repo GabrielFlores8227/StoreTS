@@ -40,7 +40,9 @@ import {
 				.addEventListener('click', async () => {
 					const templateUsable = buildTemplate[index](div);
 
-					div.querySelector('template').parentElement.append(templateUsable);
+					div
+						.querySelector('tbody > template')
+						.parentElement.append(templateUsable);
 
 					handleTableVisibility();
 
