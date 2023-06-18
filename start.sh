@@ -66,28 +66,38 @@ function STOP() {
 START
 trap KILL SIGINT
 
-sleep 60
 
-while true
-do
-  if [ $(CHECK_REPO) -eq 0 ]; then
-    echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
-    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
+if [[ ! $* == *--dev* ]]
+then
+  sleep 60
 
-    STOP
+  while true
+  do
+    if [ $(CHECK_REPO) -eq 0 ]; then
+      echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
+      clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
 
-    git fetch
-    git reset --hard origin/main
+      STOP
 
-    ./install.sh
-    ./update.sh
+      git fetch
+      git reset --hard origin/main
 
-    echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
+      ./install.sh
+      ./update.sh
 
-    sleep 5
+      echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
 
-    START
-  fi
+      sleep 5
 
-  sleep 600
-done
+      START
+    fi
+
+    sleep 600
+  done
+else
+  echo -e "\033[1;33m[!] StoreTS is running in development mode\033[0m"
+  echo -e "\033[1;33m[!] Auto-Update is off\033[0m"
+
+  wait
+fi
+

@@ -166,6 +166,7 @@ div.product-section-container > div > div:first-of-type h1 {
   }
 }
 main {
+  min-height: 41vh;
   padding: 119px 0;
   background-color: var(--light-gray);
 }

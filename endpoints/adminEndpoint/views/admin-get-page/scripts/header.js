@@ -109,11 +109,11 @@ import {
 		cell.querySelectorAll('textarea').forEach((input) => {
 			input.addEventListener('change', async (e) => {
 				handleTextInputRequest(
+					false,
 					cell,
 					forItem,
 					e.target.value,
 					identifier,
-					async () => await callBack[forItem](),
 				);
 			});
 		});

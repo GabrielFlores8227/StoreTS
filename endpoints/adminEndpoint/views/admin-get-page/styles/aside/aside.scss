@@ -3,4 +3,8 @@
 
 aside {
 	@extend %aside-menu;
+
+	ul {
+		@extend %aside-list;
+	}
 }

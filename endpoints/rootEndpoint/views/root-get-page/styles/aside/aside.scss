@@ -3,6 +3,10 @@
 
 aside {
 	@extend %aside-menu;
+
+	ul {
+		@extend %aside-list;
+	}
 }
 
 div.saved-product-container {
@@ -18,54 +22,6 @@ div.saved-product-container {
 		& > div {
 			@extend %product-container;
 			width: 100%;
-		}
-	}
-}
-
-ul.categories-list {
-	li {
-		button {
-			display: flex;
-			gap: 7px;
-			padding: 7px;
-			width: 100%;
-			position: relative;
-
-			i:first-of-type {
-				width: 8.4px;
-				height: 8.4px;
-				border-radius: 100%;
-				background-color: var(--primary-color);
-			}
-
-			i:last-of-type {
-				&:hover {
-					color: var(--primary-color);
-				}
-
-				width: 100%;
-				text-align: left;
-				white-space: nowrap;
-				transition: ease-in-out 0.35s;
-				color: var(--dark-gray);
-				font-family: var(--font-bold);
-				font-style: normal;
-				font-size: 15.4px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		}
-	}
-}
-
-@media (min-width: 1700px) {
-	ul.categories-list {
-		li {
-			button {
-				i:last-of-type {
-					font-size: 16.1px;
-				}
-			}
 		}
 	}
 }
