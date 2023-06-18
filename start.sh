@@ -69,7 +69,7 @@ trap KILL SIGINT
 
 if [[ ! $* == *--dev* ]]
 then
-  sleep 60
+  sleep 600
 
   while true
   do

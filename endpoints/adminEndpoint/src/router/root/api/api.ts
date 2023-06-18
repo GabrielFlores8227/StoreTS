@@ -105,6 +105,7 @@ api.put(
 		'/footer/whatsapp',
 		'/footer/facebook',
 		'/footer/instagram',
+		'/footer/location',
 		'/footer/storeInfo',
 		'/footer/completeStoreInfo',
 	],

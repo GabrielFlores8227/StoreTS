@@ -20,6 +20,7 @@ function getToken() {
 }
 
 const token = getToken();
+console.log(token);
 
 //
 // Get

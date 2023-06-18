@@ -11,13 +11,19 @@ class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
+				title = title.trim();
+
 				Admin.checkLength(title, 1, 30, 'title');
 			},
 			description: (description: string) => {
+				description = description.trim();
+
 				Admin.checkLength(description, 1, 255, 'description');
 			},
-			color: (data: string) => {
-				Admin.checkLength(data, 7, 7, 'color');
+			color: (color: string) => {
+				color = color.trim();
+
+				Admin.checkLength(color, 7, 7, 'color');
 			},
 		},
 		propagandas: {
@@ -39,12 +45,13 @@ class Support {
 		},
 		categories: {
 			name: async (name: string) => {
-				Admin.checkType(name, 'string', 'name');
+				name = name.trim();
+
 				Admin.checkLength(name, 1, 30, 'name');
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE name = ?;',
-					[name.trim()],
+					[name],
 				);
 
 				if (Object(query).length !== 0) {
@@ -57,7 +64,7 @@ class Support {
 		},
 		products: {
 			category: async (category: string) => {
-				Admin.checkType(category, 'string', 'category');
+				category = category.trim();
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE id = ?;',
@@ -82,56 +89,94 @@ class Support {
 				}
 			},
 			name: (name: string) => {
-				Admin.checkType(name, 'string', 'name');
+				name = name.trim();
+
 				Admin.checkLength(name, 1, 30, 'name');
 			},
 			price: (price: string) => {
-				Admin.checkType(price, 'string', 'price');
+				price = price.trim();
+
 				Admin.checkLength(price, 1, -1, 'price');
 				Admin.checkNumber(price, 'price');
 				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'price');
 			},
 			off: (off: string) => {
-				Admin.checkType(off, 'string', 'off');
+				off = off.trim();
+
 				Admin.checkLength(off, 1, -1, 'price');
 				Admin.checkNumber(off, 'off');
 				Admin.checkValue(off, 0, 100, 'off');
 			},
 			installment: (installment: string) => {
-				Admin.checkType(installment, 'string', 'installment');
+				installment = installment.trim();
+
 				Admin.checkLength(installment, 0, 30, 'installment');
 			},
 			whatsapp: (whatsapp: string) => {
-				Admin.checkType(whatsapp, 'string', 'whatsapp');
-				Admin.checkNumber(whatsapp, 'whatsapp');
+				whatsapp = whatsapp.trim();
+
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
+				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			message: (message: string) => {
-				Admin.checkType(message, 'string', 'mesage');
+				message = message.trim();
+
 				Admin.checkLength(message, 0, 255, 'message');
 			},
 		},
 		footer: {
 			title: (title: string) => {
+				title = title.trim();
+
 				Admin.checkLength(title, 1, 30, 'title');
 			},
 			text: (text: string) => {
+				text = text.trim();
+
 				Admin.checkLength(text, 1, 255, 'text');
 			},
 			whatsapp: (whatsapp: string) => {
-				Admin.checkNumber(whatsapp, 'whatsapp');
+				whatsapp = whatsapp.trim();
+
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
+				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
-				Admin.checkLength(facebook, 1, 30, 'facebook');
+				facebook = facebook.trim();
+
+				Admin.checkLength(facebook, 2, 30, 'facebook');
+				Admin.checkSubstring(facebook, '@', true, true, 'facebook');
+				Admin.checkSubstring(facebook, ' ', false, false, 'facebook');
+				Admin.checkSpecialCharacters(
+					facebook.slice(1, facebook.length),
+					'facebook',
+				);
 			},
 			instagram: (instagram: string) => {
-				Admin.checkLength(instagram, 1, 30, 'instagram');
+				instagram = instagram.trim();
+
+				Admin.checkLength(instagram, 2, 30, 'instagram');
+				Admin.checkSubstring(instagram, '@', true, true, 'instagram');
+				Admin.checkSubstring(instagram, ' ', false, false, 'instagram');
+				Admin.checkSpecialCharacters(
+					instagram.slice(1, instagram.length),
+					'instagram',
+				);
+			},
+			location: (location: string) => {
+				location = location.trim();
+
+				Admin.checkLength(location, 1, 64000, 'location');
+				Admin.checkSubstring(location, ' ', false, false, 'location');
 			},
 			storeInfo: (storeInfo: string) => {
+				storeInfo = storeInfo.trim();
+
 				Admin.checkLength(storeInfo, 1, 30, 'store info');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
+				completeStoreInfo = completeStoreInfo.trim();
+
 				Admin.checkLength(completeStoreInfo, 5, 30, 'complete store info');
 			},
 		},
@@ -301,7 +346,7 @@ class Support {
 		column: string,
 	) {
 		Admin.checkType(id, 'string', 'id');
-		Admin.checkLength(id, 1, -1, 'id');
+		Admin.checkLength(id.trim(), 1, -1, 'id');
 
 		Admin.checkType(data, 'string', column);
 
@@ -323,7 +368,7 @@ class Support {
 		column: string,
 	) {
 		Admin.checkType(id, 'string', 'id');
-		Admin.checkLength(id, 1, -1, 'id');
+		Admin.checkLength(id.trim(), 1, -1, 'id');
 
 		await Object(Support.imageMask)[table][column](file);
 	}
@@ -530,7 +575,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id, 1, -1, 'id');
+			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
 				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;',
@@ -599,7 +644,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id, 1, -1, 'id');
+			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
 
@@ -694,7 +739,7 @@ export default class LocalModules {
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id, 1, -1, 'id');
+			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
 				'SELECT id, image FROM products WHERE id = ?;',
