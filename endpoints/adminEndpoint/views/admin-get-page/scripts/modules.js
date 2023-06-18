@@ -20,7 +20,6 @@ function getToken() {
 }
 
 const token = getToken();
-console.log(token);
 
 //
 // Get
@@ -139,7 +138,6 @@ async function buildComplexTable(
 			.reverse()
 			.forEach((apiItem, index) => {
 				apiList[apiItem].reverse().forEach((apiItem) => {
-					loadProductInputProperties;
 					handleApiList(apiItem, index, {
 						option: categories,
 						templateProperties: (template) =>
@@ -490,6 +488,7 @@ export async function buildProducts(isLastItemNew = false) {
 			cell.setAttribute('action', '/admin/api/products/off');
 
 			div.innerText = apiItem.off;
+
 			formatOff(div);
 
 			let lastInnerText = div.innerText.replace(/\D/g, '');
@@ -793,11 +792,34 @@ export async function buildProductsTemplateCallback() {
 // Others
 //
 
-function handlePseudoInputCursorAsLastProperty(div) {
+function getCursorIndex(element) {
+	const selection = window.getSelection();
+	if (selection.rangeCount === 0) {
+		return 0; // No selection, cursor at index 0
+	}
+
+	const range = selection.getRangeAt(0);
+	const clonedRange = range.cloneRange();
+	clonedRange.selectNodeContents(element);
+	clonedRange.setEnd(range.startContainer, range.startOffset);
+
+	const cursorIndex = clonedRange.toString().length;
+	clonedRange.detach();
+
+	return cursorIndex;
+}
+
+function handlePseudoInputCursorIndex(div, index = undefined) {
 	const range = document.createRange();
 	const selection = window.getSelection();
-	range.selectNodeContents(div);
-	range.collapse(false);
+
+	if (!index || index > div.innerText.length) {
+		index = div.innerText.length; // Adjust index if it exceeds the div's text length
+	}
+
+	range.setStart(div.firstChild || '', index);
+	range.collapse(true);
+
 	selection.removeAllRanges();
 	selection.addRange(range);
 }
@@ -822,13 +844,15 @@ export function loadPseudoInputProperties(div) {
 		const value = div.innerText;
 		const maxLength = Number(div.getAttribute('maxlength'));
 
+		const cursorIndex = getCursorIndex(div);
+
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
 		} else {
 			lastInput = value;
 		}
 
-		handlePseudoInputCursorAsLastProperty(div);
+		handlePseudoInputCursorIndex(div, cursorIndex);
 	});
 
 	div.addEventListener('keydown', (e) => {
@@ -871,6 +895,8 @@ function formatOff(inputElement) {
 	} else {
 		inputElement.innerText = value + '%';
 	}
+
+	handlePseudoInputCursorIndex(inputElement);
 }
 
 function formatPrice(inputElement) {
@@ -900,7 +926,7 @@ function formatPrice(inputElement) {
 		inputElement.innerText = 'R$ ' + formattedValue;
 	}
 
-	handlePseudoInputCursorAsLastProperty(inputElement);
+	handlePseudoInputCursorIndex(inputElement);
 }
 
 function loadProductInputProperties(template) {
@@ -929,18 +955,16 @@ function loadProductInputProperties(template) {
 		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 		if (event.key === 'Backspace') {
-			inputElement.innerText = value.slice(0, -1) + '%';
+			inputElement.innerText = value.slice(0, -1);
 		}
 
-		handlePseudoInputCursorAsLastProperty(inputElement);
+		formatOff(inputElement);
 	});
 
 	pseudoInputs[2].addEventListener('input', (event) => {
 		const inputElement = event.target;
 
 		formatOff(inputElement);
-
-		handlePseudoInputCursorAsLastProperty(inputElement);
 	});
 
 	pseudoInputs[4].addEventListener('keydown', (event) => {
@@ -956,7 +980,7 @@ function loadProductInputProperties(template) {
 				inputElement.innerText = value.slice(0, 3);
 			}
 
-			handlePseudoInputCursorAsLastProperty(inputElement);
+			handlePseudoInputCursorIndex(inputElement);
 		}
 	});
 
@@ -965,7 +989,7 @@ function loadProductInputProperties(template) {
 
 		formatWhatsapp(inputElement);
 
-		handlePseudoInputCursorAsLastProperty(inputElement);
+		handlePseudoInputCursorIndex(inputElement);
 	});
 }
 
@@ -1170,12 +1194,6 @@ function generateRandomString(length) {
 
 	return result;
 }
-
-/**
- * Function to convert a number to money format.
- * @param {number} number - The number to be converted.
- * @returns {string} - The number in money format.
- */
 
 export function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {

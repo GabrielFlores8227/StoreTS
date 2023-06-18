@@ -69,7 +69,7 @@ trap KILL SIGINT
 
 if [[ ! $* == *--dev* ]]
 then
-  sleep 600
+  sleep 120
 
   while true
   do
@@ -97,7 +97,7 @@ then
 else
   echo -e "\033[1;33m[!] StoreTS is running in development mode\033[0m"
   echo -e "\033[1;33m[!] Auto-Update is off\033[0m"
-
-  wait
 fi
+
+wait
 
