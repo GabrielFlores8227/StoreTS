@@ -51,11 +51,6 @@
 		<script
 			defer
 			type="module"
-			src="/admin-get-page/scripts/header.js"
-		></script>
-		<script
-			defer
-			type="module"
 			src="/admin-get-page/scripts/builder.js"
 		></script>
 	</head>
@@ -150,7 +145,6 @@
 					</h1>
 				</div>
 
-				<!--table-->
 				<div class="table-section-container__table-container">
 					<table>
 						<thead>
@@ -878,6 +872,347 @@
 						<i class="fa-solid fa-pen"></i>
 						Add Product
 					</button>
+				</div>
+			</div>
+
+			<!--footer-->
+			<div header-table-section class="table-section-container">
+				<!--table-title-->
+				<div>
+					<h1>
+						<i class="fa-solid fa-shoe-prints"></i>
+						Footer
+					</h1>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Title</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<!--title-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/title"
+										identifier="only"
+										for="title"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Title"
+												maxlength="30"
+											>
+												<%= builder.footer.title %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<!--text-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/text"
+										identifier="only"
+										for="text"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Text">
+<%= builder.footer.text %></textarea
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Whatsapp</th>
+								<th>Facebook</th>
+								<th>Instagram</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<!--Whatsapp-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/whatsapp"
+										identifier="only"
+										for="whatsapp"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Whatsapp"
+												maxlength="20"
+											>
+												<%= builder.footer.whatsapp %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+
+								<!--Facebook-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/facebook"
+										identifier="only"
+										for="facebook"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="@Facebook"
+												maxlength="30"
+											>
+												<%= builder.footer.facebook %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+
+								<!--Instagram-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/instagram"
+										identifier="only"
+										for="instagram"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="@Instagram"
+												maxlength="30"
+											>
+												<%= builder.footer.instagram %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Location Link</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<!--location-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/location"
+										identifier="only"
+										for="location"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Location Link">
+<%= builder.footer.location %></textarea
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Store Info</th>
+								<th>Complete Store Info</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<!--Store-Info-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/storeInfo"
+										identifier="only"
+										for="storeInfo"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Store Info"
+												maxlength="50"
+											>
+												<%= builder.footer.storeInfo %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+
+								<!--Complete-Store-Info-->
+								<td>
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/completeStoreInfo"
+										identifier="only"
+										for="completeStoreInfo"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Complete Store Info"
+												maxlength="100"
+											>
+												<%= builder.footer.completeStoreInfo %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</main>

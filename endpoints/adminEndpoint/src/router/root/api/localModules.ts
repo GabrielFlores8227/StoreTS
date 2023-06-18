@@ -172,12 +172,12 @@ class Support {
 			storeInfo: (storeInfo: string) => {
 				storeInfo = storeInfo.trim();
 
-				Admin.checkLength(storeInfo, 1, 30, 'store info');
+				Admin.checkLength(storeInfo, 1, 50, 'store info');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
 				completeStoreInfo = completeStoreInfo.trim();
 
-				Admin.checkLength(completeStoreInfo, 5, 30, 'complete store info');
+				Admin.checkLength(completeStoreInfo, 5, 100, 'complete store info');
 			},
 		},
 	};

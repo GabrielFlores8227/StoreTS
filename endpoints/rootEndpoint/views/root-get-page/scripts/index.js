@@ -416,7 +416,7 @@ const sliderController = [];
 
 					setTimeout(() => {
 						move = true;
-					}, 700);
+					}, 600);
 
 					if (restoreIsMoving) {
 						clearTimeout(restoreIsMoving);

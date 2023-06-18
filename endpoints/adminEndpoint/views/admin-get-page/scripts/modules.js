@@ -792,7 +792,7 @@ export async function buildProductsTemplateCallback() {
 // Others
 //
 
-function getCursorIndex(element) {
+export function handleCursorIndex(element) {
 	const selection = window.getSelection();
 	if (selection.rangeCount === 0) {
 		return 0; // No selection, cursor at index 0
@@ -809,7 +809,7 @@ function getCursorIndex(element) {
 	return cursorIndex;
 }
 
-function handlePseudoInputCursorIndex(div, index = undefined) {
+export function handlePseudoInputCursorIndex(div, index = undefined) {
 	const range = document.createRange();
 	const selection = window.getSelection();
 
@@ -846,6 +846,8 @@ export function loadPseudoInputProperties(div) {
 
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
+
+			handlePseudoInputCursorIndex(div);
 		} else {
 			lastInput = value;
 		}
@@ -859,27 +861,27 @@ export function loadPseudoInputProperties(div) {
 	});
 }
 
-function formatWhatsapp(inputElement) {
+export function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
-		inputElement.innerText = '';
+		inputElement.innerText = '+';
 	} else if (value.length <= 2) {
 		inputElement.innerText = `+${value}`;
 	} else if (value.length === 3) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.charAt(2)})`;
 	} else if (value.length <= 4) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 4)})`;
-	} else if (value.length <= 8) {
+	} else if (value.length <= 9) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
 			2,
 			4,
-		)}) ${value.slice(4, 8)}`;
+		)}) ${value.slice(4, 9)}`;
 	} else {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
 			2,
 			4,
-		)}) ${value.slice(4, 8)}-${value.slice(8, 13)}`;
+		)}) ${value.slice(4, 9)}-${value.slice(9, 13)}`;
 	}
 }
 
@@ -900,12 +902,12 @@ function formatPrice(inputElement) {
 
 	if (value.length <= 3) {
 		if (value.length === 1) {
-			inputElement.innerText = 'R$ 00,0' + value;
+			inputElement.innerText = 'R$ 0,0' + value;
 		} else if (value.length === 2) {
-			inputElement.innerText = 'R$ 00,' + value;
+			inputElement.innerText = 'R$ 0,' + value;
 		} else if (value.length === 3) {
 			inputElement.innerText =
-				'R$ ' + '0' + value.charAt(0) + ',' + value.slice(1, 3);
+				'R$ ' + value.charAt(0) + ',' + value.slice(1, 3);
 		}
 	} else {
 		const dollars = value.slice(0, -2);
@@ -923,6 +925,35 @@ function formatPrice(inputElement) {
 	}
 
 	handlePseudoInputCursorIndex(inputElement);
+}
+
+export function loadWhatsappProperties(div) {
+	formatWhatsapp(div);
+
+	div.addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		let value = String(inputElement.innerText.replace(/\D/g, ''));
+
+		if (event.key === 'Backspace') {
+			if (value.length === 4) {
+				inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 3)})`;
+			}
+
+			if (value.length === 3) {
+				inputElement.innerText = value.slice(0, 3);
+			}
+
+			handlePseudoInputCursorIndex(inputElement);
+		}
+	});
+
+	div.addEventListener('input', (event) => {
+		const inputElement = event.target;
+
+		formatWhatsapp(inputElement);
+
+		handlePseudoInputCursorIndex(inputElement);
+	});
 }
 
 function loadProductInputProperties(template) {
@@ -977,30 +1008,7 @@ function loadProductInputProperties(template) {
 		formatOff(inputElement);
 	});
 
-	pseudoInputs[4].addEventListener('keydown', (event) => {
-		const inputElement = event.target;
-		let value = String(inputElement.innerText.replace(/\D/g, ''));
-
-		if (event.key === 'Backspace') {
-			if (value.length === 4) {
-				inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 3)})`;
-			}
-
-			if (value.length === 3) {
-				inputElement.innerText = value.slice(0, 3);
-			}
-
-			handlePseudoInputCursorIndex(inputElement);
-		}
-	});
-
-	pseudoInputs[4].addEventListener('input', (event) => {
-		const inputElement = event.target;
-
-		formatWhatsapp(inputElement);
-
-		handlePseudoInputCursorIndex(inputElement);
-	});
+	loadWhatsappProperties(pseudoInputs[4]);
 }
 
 export async function handleActionRequest(
