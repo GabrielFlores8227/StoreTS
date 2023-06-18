@@ -40,7 +40,7 @@ function KILL() {
   do
     APP_PORT="${APP_PORTS[INDEX]}"
 
-    fuser -k $APP_PORT/tcp
+    fuser -k $APP_PORT/tcp > /dev/null
   done
 
   echo -e "\033[1;31m[x] StoreTS killed\033[0m"
@@ -66,7 +66,7 @@ function STOP() {
 START
 trap KILL SIGINT
 
-sleep 60
+sleep 6h
 
 while true
 do
@@ -91,3 +91,6 @@ do
 
   sleep 600
 done
+
+wait
+

@@ -18,6 +18,7 @@ root.get(
 	},
 	LocalModules.middlewareGenerateToken,
 	Middleware.middlewareBuildHeader(true),
+	Middleware.middlewareBuildFooter(),
 	(req, res) => {
 		res.render('admin-get-page', { builder: Object(req).builder });
 	},

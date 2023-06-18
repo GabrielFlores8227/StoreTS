@@ -188,6 +188,43 @@ aside > div > div:last-of-type {
   height: 100%;
 }
 
+aside ul li a,
+aside ul li button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px;
+  width: 100%;
+  position: relative;
+}
+aside ul li a i:last-of-type,
+aside ul li button i:last-of-type {
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  transition: ease-in-out 0.35s;
+  color: var(--dark-gray);
+  font-family: var(--font-bold);
+  font-style: normal;
+  font-size: 15.4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+aside ul li a i:last-of-type:hover,
+aside ul li button i:last-of-type:hover {
+  color: var(--primary-color);
+}
+aside ul li a i:first-of-type {
+  color: var(--primary-color);
+}
+aside ul li button i:first-of-type {
+  width: 8.4px;
+  height: 8.4px;
+  border-radius: 100%;
+  background-color: var(--primary-color);
+}
+
 @media (min-width: 1300px) {
   div.saved-product-container > div > div > div:first-of-type img {
     width: 154px;
@@ -202,6 +239,10 @@ aside > div > div:last-of-type {
   aside > div {
     width: 322px;
     min-width: 322px;
+  }
+  aside ul li a i:last-of-type,
+  aside ul li button i:last-of-type {
+    font-size: 16.1px;
   }
 }
 aside > div > div:first-of-type > div > img {
@@ -228,41 +269,6 @@ div.saved-product-container > div.--off {
 }
 div.saved-product-container > div > div {
   width: 100%;
-}
-
-ul.categories-list li button {
-  display: flex;
-  gap: 7px;
-  padding: 7px;
-  width: 100%;
-  position: relative;
-}
-ul.categories-list li button i:first-of-type {
-  width: 8.4px;
-  height: 8.4px;
-  border-radius: 100%;
-  background-color: var(--primary-color);
-}
-ul.categories-list li button i:last-of-type {
-  width: 100%;
-  text-align: left;
-  white-space: nowrap;
-  transition: ease-in-out 0.35s;
-  color: var(--dark-gray);
-  font-family: var(--font-bold);
-  font-style: normal;
-  font-size: 15.4px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-ul.categories-list li button i:last-of-type:hover {
-  color: var(--primary-color);
-}
-
-@media (min-width: 1700px) {
-  ul.categories-list li button i:last-of-type {
-    font-size: 16.1px;
-  }
 }
 
 /*# sourceMappingURL=aside.css.map */

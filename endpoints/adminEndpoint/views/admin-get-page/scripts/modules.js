@@ -138,7 +138,6 @@ async function buildComplexTable(
 			.reverse()
 			.forEach((apiItem, index) => {
 				apiList[apiItem].reverse().forEach((apiItem) => {
-					loadProductInputProperties;
 					handleApiList(apiItem, index, {
 						option: categories,
 						templateProperties: (template) =>
@@ -489,6 +488,7 @@ export async function buildProducts(isLastItemNew = false) {
 			cell.setAttribute('action', '/admin/api/products/off');
 
 			div.innerText = apiItem.off;
+
 			formatOff(div);
 
 			let lastInnerText = div.innerText.replace(/\D/g, '');
@@ -792,11 +792,34 @@ export async function buildProductsTemplateCallback() {
 // Others
 //
 
-function handlePseudoInputCursorAsLastProperty(div) {
+export function handleCursorIndex(element) {
+	const selection = window.getSelection();
+	if (selection.rangeCount === 0) {
+		return 0; // No selection, cursor at index 0
+	}
+
+	const range = selection.getRangeAt(0);
+	const clonedRange = range.cloneRange();
+	clonedRange.selectNodeContents(element);
+	clonedRange.setEnd(range.startContainer, range.startOffset);
+
+	const cursorIndex = clonedRange.toString().length;
+	clonedRange.detach();
+
+	return cursorIndex;
+}
+
+export function handlePseudoInputCursorIndex(div, index = undefined) {
 	const range = document.createRange();
 	const selection = window.getSelection();
-	range.selectNodeContents(div);
-	range.collapse(false);
+
+	if (!index || index > div.innerText.length) {
+		index = div.innerText.length; // Adjust index if it exceeds the div's text length
+	}
+
+	range.setStart(div.firstChild || '', index);
+	range.collapse(true);
+
 	selection.removeAllRanges();
 	selection.addRange(range);
 }
@@ -823,11 +846,11 @@ export function loadPseudoInputProperties(div) {
 
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
+
+			handlePseudoInputCursorIndex(div);
 		} else {
 			lastInput = value;
 		}
-
-		handlePseudoInputCursorAsLastProperty(div);
 	});
 
 	div.addEventListener('keydown', (e) => {
@@ -838,27 +861,27 @@ export function loadPseudoInputProperties(div) {
 	});
 }
 
-function formatWhatsapp(inputElement) {
+export function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
-		inputElement.innerText = '';
+		inputElement.innerText = '+';
 	} else if (value.length <= 2) {
 		inputElement.innerText = `+${value}`;
 	} else if (value.length === 3) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.charAt(2)})`;
 	} else if (value.length <= 4) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 4)})`;
-	} else if (value.length <= 8) {
+	} else if (value.length <= 9) {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
 			2,
 			4,
-		)}) ${value.slice(4, 8)}`;
+		)}) ${value.slice(4, 9)}`;
 	} else {
 		inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(
 			2,
 			4,
-		)}) ${value.slice(4, 8)}-${value.slice(8, 13)}`;
+		)}) ${value.slice(4, 9)}-${value.slice(9, 13)}`;
 	}
 }
 
@@ -870,6 +893,8 @@ function formatOff(inputElement) {
 	} else {
 		inputElement.innerText = value + '%';
 	}
+
+	handlePseudoInputCursorIndex(inputElement);
 }
 
 function formatPrice(inputElement) {
@@ -877,12 +902,12 @@ function formatPrice(inputElement) {
 
 	if (value.length <= 3) {
 		if (value.length === 1) {
-			inputElement.innerText = 'R$ 00,0' + value;
+			inputElement.innerText = 'R$ 0,0' + value;
 		} else if (value.length === 2) {
-			inputElement.innerText = 'R$ 00,' + value;
+			inputElement.innerText = 'R$ 0,' + value;
 		} else if (value.length === 3) {
 			inputElement.innerText =
-				'R$ ' + '0' + value.charAt(0) + ',' + value.slice(1, 3);
+				'R$ ' + value.charAt(0) + ',' + value.slice(1, 3);
 		}
 	} else {
 		const dollars = value.slice(0, -2);
@@ -899,7 +924,36 @@ function formatPrice(inputElement) {
 		inputElement.innerText = 'R$ ' + formattedValue;
 	}
 
-	handlePseudoInputCursorAsLastProperty(inputElement);
+	handlePseudoInputCursorIndex(inputElement);
+}
+
+export function loadWhatsappProperties(div) {
+	formatWhatsapp(div);
+
+	div.addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		let value = String(inputElement.innerText.replace(/\D/g, ''));
+
+		if (event.key === 'Backspace') {
+			if (value.length === 4) {
+				inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 3)})`;
+			}
+
+			if (value.length === 3) {
+				inputElement.innerText = value.slice(0, 3);
+			}
+
+			handlePseudoInputCursorIndex(inputElement);
+		}
+	});
+
+	div.addEventListener('input', (event) => {
+		const inputElement = event.target;
+
+		formatWhatsapp(inputElement);
+
+		handlePseudoInputCursorIndex(inputElement);
+	});
 }
 
 function loadProductInputProperties(template) {
@@ -918,8 +972,22 @@ function loadProductInputProperties(template) {
 		loadPseudoInputProperties(div);
 	});
 
+	pseudoInputs[1].addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		const value = inputElement.innerText.replace(/\D/g, '');
+
+		if (event.key === 'Backspace') {
+			inputElement.innerText = value.slice(0, -1);
+
+			event.preventDefault();
+
+			formatPrice(inputElement);
+		}
+	});
+
 	pseudoInputs[1].addEventListener('input', (event) => {
 		const inputElement = event.target;
+
 		formatPrice(inputElement);
 	});
 
@@ -928,44 +996,19 @@ function loadProductInputProperties(template) {
 		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 		if (event.key === 'Backspace') {
-			inputElement.innerText = value.slice(0, -1) + '%';
+			inputElement.innerText = value.slice(0, -1);
 		}
 
-		handlePseudoInputCursorAsLastProperty(inputElement);
+		formatOff(inputElement);
 	});
 
 	pseudoInputs[2].addEventListener('input', (event) => {
 		const inputElement = event.target;
 
 		formatOff(inputElement);
-
-		handlePseudoInputCursorAsLastProperty(inputElement);
 	});
 
-	pseudoInputs[4].addEventListener('keydown', (event) => {
-		const inputElement = event.target;
-		let value = String(inputElement.innerText.replace(/\D/g, ''));
-
-		if (event.key === 'Backspace') {
-			if (value.length === 4) {
-				inputElement.innerText = `+${value.slice(0, 2)} (${value.slice(2, 3)})`;
-			}
-
-			if (value.length === 3) {
-				inputElement.innerText = value.slice(0, 3);
-			}
-
-			handlePseudoInputCursorAsLastProperty(inputElement);
-		}
-	});
-
-	pseudoInputs[4].addEventListener('input', (event) => {
-		const inputElement = event.target;
-
-		formatWhatsapp(inputElement);
-
-		handlePseudoInputCursorAsLastProperty(inputElement);
-	});
+	loadWhatsappProperties(pseudoInputs[4]);
 }
 
 export async function handleActionRequest(
@@ -1169,12 +1212,6 @@ function generateRandomString(length) {
 
 	return result;
 }
-
-/**
- * Function to convert a number to money format.
- * @param {number} number - The number to be converted.
- * @returns {string} - The number in money format.
- */
 
 export function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {

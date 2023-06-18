@@ -398,6 +398,7 @@ const sliderController = [];
 	}, 10000);
 
 	let restoreIsMoving;
+	let move = true;
 
 	controller.imageSliderContainer
 		.querySelectorAll('button')
@@ -407,6 +408,16 @@ const sliderController = [];
 					? 'touchstart'
 					: 'mousedown',
 				() => {
+					if (!move) {
+						return;
+					}
+
+					move = false;
+
+					setTimeout(() => {
+						move = true;
+					}, 600);
+
 					if (restoreIsMoving) {
 						clearTimeout(restoreIsMoving);
 					}
