@@ -844,15 +844,11 @@ export function loadPseudoInputProperties(div) {
 		const value = div.innerText;
 		const maxLength = Number(div.getAttribute('maxlength'));
 
-		const cursorIndex = getCursorIndex(div);
-
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
 		} else {
 			lastInput = value;
 		}
-
-		handlePseudoInputCursorIndex(div, cursorIndex);
 	});
 
 	div.addEventListener('keydown', (e) => {
@@ -945,8 +941,22 @@ function loadProductInputProperties(template) {
 		loadPseudoInputProperties(div);
 	});
 
+	pseudoInputs[1].addEventListener('keydown', (event) => {
+		const inputElement = event.target;
+		const value = inputElement.innerText.replace(/\D/g, '');
+
+		if (event.key === 'Backspace') {
+			inputElement.innerText = value.slice(0, -1);
+
+			event.preventDefault();
+
+			formatPrice(inputElement);
+		}
+	});
+
 	pseudoInputs[1].addEventListener('input', (event) => {
 		const inputElement = event.target;
+
 		formatPrice(inputElement);
 	});
 
