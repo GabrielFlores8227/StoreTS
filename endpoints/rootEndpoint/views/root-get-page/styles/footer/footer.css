@@ -80,7 +80,6 @@ footer > div:first-of-type > div:last-of-type > div h1 {
 }
 footer > div:first-of-type > div:last-of-type > div p {
   color: white;
-  word-break: break-all;
   padding-bottom: 10.5px;
 }
 footer > div:first-of-type > div:last-of-type > div > div {

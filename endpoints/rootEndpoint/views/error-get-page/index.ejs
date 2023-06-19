@@ -41,8 +41,6 @@
 		/>
 	</head>
 	<body>
-
-		<!--header-->
 		<header>
 			<div>
 				<a href="/">
@@ -54,20 +52,14 @@
 				</a>
 			</div>
 		</header>
-
-		<!--main-->
 		<main>
 			<div>
 				<h1>
 					<i class="fa-solid fa-bug"></i>
 					<%= status %>
 				</h1>
-				<h2>
-					<%= message %>
-				</h2>
-				<p>
-					<%= text %>
-				</p>
+				<h2><%= message %></h2>
+				<p><%= text %></p>
 				<% if (homePage) { %>
 				<a href="/">Homepage</a>
 				<% } %>

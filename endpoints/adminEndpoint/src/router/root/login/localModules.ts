@@ -23,27 +23,9 @@ class Support {
 			true,
 			'/admin/login',
 		);
-		Admin.checkLength(
-			body.username,
-			1,
-			50,
-			'username',
-			401,
-			true,
-			'/admin/login',
-		);
 		Admin.checkType(
 			body.password,
 			'string',
-			'password',
-			401,
-			true,
-			'/admin/login',
-		);
-		Admin.checkLength(
-			body.password,
-			1,
-			50,
 			'password',
 			401,
 			true,
@@ -90,7 +72,7 @@ export default class LocalModules {
 				throw {
 					status: 401,
 					message:
-						'Oops, it seems that either the password or username is incorrect',
+						'Desculpe, parece que a senha ou o nome de usuário está incorreto.',
 					redirect: true,
 					url: '/admin/login',
 				};

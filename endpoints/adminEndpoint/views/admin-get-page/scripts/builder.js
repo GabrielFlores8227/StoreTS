@@ -5,8 +5,6 @@ import {
 	handleCellRequest,
 	handleTextInputRequest,
 	handleTableVisibility,
-	handleCursorIndex,
-	handlePseudoInputCursorIndex,
 	buildIcon,
 	buildLogo,
 	buildTitle,
@@ -20,10 +18,10 @@ import {
 	buildProductsTemplateCallback,
 } from './modules.js';
 
-//
-// Build Table Pre-Made
-//
-
+/**
+ * Immediately invoked function expression (IIFE) that applies the 'loadFileInputProperties' function
+ * to all 'div' elements with the 'file-input-container' attribute.
+ */
 (() => {
 	window.document
 		.querySelectorAll('div[file-input-container]')
@@ -32,6 +30,11 @@ import {
 		});
 })();
 
+/**
+ * Immediately invoked function expression (IIFE) that applies the 'loadPseudoInputProperties' function
+ * to all 'div' elements with the 'pseudo-input' attribute, and adds a 'keydown' event listener to all
+ * 'textarea' elements to handle the 'Enter' key press.
+ */
 (() => {
 	window.document.querySelectorAll('div[pseudo-input]').forEach((div) => {
 		loadPseudoInputProperties(div);
@@ -47,12 +50,20 @@ import {
 	});
 })();
 
+/**
+ * Immediately invoked function expression (IIFE) that adjusts the height of 'textarea' elements
+ * based on their content and handles resizing when the window is resized.
+ */
 (() => {
 	window.document.querySelectorAll('textarea').forEach((textarea) => {
 		textarea.style.height =
 			textarea.scrollHeight <= 74
 				? '53px'
-				: textarea.offsetHeight + 14 * 2 + 'px';
+				: `${textarea.offsetHeight + 14 * 2}px`;
+
+		if (textarea.scrollHeight === 74) {
+			textarea.style.height = 'auto';
+		}
 
 		textarea.addEventListener('input', () => {
 			textarea.style.height = '53px';
@@ -62,7 +73,7 @@ import {
 			}
 
 			textarea.style.height = 'auto';
-			textarea.style.height = textarea.scrollHeight + 'px';
+			textarea.style.height = `${textarea.scrollHeight}px`;
 		});
 
 		window.addEventListener('resize', () => {
@@ -73,11 +84,16 @@ import {
 			}
 
 			textarea.style.height = 'auto';
-			textarea.style.height = textarea.scrollHeight + 'px';
+			textarea.style.height = `${textarea.scrollHeight}px`;
 		});
 	});
 })();
 
+/**
+ * Immediately invoked function expression (IIFE) that handles various interactions within 'div[cell-container]'
+ * elements, such as file input changes, pseudo input focusout, textarea changes, and input color changes.
+ * It utilizes callback functions based on the specified 'action' attribute.
+ */
 (() => {
 	const callBack = {
 		'/admin/api/header/icon': async () => await buildIcon(),
@@ -160,10 +176,10 @@ import {
 	});
 })();
 
-//
-// Build Table Pos-Made
-//
-
+/**
+ * Immediately invoked function expression (IIFE) that initializes and handles the dynamic building of elements and templates.
+ * It iterates over special sections in the document, builds specific elements, sets up event listeners, and handles table visibility.
+ */
 (() => {
 	const build = [
 		() => buildPropagandas(),

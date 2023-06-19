@@ -1,7 +1,8 @@
-//
-// Cookie
-//
-
+/**
+ * Retrieves the authentication token from the cookies.
+ *
+ * @returns {string|null} The token value if found, or null if not found.
+ */
 function getToken() {
 	const cookies = document.cookie.split(';');
 
@@ -21,50 +22,66 @@ function getToken() {
 
 const token = getToken();
 
-//
-// Get
-//
-
+/**
+ * Retrieves the header data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the header data.
+ */
 export async function getHeader() {
 	return await (
 		await fetch('/admin/api/header', {
 			method: 'POST',
-			headers: { authorization: 'Bearer ' + token },
+			headers: { authorization: `Bearer ${token}` },
 		})
 	).json();
 }
 
+/**
+ * Retrieves the propaganda data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the propaganda data.
+ */
 async function getPropagandas() {
 	return await (
 		await fetch('/admin/api/propagandas', {
 			method: 'POST',
-			headers: { authorization: 'Bearer ' + token },
+			headers: { authorization: `Bearer ${token}` },
 		})
 	).json();
 }
 
+/**
+ * Retrieves the categories data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the categories data.
+ */
 async function getCategories() {
 	return await (
 		await fetch('/admin/api/categories', {
 			method: 'POST',
-			headers: { authorization: 'Bearer ' + token },
+			headers: { authorization: `Bearer ${token}` },
 		})
 	).json();
 }
 
+/**
+ * Retrieves the product data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the product data.
+ */
 async function getProducts() {
 	return await (
 		await fetch('/admin/api/products', {
 			method: 'POST',
-			headers: { authorization: 'Bearer ' + token },
+			headers: { authorization: `Bearer ${token}` },
 		})
 	).json();
 }
 
-//
-// Build Interface
-//
-
+/**
+ * Function to build aside menus and attach click handlers to toggle their visibility.
+ * @param {Array} asideButtonHandler - An array of objects containing selector, element, and action properties.
+ */
 export function buildAsideMenus(asideButtonHandler) {
 	const addClickHandler = (selector, element, action) => {
 		document.querySelectorAll(`button[${selector}]`).forEach((button) => {
@@ -81,10 +98,9 @@ export function buildAsideMenus(asideButtonHandler) {
 	});
 }
 
-//
-// Build Table
-//
-
+/**
+ * Builds the icon for the web page based on the header data.
+ */
 export async function buildIcon() {
 	const { icon } = await getHeader();
 
@@ -93,6 +109,9 @@ export async function buildIcon() {
 		.setAttribute('href', icon);
 }
 
+/**
+ * Builds the logo for the web page based on the header data.
+ */
 export async function buildLogo() {
 	const { logo } = await getHeader();
 
@@ -101,18 +120,36 @@ export async function buildLogo() {
 	});
 }
 
+/**
+ * Builds the title for the web page based on the header data.
+ */
 export async function buildTitle() {
 	const { title } = await getHeader();
 
 	window.document.querySelector('title').innerText = title + ' | Admin';
 }
 
+/**
+ * Builds the primary color for the web page based on the header data.
+ */
 export async function buildColor() {
 	const { color } = await getHeader();
 
 	window.document.documentElement.style.setProperty('--primary-color', color);
 }
 
+/**
+ * Builds a complex table for a specific section on the web page.
+ *
+ * @param {Function} apiListBuilder - A function that builds the API list.
+ * @param {string} sectionName - The name of the section.
+ * @param {Function} cellFunction - A function that handles each cell in the table.
+ * @param {string} deleteItemApiUrl - The API URL for deleting an item.
+ * @param {string} reorderItemsApiUrl - The API URL for reordering items.
+ * @param {Object} options - Optional parameters for customization.
+ * @param {boolean} [options.isLastItemNew=false] - Indicates if the last item is new.
+ * @param {Function} [options.deleteItemCallback=undefined] - A callback function to be called after deleting an item.
+ */
 async function buildComplexTable(
 	apiListBuilder,
 	sectionName,
@@ -141,7 +178,7 @@ async function buildComplexTable(
 					handleApiList(apiItem, index, {
 						option: categories,
 						templateProperties: (template) =>
-							loadProductInputProperties(template),
+							loadProductInputsProperties(template),
 					});
 				});
 			});
@@ -169,7 +206,7 @@ async function buildComplexTable(
 		await fetch(reorderItemsApiUrl, {
 			method: 'PUT',
 			headers: {
-				authorization: 'Bearer ' + token,
+				authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json',
 			},
 			body: form,
@@ -184,7 +221,6 @@ async function buildComplexTable(
 
 	handleTableVisibility();
 
-	//private function
 	function handleApiList(
 		apiItem,
 		index,
@@ -256,6 +292,11 @@ async function buildComplexTable(
 	}
 }
 
+/**
+ * Builds the propagandas section on the web page.
+ *
+ * @param {boolean} [isLastItemNew=false] - Indicates if the last item is new.
+ */
 export function buildPropagandas(isLastItemNew = false) {
 	const apiListBuilder = async () => await getPropagandas();
 	const sectionName = 'propagandas';
@@ -264,7 +305,7 @@ export function buildPropagandas(isLastItemNew = false) {
 	const cellFunction = (apiItem, cell, index) => {
 		cell.setAttribute(
 			'action',
-			'/admin/api/propagandas/' + (index === 0 ? 'bigImage' : 'smallImage'),
+			`/admin/api/propagandas/${index === 0 ? 'bigImage' : 'smallImage'}`,
 		);
 
 		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
@@ -289,7 +330,7 @@ export function buildPropagandas(isLastItemNew = false) {
 				'href',
 				index === 0 ? apiItem.bigImage : apiItem.smallImage,
 			);
-			link.innerText = link.innerText + ' ' + apiItem.id;
+			link.innerText = `${link.innerText} ${apiItem.id}`;
 
 			loadFileInputProperties(div);
 		});
@@ -307,6 +348,11 @@ export function buildPropagandas(isLastItemNew = false) {
 	);
 }
 
+/**
+ * Builds the categories section on the web page.
+ *
+ * @param {boolean} [isLastItemNew=false] - Indicates if the last item is new.
+ */
 export function buildCategories(isLastItemNew = false) {
 	const apiListBuilder = async () => await getCategories();
 	const sectionName = 'categories';
@@ -357,6 +403,13 @@ export function buildCategories(isLastItemNew = false) {
 	);
 }
 
+/**
+ * Builds the product categories select element with the provided categories.
+ *
+ * @param {Array} categories - The array of category objects.
+ * @param {HTMLSelectElement} select - The select element to build the options.
+ * @param {string} [selected=''] - The ID of the selected category.
+ */
 function buildProductCategoriesSelect(categories, select, selected = '') {
 	const selectedOptions = [];
 
@@ -395,6 +448,11 @@ function buildProductCategoriesSelect(categories, select, selected = '') {
 	});
 }
 
+/**
+ * Builds the products table with the provided API data.
+ *
+ * @param {boolean} [isLastItemNew=false] - Determines if the last item is new.
+ */
 export async function buildProducts(isLastItemNew = false) {
 	const apiListBuilder = async () => await getProducts();
 	const sectionName = 'products';
@@ -588,10 +646,12 @@ export async function buildProducts(isLastItemNew = false) {
 	);
 }
 
-//
-// Build Template
-//
-
+/**
+ * Builds the template for propagandas in the special section.
+ *
+ * @param {Element} specialSection - The special section element.
+ * @returns {Element} - The cloned template element.
+ */
 export function buildPropagandasTemplate(specialSection) {
 	const template = specialSection
 		.querySelector('template[propagandas-template]')
@@ -646,6 +706,12 @@ export function buildPropagandasTemplate(specialSection) {
 	return template;
 }
 
+/**
+ * Builds the template for categories in the special section.
+ *
+ * @param {Element} specialSection - The special section element.
+ * @returns {Element} - The cloned template element.
+ */
 export function buildCategoriesTemplate(specialSection) {
 	const template = specialSection
 		.querySelector('template[categories-template]')
@@ -696,6 +762,12 @@ export function buildCategoriesTemplate(specialSection) {
 	return template;
 }
 
+/**
+ * Builds the template for products in the special section.
+ *
+ * @param {Element} specialSection - The special section element.
+ * @returns {Element} - The cloned template element.
+ */
 export function buildProductsTemplate(specialSection) {
 	const template = specialSection
 		.querySelector('template[products-template]')
@@ -707,7 +779,7 @@ export function buildProductsTemplate(specialSection) {
 		.querySelector('td[action-container]')
 		.classList.add('--no-drag-button');
 
-	loadProductInputProperties(template);
+	loadProductInputsProperties(template);
 
 	const actionContainer = template.querySelector('td[action-container]');
 	const actionButtons = actionContainer.querySelectorAll('button');
@@ -737,7 +809,7 @@ export function buildProductsTemplate(specialSection) {
 		const off = template
 			.querySelector('div[product-off]')
 			.innerText.replace(/\D/g, '');
-		form.append('off', off);
+		form.append('off', off === '' ? '0' : off);
 
 		const installment = template.querySelector(
 			'div[product-installment]',
@@ -774,10 +846,10 @@ export function buildProductsTemplate(specialSection) {
 	return template;
 }
 
-//
-// Build Template Callback
-//
-
+/**
+ * Callback function used after building the products template.
+ * It retrieves the categories and updates the product categories select elements.
+ */
 export async function buildProductsTemplateCallback() {
 	const categories = await getCategories();
 
@@ -788,28 +860,16 @@ export async function buildProductsTemplateCallback() {
 		});
 }
 
-//
-// Others
-//
-
-export function handleCursorIndex(element) {
-	const selection = window.getSelection();
-	if (selection.rangeCount === 0) {
-		return 0; // No selection, cursor at index 0
+/**
+ * Handles the cursor index within a pseudo input element.
+ * @param {HTMLDivElement} div - The pseudo input element.
+ * @param {number} [index] - The optional cursor index to set. If not provided or exceeds the div's text length, the index is set to the end of the text.
+ */
+export function handlePseudoInputCursorIndex(div, index = undefined) {
+	if (div.innerText === '') {
+		return;
 	}
 
-	const range = selection.getRangeAt(0);
-	const clonedRange = range.cloneRange();
-	clonedRange.selectNodeContents(element);
-	clonedRange.setEnd(range.startContainer, range.startOffset);
-
-	const cursorIndex = clonedRange.toString().length;
-	clonedRange.detach();
-
-	return cursorIndex;
-}
-
-export function handlePseudoInputCursorIndex(div, index = undefined) {
 	const range = document.createRange();
 	const selection = window.getSelection();
 
@@ -824,6 +884,10 @@ export function handlePseudoInputCursorIndex(div, index = undefined) {
 	selection.addRange(range);
 }
 
+/**
+ * Loads file input properties and updates the link and file name display.
+ * @param {HTMLDivElement} div - The file input container element.
+ */
 export function loadFileInputProperties(div) {
 	const link = div.querySelector('a');
 	const fileInput = div.querySelector('input');
@@ -837,6 +901,10 @@ export function loadFileInputProperties(div) {
 	});
 }
 
+/**
+ * Loads pseudo input properties and adds event listeners for input and keydown events.
+ * @param {HTMLDivElement} div - The pseudo input element.
+ */
 export function loadPseudoInputProperties(div) {
 	let lastInput = div.innerText;
 
@@ -846,7 +914,6 @@ export function loadPseudoInputProperties(div) {
 
 		if (value.length > maxLength) {
 			div.innerText = lastInput;
-
 			handlePseudoInputCursorIndex(div);
 		} else {
 			lastInput = value;
@@ -861,11 +928,15 @@ export function loadPseudoInputProperties(div) {
 	});
 }
 
+/**
+ * Formats the WhatsApp input value based on its length and updates the input element's text content.
+ * @param {HTMLDivElement} inputElement - The WhatsApp input element.
+ */
 export function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
-		inputElement.innerText = '+';
+		inputElement.innerText = '';
 	} else if (value.length <= 2) {
 		inputElement.innerText = `+${value}`;
 	} else if (value.length === 3) {
@@ -885,7 +956,11 @@ export function formatWhatsapp(inputElement) {
 	}
 }
 
-function formatOff(inputElement) {
+/**
+ * Formats the discount percentage input value and updates the input element's text content.
+ * @param {HTMLDivElement} inputElement - The discount percentage input element.
+ */
+export function formatOff(inputElement) {
 	let value = Number(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value > 100) {
@@ -897,17 +972,20 @@ function formatOff(inputElement) {
 	handlePseudoInputCursorIndex(inputElement);
 }
 
-function formatPrice(inputElement) {
+/**
+ * Formats the price input value and updates the input element's text content.
+ * @param {HTMLDivElement} inputElement - The price input element.
+ */
+export function formatPrice(inputElement) {
 	const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 	if (value.length <= 3) {
 		if (value.length === 1) {
-			inputElement.innerText = 'R$ 0,0' + value;
+			inputElement.innerText = `R$ 0,0${value}`;
 		} else if (value.length === 2) {
-			inputElement.innerText = 'R$ 0,' + value;
+			inputElement.innerText = `R$ 0,${value}`;
 		} else if (value.length === 3) {
-			inputElement.innerText =
-				'R$ ' + value.charAt(0) + ',' + value.slice(1, 3);
+			inputElement.innerText = `R$ ${value.charAt(0)},${value.slice(1, 3)}`;
 		}
 	} else {
 		const dollars = value.slice(0, -2);
@@ -915,18 +993,22 @@ function formatPrice(inputElement) {
 
 		const formattedDollars = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-		let formattedValue = formattedDollars + ',' + cents;
+		let formattedValue = `${formattedDollars},${cents}`;
 
 		if (formattedValue === ',') {
 			formattedValue += '00';
 		}
 
-		inputElement.innerText = 'R$ ' + formattedValue;
+		inputElement.innerText = `R$ ${formattedValue}`;
 	}
 
 	handlePseudoInputCursorIndex(inputElement);
 }
 
+/**
+ * Loads WhatsApp properties and adds event listeners to handle input and formatting.
+ * @param {HTMLDivElement} div - The WhatsApp input container element.
+ */
 export function loadWhatsappProperties(div) {
 	formatWhatsapp(div);
 
@@ -956,7 +1038,11 @@ export function loadWhatsappProperties(div) {
 	});
 }
 
-function loadProductInputProperties(template) {
+/**
+ * Loads product input properties and adds event listeners to handle input and formatting.
+ * @param {HTMLElement} template - The product template element.
+ */
+export function loadProductInputsProperties(template) {
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
 		const key = generateRandomString(30);
 
@@ -978,16 +1064,13 @@ function loadProductInputProperties(template) {
 
 		if (event.key === 'Backspace') {
 			inputElement.innerText = value.slice(0, -1);
-
 			event.preventDefault();
-
 			formatPrice(inputElement);
 		}
 	});
 
 	pseudoInputs[1].addEventListener('input', (event) => {
 		const inputElement = event.target;
-
 		formatPrice(inputElement);
 	});
 
@@ -1004,13 +1087,21 @@ function loadProductInputProperties(template) {
 
 	pseudoInputs[2].addEventListener('input', (event) => {
 		const inputElement = event.target;
-
 		formatOff(inputElement);
 	});
 
 	loadWhatsappProperties(pseudoInputs[4]);
 }
 
+/**
+ * Handles an action request by sending a request to the specified URL with the provided method, body, and headers.
+ * @param {HTMLElement} actionContainer - The container element for the action.
+ * @param {string} url - The URL to send the request to.
+ * @param {string} method - The HTTP method for the request (e.g., 'GET', 'POST', 'PUT', 'DELETE').
+ * @param {FormData | string | null} body - The body of the request.
+ * @param {string | undefined} contentType - The content type of the request.
+ * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
+ */
 export async function handleActionRequest(
 	actionContainer,
 	url,
@@ -1021,7 +1112,7 @@ export async function handleActionRequest(
 	$('--loading');
 
 	const headers = {
-		authorization: 'Bearer ' + token,
+		authorization: `Bearer ${token}`,
 	};
 
 	if (contentType) {
@@ -1038,7 +1129,6 @@ export async function handleActionRequest(
 
 	if (status === 200) {
 		$('--ok');
-
 		return true;
 	} else {
 		if (status === 401) {
@@ -1046,10 +1136,14 @@ export async function handleActionRequest(
 		}
 
 		$('--error', message);
-
 		return false;
 	}
 
+	/**
+	 * Updates the action info element with the provided state and title.
+	 * @param {string} add - The state to add to the action info element ('--loading', '--error', '--ok').
+	 * @param {string | undefined} title - The title for the action info element.
+	 */
 	function $(add, title = undefined) {
 		const states = ['--loading', '--error', '--ok'];
 		const info = actionContainer.querySelector('div[action-info]');
@@ -1068,13 +1162,20 @@ export async function handleActionRequest(
 	}
 }
 
+/**
+ * Handles a cell request by sending a PUT request to the action URL specified in the cell's attribute with the provided body and headers.
+ * @param {HTMLElement} cell - The cell element representing the action.
+ * @param {FormData | string | null} body - The body of the request.
+ * @param {string | undefined} contentType - The content type of the request.
+ * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
+ */
 export async function handleCellRequest(cell, body, contentType = undefined) {
 	$('--loading');
 
 	const action = cell.getAttribute('action');
 
 	const headers = {
-		authorization: 'Bearer ' + token,
+		authorization: `Bearer ${token}`,
 	};
 
 	if (contentType) {
@@ -1091,7 +1192,6 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 
 	if (status === 200) {
 		$('--ok');
-
 		return true;
 	} else {
 		if (status === 401) {
@@ -1099,10 +1199,14 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 		}
 
 		$('--error', message);
-
 		return false;
 	}
 
+	/**
+	 * Updates the cell info element with the provided state and title.
+	 * @param {string} add - The state to add to the cell info element ('--loading', '--error', '--ok').
+	 * @param {string | undefined} title - The title for the cell info element.
+	 */
 	function $(add, title = undefined) {
 		const states = ['--loading', '--error', '--ok'];
 		const info = cell.querySelector('div[cell-info]');
@@ -1121,6 +1225,16 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 	}
 }
 
+/**
+ * Handles a text input request by sending a PUT request with the updated value to the server.
+ * @param {string} lastInnerText - The last recorded inner text of the input element.
+ * @param {HTMLElement} cell - The cell element representing the action.
+ * @param {string} forItem - The key representing the item being updated.
+ * @param {string} value - The new value of the input element.
+ * @param {string} identifier - The identifier for the item being updated.
+ * @param {function | undefined} callBack - An optional callback function to execute after the request is successful.
+ * @returns {Promise<void>} A promise that resolves once the request is handled and, if provided, the callback function is executed.
+ */
 export async function handleTextInputRequest(
 	lastInnerText,
 	cell,
@@ -1134,10 +1248,8 @@ export async function handleTextInputRequest(
 	}
 
 	let form = {};
-
 	form[forItem] = value;
 	form['id'] = identifier;
-
 	form = JSON.stringify(form);
 
 	const req = await handleCellRequest(cell, form, 'application/json');
@@ -1147,6 +1259,9 @@ export async function handleTextInputRequest(
 	}
 }
 
+/**
+ * Handles the visibility of tables in special sections.
+ */
 export function handleTableVisibility() {
 	window.document.querySelectorAll('div[special-section]').forEach((div) => {
 		const rows = div.querySelectorAll('tr[table-row]');
@@ -1159,20 +1274,35 @@ export function handleTableVisibility() {
 	});
 }
 
-function addSortableList(container, callBack) {
+/**
+ * Adds sortable behavior to a list using jQuery UI Sortable.
+ * @param {string} sectionName - The attribute name of the sortable section.
+ * @param {function} callBack - The callback function to execute when sorting stops.
+ */
+function addSortableList(sectionName, callBack) {
 	$(function () {
-		const sortable = $(`[${container}]`).sortable({
+		const container = `[${sectionName}]`;
+
+		const sortable = $(container).sortable({
 			items: 'tr:not([pseudo-item])',
 			cancel: '[pseudo-item]',
 			stop: callBack,
 			tolerance: 'pointer',
+			helper: 'clone', // Use 'clone' helper to maintain original widths
+			start: function (event, ui) {
+				ui.helper.find('th, td').each(function () {
+					$(this).data('width', $(this).width());
+				});
+			},
+			change: function (event, ui) {
+				ui.helper.find('th, td:not(.action-container)').each(function () {
+					$(this).width($(this).data('width'));
+				});
+			},
 		});
 
-		$(`[${container}]`).on('mousedown', '[draggable]', function () {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
+		$(container).on('mousedown', '[draggable]', function () {
+			if ($(container).find('[original-item]').length < 2) {
 				return;
 			}
 
@@ -1180,10 +1310,7 @@ function addSortableList(container, callBack) {
 		});
 
 		$(document).on('mouseup', function (e) {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
+			if ($(container).find('[original-item]').length < 2) {
 				return;
 			}
 
@@ -1194,12 +1321,22 @@ function addSortableList(container, callBack) {
 	});
 }
 
-function destroySortableList(container) {
+/**
+ * Destroys the sortable behavior for a given container.
+ * @param {string} sectionName - The attribute selector of the container.
+ */
+function destroySortableList(sectionName) {
 	$(function () {
-		$('[' + container + ']').sortable('destroy');
+		// Find the elements with the specified container attribute selector and destroy the sortable behavior
+		$(`[${sectionName}]`).sortable('destroy');
 	});
 }
 
+/**
+ * Generates a random string of the specified length.
+ * @param {number} length - The length of the random string.
+ * @returns {string} - The generated random string.
+ */
 function generateRandomString(length) {
 	const characters =
 		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -1213,6 +1350,11 @@ function generateRandomString(length) {
 	return result;
 }
 
+/**
+ * Converts a number to the Brazilian currency format.
+ * @param {number} number - The number to be converted.
+ * @returns {string} - The number in the Brazilian currency format.
+ */
 export function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {
 		style: 'currency',

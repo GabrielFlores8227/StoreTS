@@ -13,7 +13,9 @@ root.get(
 	Middleware.middlewareBuildProducts(),
 	Middleware.middlewareBuildFooter(),
 	(req, res) => {
-		res.render('root-get-page', { builder: Object(req).builder });
+		res.render('root-get-page', {
+			builder: Object(req).builder,
+		});
 	},
 );
 
