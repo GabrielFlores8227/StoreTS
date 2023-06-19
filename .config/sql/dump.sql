@@ -93,7 +93,7 @@ CREATE TABLE `footer` (
 
 LOCK TABLES `footer` WRITE;
 /*!40000 ALTER TABLE `footer` DISABLE KEYS */;
-INSERT INTO `footer` VALUES ('only','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS S3 e WhatsApp.','9999999999999','@instagram','@facebook','https://www.google.com/maps/@-23.5078035,-47.6090396,15z?entry=ttu','Horário de atendimento: 9:00 - 18:00*','Horário de atendimento em dias úteis dias: 9:00 - 18:00');
+INSERT INTO `footer` VALUES ('only','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS e WhatsApp.','9999999999999','@instagram','@facebook','https://www.google.com/maps/@-23.5078035,-47.6090396,15z?entry=ttu','Horário de atendimento: 9:00 - 18:00*','Horário de atendimento em dias úteis dias: 9:00 - 18:00');
 /*!40000 ALTER TABLE `footer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +121,7 @@ CREATE TABLE `header` (
 
 LOCK TABLES `header` WRITE;
 /*!40000 ALTER TABLE `header` DISABLE KEYS */;
-INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS S3 e WhatsApp.','#ff0000');
+INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS e WhatsApp.','#ff0000');
 /*!40000 ALTER TABLE `header` ENABLE KEYS */;
 UNLOCK TABLES;
 
