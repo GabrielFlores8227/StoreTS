@@ -50,7 +50,6 @@
 		<script defer type="module" src="/root-get-page/scripts/index.js"></script>
 	</head>
 	<body>
-		<!--loading-screen-->
 		<div class="loading-container">
 			<div loading-screen>
 				<img
@@ -60,8 +59,6 @@
 				/>
 			</div>
 		</div>
-
-		<!--aside-menu-->
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>
 			<div>
@@ -111,8 +108,6 @@
 				</div>
 			</div>
 		</aside>
-
-		<!--aside-menu-->
 		<aside categories-aside-menu>
 			<button close-categories-aside-menu-button></button>
 			<div>
@@ -142,11 +137,8 @@
 				</div>
 			</div>
 		</aside>
-
-		<!--header-->
 		<header>
 			<div>
-				<!--logo-->
 				<a href="/">
 					<img
 						draggable="false"
@@ -154,8 +146,6 @@
 						alt="<%= builder.header.title %> Logo"
 					/>
 				</a>
-
-				<!--search-container-->
 				<div search-container class="search-container">
 					<input type="text" placeholder="O que você procura?" />
 					<div>
@@ -172,8 +162,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!--aside-menu-buttons-->
 				<div>
 					<button open-saved-aside-menu-button>
 						<i class="fa-solid fa-bookmark"></i>
@@ -184,12 +172,9 @@
 				</div>
 			</div>
 			<div>
-				<!--aside-menu-button-->
 				<button open-categories-aside-menu-button>
 					<i class="fa-solid fa-bars"></i>
 				</button>
-
-				<!--search-container-->
 				<div search-container class="search-container">
 					<input type="text" placeholder="What are you looking for?" />
 					<div>
@@ -208,10 +193,7 @@
 				</div>
 			</div>
 		</header>
-
-		<!--main-->
 		<main>
-			<!--propagandas-->
 			<% if (builder.propagandas.length > 0) { %>
 			<div image-slider-container class="propagandas-container">
 				<button tabindex="-1"></button>
@@ -234,8 +216,6 @@
 				<button tabindex="-1"></button>
 			</div>
 			<% } %>
-
-			<!--products-->
 			<div class="product-section-container">
 				<% Object.keys(builder.products).forEach((category) => { %>
 				<div product-section>
@@ -283,8 +263,6 @@
 				<% }) %>
 			</div>
 		</main>
-
-		<!--footer-->
 		<footer>
 			<div>
 				<div>

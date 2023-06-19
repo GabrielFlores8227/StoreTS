@@ -1,5 +1,9 @@
 import { buildAsideMenus } from './modules.js';
 
+/**
+ * Immediately invoked function expression (IIFE) that adds a click event listener to the button within the 'div[warning]' element.
+ * When the button is clicked, the page is reloaded.
+ */
 (() => {
 	window.document
 		.querySelector('div[warning] button')
@@ -8,6 +12,14 @@ import { buildAsideMenus } from './modules.js';
 		});
 })();
 
+/**
+ * Function that builds aside menus based on the provided configuration array.
+ * Each configuration object in the array specifies a selector, element, and action to perform on the element.
+ * The selector is used to identify the button that triggers the action.
+ * The element is the target aside menu element.
+ * The action can be 'add' or 'remove' to add or remove a class from the element, respectively.
+ * @param {Array} menus - The configuration array for building aside menus.
+ */
 buildAsideMenus([
 	{
 		selector: 'open-settings-aside-menu-button',
@@ -21,6 +33,11 @@ buildAsideMenus([
 	},
 ]);
 
+/**
+ * Immediately invoked function expression (IIFE) that enables sliding functionality for slider containers.
+ * It allows users to scroll horizontally within the slider container by dragging or swiping.
+ * The functionality is triggered by mouse or touch events.
+ */
 (() => {
 	const sliderContainer = document.querySelectorAll('[table-container]');
 
