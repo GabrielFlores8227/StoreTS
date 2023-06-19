@@ -37,8 +37,8 @@ router.use(
 					header: await Middleware.buildHeader(),
 				},
 				status: 429,
-				message: 'Too many requests',
-				text: 'We sincerely apologize for the inconvenience caused. Our server is currently receiving an unusually high number of requests from your IP address. As a result, we are unable to fulfill your request at this time. Please try again later or contact us if you require immediate assistance.',
+				message: 'Muitas solicitações',
+				text: 'Pedimos sinceras desculpas pelo inconveniente causado. Nosso servidor está recebendo atualmente um número incomumente alto de solicitações do seu endereço IP. Como resultado, não podemos atender à sua solicitação neste momento. Por favor, tente novamente mais tarde ou entre em contato conosco se precisar de assistência imediata.',
 				homePage: false,
 			});
 		},

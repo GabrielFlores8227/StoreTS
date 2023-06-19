@@ -61,6 +61,7 @@ div.table-section-container__table-container {
 		border-radius: 7px;
 		overflow: hidden;
 		background-color: var(--primary-color);
+		table-layout: auto;
 
 		thead,
 		tbody {
@@ -69,22 +70,113 @@ div.table-section-container__table-container {
 
 		thead {
 			width: 100%;
-			user-select: none;
 			height: 41px;
 			color: white;
 		}
 
 		tbody {
 			& > tr {
+				width: 100%;
 				background-color: white;
 
 				& > td {
-					&.--sortable-item {
-						width: 100%;
+					height: 59.9px;
+
+					&.regular-container {
+						min-width: 296px;
 					}
 
-					min-width: 301px;
-					height: 59.9px;
+					&.action-container {
+						width: 175px;
+						min-width: 175px;
+
+						&.--no-drag-button {
+							& > div {
+								& > div {
+									& > button:first-of-type {
+										display: none;
+									}
+								}
+							}
+						}
+
+						&.--no-send-button {
+							& > div {
+								& > div {
+									& > button:nth-of-type(2) {
+										display: none;
+									}
+								}
+							}
+						}
+
+						& > div {
+							display: flex;
+							align-items: center;
+							justify-content: center;
+
+							& > div {
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								gap: 14px;
+								width: 175px;
+								position: relative;
+
+								& > button {
+									color: var(--primary-color);
+									font-size: 16.8px;
+									padding: 7px;
+								}
+
+								& > div.action-container__action-info-container {
+									&.--loading {
+										i.action-container__cell-info-container__loading {
+											display: block;
+										}
+									}
+
+									&.--error {
+										i:nth-of-type(2) {
+											display: block;
+										}
+									}
+
+									&.--ok {
+										i:last-of-type {
+											display: block;
+										}
+									}
+
+									transform: translateY(-50%);
+									position: absolute;
+									top: 50%;
+									right: 14px;
+
+									i {
+										display: none;
+									}
+
+									i.action-container__cell-info-container__loading {
+										width: 16.1px;
+										height: 16.1px;
+										border-radius: 100%;
+										border: 2.8px solid var(--regular-green);
+										border-top: 2.8px solid transparent;
+										animation: spinner 1.4s linear infinite forwards;
+									}
+
+									& > i:nth-of-type(2) {
+										color: red;
+									}
+
+									& > i:last-of-type {
+										color: var(--regular-green);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -165,7 +257,7 @@ div.cell-container__file-input-container {
 
 	a {
 		white-space: nowrap;
-		max-width: 140px;
+		max-width: 70%;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		padding: 0px 3.5px;
@@ -245,95 +337,6 @@ div.cell-container__select-container {
 
 		& > option {
 			font-size: 15.4px;
-		}
-	}
-}
-
-td.action-container {
-	&.--no-drag-button {
-		& > div {
-			& > div {
-				& > button:first-of-type {
-					display: none;
-				}
-			}
-		}
-	}
-
-	&.--no-send-button {
-		& > div {
-			& > div {
-				& > button:nth-of-type(2) {
-					display: none;
-				}
-			}
-		}
-	}
-
-	& > div {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		& > div {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 14px;
-			width: 175px;
-			position: relative;
-
-			& > button {
-				color: var(--primary-color);
-				font-size: 16.8px;
-				padding: 7px;
-			}
-
-			& > div.action-container__action-info-container {
-				&.--loading {
-					i.action-container__cell-info-container__loading {
-						display: block;
-					}
-				}
-
-				&.--error {
-					i:nth-of-type(2) {
-						display: block;
-					}
-				}
-
-				&.--ok {
-					i:last-of-type {
-						display: block;
-					}
-				}
-
-				transform: translateY(-50%);
-				position: absolute;
-				top: 50%;
-				right: 0px;
-
-				i {
-					display: none;
-				}
-
-				i.action-container__cell-info-container__loading {
-					width: 16.1px;
-					height: 16.1px;
-					border-radius: 100%;
-					border: 2.8px solid var(--regular-green);
-					border-top: 2.8px solid transparent;
-					animation: spinner 1.4s linear infinite forwards;
-				}
-
-				& > i:nth-of-type(2) {
-					color: red;
-				}
-
-				& > i:last-of-type {
-					color: var(--regular-green);
-				}
-			}
 		}
 	}
 }

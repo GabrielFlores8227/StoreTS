@@ -1,7 +1,8 @@
-//
-// Cookie
-//
-
+/**
+ * Retrieves the authentication token from the cookies.
+ *
+ * @returns {string|null} The token value if found, or null if not found.
+ */
 function getToken() {
 	const cookies = document.cookie.split(';');
 
@@ -20,10 +21,6 @@ function getToken() {
 }
 
 const token = getToken();
-
-//
-// Get
-//
 
 export async function getHeader() {
 	return await (
@@ -737,7 +734,7 @@ export function buildProductsTemplate(specialSection) {
 		const off = template
 			.querySelector('div[product-off]')
 			.innerText.replace(/\D/g, '');
-		form.append('off', off);
+		form.append('off', off === '' ? '0' : off);
 
 		const installment = template.querySelector(
 			'div[product-installment]',
@@ -810,6 +807,10 @@ export function handleCursorIndex(element) {
 }
 
 export function handlePseudoInputCursorIndex(div, index = undefined) {
+	if (div.innerText === '') {
+		return;
+	}
+
 	const range = document.createRange();
 	const selection = window.getSelection();
 
@@ -865,7 +866,7 @@ export function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
-		inputElement.innerText = '+';
+		inputElement.innerText = '';
 	} else if (value.length <= 2) {
 		inputElement.innerText = `+${value}`;
 	} else if (value.length === 3) {
@@ -1159,20 +1160,30 @@ export function handleTableVisibility() {
 	});
 }
 
-function addSortableList(container, callBack) {
+function addSortableList(sectionName, callBack) {
 	$(function () {
-		const sortable = $(`[${container}]`).sortable({
+		const container = `[${sectionName}]`;
+
+		const sortable = $(container).sortable({
 			items: 'tr:not([pseudo-item])',
 			cancel: '[pseudo-item]',
 			stop: callBack,
 			tolerance: 'pointer',
+			helper: 'clone', // Use 'clone' helper to maintain original widths
+			start: function (event, ui) {
+				ui.helper.find('th, td').each(function () {
+					$(this).data('width', $(this).width());
+				});
+			},
+			change: function (event, ui) {
+				ui.helper.find('th, td:not(.action-container)').each(function () {
+					$(this).width($(this).data('width'));
+				});
+			},
 		});
 
-		$(`[${container}]`).on('mousedown', '[draggable]', function () {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
+		$(container).on('mousedown', '[draggable]', function () {
+			if ($(container).find('[original-item]').length < 2) {
 				return;
 			}
 
@@ -1180,10 +1191,7 @@ function addSortableList(container, callBack) {
 		});
 
 		$(document).on('mouseup', function (e) {
-			if (
-				window.document.querySelectorAll(`[${container}] [original-item]`)
-					.length < 2
-			) {
+			if ($(container).find('[original-item]').length < 2) {
 				return;
 			}
 

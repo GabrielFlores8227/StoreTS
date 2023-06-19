@@ -13,23 +13,23 @@ class Support {
 			title: (title: string) => {
 				title = title.trim();
 
-				Admin.checkLength(title, 1, 30, 'title');
+				Admin.checkLength(title, 1, 30, 'título');
 			},
 			description: (description: string) => {
 				description = description.trim();
 
-				Admin.checkLength(description, 1, 255, 'description');
+				Admin.checkLength(description, 1, 255, 'descrição');
 			},
 			color: (color: string) => {
 				color = color.trim();
 
-				Admin.checkLength(color, 7, 7, 'color');
+				Admin.checkLength(color, 7, 7, 'cor');
 			},
 		},
 		propagandas: {
 			imagesContext: (imagesContext: Array<string>) => {
-				Admin.checkType(imagesContext, 'object', 'images context');
-				Admin.checkLength(imagesContext, 2, 2, 'images context');
+				Admin.checkType(imagesContext, 'object', 'imagesContext');
+				Admin.checkLength(imagesContext, 2, 2, 'imagesContext');
 
 				if (
 					JSON.stringify(imagesContext.sort()) !==
@@ -38,7 +38,7 @@ class Support {
 					throw {
 						status: 400,
 						message:
-							"Oops, necessary data is missing in the 'imagesContext' key",
+							"Desculpe, dados necessários estão faltando. Por favor tente consertar o campo 'imagesContext'.",
 					};
 				}
 			},
@@ -47,7 +47,7 @@ class Support {
 			name: async (name: string) => {
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'name');
+				Admin.checkLength(name, 1, 30, 'nome');
 
 				const [query] = await Sql.query(
 					'SELECT name FROM categories WHERE name = ?;',
@@ -57,7 +57,7 @@ class Support {
 				if (Object(query).length !== 0) {
 					throw {
 						status: 400,
-						message: `Oops, the category '${name}' already exists. Please try using a different name`,
+						message: `Desculpe, a categoria "${name}" já existe. Por favor, tente usar um nome diferente.`,
 					};
 				}
 			},
@@ -73,13 +73,13 @@ class Support {
 
 				if (Object(query).length === 0) {
 					let message =
-						'Oops, the category you provided does not exist. Please try choosing an existing category';
+						'Desculpe, a categoria que você forneceu não existe. Por favor, tente escolher uma categoria existente.';
 
 					const [query] = await Sql.query('SELECT name FROM categories;');
 
 					if (Object(query).length === 0) {
 						message =
-							'Oops, there are no categories available. Please try to create a category first';
+							'Desculpe, não há categorias disponíveis no momento. Por favor, tente criar uma categoria primeiro.';
 					}
 
 					throw {
@@ -91,26 +91,26 @@ class Support {
 			name: (name: string) => {
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'name');
+				Admin.checkLength(name, 1, 30, 'nome');
 			},
 			price: (price: string) => {
 				price = price.trim();
 
-				Admin.checkLength(price, 1, -1, 'price');
-				Admin.checkNumber(price, 'price');
-				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'price');
+				Admin.checkLength(price, 1, -1, 'preço');
+				Admin.checkNumber(price, 'preço');
+				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'preço');
 			},
 			off: (off: string) => {
 				off = off.trim();
 
-				Admin.checkLength(off, 1, -1, 'price');
-				Admin.checkNumber(off, 'off');
-				Admin.checkValue(off, 0, 100, 'off');
+				Admin.checkLength(off, 1, -1, 'promoção');
+				Admin.checkNumber(off, 'promoção');
+				Admin.checkValue(off, 0, 100, 'promoção');
 			},
 			installment: (installment: string) => {
 				installment = installment.trim();
 
-				Admin.checkLength(installment, 0, 30, 'installment');
+				Admin.checkLength(installment, 0, 30, 'parcelas');
 			},
 			whatsapp: (whatsapp: string) => {
 				whatsapp = whatsapp.trim();
@@ -121,19 +121,19 @@ class Support {
 			message: (message: string) => {
 				message = message.trim();
 
-				Admin.checkLength(message, 0, 255, 'message');
+				Admin.checkLength(message, 0, 255, 'mensagem');
 			},
 		},
 		footer: {
 			title: (title: string) => {
 				title = title.trim();
 
-				Admin.checkLength(title, 1, 30, 'title');
+				Admin.checkLength(title, 1, 50, 'título');
 			},
 			text: (text: string) => {
 				text = text.trim();
 
-				Admin.checkLength(text, 1, 255, 'text');
+				Admin.checkLength(text, 1, 255, 'texto');
 			},
 			whatsapp: (whatsapp: string) => {
 				whatsapp = whatsapp.trim();
@@ -166,18 +166,18 @@ class Support {
 			location: (location: string) => {
 				location = location.trim();
 
-				Admin.checkLength(location, 1, 64000, 'location');
-				Admin.checkSubstring(location, ' ', false, false, 'location');
+				Admin.checkLength(location, 1, 64000, 'localização');
+				Admin.checkSubstring(location, ' ', false, false, 'localização');
 			},
 			storeInfo: (storeInfo: string) => {
 				storeInfo = storeInfo.trim();
 
-				Admin.checkLength(storeInfo, 1, 50, 'store info');
+				Admin.checkLength(storeInfo, 1, 50, 'informação da loja');
 			},
 			completeStoreInfo: (completeStoreInfo: string) => {
 				completeStoreInfo = completeStoreInfo.trim();
 
-				Admin.checkLength(completeStoreInfo, 5, 100, 'complete store info');
+				Admin.checkLength(completeStoreInfo, 5, 100, 'informação completa');
 			},
 		},
 	};
@@ -267,7 +267,7 @@ class Support {
 			) {
 				throw {
 					status: 400,
-					message: `Oops, the image '${originalName}' is not a valid image. Please try choosing another image`,
+					message: `Desculpe, a imagem "${originalName}" não é uma imagem válida. Por favor, tente escolher outra imagem.`,
 				};
 			}
 
@@ -399,7 +399,8 @@ class Support {
 		) {
 			throw {
 				status: 400,
-				message: 'Oops, the sent IDs are not valid or incomplete',
+				message:
+					'Desculpe, os IDs enviados não são válidos ou estão incompletos. Por favor, verifique os IDs e certifique-se de que estão corretos e completos.',
 			};
 		}
 	}
@@ -478,8 +479,8 @@ export default class LocalModules {
 							status: 400,
 							message:
 								maxCount === 1
-									? 'Oops, it seems that the sent image is incorrect'
-									: 'Oops, it seems that the sent images are incorrect',
+									? 'Desculpe, parece que a imagem enviada não é uma imagem válida. Por favor, verifique a imagem e tente novamente.'
+									: 'Desculpe, parece que algumas imagens enviadas naõ são válidas. Por favor, verifique as imagens e tente novamente.',
 						};
 					}
 
@@ -491,8 +492,8 @@ export default class LocalModules {
 							status: 400,
 							message:
 								maxCount === 1
-									? 'Oops, it seems that the required image is missing'
-									: 'Oops, it seems that the required images are missing',
+									? 'Desculpe, parece que a imagem necessária para completar o pedido não foi enviada. Por favor, adicione uma imagem e tente novamente.'
+									: 'Desculpe, parece que algumas imagens necessárias para completar o pedido não foram enviadas. Por favor, adicione todas as imagens e tente novamente.',
 						};
 					} else if (err) {
 						throw err;

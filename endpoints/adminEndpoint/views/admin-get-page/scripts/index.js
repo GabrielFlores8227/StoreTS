@@ -31,12 +31,26 @@ buildAsideMenus([
 		let position;
 
 		sliderContainer[c].addEventListener('touchmove', () => {
+			if (
+				e.target.getAttribute('contenteditable') ||
+				e.target.tagName === 'TEXTAREA'
+			) {
+				return;
+			}
+
 			isDown = true;
 		});
 		sliderContainer[c].addEventListener('touchend', () => {
 			isDown = false;
 		});
 		sliderContainer[c].addEventListener('mousedown', (e) => {
+			if (
+				e.target.getAttribute('contenteditable') ||
+				e.target.tagName === 'TEXTAREA'
+			) {
+				return;
+			}
+
 			isDown = true;
 			sliderContainer[c].classList.add('active');
 			startX = e.pageX - sliderContainer[c].offsetLeft;

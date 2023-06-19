@@ -5,8 +5,6 @@ import {
 	handleCellRequest,
 	handleTextInputRequest,
 	handleTableVisibility,
-	handleCursorIndex,
-	handlePseudoInputCursorIndex,
 	buildIcon,
 	buildLogo,
 	buildTitle,
@@ -53,6 +51,10 @@ import {
 			textarea.scrollHeight <= 74
 				? '53px'
 				: textarea.offsetHeight + 14 * 2 + 'px';
+
+		if (textarea.scrollHeight == 74) {
+			textarea.style.height = 'auto';
+		}
 
 		textarea.addEventListener('input', () => {
 			textarea.style.height = '53px';

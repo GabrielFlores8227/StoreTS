@@ -55,24 +55,21 @@
 		></script>
 	</head>
 	<body>
-		<!--warning-->
 		<div warning class="warning-container">
 			<div>
 				<h2>
 					<i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-					Multi-Window
+					Multíplas Janelas
 				</h2>
 				<p>
-					Admin page is open in another window. Click "Use Here" to use Admin
-					page in this window.
+					A página do administrador está aberta em outra janela. Clique em "USAR
+					AQUI" para usar a página nesta janela.
 				</p>
 				<div>
-					<button>USE HERE</button>
+					<button>USAR AQUI</button>
 				</div>
 			</div>
 		</div>
-
-		<!--aside-menu-->
 		<aside settings-aside-menu>
 			<button close-settings-aside-menu-button></button>
 			<div>
@@ -85,7 +82,7 @@
 							alt="<%= builder.header.title %> Logo"
 						/>
 						<div>
-							<p>Settings</p>
+							<p>Configurações</p>
 						</div>
 					</div>
 				</div>
@@ -94,24 +91,21 @@
 						<li>
 							<a href="#">
 								<i class="fa-solid fa-user"></i>
-								<i>Change username</i>
+								<i>Mudar nome de usuário</i>
 							</a>
 						</li>
 						<li>
 							<a href="#">
 								<i class="fa-solid fa-lock"></i>
-								<i>Change password</i>
+								<i>Mudar senha</i>
 							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</aside>
-
-		<!--header-->
 		<header>
 			<div>
-				<!--logo-->
 				<a href="/">
 					<img
 						logo
@@ -120,8 +114,6 @@
 						alt="<%= builder.header.title %> Logo"
 					/>
 				</a>
-
-				<!--aside-menu-button-->
 				<div>
 					<button open-settings-aside-menu-button>
 						<i class="fa-solid fa-gear"></i>
@@ -132,31 +124,25 @@
 				</div>
 			</div>
 		</header>
-
-		<!--main-->
 		<main>
-			<!--header-->
 			<div header-table-section class="table-section-container">
-				<!--table-title-->
 				<div>
 					<h1>
 						<i class="fa-solid fa-helmet-safety"></i>
-						Header
+						Cabeçalho
 					</h1>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Icon</th>
+								<th>Ícone</th>
 								<th>Logo</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--icon-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -173,7 +159,7 @@
 											</label>
 											<input id="icon" type="file" accept="image/*" />
 											<a href="<%= builder.header.icon %>" target="_blank"
-												>Icon</a
+												>Ícone</a
 											>
 										</div>
 										<div cell-info class="cell-container__cell-info-container">
@@ -188,9 +174,7 @@
 										</div>
 									</div>
 								</td>
-
-								<!--logo-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -226,19 +210,17 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Title</th>
-								<th>Color</th>
+								<th>Título</th>
+								<th>Cor</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--title-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -252,7 +234,7 @@
 											<div
 												pseudo-input
 												contenteditable="true"
-												placeholder="Title"
+												placeholder="Título"
 												maxlength="30"
 											>
 												<%= builder.header.title %>
@@ -270,9 +252,7 @@
 										</div>
 									</div>
 								</td>
-
-								<!--color-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -301,18 +281,16 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Description</th>
+								<th>Descrição</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--description-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -323,7 +301,7 @@
 										<div
 											class="cell-container__input-container cell-container__text-area-container"
 										>
-											<textarea maxlength="255" placeholder="Description">
+											<textarea maxlength="255" placeholder="Descrição">
 <%= builder.header.description %></textarea
 											>
 										</div>
@@ -344,89 +322,25 @@
 					</table>
 				</div>
 			</div>
-
-			<!--propagandas-->
 			<div special-section class="table-section-container">
-				<!--table-title-->
 				<div>
 					<h1>
 						<i class="fa-solid fa-thumbtack"></i>
 						Propagandas
 					</h1>
 				</div>
-
-				<!--table-->
 				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Big Image</th>
-								<th>Small Image</th>
-								<th>Actions</th>
+								<th>Ações</th>
+								<th>Imagem Grande</th>
+								<th>Imagem Pequena</th>
 							</tr>
 						</thead>
 						<tbody>
 							<template propagandas-template>
 								<tr table-row>
-									<!--big-image-->
-									<td class="--sortable-item">
-										<div cell-container class="cell-container">
-											<div
-												file-input-container
-												class="cell-container__input-container cell-container__file-input-container"
-											>
-												<label>
-													<i class="fa-solid fa-image"></i>
-												</label>
-												<input type="file" accept="image/*" />
-												<a target="_blank">Big Image</a>
-											</div>
-											<div
-												cell-info
-												class="cell-container__cell-info-container"
-											>
-												<i
-													class="cell-container__cell-info-container__loading"
-												></i>
-												<i
-													cell-info-error
-													class="fa-sharp fa-solid fa-circle-exclamation"
-												></i>
-												<i class="fa-solid fa-circle-check"></i>
-											</div>
-										</div>
-									</td>
-
-									<!--small-image-->
-									<td class="--sortable-item">
-										<div cell-container class="cell-container">
-											<div
-												file-input-container
-												class="cell-container__input-container cell-container__file-input-container"
-											>
-												<label>
-													<i class="fa-solid fa-image"></i>
-												</label>
-												<input type="file" accept="image/*" />
-												<a target="_blank">Small Image</a>
-											</div>
-											<div
-												cell-info
-												class="cell-container__cell-info-container"
-											>
-												<i
-													class="cell-container__cell-info-container__loading"
-												></i>
-												<i
-													cell-info-error
-													class="fa-sharp fa-solid fa-circle-exclamation"
-												></i>
-												<i class="fa-solid fa-circle-check"></i>
-											</div>
-										</div>
-									</td>
-
-									<!--actions-->
 									<td action-container class="action-container">
 										<div>
 											<div>
@@ -455,13 +369,65 @@
 											</div>
 										</div>
 									</td>
+									<td width="50%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input type="file" accept="image/*" />
+												<a target="_blank">Imagem Grande</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="50%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input type="file" accept="image/*" />
+												<a target="_blank">Imagem Pequena</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
 								</tr>
 							</template>
 						</tbody>
 					</table>
 				</div>
-
-				<!--add-button-->
 				<div>
 					<button add-item-to-table-button>
 						<i class="fa-solid fa-thumbtack"></i>
@@ -469,31 +435,53 @@
 					</button>
 				</div>
 			</div>
-
-			<!--categories-section-->
 			<div special-section class="table-section-container">
-				<!--table-title-->
 				<div>
 					<h1>
 						<i class="fa-solid fa-box"></i>
-						Categories
+						Categorias
 					</h1>
 				</div>
-
-				<!--table-->
 				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Category Name</th>
-								<th>Actions</th>
+								<th>Ações</th>
+								<th>Nome da Categoria</th>
 							</tr>
 						</thead>
 						<tbody>
 							<template categories-template>
 								<tr table-row>
-									<!--category-->
-									<td class="--sortable-item">
+									<td action-container class="action-container">
+										<div>
+											<div>
+												<button draggable>
+													<i class="fa-solid fa-sort"></i>
+												</button>
+												<button>
+													<i class="fa-sharp fa-solid fa-paper-plane"></i>
+												</button>
+												<button>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td width="100%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -501,7 +489,7 @@
 												<div
 													pseudo-input
 													contenteditable="true"
-													placeholder="Category Name"
+													placeholder="Nome"
 													maxlength="30"
 												></div>
 											</div>
@@ -520,8 +508,43 @@
 											</div>
 										</div>
 									</td>
-
-									<!--Actions-->
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<button add-item-to-table-button>
+						<i class="fa-solid fa-box"></i>
+						Add Categoria
+					</button>
+				</div>
+			</div>
+			<div special-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-pen"></i>
+						Produtos
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Ações</th>
+								<th>Imagem do Produto</th>
+								<th>Categoria</th>
+								<th>Nome</th>
+								<th>Preço</th>
+								<th>Promoção</th>
+								<th>Parcelas</th>
+								<th>Whatsapp</th>
+								<th>Mensagem</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template products-template>
+								<tr table-row>
 									<td action-container class="action-container">
 										<div>
 											<div>
@@ -550,52 +573,7 @@
 											</div>
 										</div>
 									</td>
-								</tr>
-							</template>
-						</tbody>
-					</table>
-				</div>
-
-				<!--add-button-->
-				<div>
-					<button add-item-to-table-button>
-						<i class="fa-solid fa-box"></i>
-						Add Category
-					</button>
-				</div>
-			</div>
-
-			<!--products-->
-			<div special-section class="table-section-container">
-				<!--table-title-->
-				<div>
-					<h1>
-						<i class="fa-solid fa-pen"></i>
-						Products
-					</h1>
-				</div>
-
-				<!--table-->
-				<div table-container class="table-section-container__table-container">
-					<table>
-						<thead>
-							<tr>
-								<th>Image</th>
-								<th class="--hidden">Category</th>
-								<th>Name</th>
-								<th>Price</th>
-								<th>Off</th>
-								<th class="--hidden">Installment</th>
-								<th class="--hidden">Whatsapp</th>
-								<th class="--hidden">Message</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<template products-template>
-								<tr table-row>
-									<!--image-->
-									<td>
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
@@ -605,7 +583,7 @@
 													<i class="fa-solid fa-image"></i>
 												</label>
 												<input product-image type="file" accept="image/*" />
-												<a target="_blank">Image</a>
+												<a target="_blank">Imagem</a>
 											</div>
 											<div
 												cell-info
@@ -622,9 +600,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--category-->
-									<td class="--hidden">
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__select-container"
@@ -650,9 +626,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--name-->
-									<td>
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -661,7 +635,7 @@
 													product-name
 													pseudo-input
 													contenteditable="true"
-													placeholder="Name"
+													placeholder="Nome"
 													maxlength="30"
 												></div>
 											</div>
@@ -680,9 +654,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--price-->
-									<td>
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -691,7 +663,7 @@
 													product-price
 													pseudo-input
 													contenteditable="true"
-													placeholder="Price"
+													placeholder="Preço"
 													maxlength="25"
 												></div>
 											</div>
@@ -710,9 +682,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--off-->
-									<td>
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -721,7 +691,7 @@
 													product-off
 													pseudo-input
 													contenteditable="true"
-													placeholder="Off"
+													placeholder="Promoção"
 													maxlength="30"
 												></div>
 											</div>
@@ -740,9 +710,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--installment-->
-									<td class="--hidden">
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -751,7 +719,7 @@
 													product-installment
 													pseudo-input
 													contenteditable="true"
-													placeholder="Installment"
+													placeholder="Parcelas"
 													maxlength="30"
 												></div>
 											</div>
@@ -770,9 +738,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--whatsapp-->
-									<td class="--hidden">
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -800,9 +766,7 @@
 											</div>
 										</div>
 									</td>
-
-									<!--message-->
-									<td class="--hidden">
+									<td width="12%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												class="cell-container__input-container cell-container__text-input-container"
@@ -811,7 +775,7 @@
 													product-message
 													pseudo-input
 													contenteditable="true"
-													placeholder="Message"
+													placeholder="Mensagem"
 													maxlength="255"
 												></div>
 											</div>
@@ -830,72 +794,35 @@
 											</div>
 										</div>
 									</td>
-
-									<!--actions-->
-									<td action-container class="action-container">
-										<div>
-											<div>
-												<button draggable>
-													<i class="fa-solid fa-sort"></i>
-												</button>
-												<button>
-													<i class="fa-sharp fa-solid fa-paper-plane"></i>
-												</button>
-												<button>
-													<i class="fa-solid fa-trash"></i>
-												</button>
-												<div
-													action-info
-													class="action-container__action-info-container"
-												>
-													<i
-														class="action-container__cell-info-container__loading"
-													></i>
-													<i
-														action-info-error
-														class="fa-sharp fa-solid fa-circle-exclamation"
-													></i>
-													<i class="fa-solid fa-circle-check"></i>
-												</div>
-											</div>
-										</div>
-									</td>
 								</tr>
 							</template>
 						</tbody>
 					</table>
 				</div>
-
-				<!--add-button-->
 				<div>
 					<button add-item-to-table-button>
 						<i class="fa-solid fa-pen"></i>
-						Add Product
+						Add Produto
 					</button>
 				</div>
 			</div>
-
-			<!--footer-->
 			<div header-table-section class="table-section-container">
-				<!--table-title-->
 				<div>
 					<h1>
 						<i class="fa-solid fa-shoe-prints"></i>
-						Footer
+						Rodapé
 					</h1>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Title</th>
+								<th>Título</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--title-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -909,8 +836,8 @@
 											<div
 												pseudo-input
 												contenteditable="true"
-												placeholder="Title"
-												maxlength="30"
+												placeholder="Título"
+												maxlength="50"
 											>
 												<%= builder.footer.title %>
 											</div>
@@ -931,18 +858,16 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Description</th>
+								<th>Text</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--text-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -953,7 +878,7 @@
 										<div
 											class="cell-container__input-container cell-container__text-area-container"
 										>
-											<textarea maxlength="255" placeholder="Text">
+											<textarea maxlength="255" placeholder="Texto">
 <%= builder.footer.text %></textarea
 											>
 										</div>
@@ -973,8 +898,7 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -985,8 +909,7 @@
 						</thead>
 						<tbody>
 							<tr>
-								<!--Whatsapp-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1019,8 +942,7 @@
 									</div>
 								</td>
 
-								<!--Facebook-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1052,9 +974,7 @@
 										</div>
 									</div>
 								</td>
-
-								<!--Instagram-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1090,18 +1010,16 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Location Link</th>
+								<th>Localização (link)</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--location-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1112,7 +1030,7 @@
 										<div
 											class="cell-container__input-container cell-container__text-area-container"
 										>
-											<textarea maxlength="255" placeholder="Location Link">
+											<textarea maxlength="255" placeholder="Localização">
 <%= builder.footer.location %></textarea
 											>
 										</div>
@@ -1132,19 +1050,17 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="table-section-container__table-container">
+				<div table-container class="table-section-container__table-container">
 					<table>
 						<thead>
 							<tr>
-								<th>Store Info</th>
-								<th>Complete Store Info</th>
+								<th>Informação da Loja</th>
+								<th>Informação Completa</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<!--Store-Info-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1158,7 +1074,7 @@
 											<div
 												pseudo-input
 												contenteditable="true"
-												placeholder="Store Info"
+												placeholder="Informação da Loja"
 												maxlength="50"
 											>
 												<%= builder.footer.storeInfo %>
@@ -1176,9 +1092,7 @@
 										</div>
 									</div>
 								</td>
-
-								<!--Complete-Store-Info-->
-								<td>
+								<td class="regular-container">
 									<div
 										cell-container
 										class="cell-container"
@@ -1192,7 +1106,7 @@
 											<div
 												pseudo-input
 												contenteditable="true"
-												placeholder="Complete Store Info"
+												placeholder="Informação Completa"
 												maxlength="100"
 											>
 												<%= builder.footer.completeStoreInfo %>
