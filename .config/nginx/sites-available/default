@@ -1,9 +1,28 @@
+# server {                                                                                 
+        ##                                                                               
+        # Https                                                                          
+        ##                                                                               
+
+        # listen                  443 ssl default_server;
+        # listen                  [::]:443 ssl default_server;
+        # server_name             _;
+
+        # ssl_certificate         /etc/ssl/certificate.crt; 
+        # ssl_certificate_key     /etc/ssl/private.key;
+        # ssl_protocols           TLSv1.2 TLSv1.3;
+        # ssl_ciphers             HIGH:!aNULL:!MD5;
+
+        # return 301 https://www.papelariamenck.com.br$request_uri;
+# }
+
 server {
         ##
         # Https
         ##
 
         # listen                  443 ssl;
+        # listen                  [::]:443 ssl;
+
         # server_name             www.url.com.br;
 
         # ssl                     on;
