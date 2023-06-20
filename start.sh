@@ -66,7 +66,7 @@ function STOP() {
 START
 trap KILL SIGINT
 
-sleep 10m
+sleep 1m
 
 while true
 do
