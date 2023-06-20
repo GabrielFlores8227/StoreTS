@@ -12,7 +12,7 @@
         # ssl_protocols           TLSv1.2 TLSv1.3;
         # ssl_ciphers             HIGH:!aNULL:!MD5;
 
-        # return 301 https://www.papelariamenck.com.br$request_uri;
+        # return 301 https://url.com$request_uri;
 # }
 
 server {
@@ -23,7 +23,7 @@ server {
         # listen                  443 ssl;
         # listen                  [::]:443 ssl;
 
-        # server_name             www.url.com.br;
+        # server_name             www.url.com;
 
         # ssl                     on;
         # ssl_certificate         /etc/ssl/certificate.crt; 
