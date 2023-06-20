@@ -1,6 +1,6 @@
 server {
         ##
-        # Htpps
+        # Https
         ##
 
         # listen                  443 ssl;
@@ -13,7 +13,7 @@ server {
         # ssl_ciphers             HIGH:!aNULL:!MD5;
 
         ##
-        # Htpp
+        # Http
         ##
 
         listen 80 default_server;
