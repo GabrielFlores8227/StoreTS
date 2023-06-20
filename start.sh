@@ -65,32 +65,4 @@ function STOP() {
 
 START
 trap KILL SIGINT
-
-sleep 1m
-
-while true
-do
-  if [ $(CHECK_REPO) -eq 0 ]; then
-    echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
-    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
-
-    STOP
-
-    git fetch
-    git reset --hard origin/main
-
-    ./install.sh
-    ./update.sh
-
-    echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
-
-    sleep 5
-
-    START
-  fi
-
-  sleep 600
-done
-
 wait
-

@@ -374,68 +374,71 @@ const sliderController = [];
  */
 
 (() => {
-	const controller = {
-		imageSliderContainer: window.document.querySelector(
-			'div[image-slider-container]',
-		),
-		imageSlider: window.document.querySelector(
-			'div[image-slider-container] div',
-		),
-		numberOfPropagandas: window.document.querySelectorAll(
-			'div[image-slider-container] img',
-		).length,
-		currentIndex: 0,
-		goingLeft: true,
-		isMoving: false,
-	};
+	window.document
+		.querySelectorAll('div[image-slider-container]')
+		.forEach((div) => {
+			const controller = {
+				imageSliderContainer: div,
+				imageSlider: div.querySelector('div'),
+				numberOfPropagandas: div.querySelectorAll('img').length,
+				currentIndex: 0,
+				goingLeft: true,
+				isMoving: false,
+			};
 
-	setInterval(() => {
-		if (controller.goingLeft) {
-			handlePropagandaScroll(controller, true);
-		} else {
-			handlePropagandaScroll(controller, false);
-		}
-	}, 10000);
+			setInterval(() => {
+				if (controller.goingLeft) {
+					handlePropagandaScroll(controller, true);
+				} else {
+					handlePropagandaScroll(controller, false);
+				}
+			}, 10000);
 
-	let restoreIsMoving;
-	let move = true;
+			let restoreIsMoving;
+			let move = true;
 
-	controller.imageSliderContainer
-		.querySelectorAll('button')
-		.forEach((button, index) => {
-			button.addEventListener(
-				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-					? 'touchstart'
-					: 'mousedown',
-				() => {
-					if (!move) {
-						return;
-					}
+			controller.imageSliderContainer
+				.querySelectorAll('button')
+				.forEach((button, index) => {
+					button.addEventListener(
+						/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+							? 'touchstart'
+							: 'mousedown',
+						() => {
+							if (!move) {
+								return;
+							}
 
-					move = false;
+							move = false;
 
-					setTimeout(() => {
-						move = true;
-					}, 600);
+							setTimeout(() => {
+								move = true;
+							}, 600);
 
-					if (restoreIsMoving) {
-						clearTimeout(restoreIsMoving);
-					}
+							if (restoreIsMoving) {
+								clearTimeout(restoreIsMoving);
+							}
 
-					controller.isMoving = true;
+							controller.isMoving = true;
 
-					handlePropagandaScroll(controller, index === 0 ? false : true, true);
+							handlePropagandaScroll(
+								controller,
+								index === 0 ? false : true,
+								true,
+							);
 
-					restoreIsMoving = setTimeout(() => {
-						controller.isMoving = false;
-					}, 10000);
-				},
-			);
+							restoreIsMoving = setTimeout(() => {
+								controller.isMoving = false;
+							}, 10000);
+						},
+					);
+				});
+
+			window.addEventListener('resize', () => {
+				controller.imageSlider.scrollLeft =
+					(controller.imageSlider.scrollWidth /
+						controller.numberOfPropagandas) *
+					controller.currentIndex;
+			});
 		});
-
-	window.addEventListener('resize', () => {
-		controller.imageSlider.scrollLeft =
-			(controller.imageSlider.scrollWidth / controller.numberOfPropagandas) *
-			controller.currentIndex;
-	});
 })();

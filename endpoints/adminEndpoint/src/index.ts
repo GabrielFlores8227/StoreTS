@@ -76,6 +76,7 @@ app.use(
 		store,
 		cookie: {
 			maxAge: expiration,
+			sameSite: 'strict',
 		},
 	}),
 );
