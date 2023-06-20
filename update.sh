@@ -1,3 +1,9 @@
+#!/bin/bash
+
+##
+# Main
+##
+
 APP_END_POINTS=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
 
 for INDEX in "${!APP_END_POINTS[@]}"
