@@ -25,6 +25,30 @@ function START() {
   done
 }
 
+function STOP() {
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
+
+    fuser -k $APP_PORT/tcp
+  done
+
+  echo -e "\033[1;31m[x] StoreTS stopped\033[0m"
+}
+
+function KILL() {
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
+
+    fuser -k $APP_PORT/tcp > /dev/null
+  done
+
+  echo -e "\033[1;31m[x] StoreTS killed\033[0m"
+
+  exit
+}
+
 function CHECK_REPO_VERSION() {
   output=$(git remote show origin)
 
@@ -59,30 +83,6 @@ function CHECK_REPO_UPDATE() {
 
     sleep 600
   done
-}
-
-function KILL() {
-  for INDEX in "${!APP_PORTS[@]}"
-  do
-    APP_PORT="${APP_PORTS[INDEX]}"
-
-    fuser -k $APP_PORT/tcp > /dev/null
-  done
-
-  echo -e "\033[1;31m[x] StoreTS killed\033[0m"
-
-  exit
-}
-
-function STOP() {
-  for INDEX in "${!APP_PORTS[@]}"
-  do
-    APP_PORT="${APP_PORTS[INDEX]}"
-
-    fuser -k $APP_PORT/tcp
-  done
-
-  echo -e "\033[1;31m[x] StoreTS stopped\033[0m"
 }
 
 ##
