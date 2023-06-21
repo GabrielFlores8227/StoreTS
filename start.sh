@@ -1,13 +1,6 @@
 #!/bin/bash
 
 ##
-# Config
-##
-
-APP_PORTS=("2000" "2001")
-APP_END_POINTS=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
-
-##
 # Functions
 ##
 
@@ -89,19 +82,39 @@ function CHECK_REPO_UPDATE() {
 # Main
 ##
 
+APP_PORTS=()
+APP_END_POINTS=()
+
+if [[ " $* " == *" --root "* ]]
+then
+  APP_PORTS+=('2000')
+  APP_END_POINTS+=("$(pwd)/endpoints/rootEndpoint")
+fi
+
+if [[ " $* " == *" --admin "* ]]
+then
+  APP_PORTS+=("2001")
+  APP_END_POINTS+=("$(pwd)/endpoints/adminEndpoint")
+fi
+
+if [ ${#APP_END_POINTS[@]} -lt 1 ]
+then
+  APP_PORTS+=( "2000" "2001")
+  APP_END_POINTS+=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
+fi
+
 START
 trap KILL SIGINT
 
-for arg in "$@"; do
-  if ! [ "$arg" == "--dev" ]; then
-    sleep 1m
+if ! [[ " $* " == *" --dev "* ]];
+then
+  sleep 6h
 
-    CHECK_REPO_UPDATE
-  else
-    echo -e "\033[1;33m[!] StoreTS is running in development mode\033[0m"
-    echo -e "\033[1;33m[!] Repository auto-update is off\033[0m"
-  fi
-done
+  CHECK_REPO_UPDATE
+else
+  echo -e "\033[1;33m[!] StoreTS is running in development mode\033[0m"
+  echo -e "\033[1;33m[!] Repository auto-update is off\033[0m"
+fi
 
 
 wait
