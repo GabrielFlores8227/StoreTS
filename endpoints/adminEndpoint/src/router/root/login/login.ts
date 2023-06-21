@@ -15,7 +15,7 @@ login.get(
 	},
 	Middleware.middlewareBuildHeader(),
 	(req, res) => {
-		res.render('admin-login-get-page', { builder: Object(req).builder });
+		res.render('admin-form-page', { builder: Object(req).builder });
 	},
 );
 

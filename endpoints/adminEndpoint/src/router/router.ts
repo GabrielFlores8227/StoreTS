@@ -7,7 +7,7 @@ const router = express.Router();
 router.use('/', root);
 
 router.get('*', Middleware.middlewareBuildHeader(), (req, res) => {
-	res.status(404).render('error-get-page', {
+	res.status(404).render('admin-error-page', {
 		builder: Object(req).builder,
 		status: 404,
 		message: 'Página não encontrada',

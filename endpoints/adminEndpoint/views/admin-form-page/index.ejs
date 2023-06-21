@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex" />
 
 		<!--theme-color-->
 		<meta name="theme-color" content="<%= builder.header.color %>" />
@@ -10,9 +11,8 @@
 		<!--icon-->
 		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
 
-		<!--title & description-->
-		<title><%= builder.header.title%></title>
-		<meta name="description" content="<%= builder.header.description%>" />
+		<!--title-->
+		<title><%= builder.header.title%> | Login</title>
 
 		<!--css-->
 		<style type="text/css" media="screen">
@@ -27,12 +27,15 @@
 				--dark-gray: rgb(20, 20, 20);
 			}
 		</style>
-		<link rel="stylesheet" href="/root-get-page/styles/index/index.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/loading/loading.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/aside/aside.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/header/header.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/main/main.css" />
-		<link rel="stylesheet" href="/root-get-page/styles/footer/footer.css" />
+		<link
+			rel="stylesheet"
+			href="/admin-form-page/styles/index/index.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="/admin-form-page/styles/header/header.css"
+		/>
+		<link rel="stylesheet" href="/admin-form-page/styles/main/main.css" />
 
 		<!--font-awesome-->
 		<link
@@ -44,99 +47,13 @@
 		/>
 
 		<!--scripts-->
-		<script charset="utf-8">
-			var builder = <%- JSON.stringify(builder).replace(/\\/g, '\\\\') %>
-		</script>
-		<script defer type="module" src="/root-get-page/scripts/index.js"></script>
+		<script
+			defer
+			type="module"
+			src="/admin-form-page/scripts/index.js"
+		></script>
 	</head>
 	<body>
-		<div class="loading-container">
-			<div loading-screen>
-				<img
-					draggable="false"
-					src="<%= builder.header.logo %>"
-					alt="<%= builder.header.title %> Logo"
-				/>
-			</div>
-		</div>
-		<aside saved-aside-menu>
-			<button close-saved-aside-menu-button></button>
-			<div>
-				<div>
-					<div>
-						<img
-							draggable="false"
-							src="<%= builder.header.logo %>"
-							alt="<%= builder.header.title %> Logo"
-						/>
-						<div>
-							<p>Produtos Salvos</p>
-						</div>
-					</div>
-				</div>
-				<div>
-					<div saved-product-container class="saved-product-container">
-						<template>
-							<div>
-								<div>
-									<div>
-										<div>
-											<button remove-from-saved-button>
-												<i class="fa-solid fa-xmark"></i>
-												Remover Produto
-											</button>
-										</div>
-										<div>
-											<hr />
-										</div>
-										<img draggable="false" product-image />
-										<div>
-											<p product-name></p>
-											<p product-old-price></p>
-											<p product-price></p>
-											<p product-installment></p>
-										</div>
-									</div>
-									<a product-link target="_blank">
-										<i class="fa-brands fa-whatsapp"></i>
-										Order Product
-									</a>
-								</div>
-							</div>
-						</template>
-					</div>
-				</div>
-			</div>
-		</aside>
-		<aside categories-aside-menu>
-			<button close-categories-aside-menu-button></button>
-			<div>
-				<div>
-					<div>
-						<img
-							draggable="false"
-							src="<%= builder.header.logo %>"
-							alt="<%= builder.header.title %> Logo"
-						/>
-						<div>
-							<p>Categorias</p>
-						</div>
-					</div>
-				</div>
-				<div>
-					<ul class="categories-list">
-						<% Object.keys(builder.products).forEach((category) => { %>
-						<li>
-							<button close-categories-aside-menu-button go-to-section-button>
-								<i></i>
-								<i> <%= category %> </i>
-							</button>
-						</li>
-						<% }) %>
-					</ul>
-				</div>
-			</div>
-		</aside>
 		<header>
 			<div>
 				<a href="/">
@@ -146,124 +63,52 @@
 						alt="<%= builder.header.title %> Logo"
 					/>
 				</a>
-				<div search-container class="search-container">
-					<input type="text" placeholder="O que você procura?" />
-					<div>
-						<div search-results>
-							<template>
-								<button tabindex="-1">
-									<img draggable="false" product-image />
-									<div>
-										<p product-name></p>
-										<p product-price></p>
-									</div>
-								</button>
-							</template>
-						</div>
-					</div>
-				</div>
-				<div>
-					<button open-saved-aside-menu-button>
-						<i class="fa-solid fa-bookmark"></i>
-					</button>
-					<button open-categories-aside-menu-button>
-						<i class="fa-solid fa-bars"></i>
-					</button>
-				</div>
-			</div>
-			<div>
-				<button open-categories-aside-menu-button>
-					<i class="fa-solid fa-bars"></i>
-				</button>
-				<div search-container class="search-container">
-					<input type="text" placeholder="What are you looking for?" />
-					<div>
-						<div search-results>
-							<template>
-								<button tabindex="-1">
-									<img draggable="false" product-image />
-									<div>
-										<p product-name></p>
-										<p product-price></p>
-									</div>
-								</button>
-							</template>
-						</div>
-					</div>
-				</div>
 			</div>
 		</header>
 		<main>
-			<% if (builder.propagandas.length > 0) { %>
-			<div image-slider-container class="propagandas-container">
-				<button tabindex="-1"></button>
+			<div>
 				<div>
-					<% builder.propagandas.forEach((propaganda) => { %>
-					<picture>
-						<source
-							media="(min-width: 490px)"
-							srcset="<%= propaganda.bigImage %>"
-						/>
-						<img
-							draggable="false"
-							src="<%= propaganda.smallImage %>"
-							alt="Propaganda"
-						/>
-					</picture>
-					<% }) %>
-				</div>
-				<p><%= builder.footer.storeInfo %></p>
-				<button tabindex="-1"></button>
-			</div>
-			<% } %>
-			<div class="product-section-container">
-				<% Object.keys(builder.products).forEach((category) => { %>
-				<div product-section>
+					<h1>Admin Page</h1>
 					<div>
-						<h1><%= category %></h1>
-					</div>
-					<div product-slider-container>
-						<% builder.products[category].forEach((product) => { %>
-						<div product-container product-id="<%= product.id %>">
+						<form login-form method="POST" action="/admin/login">
+							<span message-container>
+								<i class="fa-solid fa-circle-info"></i>
+								<i message></i>
+							</span>
 							<div>
 								<div>
-									<button open-saved-aside-menu-button save-product-button>
-										<i class="fa-solid fa-bookmark"></i>
-										Salvar Produto
-									</button>
+									<div>
+										<input
+											username
+											id="username"
+											type="text"
+											name="username"
+											placeholder="Usuário"
+										/>
+										<label for="username">Usuário</label>
+									</div>
 								</div>
 								<div>
-									<hr />
+									<div>
+										<input
+											password
+											id="password"
+											type="password"
+											name="password"
+											placeholder="Senha"
+										/>
+										<label for="password">Senha</label>
+									</div>
 								</div>
-								<img
-									draggable="false"
-									src="<%= product.image %>"
-									alt="<%= product.name %>"
-								/>
-								<div>
-									<p><%= product.name %></p>
-									<% if (product.off !== 0) { %>
-									<p price><%= product.price %></p>
-									<p price><%= product.price / 100 * (100 - product.off) %></p>
-									<% } else { %>
-									<p></p>
-									<p price><%= product.price %></p>
-									<% } %>
-									<p><%= product.installment %></p>
-								</div>
+								<button>
+									<i class="fa-solid fa-right-to-bracket"></i>
+									Login
+								</button>
 							</div>
-							<a target="_blank" href="/api/order/<%= product.id %>">
-								<i class="fa-brands fa-whatsapp"></i>
-								Pedir Produto
-							</a>
-						</div>
-						<% }) %>
+						</form>
 					</div>
 				</div>
-				<% }) %>
 			</div>
-		</main>
-		<footer>
 			<div>
 				<div>
 					<svg
@@ -1145,43 +990,7 @@
 						/>
 					</svg>
 				</div>
-				<div>
-					<div>
-						<h1><%= builder.footer.title %></h1>
-						<p><%= builder.footer.text %></p>
-						<div>
-							<a
-								target="_blank"
-								href="https://wa.me/<%= builder.footer.whatsapp %>"
-							>
-								<i class="fa-brands fa-whatsapp"></i>
-								Whatsapp
-							</a>
-							<div>
-								<a
-									target="_blank"
-									href="https://www.instagram.com/<%= builder.footer.instagram.replace('@', '') %>"
-								>
-									<i class="fa-brands fa-instagram"></i>
-									Instagram
-								</a>
-								<a
-									target="_blank"
-									href="https://www.facebook.com/<%= builder.footer.facebook.replace('@', '') %>"
-								>
-									<i class="fa-brands fa-square-facebook"></i>
-									Facebook
-								</a>
-							</div>
-							<a target="_blank" href="<%= builder.footer.location %>">
-								<i class="fa-solid fa-location-dot"></i>
-								Location
-							</a>
-						</div>
-						<p><%= builder.footer.completeStoreInfo %></p>
-					</div>
-				</div>
 			</div>
-		</footer>
+		</main>
 	</body>
 </html>

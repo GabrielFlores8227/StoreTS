@@ -50,7 +50,7 @@ class Support {
 				Admin.checkLength(name, 1, 30, 'nome');
 
 				const [query] = await Sql.query(
-					'SELECT name FROM categories WHERE name = ?;',
+					'SELECT `name` FROM `categories` WHERE `name` = ?;',
 					[name],
 				);
 
@@ -67,7 +67,7 @@ class Support {
 				category = category.trim();
 
 				const [query] = await Sql.query(
-					'SELECT name FROM categories WHERE id = ?;',
+					'SELECT `name` FROM `categories` WHERE `id` = ?;',
 					[category],
 				);
 
@@ -75,7 +75,7 @@ class Support {
 					let message =
 						'Desculpe, a categoria que você forneceu não existe. Por favor, tente escolher uma categoria existente.';
 
-					const [query] = await Sql.query('SELECT name FROM categories;');
+					const [query] = await Sql.query('SELECT `name` FROM `categories`;');
 
 					if (Object(query).length === 0) {
 						message =
@@ -169,12 +169,12 @@ class Support {
 				Admin.checkLength(location, 1, 64000, 'localização');
 				Admin.checkSubstring(location, ' ', false, false, 'localização');
 			},
-			storeInfo: (storeInfo: string) => {
+			'store-info': (storeInfo: string) => {
 				storeInfo = storeInfo.trim();
 
 				Admin.checkLength(storeInfo, 1, 50, 'informação da loja');
 			},
-			completeStoreInfo: (completeStoreInfo: string) => {
+			'complete-store-info': (completeStoreInfo: string) => {
 				completeStoreInfo = completeStoreInfo.trim();
 
 				Admin.checkLength(completeStoreInfo, 5, 100, 'informação completa');
@@ -193,9 +193,9 @@ class Support {
 				}),
 		},
 		propagandas: {
-			bigImage: async (file: Express.Multer.File | undefined) =>
+			'big-image': async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'cover', { width: 1920, height: 460 }),
-			smallImage: async (file: Express.Multer.File | undefined) =>
+			'small-image': async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'cover', { width: 1080, height: 1080 }),
 		},
 		products: {
@@ -290,11 +290,11 @@ class Support {
 	) {
 		Support.textMask.propagandas.imagesContext(imagesContext);
 
-		await this.imageMask.propagandas.bigImage(
+		await this.imageMask.propagandas['big-image'](
 			Object(files)[imagesContext.indexOf('bigImage')],
 		);
 
-		await this.imageMask.propagandas.smallImage(
+		await this.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
 	}
@@ -385,7 +385,7 @@ class Support {
 		Admin.checkType(ids, 'object', 'ids');
 		Admin.checkLength(ids, 1, -1, 'ids');
 
-		const [query] = await Sql.query('SELECT id FROM ' + column);
+		const [query] = await Sql.query('SELECT `id` FROM `' + column + '`;');
 
 		const queryIds: string[] = [];
 
@@ -426,7 +426,7 @@ export default class LocalModules {
 			const authorization = String(req.headers.authorization).substring(7);
 
 			const [query] = await Sql.query(
-				'SELECT token FROM admin WHERE token = ?;',
+				'SELECT `token` FROM `admin` WHERE `token` = ?;',
 				[authorization],
 			);
 
@@ -547,7 +547,7 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);',
+				'INSERT INTO `propagandas` (`big-image`, `small-image`) VALUES (?, ?);',
 				[bigImage.originalname, smallImage.originalname],
 			);
 
@@ -579,7 +579,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;',
+				'SELECT `big-image`, `small-image` FROM `propagandas` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -587,10 +587,10 @@ export default class LocalModules {
 				return next();
 			}
 
-			await S3.deleteFileFromS3Bucket(Object(query)[0].bigImage);
-			await S3.deleteFileFromS3Bucket(Object(query)[0].smallImage);
+			await S3.deleteFileFromS3Bucket(Object(query)[0]['big-image']);
+			await S3.deleteFileFromS3Bucket(Object(query)[0]['small-image']);
 
-			await Sql.query('DELETE FROM propagandas WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `propagandas` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -617,7 +617,7 @@ export default class LocalModules {
 
 			await Support.textMask.categories.name(name);
 
-			await Sql.query('INSERT INTO categories (name) VALUES (?);', [
+			await Sql.query('INSERT INTO `categories` (`name`) VALUES (?);', [
 				name.trim(),
 			]);
 
@@ -647,14 +647,14 @@ export default class LocalModules {
 			Admin.checkType(id, 'string', 'id');
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
-			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
 
 			const [query] = await Sql.query(
-				'SELECT image FROM products WHERE category = ?;',
+				'SELECT `image` FROM `products` WHERE `category` = ?;',
 				[id],
 			);
 
-			await Sql.query('DELETE FROM products WHERE category = ?;', [id]);
+			await Sql.query('DELETE FROM `products` WHERE `category` = ?;', [id]);
 
 			for (let c = 0; c < Object(query).length; c++) {
 				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
@@ -703,7 +703,7 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
+				'INSERT INTO `products` (`category`, `name`, `image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category.trim(),
 					name.trim(),
@@ -743,7 +743,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT id, image FROM products WHERE id = ?;',
+				'SELECT `id`, `image` FROM `products` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -753,7 +753,7 @@ export default class LocalModules {
 
 			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
 
-			await Sql.query('DELETE FROM products WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `products` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -785,7 +785,7 @@ export default class LocalModules {
 			await Support.validateDataForMiddlewarePutText(id, data, table, column);
 
 			await Sql.query(
-				'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;',
+				'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
 				[data.trim(), id],
 			);
 
@@ -819,7 +819,7 @@ export default class LocalModules {
 			await Support.validateDataForMiddlewarePutImage(id, file, table, column);
 
 			const [query] = await Sql.query(
-				'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?;',
+				'SELECT `' + column + '` FROM `' + table + '` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -859,7 +859,7 @@ export default class LocalModules {
 
 			for (let c = 0; c < ids.length; c++) {
 				await Sql.query(
-					'UPDATE ' + column + ' SET position = ? WHERE id = ?;',
+					'UPDATE `' + column + '` SET `position` = ? WHERE `id` = ?;',
 					[c, ids[c]],
 				);
 			}

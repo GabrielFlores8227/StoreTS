@@ -20,7 +20,7 @@ root.get(
 	Middleware.middlewareBuildHeader(true),
 	Middleware.middlewareBuildFooter(),
 	(req, res) => {
-		res.render('admin-get-page', { builder: Object(req).builder });
+		res.render('admin-page', { builder: Object(req).builder });
 	},
 );
 

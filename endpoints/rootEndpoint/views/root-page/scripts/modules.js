@@ -116,10 +116,10 @@ export function renderSavedProducts(products) {
 			}
 
 			productInstallment.textContent = product.installment;
-			productLink.href = '/api/order/' + product.id;
+			productLink.href = `/api/order/${product.id}`;
 
 			templateParent.append(template);
-			template.style.height = template.offsetHeight + 21 + 'px';
+			template.style.height = `${template.offsetHeight + 21}px`;
 		});
 	});
 }

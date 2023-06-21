@@ -34,11 +34,9 @@ export default class LocalModules {
 
 			await Middleware.addHistory('products', id!);
 
-			Object(req).redirectTo =
-				'https://api.whatsapp.com/send?phone=' +
-				Object(query)[0].whatsapp +
-				'&text=' +
-				Object(query)[0].message.replace('###', Object(query)[0].name);
+			Object(req).redirectTo = `https://api.whatsapp.com/send?phone=${
+				Object(query)[0].whatsapp
+			}&text=${Object(query)[0].message.replace('###', Object(query)[0].name)}`;
 
 			return next();
 		} catch (err) {

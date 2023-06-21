@@ -30,7 +30,7 @@ router.use(
 		windowMs: 15 * 60 * 1000,
 		max: 400,
 		handler: async (_: express.Request, res: express.Response) => {
-			res.status(429).render('error-get-page', {
+			res.status(429).render('error-page', {
 				builder: {
 					header: await Middleware.buildHeader(),
 				},
@@ -61,6 +61,6 @@ const port =
 
 app.listen(port, () => {
 	console.log(
-		'\u001b[1;32m[v] Running\u001b[0m: \t (/) \t\t http://localhost:' + port,
+		`\u001b[1;32m[v] Running\u001b[0m: \t (/) \t\t http://localhost: ${port}`,
 	);
 });

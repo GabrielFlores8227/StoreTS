@@ -9,7 +9,7 @@ function getToken() {
 	for (let i = 0; i < cookies.length; i++) {
 		const cookie = cookies[i].trim();
 
-		if (cookie.startsWith('token' + '=')) {
+		if (cookie.startsWith('token=')) {
 			document.cookie =
 				'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
@@ -279,7 +279,7 @@ async function buildComplexTable(
 					cellFunction,
 					deleteItemApiUrl,
 					reorderItemsApiUrl,
-					{ isLastItemNew, deleteItemCallback },
+					{ deleteItemCallback },
 				);
 			}
 		});
@@ -305,7 +305,7 @@ export function buildPropagandas(isLastItemNew = false) {
 	const cellFunction = (apiItem, cell, index) => {
 		cell.setAttribute(
 			'action',
-			`/admin/api/propagandas/${index === 0 ? 'bigImage' : 'smallImage'}`,
+			`/admin/api/propagandas/${index === 0 ? 'big-image' : 'small-image'}`,
 		);
 
 		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
@@ -328,7 +328,7 @@ export function buildPropagandas(isLastItemNew = false) {
 			const link = div.querySelector('a');
 			link.setAttribute(
 				'href',
-				index === 0 ? apiItem.bigImage : apiItem.smallImage,
+				index === 0 ? apiItem['big-image'] : apiItem['small-image'],
 			);
 			link.innerText = `${link.innerText} ${apiItem.id}`;
 
