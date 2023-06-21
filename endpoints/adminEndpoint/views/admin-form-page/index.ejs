@@ -12,7 +12,7 @@
 		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
 
 		<!--title-->
-		<title><%= builder.header.title%> | Login</title>
+		<title><%= builder.header.title%> | <%= siteInfo.title %></title>
 
 		<!--css-->
 		<style type="text/css" media="screen">
@@ -68,9 +68,9 @@
 		<main>
 			<div>
 				<div>
-					<h1>Admin Page</h1>
+					<h1><%= siteInfo.title %></h1>
 					<div>
-						<form login-form method="POST" action="/admin/login">
+						<form login-form method="<%= siteInfo.form.method %>" action="<%= siteInfo.form.action %>">
 							<span message-container>
 								<i class="fa-solid fa-circle-info"></i>
 								<i message></i>
@@ -79,30 +79,30 @@
 								<div>
 									<div>
 										<input
-											username
-											id="username"
-											type="text"
-											name="username"
-											placeholder="Usuário"
+											first-input
+											id="first-input"
+										  type="<%= siteInfo.form.firstInput.type %>"
+											name="<%= siteInfo.form.firstInput.name %>"
+											placeholder="<%= siteInfo.form.firstInput.placeholder %>"
 										/>
-										<label for="username">Usuário</label>
+										<label for="first-input"><%= siteInfo.form.firstInput.placeholder %></label>
 									</div>
 								</div>
 								<div>
 									<div>
 										<input
-											password
-											id="password"
-											type="password"
-											name="password"
-											placeholder="Senha"
+											second-input
+											id="second-input"
+										  type="<%= siteInfo.form.secondInput.type %>"
+											name="<%= siteInfo.form.secondInput.name %>"
+											placeholder="<%= siteInfo.form.secondInput.placeholder %>"
 										/>
-										<label for="password">Senha</label>
+										<label for="second-input"><%= siteInfo.form.secondInput.placeholder %></label>
 									</div>
 								</div>
 								<button>
-									<i class="fa-solid fa-right-to-bracket"></i>
-									Login
+									<i class="<%= siteInfo.form.button.icon %>"></i>
+									<%= siteInfo.form.button.name %>
 								</button>
 							</div>
 						</form>

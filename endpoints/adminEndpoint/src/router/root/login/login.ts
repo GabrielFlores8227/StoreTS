@@ -15,7 +15,31 @@ login.get(
 	},
 	Middleware.middlewareBuildHeader(),
 	(req, res) => {
-		res.render('admin-form-page', { builder: Object(req).builder });
+		res.render('admin-form-page', {
+			builder: Object(req).builder,
+			siteInfo: {
+				title: 'Login',
+				form: {
+					method: 'POST',
+					action: '/admin/login',
+					authentication: false,
+					firstInput: {
+						type: 'text',
+						name: 'username',
+						placeholder: 'Usuário',
+					},
+					secondInput: {
+						type: 'password',
+						name: 'password',
+						placeholder: 'Senha',
+					},
+					button: {
+						icon: 'fa-solid fa-right-to-bracket',
+						name: 'Login',
+					},
+				},
+			},
+		});
 	},
 );
 

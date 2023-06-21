@@ -10,34 +10,37 @@
 })();
 
 (() => {
-	const username = window.document.querySelector('[username]');
-	const password = window.document.querySelector('[password]');
+	const firstInput = window.document.querySelector('[first-input]');
+	const secondInput = window.document.querySelector('[second-input]');
 
 	if (!sessionStorage.getItem('auth')) {
 		sessionStorage.setItem(
 			'auth',
-			JSON.stringify({ username: username.value, password: password.value }),
+			JSON.stringify({
+				firstInput: firstInput.value,
+				secondInput: secondInput.value,
+			}),
 		);
 	}
 
 	const auth = JSON.parse(sessionStorage.getItem('auth'));
 
-	if (auth.username) {
-		username.value = auth.username;
+	if (auth.firstInput) {
+		firstInput.value = auth.firstInput;
 	}
 
-	if (auth.password) {
-		password.value = auth.password;
+	if (auth.secondInput) {
+		secondInput.value = auth.secondInput;
 	}
 
-	username.addEventListener('input', () => {
-		auth.username = username.value;
+	firstInput.addEventListener('input', () => {
+		auth.firstInput = firstInput.value;
 
 		sessionStorage.setItem('auth', JSON.stringify(auth));
 	});
 
-	password.addEventListener('input', () => {
-		auth.password = password.value;
+	secondInput.addEventListener('input', () => {
+		auth.secondInput = secondInput.value;
 
 		sessionStorage.setItem('auth', JSON.stringify(auth));
 	});
