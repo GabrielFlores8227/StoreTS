@@ -11,26 +11,12 @@ class Support {
 	 * @param body - The request body containing the username and password.
 	 * @throws {Error} If the data is invalid, it throws an error with the appropriate status code and redirection URL.
 	 */
-	public static validateDataForMiddlewareCheckAuth(body: {
-		username: string;
-		password: string;
-	}) {
-		Admin.checkType(
-			body.username,
-			'string',
-			'username',
-			401,
-			true,
-			'/admin/login',
-		);
-		Admin.checkType(
-			body.password,
-			'string',
-			'password',
-			401,
-			true,
-			'/admin/login',
-		);
+	public static validateDataForMiddlewareCheckAuth(
+		username: string,
+		password: string,
+	) {
+		Admin.checkType(username, 'string', 'username', 401, true, '/admin/login');
+		Admin.checkType(password, 'string', 'password', 401, true, '/admin/login');
 	}
 }
 
@@ -52,19 +38,21 @@ export default class LocalModules {
 		next: express.NextFunction,
 	) {
 		try {
-			Support.validateDataForMiddlewareCheckAuth(req.body);
+			const { username, password } = req.body;
+
+			Support.validateDataForMiddlewareCheckAuth(username, password);
 
 			const hashedUsername = crypto
 				.createHash('sha512')
-				.update(String(req.body.username))
+				.update(String(username))
 				.digest('hex');
 			const hashedPassword = crypto
 				.createHash('sha512')
-				.update(String(req.body.password))
+				.update(String(password))
 				.digest('hex');
 
 			const [query] = await Sql.query(
-				'SELECT username, password, token FROM admin WHERE id = ? AND username = ? AND password = ?',
+				'SELECT `username`, `password`, `token` FROM `admin` WHERE `id` = ? AND `username` = ? AND `password` = ?;',
 				['only', hashedUsername, hashedPassword],
 			);
 

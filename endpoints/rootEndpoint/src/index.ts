@@ -25,7 +25,7 @@ app.set('view engine', 'ejs');
 //
 
 // Enable request rate limiting
-router.use(
+app.use(
 	rateLimit({
 		windowMs: 15 * 60 * 1000,
 		max: 400,
@@ -34,10 +34,12 @@ router.use(
 				builder: {
 					header: await Middleware.buildHeader(),
 				},
-				status: 429,
-				message: 'Muitas solicitações',
-				text: 'Pedimos sinceras desculpas pelo inconveniente causado. Nosso servidor está recebendo atualmente um número incomumente alto de solicitações do seu endereço IP. Como resultado, não podemos atender à sua solicitação neste momento. Por favor, tente novamente mais tarde ou entre em contato conosco se precisar de assistência imediata.',
-				homePage: false,
+				siteInfo: {
+					status: 429,
+					message: 'Muitas solicitações',
+					text: 'Pedimos sinceras desculpas pelo inconveniente causado. Nosso servidor está recebendo atualmente um número incomumente alto de solicitações do seu endereço IP. Como resultado, não podemos atender à sua solicitação neste momento. Por favor, tente novamente mais tarde ou entre em contato conosco se precisar de assistência imediata.',
+					homePage: false,
+				},
 			});
 		},
 	}),

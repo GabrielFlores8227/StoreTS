@@ -408,41 +408,6 @@ class Support {
 
 export default class LocalModules {
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
-
-	/**
-	 * Middleware function to check the validity of a token in the request headers.
-	 * Throws an error if the token is invalid or missing.
-	 *
-	 * @param {express.Request} req - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The next middleware function.
-	 */
-	public static async middlewareCheckToken(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
-	) {
-		try {
-			const authorization = String(req.headers.authorization).substring(7);
-
-			const [query] = await Sql.query(
-				'SELECT `token` FROM `admin` WHERE `token` = ?;',
-				[authorization],
-			);
-
-			if (Object(query).length === 0) {
-				throw {
-					status: 401,
-					message: 'unthorized',
-				};
-			}
-
-			return next();
-		} catch (err) {
-			Middleware.handleMiddlewareError(res, err);
-		}
-	}
-
 	/**
 	 * Middleware function for handling file uploads using multer.
 	 * Validates the number of uploaded files based on the specified minimum and maximum counts.

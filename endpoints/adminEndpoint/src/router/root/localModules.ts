@@ -25,7 +25,7 @@ export default class LocalModules {
 				.toString('hex')
 				.substring(0, 255);
 
-			await Sql.query('UPDATE admin SET token = ? WHERE id = ?', [
+			await Sql.query('UPDATE `admin` SET `token` = ? WHERE `id` = ?', [
 				newToken,
 				'only',
 			]);
