@@ -58,8 +58,7 @@ window.document.querySelector('form').addEventListener('submit', async (e) => {
 			'Dados atualizados com successo.';
 		element.classList.add('--ok');
 		e.target.querySelector('button[submit-button]').classList.add('--off');
-		e.target.querySelector('a[link-button]').classList.remove('--off');
-		e.target.querySelector('a[link-button]').classList.add('--on');
+		e.target.querySelector('a[link-button]').setAttribute('class', '--on');
 	} else {
 		element.querySelector('i[message]').innerText =
 			res.status === 401

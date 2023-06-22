@@ -103,8 +103,7 @@ div.product-section-container {
 			h1 {
 				&::before {
 					content: '';
-					width: 10.5px;
-					height: 10.5px;
+					padding: 5.6px;
 					border-radius: 100%;
 					background-color: var(--primary-color);
 					transform: translateY(-50%);

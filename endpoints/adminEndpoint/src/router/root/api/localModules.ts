@@ -263,7 +263,9 @@ class Support {
 		} catch (err: any) {
 			if (
 				err.message === 'Input buffer contains unsupported image format' ||
-				err.message === 'Input Buffer is empty'
+				err.message === 'Input Buffer is empty' ||
+				err.message ===
+					'source: bad seek to 7448\nheif: Invalid input: Unspecified: Bitstream not supported by this decoder (2.0)'
 			) {
 				throw {
 					status: 400,

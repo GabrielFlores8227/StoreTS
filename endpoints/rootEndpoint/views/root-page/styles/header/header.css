@@ -153,7 +153,7 @@ div.search-container > div > div > button {
   display: flex;
   justify-content: left;
   align-items: center;
-  gap: 14px;
+  gap: 17.5px;
   width: 100%;
   padding: 21px 14px;
   position: relative;
@@ -169,8 +169,8 @@ div.search-container > div > div > button:not(:last-of-type)::after {
   bottom: 0px;
 }
 div.search-container > div > div > button > img {
-  width: 73.5px;
-  height: 73.5px;
+  width: 56px;
+  height: 56px;
   border-radius: 7px;
   object-fit: contain;
 }
@@ -195,7 +195,7 @@ div.search-container > div > div > button > div > p:first-of-type {
 }
 div.search-container > div > div > button > div > p:last-of-type {
   color: var(--regular-green);
-  font-size: 25.9px;
+  font-size: 24.5px;
 }
 
 @media (min-width: 870px) {

@@ -143,7 +143,7 @@ div.table-section-container__table-container > table tbody > tr > td.action-cont
   transform: translateY(-50%);
   position: absolute;
   top: 50%;
-  right: 14px;
+  right: 13.3px;
 }
 div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--loading i.action-container__cell-info-container__loading {
   display: block;
@@ -161,8 +161,8 @@ div.table-section-container__table-container > table tbody > tr > td.action-cont
   width: 16.1px;
   height: 16.1px;
   border-radius: 100%;
-  border: 2.8px solid var(--regular-green);
-  border-top: 2.8px solid transparent;
+  border: 3.5px solid var(--regular-green);
+  border-top: 3.5px solid transparent;
   animation: spinner 1.4s linear infinite forwards;
 }
 div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:nth-of-type(2) {
@@ -201,8 +201,8 @@ div.cell-container > div.cell-container__cell-info-container i.cell-container__c
   width: 16.1px;
   height: 16.1px;
   border-radius: 100%;
-  border: 2.8px solid var(--regular-green);
-  border-top: 2.8px solid transparent;
+  border: 3.5px solid var(--regular-green);
+  border-top: 3.5px solid transparent;
   animation: spinner 1.4s linear infinite forwards;
 }
 div.cell-container > div.cell-container__cell-info-container > i:nth-of-type(2) {
@@ -313,14 +313,6 @@ div.cell-container__select-container select > option {
   div.table-section-container__table-container > table thead,
   div.table-section-container__table-container > table tbody {
     font-size: 16.8px;
-  }
-  i.cell-container__cell-info-container__loading {
-    border: 3.5px solid var(--regular-green);
-    border-top: 3.5px solid transparent;
-  }
-  i.action-container__cell-info-container__loading {
-    border: 3.5px solid var(--regular-green);
-    border-top: 3.5px solid transparent;
   }
 }
 

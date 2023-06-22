@@ -8,6 +8,18 @@ import {
 	convertToMoneyFormat,
 } from './modules.js';
 
+/**
+ * Loading Screen Functionality
+ *
+ * This self-invoking function sets up the loading screen functionality.
+ * It selects the loading screen container element from the window document,
+ * along with its logo image element. It adds a load event listener to the logo image,
+ * and when the logo finishes loading, it adds the "--on" class to the loading screen container
+ * to display the loading screen. If the logo is already complete (cached), the "--on" class is immediately added.
+ * After a delay of 2000 milliseconds (2 seconds), it calls the "handleLoadingImages" function,
+ * passing the loading screen container as an argument, to handle any additional loading images.
+ * This function helps create a smooth loading experience for the user.
+ */
 (() => {
 	const loadingScreenContainer = window.document.querySelector(
 		'div[loading-screen]',
@@ -45,7 +57,6 @@ import {
  * - The 'handleProductsGrid' function is called to handle the products grid layout within each slider.
  * - A resize event listener is added to handle window resizing, applying necessary actions to the sliders.
  */
-
 const sliderController = [];
 
 (() => {
@@ -66,6 +77,7 @@ const sliderController = [];
 		let left;
 		let scrollLeft;
 		let wait;
+		let setted = false;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
@@ -102,26 +114,24 @@ const sliderController = [];
 		});
 
 		setInterval(() => {
-			if (wait) {
+			if (setted) {
+				return;
+			}
+
+			if (wait || !sliderController[index]) {
+				setted = true;
+
+				setTimeout(() => {
+					wait = false;
+					sliderController[index] = true;
+					setted = false;
+				}, 15000);
+
 				return;
 			}
 
 			if (isDown) {
 				wait = true;
-
-				setTimeout(() => {
-					wait = false;
-				}, 10000);
-
-				if (!sliderController[index]) {
-					sliderController[index] = true;
-				}
-
-				return;
-			}
-
-			if (!sliderController[index]) {
-				return;
 			}
 
 			if (position >= element.scrollWidth - element.clientWidth) {
@@ -171,7 +181,6 @@ const sliderController = [];
  * - The 'handleSearch' function is provided with the necessary parameters for performing the search.
  * - When the input field loses focus, a timeout is set to remove search results and reset the search container after 120 milliseconds.
  */
-
 (() => {
 	const { products } = builder;
 
@@ -238,7 +247,6 @@ const sliderController = [];
  * - The 'renderSavedProducts' function is called to render the saved products based on the 'builder' object.
  *   The 'builder.products' data is passed as an argument to the function.
  */
-
 (() => {
 	buildAsideMenus([
 		{
@@ -314,7 +322,6 @@ const sliderController = [];
  *   The 'product-id' attribute of the current product container is retrieved and added to the 'savedIds' array stored in local storage.
  *   The 'renderSavedProducts' function is called to render the updated list of saved products based on the 'builder' object.
  */
-
 (() => {
 	const productSections = window.document.querySelectorAll(
 		'div[product-section]',
@@ -372,7 +379,6 @@ const sliderController = [];
  * - A resize event listener is added to the window.
  *   When the window is resized, the 'scrollLeft' property of the image slider is adjusted to maintain the current position.
  */
-
 (() => {
 	window.document
 		.querySelectorAll('div[image-slider-container]')

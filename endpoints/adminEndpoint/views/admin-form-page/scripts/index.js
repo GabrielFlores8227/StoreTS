@@ -14,41 +14,6 @@
 })();
 
 /**
- * Immediately invoked function expression (IIFE) that handles storing and retrieving input values
- * in the session storage to maintain state across page reloads or navigations.
- */
-(() => {
-	let auth = JSON.parse(Object(sessionStorage.getItem('auth')));
-	const inputs = window.document.querySelectorAll('input');
-
-	if (window.location.href != auth.dataOwner) {
-		sessionStorage.clear();
-		sessionStorage.setItem(
-			'auth',
-			JSON.stringify({
-				dataOwner: window.location.href,
-				inputs: [],
-			}),
-		);
-	}
-
-	auth = JSON.parse(sessionStorage.getItem('auth'));
-
-	inputs.forEach((input, index) => {
-		if (!auth.inputs[index]) {
-			auth.inputs.push('');
-		}
-
-		input.value = auth.inputs[index];
-
-		input.addEventListener('input', (e) => {
-			auth.inputs[index] = e.target.value;
-			sessionStorage.setItem('auth', JSON.stringify(auth));
-		});
-	});
-})();
-
-/**
  * Immediately invoked function expression (IIFE) that enables toggling of password visibility for input fields.
  * It adds event listeners to buttons with the attribute 'toggle-password-input' to toggle the visibility of associated input fields.
  * When clicked, the button changes the input field type between 'password' and 'text', and updates the icon accordingly.

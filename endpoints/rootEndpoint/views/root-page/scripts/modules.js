@@ -2,7 +2,6 @@
  * Function to handle loading images and update the loading progress.
  * @param {HTMLElement} loadingScreenContainer - The container element for the loading screen.
  */
-
 export function handleLoadingImages(loadingScreenContainer) {
 	const allImages = window.document.querySelectorAll('img');
 	let loadedImages = 0;
@@ -33,7 +32,6 @@ export function handleLoadingImages(loadingScreenContainer) {
  * Function to build aside menus and attach click handlers to toggle their visibility.
  * @param {Array} asideButtonHandler - An array of objects containing selector, element, and action properties.
  */
-
 export function buildAsideMenus(asideButtonHandler) {
 	const addClickHandler = (selector, element, action) => {
 		document.querySelectorAll(`button[${selector}]`).forEach((button) => {
@@ -54,7 +52,6 @@ export function buildAsideMenus(asideButtonHandler) {
  * Function to render saved products on the page.
  * @param {Object} products - An object containing the saved products.
  */
-
 export function renderSavedProducts(products) {
 	let saved = localStorage.getItem('saved');
 
@@ -128,7 +125,6 @@ export function renderSavedProducts(products) {
  * Function to handle the products grid layout and add special styling if needed.
  * @param {HTMLElement} element - The container element for the products grid.
  */
-
 export function handleProductsGrid(element) {
 	if (
 		element.scrollWidth - element.clientWidth <
@@ -162,7 +158,6 @@ export function handleProductsGrid(element) {
  * @param {boolean} forward - A flag indicating the scroll direction (true for forward, false for backward).
  * @param {boolean} ignoreIsMoving - Optional. A flag indicating whether to ignore the 'isMoving' property of the controller. Default is false.
  */
-
 export function handlePropagandaScroll(
 	controller,
 	forward,
@@ -202,7 +197,6 @@ export function handlePropagandaScroll(
  * @param {Event} event - The search event object.
  * @param {Object} sliderController - The controller object for the sliders.
  */
-
 export function handleSearch(
 	searchContainer,
 	input,
@@ -310,7 +304,6 @@ export function handleSearch(
  * @param {number} number - The number to be converted.
  * @returns {string} - The number in money format.
  */
-
 export function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {
 		style: 'currency',

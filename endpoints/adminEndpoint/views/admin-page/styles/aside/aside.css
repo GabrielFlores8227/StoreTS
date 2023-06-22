@@ -96,7 +96,7 @@ aside ul li button i:last-of-type {
   color: var(--dark-gray);
   font-family: var(--font-bold);
   font-style: normal;
-  font-size: 15.4px;
+  font-size: 16.8px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -108,6 +108,7 @@ aside ul li a i:first-of-type {
   color: var(--primary-color);
 }
 aside ul li button i:first-of-type {
+  display: block;
   width: 8.4px;
   height: 8.4px;
   border-radius: 100%;

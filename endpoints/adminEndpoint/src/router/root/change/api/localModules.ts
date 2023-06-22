@@ -16,29 +16,52 @@ class Support {
 	 * @param {string} key - The key representing the parameter name.
 	 * @throws {object} - Error object with status and message properties.
 	 */
-	public static validateDataForMiddlewarePutAuth(
+	public static async validateDataForMiddlewarePutAuth(
 		from: string,
 		to: string,
 		confirm: string,
 		key: string,
 	) {
 		Admin.checkType(from, 'string', `${key} atual`);
+
+		const hashedFrom = crypto
+			.createHash('sha512')
+			.update(String(from))
+			.digest('hex');
+
+		const [query] = await Sql.query(
+			'	SELECT `' + key + '` FROM `admin` WHERE `' + key + '` = ? AND `id` = ?;',
+			[hashedFrom, 'only'],
+		);
+
+		if (Object(query).length === 0) {
+			const message =
+				key === 'username'
+					? `Desculpe, o usuário fornecido está incorreto. Por favor, verifique os dados e tente novamente.`
+					: `Desculpe, a senha fornecida está incorreta. Por favor, verifique os dados e tente novamente.`;
+
+			throw {
+				status: 400,
+				message,
+			};
+		}
+
 		Admin.checkType(
 			to,
 			'string',
-			key === 'usuário' ? `Novo ${key}` : `nova ${key}`,
+			key === 'username' ? `novo usuário` : `nova senha`,
 		);
 		Admin.checkLength(
 			to,
 			5,
 			30,
-			key === 'usuário' ? `Novo ${key}` : `nova ${key}`,
+			key === 'username' ? `novo usuário` : `nova senha`,
 		);
 		Admin.checkType(confirm, 'string', `confirme ${key}`);
 
 		if (from === to) {
 			const message = `Por favor, forneça ${
-				key === 'usuário'
+				key === 'username'
 					? 'um novo usuário diferente do usuário atual'
 					: 'uma nova senha diferente da senha atual'
 			}.`;
@@ -51,9 +74,9 @@ class Support {
 
 		if (to !== confirm) {
 			const message = `Desculpe, parece que o campo '${
-				key === 'usuário' ? 'novo usuário' : 'nova senha'
+				key === 'username' ? 'novo usuário' : 'nova senha'
 			}' e '${
-				key === 'usuário' ? 'confirme novo usuário' : 'confirme nova senha'
+				key === 'username' ? 'confirme novo usuário' : 'confirme nova senha'
 			}' não são iguais. Por favor, verifique os dados e tente novamente.`;
 
 			throw {
@@ -66,14 +89,13 @@ class Support {
 
 export default class LocalModules {
 	/**
-	 * Middleware function to update authentication credentials.
-	 * Validates the request body, hashes the current and new values,
-	 * performs a database update query, clears all sessions,
-	 * and calls the next middleware.
+	 * Middleware function for handling the "putAuth" route.
+	 * Validates the data received in the request body, updates the specified column in the "admin" table,
+	 * and deletes all sessions.
 	 *
 	 * @param {express.Request} req - The Express request object.
 	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The Express next function.
+	 * @param {express.NextFunction} next - The next middleware function.
 	 */
 	public static async middlewarePutAuth(
 		req: express.Request,
@@ -83,10 +105,9 @@ export default class LocalModules {
 		try {
 			const { from, to, confirm } = req.body;
 			const url = req.originalUrl.split('/');
-			const column = url[url.length - 1];
-			const key = column === 'username' ? 'usuário' : 'senha';
+			const column = String(url[url.length - 1]);
 
-			Support.validateDataForMiddlewarePutAuth(from, to, confirm, key);
+			await Support.validateDataForMiddlewarePutAuth(from, to, confirm, column);
 
 			const hashedFrom = crypto
 				.createHash('sha512')
@@ -98,22 +119,10 @@ export default class LocalModules {
 				.update(String(to))
 				.digest('hex');
 
-			const [query] = await Sql.query(
+			await Sql.query(
 				'UPDATE `admin` set `' + column + '` = ? WHERE `' + column + '` = ?;',
 				[hashedTo, hashedFrom],
 			);
-
-			if (Object(query).affectedRows === 0) {
-				const message =
-					key === 'usuário'
-						? `Desculpe, o ${key} fornecido está incorreto. Por favor, verifique os dados e tente novamente.`
-						: `Desculpe, a ${key} fornecida está incorreta. Por favor, verifique os dados e tente novamente.`;
-
-				throw {
-					status: 400,
-					message,
-				};
-			}
 
 			await Sql.query('DELETE FROM `sessions`;');
 

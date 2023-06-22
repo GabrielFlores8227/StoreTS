@@ -168,6 +168,8 @@ async function buildComplexTable(
 		tr.remove();
 	});
 
+	handleTableVisibility();
+
 	if (sectionName === 'products') {
 		const categories = await getCategories();
 
@@ -187,6 +189,8 @@ async function buildComplexTable(
 			handleApiList(apiItem, index);
 		});
 	}
+
+	handleTableVisibility();
 
 	template.parentElement.setAttribute(`sortable-${sectionName}`, '');
 
@@ -218,8 +222,6 @@ async function buildComplexTable(
 	) {
 		destroySortableList(`sortable-${sectionName}`);
 	}
-
-	handleTableVisibility();
 
 	function handleApiList(
 		apiItem,

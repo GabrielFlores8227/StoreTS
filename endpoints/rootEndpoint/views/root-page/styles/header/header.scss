@@ -135,14 +135,14 @@ div.search-container {
 				display: flex;
 				justify-content: left;
 				align-items: center;
-				gap: 14px;
+				gap: 17.5px;
 				width: 100%;
 				padding: 21px 14px;
 				position: relative;
 
 				& > img {
-					width: 73.5px;
-					height: 73.5px;
+					width: 56px;
+					height: 56px;
 					border-radius: 7px;
 					object-fit: contain;
 				}
@@ -170,7 +170,7 @@ div.search-container {
 
 					& > p:last-of-type {
 						color: var(--regular-green);
-						font-size: 25.9px;
+						font-size: 24.5px;
 					}
 				}
 			}
