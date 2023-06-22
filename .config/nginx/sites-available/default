@@ -7,7 +7,7 @@ server {
         listen [::]:80 default_server;
         server_name _;
 
-        return 301 https://url.com$request_uri;
+        return 301 https://www.url.com$request_uri;
 }
 
 server {                                                                                 
@@ -24,7 +24,7 @@ server {
         ssl_protocols           TLSv1.2 TLSv1.3;
         ssl_ciphers             HIGH:!aNULL:!MD5;
 
-        return 301 https://url.com$request_uri;
+        return 301 https://www.url.com$request_uri;
 }
 
 server {
