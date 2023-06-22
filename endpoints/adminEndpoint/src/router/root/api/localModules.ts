@@ -49,7 +49,9 @@ class Support {
 
 				Admin.checkLength(name, 1, 30, 'nome');
 
-				const [query] = await Sql.query(
+				let query;
+
+				[query] = await Sql.query(
 					'SELECT `name` FROM `categories` WHERE `name` = ?;',
 					[name],
 				);
