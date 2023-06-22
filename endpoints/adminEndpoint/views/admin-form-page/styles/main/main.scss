@@ -89,8 +89,19 @@ form {
 		flex-direction: column;
 		gap: 18.9px;
 
-		& > button {
+		& > button,
+		a {
+			&.--on {
+				display: flex;
+			}
+
+			&.--off {
+				display: none;
+			}
+
 			@extend %small-font-size;
+			align-items: center;
+			justify-content: center;
 			width: 100%;
 			gap: 7px;
 			padding: 10.5px;
@@ -103,6 +114,23 @@ form {
 
 		& > div {
 			position: relative;
+
+			button {
+				&.--on {
+					display: block;
+				}
+
+				display: none;
+				transform: translate(-50%, -50%);
+				color: var(--regular-gray);
+				position: absolute;
+				top: 50%;
+				right: 10.5px;
+
+				i.fa-eye-slash {
+					transform: translateX(10%);
+				}
+			}
 
 			label {
 				@extend %small-font-size;

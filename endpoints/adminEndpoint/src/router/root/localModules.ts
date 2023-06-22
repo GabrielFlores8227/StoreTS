@@ -30,12 +30,11 @@ export default class LocalModules {
 				'only',
 			]);
 
-			const currentDate = new Date();
-			const futureDate = new Date();
-			futureDate.setMinutes(currentDate.getMinutes() + 1);
+			const expires = new Date();
+			expires.setMinutes(new Date().getMinutes() + 1);
 
 			res.cookie('token', newToken, {
-				expires: futureDate,
+				expires,
 				sameSite: 'strict',
 			});
 

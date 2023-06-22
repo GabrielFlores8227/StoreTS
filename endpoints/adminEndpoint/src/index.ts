@@ -29,8 +29,8 @@ app.set('view engine', 'ejs');
 // Enable request rate limiting
 app.use(
 	rateLimit({
-		windowMs: 15 * 60 * 1000,
-		max: 400,
+		windowMs: 24 * 60 * 60 * 1000,
+		max: 5000,
 		handler: async (_: express.Request, res: express.Response) => {
 			res.status(429).render('admin-error-page', {
 				builder: {

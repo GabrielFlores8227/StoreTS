@@ -52,6 +52,13 @@
 			type="module"
 			src="/admin-form-page/scripts/index.js"
 		></script>
+		<% if (siteInfo.form.authentication) { %>
+		<script
+			defer
+			type="module"
+			src="/admin-form-page/scripts/form.js"
+		></script>
+		<% } %>
 	</head>
 	<body>
 		<header>
@@ -79,31 +86,58 @@
 								<div>
 									<div>
 										<input
-											first-input
 											id="first-input"
 										  type="<%= siteInfo.form.firstInput.type %>"
 											name="<%= siteInfo.form.firstInput.name %>"
 											placeholder="<%= siteInfo.form.firstInput.placeholder %>"
+					 						maxlength="<%= siteInfo.form.firstInput.maxLength %>"
+										  value=""
 										/>
 										<label for="first-input"><%= siteInfo.form.firstInput.placeholder %></label>
+										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
 									</div>
 								</div>
 								<div>
 									<div>
 										<input
-											second-input
 											id="second-input"
 										  type="<%= siteInfo.form.secondInput.type %>"
 											name="<%= siteInfo.form.secondInput.name %>"
 											placeholder="<%= siteInfo.form.secondInput.placeholder %>"
+					 						maxlength="<%= siteInfo.form.secondInput.maxLength %>"
+										  value=""
 										/>
 										<label for="second-input"><%= siteInfo.form.secondInput.placeholder %></label>
+										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
 									</div>
 								</div>
-								<button>
+								<% if (siteInfo.form.thirdInput) { %>
+								<div>
+									<div>
+										<input
+											id="third-input"
+										  type="<%= siteInfo.form.thirdInput.type %>"
+											name="<%= siteInfo.form.thirdInput.name %>"
+											placeholder="<%= siteInfo.form.thirdInput.placeholder %>"
+					 						maxlength="<%= siteInfo.form.thirdInput.maxLength %>"
+										  value=""
+										/>
+										<label for="third-input"><%= siteInfo.form.thirdInput.placeholder %></label>
+										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
+									</div>
+								</div>
+								<% } %>
+								<button submit-button class="--on">
 									<i class="<%= siteInfo.form.button.icon %>"></i>
 									<%= siteInfo.form.button.name %>
 								</button>
+
+								<% if (siteInfo.form.authentication) { %>
+								<a link-button class="--off" href="<%= siteInfo.form.a.href %>">
+									<i class="<%= siteInfo.form.a.icon %>"></i>
+									<%= siteInfo.form.a.name %>
+								</a>
+								<% } %>
 							</div>
 						</form>
 					</div>

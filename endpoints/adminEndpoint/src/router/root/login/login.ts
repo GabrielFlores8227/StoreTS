@@ -7,8 +7,8 @@ const login = express.Router();
 login.get(
 	'/',
 	(req, res, next) => {
-		if (Object(req).session.userId) {
-			return res.status(401).redirect('/admin');
+		if (Object(req).session.sessionID) {
+			return res.redirect('/admin');
 		} else {
 			return next();
 		}
@@ -27,11 +27,13 @@ login.get(
 						type: 'text',
 						name: 'username',
 						placeholder: 'Usuário',
+						maxLength: 30,
 					},
 					secondInput: {
 						type: 'password',
 						name: 'password',
 						placeholder: 'Senha',
+						maxLength: 30,
 					},
 					button: {
 						icon: 'fa-solid fa-right-to-bracket',
