@@ -44,3 +44,20 @@
 			});
 		});
 })();
+
+/**
+ * Immediately invoked function expression (IIFE) that focuses and blurs all input fields on the page, including handling browser autofill.
+ * It selects all input elements using querySelectorAll and iterates over them.
+ * For each input element, it sets focus using the focus() method with a delay of 120 milliseconds.
+ * After another delay of 120 milliseconds, it removes focus from the input element using the blur() method.
+ * This functionality can be useful for handling browser autofill scenarios where the input fields are automatically filled by the browser.
+ */
+window.document.querySelectorAll('input').forEach((input) => {
+	setTimeout(() => {
+		input.focus();
+
+		setTimeout(() => {
+			input.blur();
+		}, 120);
+	}, 120);
+});
