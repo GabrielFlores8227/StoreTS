@@ -13,7 +13,7 @@ root.get(
 	Middleware.middlewareBuildProducts(),
 	Middleware.middlewareBuildFooter(),
 	(req, res) => {
-		res.render('root-get-page', {
+		res.render('root-page', {
 			builder: Object(req).builder,
 		});
 	},

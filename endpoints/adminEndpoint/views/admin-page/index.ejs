@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex" />
+
+		<!--theme-color-->
+		<meta name="theme-color" content="<%= builder.header.color %>" />
+
+		<!--icon-->
+		<link rel="shortcut icon" href="<%= builder.header.icon %>" />
+
+		<!--title-->
+		<title><%= builder.header.title%> | Admin</title>
+
+		<!--css-->
+		<style type="text/css" media="screen">
+			:root {
+				--font-regular: poppins-regular, Arial, Helvetica, sans-serif;
+				--font-bold: poppins-bold, Arial, Helvetica, sans-serif;
+				--primary-color: <%= builder.header.color %>;
+				--regular-green: rgb(93, 212, 104);
+				--dark-green: rgb(76, 172, 85);
+				--light-gray: rgb(236, 236, 236);
+				--regular-gray: rgb(59, 59, 59);
+				--dark-gray: rgb(20, 20, 20);
+			}
+		</style>
+		<link rel="stylesheet" href="/admin-page/styles/index/index.css" />
+		<link rel="stylesheet" href="/admin-page/styles/warning/warning.css" />
+		<link rel="stylesheet" href="/admin-page/styles/aside/aside.css" />
+		<link rel="stylesheet" href="/admin-page/styles/header/header.css" />
+		<link rel="stylesheet" href="/admin-page/styles/main/main.css" />
+
+		<!--font-awesome-->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+
+		<!--jquery-->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+		<!--scripts-->
+		<script defer type="module" src="/admin-page/scripts/index.js"></script>
+		<script
+			defer
+			type="module"
+			src="/admin-page/scripts/builder.js"
+		></script>
+	</head>
+	<body>
+		<div warning class="warning-container">
+			<div>
+				<h2>
+					<i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+					Multíplas Janelas
+				</h2>
+				<p>
+					A página do administrador está aberta em outra janela. Clique em "USAR
+					AQUI" para usar a página nesta janela.
+				</p>
+				<div>
+					<button>USAR AQUI</button>
+				</div>
+			</div>
+		</div>
+		<aside settings-aside-menu>
+			<button close-settings-aside-menu-button></button>
+			<div>
+				<div>
+					<div>
+						<img
+							logo
+							draggable="false"
+							src="<%= builder.header.logo %>"
+							alt="<%= builder.header.title %> Logo"
+						/>
+						<div>
+							<p>Configurações</p>
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul>
+						<li>
+							<a href="/admin/change/username">
+								<i class="fa-solid fa-user"></i>
+								<i>Trocar Usuário</i>
+							</a>
+						</li>
+						<li>
+							<a href="/admin/change/password">
+								<i class="fa-solid fa-lock"></i>
+								<i>Trocar Senha</i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</aside>
+		<header>
+			<div>
+				<a href="/">
+					<img
+						logo
+						draggable="false"
+						src="<%= builder.header.logo %>"
+						alt="<%= builder.header.title %> Logo"
+					/>
+				</a>
+				<div>
+					<button open-settings-aside-menu-button>
+						<i class="fa-solid fa-gear"></i>
+					</button>
+					<a href="/admin/logout">
+						<i class="fa-solid fa-right-from-bracket"></i>
+					</a>
+				</div>
+			</div>
+		</header>
+		<main>
+			<div header-table-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-helmet-safety"></i>
+						Cabeçalho
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Ícone</th>
+								<th>Logo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/icon"
+										identifier="only"
+										for="icon"
+									>
+										<div
+											file-input-container
+											class="cell-container__input-container cell-container__file-input-container"
+										>
+											<label for="icon">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input id="icon" type="file" accept="image/*" />
+											<a href="<%= builder.header.icon %>" target="_blank"
+												>Ícone</a
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/logo"
+										identifier="only"
+										for="logo"
+									>
+										<div
+											file-input-container
+											class="cell-container__input-container cell-container__file-input-container"
+										>
+											<label for="logo">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input id="logo" type="file" accept="image/*" />
+											<a href="<%= builder.header.logo %>" target="_blank"
+												>Logo</a
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Título</th>
+								<th>Cor</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/title"
+										identifier="only"
+										for="title"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Título"
+												maxlength="30"
+											>
+												<%= builder.header.title %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/color"
+										identifier="only"
+										for="color"
+									>
+										<div
+											class="cell-container__input-container cell-container__color-input-container"
+										>
+											<input type="color" value="<%= builder.header.color %>" />
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Descrição</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/header/description"
+										identifier="only"
+										for="description"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Descrição">
+<%= builder.header.description %></textarea
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div special-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-thumbtack"></i>
+						Propagandas
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Ações</th>
+								<th>Imagem Grande</th>
+								<th>Imagem Pequena</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template propagandas-template>
+								<tr table-row>
+									<td action-container class="action-container">
+										<div>
+											<div>
+												<button draggable>
+													<i class="fa-solid fa-sort"></i>
+												</button>
+												<button>
+													<i class="fa-sharp fa-solid fa-paper-plane"></i>
+												</button>
+												<button>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td width="50%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input type="file" accept="image/*" />
+												<a target="_blank">Imagem Grande</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="50%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input type="file" accept="image/*" />
+												<a target="_blank">Imagem Pequena</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<button add-item-to-table-button>
+						<i class="fa-solid fa-thumbtack"></i>
+						Add Propaganda
+					</button>
+				</div>
+			</div>
+			<div special-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-box"></i>
+						Categorias
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Ações</th>
+								<th>Nome da Categoria</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template categories-template>
+								<tr table-row>
+									<td action-container class="action-container">
+										<div>
+											<div>
+												<button draggable>
+													<i class="fa-solid fa-sort"></i>
+												</button>
+												<button>
+													<i class="fa-sharp fa-solid fa-paper-plane"></i>
+												</button>
+												<button>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td width="100%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													pseudo-input
+													contenteditable="true"
+													placeholder="Nome"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<button add-item-to-table-button>
+						<i class="fa-solid fa-box"></i>
+						Add Categoria
+					</button>
+				</div>
+			</div>
+			<div special-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-pen"></i>
+						Produtos
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Ações</th>
+								<th>Imagem do Produto</th>
+								<th>Categoria</th>
+								<th>Nome</th>
+								<th>Preço</th>
+								<th>Promoção</th>
+								<th>Parcelas</th>
+								<th>Whatsapp</th>
+								<th>Mensagem</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template products-template>
+								<tr table-row>
+									<td action-container class="action-container">
+										<div>
+											<div>
+												<button draggable>
+													<i class="fa-solid fa-sort"></i>
+												</button>
+												<button>
+													<i class="fa-sharp fa-solid fa-paper-plane"></i>
+												</button>
+												<button>
+													<i class="fa-solid fa-trash"></i>
+												</button>
+												<div
+													action-info
+													class="action-container__action-info-container"
+												>
+													<i
+														class="action-container__cell-info-container__loading"
+													></i>
+													<i
+														action-info-error
+														class="fa-sharp fa-solid fa-circle-exclamation"
+													></i>
+													<i class="fa-solid fa-circle-check"></i>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												file-input-container
+												class="cell-container__input-container cell-container__file-input-container"
+											>
+												<label>
+													<i class="fa-solid fa-image"></i>
+												</label>
+												<input product-image type="file" accept="image/*" />
+												<a target="_blank">Imagem</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__select-container"
+											>
+												<select product-category product-categories-select>
+													<template>
+														<option></option>
+													</template>
+												</select>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-name
+													pseudo-input
+													contenteditable="true"
+													placeholder="Nome"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-price
+													pseudo-input
+													contenteditable="true"
+													placeholder="Preço"
+													maxlength="25"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-off
+													pseudo-input
+													contenteditable="true"
+													placeholder="Promoção"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-installment
+													pseudo-input
+													contenteditable="true"
+													placeholder="Parcelas"
+													maxlength="30"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-whatsapp
+													pseudo-input
+													contenteditable="true"
+													placeholder="Whatsapp"
+													maxlength="20"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="12%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__input-container cell-container__text-input-container"
+											>
+												<div
+													product-message
+													pseudo-input
+													contenteditable="true"
+													placeholder="Mensagem"
+													maxlength="255"
+												></div>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<button add-item-to-table-button>
+						<i class="fa-solid fa-pen"></i>
+						Add Produto
+					</button>
+				</div>
+			</div>
+			<div header-table-section class="table-section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-shoe-prints"></i>
+						Rodapé
+					</h1>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Título</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/title"
+										identifier="only"
+										for="title"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Título"
+												maxlength="50"
+											>
+												<%= builder.footer.title %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Text</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/text"
+										identifier="only"
+										for="text"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Texto">
+<%= builder.footer.text %></textarea
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Whatsapp</th>
+								<th>Facebook</th>
+								<th>Instagram</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/whatsapp"
+										identifier="only"
+										for="whatsapp"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Whatsapp"
+												maxlength="20"
+											>
+												<%= builder.footer.whatsapp %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/facebook"
+										identifier="only"
+										for="facebook"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="@Facebook"
+												maxlength="30"
+											>
+												<%= builder.footer.facebook %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/instagram"
+										identifier="only"
+										for="instagram"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="@Instagram"
+												maxlength="30"
+											>
+												<%= builder.footer.instagram %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Localização (link)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/location"
+										identifier="only"
+										for="location"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-area-container"
+										>
+											<textarea maxlength="255" placeholder="Localização">
+<%= builder.footer.location %></textarea
+											>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div table-container class="table-section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Informação da Loja</th>
+								<th>Informação Completa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/store-info"
+										identifier="only"
+										for="store-info"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Informação da Loja"
+												maxlength="50"
+											>
+												<%= builder.footer['store-info'] %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/footer/complete-store-info"
+										identifier="only"
+										for="complete-store-info"
+									>
+										<div
+											class="cell-container__input-container cell-container__text-input-container"
+										>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Informação Completa"
+												maxlength="100"
+											>
+												<%= builder.footer['complete-store-info'] %>
+											</div>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

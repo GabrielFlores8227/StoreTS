@@ -37,7 +37,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES ('only','bf95276c15f9b8e4d8f1f154fd4ff51b04b4ae6932dda33f06b32bb76b2f72e09a9c63552768635182989662dad67b4ae397e46becc1ed5ffe953f935e3add27','bf95276c15f9b8e4d8f1f154fd4ff51b04b4ae6932dda33f06b32bb76b2f72e09a9c63552768635182989662dad67b4ae397e46becc1ed5ffe953f935e3add27','');
+INSERT INTO `admin` VALUES ('only','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec','');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,11 +50,11 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(30) COLLATE utf8mb4_bin NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `category` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,8 +81,8 @@ CREATE TABLE `footer` (
   `facebook` varchar(30) NOT NULL,
   `instagram` varchar(30) NOT NULL,
   `location` text NOT NULL,
-  `storeInfo` varchar(50) NOT NULL,
-  `completeStoreInfo` varchar(100) NOT NULL,
+  `store-info` varchar(50) NOT NULL,
+  `complete-store-info` varchar(100) NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -93,7 +93,7 @@ CREATE TABLE `footer` (
 
 LOCK TABLES `footer` WRITE;
 /*!40000 ALTER TABLE `footer` DISABLE KEYS */;
-INSERT INTO `footer` VALUES ('only','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS S3 e WhatsApp.','9999999999999','@instagram','@facebook','https://www.google.com/maps/@-23.5078035,-47.6090396,15z?entry=ttu','Horário de atendimento: 9:00 - 18:00*','Horário de atendimento em dias úteis dias: 9:00 - 18:00');
+INSERT INTO `footer` VALUES ('only','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS e WhatsApp.','9999999999999','@instagram','@facebook','https://www.google.com/maps/@-23.5078035,-47.6090396,15z?entry=ttu','Horário de atendimento: 9:00 - 18:00*','Horário de atendimento em dias úteis dias: 9:00 - 18:00');
 /*!40000 ALTER TABLE `footer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +121,7 @@ CREATE TABLE `header` (
 
 LOCK TABLES `header` WRITE;
 /*!40000 ALTER TABLE `header` DISABLE KEYS */;
-INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS S3 e WhatsApp.','#ff0000');
+INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','Crie portfólios atraentes para lojas, promova produtos e alcance mais clientes com StoreTS. Uma plataforma de vendas online integrada com a AWS e WhatsApp.','#ff0000');
 /*!40000 ALTER TABLE `header` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `products` (
   `history` json DEFAULT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -166,11 +166,11 @@ DROP TABLE IF EXISTS `propagandas`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `propagandas` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `bigImage` varchar(255) NOT NULL,
-  `smallImage` varchar(255) NOT NULL,
+  `big-image` varchar(255) NOT NULL,
+  `small-image` varchar(255) NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

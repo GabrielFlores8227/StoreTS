@@ -1,8 +1,8 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { createHash } from 'crypto';
 import Middleware from 'storets-middleware';
 import Admin from 'storets-admin';
 import Sql from 'storets-sql';
-import crypto from 'crypto';
 
 class Support {
 	/**
@@ -11,26 +11,12 @@ class Support {
 	 * @param body - The request body containing the username and password.
 	 * @throws {Error} If the data is invalid, it throws an error with the appropriate status code and redirection URL.
 	 */
-	public static validateDataForMiddlewareCheckAuth(body: {
-		username: string;
-		password: string;
-	}) {
-		Admin.checkType(
-			body.username,
-			'string',
-			'username',
-			401,
-			true,
-			'/admin/login',
-		);
-		Admin.checkType(
-			body.password,
-			'string',
-			'password',
-			401,
-			true,
-			'/admin/login',
-		);
+	public static validateDataForMiddlewareCheckAuth(
+		username: string,
+		password: string,
+	) {
+		Admin.checkType(username, 'string', 'username', 401, true, '/admin/login');
+		Admin.checkType(password, 'string', 'password', 401, true, '/admin/login');
 	}
 }
 
@@ -42,29 +28,29 @@ export default class LocalModules {
 	 * generates a new token, updates the token in the database,
 	 * sets the token as a cookie in the response, and calls the next middleware.
 	 *
-	 * @param {express.Request} req - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The Express next function.
+	 * @param {Request} req - The Express request object.
+	 * @param {Response} res - The Express response object.
+	 * @param {NextFunction} next - The Express next function.
 	 */
 	public static async middlewareCheckAuth(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
-			Support.validateDataForMiddlewareCheckAuth(req.body);
+			const { username, password } = req.body;
 
-			const hashedUsername = crypto
-				.createHash('sha512')
-				.update(String(req.body.username))
+			Support.validateDataForMiddlewareCheckAuth(username, password);
+
+			const hashedUsername = createHash('sha512')
+				.update(String(username))
 				.digest('hex');
-			const hashedPassword = crypto
-				.createHash('sha512')
-				.update(String(req.body.password))
+			const hashedPassword = createHash('sha512')
+				.update(String(password))
 				.digest('hex');
 
 			const [query] = await Sql.query(
-				'SELECT username, password, token FROM admin WHERE id = ? AND username = ? AND password = ?',
+				'SELECT `username`, `password`, `token` FROM `admin` WHERE `id` = ? AND `username` = ? AND `password` = ?;',
 				['only', hashedUsername, hashedPassword],
 			);
 

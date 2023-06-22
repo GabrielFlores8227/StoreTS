@@ -3,6 +3,7 @@ import Middleware from 'storets-middleware';
 import LocalModules from './localModules';
 import login from './login/login';
 import logout from './logout/logout';
+import change from './change/change';
 import api from './api/api';
 
 const root = express.Router();
@@ -20,12 +21,13 @@ root.get(
 	Middleware.middlewareBuildHeader(true),
 	Middleware.middlewareBuildFooter(),
 	(req, res) => {
-		res.render('admin-get-page', { builder: Object(req).builder });
+		res.render('admin-page', { builder: Object(req).builder });
 	},
 );
 
-root.use('/api', api);
 root.use('/login', login);
 root.use('/logout', logout);
+root.use('/change', change);
+root.use('/api', api);
 
 export default root;

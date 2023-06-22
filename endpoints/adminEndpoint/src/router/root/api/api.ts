@@ -6,7 +6,7 @@ const api = express.Router();
 
 api.post(
 	'/website',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildWebsite,
 	(req, res) => {
 		res.json(Object(req).builder.website);
@@ -15,7 +15,7 @@ api.post(
 
 api.post(
 	'/header',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildHeader(true),
 	(req, res) => {
 		res.json(Object(req).builder.header);
@@ -24,7 +24,7 @@ api.post(
 
 api.post(
 	'/propagandas',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildPropagandas(true),
 	(req, res) => {
 		res.json(Object(req).builder.propagandas);
@@ -33,7 +33,7 @@ api.post(
 
 api.post(
 	'/categories',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildCategories(),
 	(req, res) => {
 		res.json(Object(req).builder.categories);
@@ -42,7 +42,7 @@ api.post(
 
 api.post(
 	'/products',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildProducts(true),
 	(req, res) => {
 		res.json(Object(req).builder.products);
@@ -51,7 +51,7 @@ api.post(
 
 api.post(
 	'/footer',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	Middleware.middlewareBuildFooter,
 	(req, res) => {
 		res.json(Object(req).builder.footer);
@@ -61,7 +61,7 @@ api.post(
 api.post(
 	'/propaganda',
 	LocalModules.middlewareUploadFiles(2, 2),
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePostPropaganda,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -70,7 +70,7 @@ api.post(
 
 api.post(
 	'/category',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePostCategory,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -80,7 +80,7 @@ api.post(
 api.post(
 	'/product',
 	LocalModules.middlewareUploadFiles(1, 1),
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePostProduct,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -106,10 +106,10 @@ api.put(
 		'/footer/facebook',
 		'/footer/instagram',
 		'/footer/location',
-		'/footer/storeInfo',
-		'/footer/completeStoreInfo',
+		'/footer/store-info',
+		'/footer/complete-store-info',
 	],
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePutText,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -120,12 +120,12 @@ api.put(
 	[
 		'/header/icon',
 		'/header/logo',
-		'/propagandas/bigImage',
-		'/propagandas/smallImage',
+		'/propagandas/big-image',
+		'/propagandas/small-image',
 		'/products/image',
 	],
 	LocalModules.middlewareUploadFiles(1, 1),
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePutImage,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -134,7 +134,7 @@ api.put(
 
 api.put(
 	['/propagandas', '/categories', '/products'],
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePutPosition,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -143,7 +143,7 @@ api.put(
 
 api.delete(
 	'/propaganda',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewareDeletePropaganda,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -152,7 +152,7 @@ api.delete(
 
 api.delete(
 	'/category',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewareDeleteCategory,
 	(_, res) => {
 		res.json({ status: 200 });
@@ -161,7 +161,7 @@ api.delete(
 
 api.delete(
 	'/product',
-	LocalModules.middlewareCheckToken,
+	Middleware.middlewareCheckToken,
 	LocalModules.middlewareDeleteProduct,
 	(_, res) => {
 		res.json({ status: 200 });

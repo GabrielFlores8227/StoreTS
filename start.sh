@@ -1,13 +1,6 @@
 #!/bin/bash
 
 ##
-# Config
-##
-
-APP_PORTS=("2000" "2001")
-APP_END_POINTS=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
-
-##
 # Functions
 ##
 
@@ -25,14 +18,15 @@ function START() {
   done
 }
 
-CHECK_REPO() {
-  output=$(git remote show origin)
+function STOP() {
+  for INDEX in "${!APP_PORTS[@]}"
+  do
+    APP_PORT="${APP_PORTS[INDEX]}"
 
-  if [[ $output =~ "local out of date" ]]; then
-    echo 0
-  else
-    echo 1
-  fi
+    fuser -k $APP_PORT/tcp
+  done
+
+  echo -e "\033[1;31m[x] StoreTS stopped\033[0m"
 }
 
 function KILL() {
@@ -48,49 +42,79 @@ function KILL() {
   exit
 }
 
-function STOP() {
-  for INDEX in "${!APP_PORTS[@]}"
+function CHECK_REPO_VERSION() {
+  output=$(git remote show origin)
+
+  if [[ $output =~ "local out of date" ]]; then
+    echo 0
+  else
+    echo 1
+  fi
+}
+
+function CHECK_REPO_UPDATE() {
+  while true
   do
-    APP_PORT="${APP_PORTS[INDEX]}"
+    if [ $(CHECK_REPO_VERSION) -eq 0 ]; then
+      echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
+      clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
 
-    fuser -k $APP_PORT/tcp
+      STOP
+
+      git fetch
+      git reset --hard origin/main
+
+      ./install.sh
+      ./update.sh
+
+      echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
+
+      sleep 5
+
+      START
+    fi
+
+    sleep 1h
   done
-
-  echo -e "\033[1;31m[x] StoreTS stopped\033[0m"
 }
 
 ##
 # Main
 ##
 
+APP_PORTS=()
+APP_END_POINTS=()
+
+if [[ " $* " == *" --root "* ]]
+then
+  APP_PORTS+=('2000')
+  APP_END_POINTS+=("$(pwd)/endpoints/rootEndpoint")
+fi
+
+if [[ " $* " == *" --admin "* ]]
+then
+  APP_PORTS+=("2001")
+  APP_END_POINTS+=("$(pwd)/endpoints/adminEndpoint")
+fi
+
+if [ ${#APP_END_POINTS[@]} -lt 1 ]
+then
+  APP_PORTS+=( "2000" "2001")
+  APP_END_POINTS+=("$(pwd)/endpoints/rootEndpoint" "$(pwd)/endpoints/adminEndpoint")
+fi
+
 START
 trap KILL SIGINT
 
-sleep 6h
+if ! [[ " $* " == *" --dev "* ]];
+then
+  sleep 6h
 
-while true
-do
-  if [ $(CHECK_REPO) -eq 0 ]; then
-    echo -e "\033[1;31m[x] StoreTS local repository is not up to data\033[0m"
-    clear && echo -e "\033[1;32m[v] Starting StoreTS local repository update\033[0m"
+  CHECK_REPO_UPDATE
+else
+  echo -e "\033[1;33m[!] StoreTS is running in development mode\033[0m"
+  echo -e "\033[1;33m[!] Repository auto-update is off\033[0m"
+fi
 
-    STOP
-
-    git fetch
-    git reset --hard origin/main
-
-    ./install.sh
-    ./update.sh
-
-    echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
-
-    sleep 5
-
-    START
-  fi
-
-  sleep 600
-done
 
 wait
-

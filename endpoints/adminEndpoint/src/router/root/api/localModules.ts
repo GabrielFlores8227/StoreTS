@@ -1,8 +1,8 @@
-import express from 'express';
-import Admin from 'storets-admin';
+import { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
+import Admin from 'storets-admin';
 import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 import S3 from 'storets-s3';
@@ -49,8 +49,10 @@ class Support {
 
 				Admin.checkLength(name, 1, 30, 'nome');
 
-				const [query] = await Sql.query(
-					'SELECT name FROM categories WHERE name = ?;',
+				let query;
+
+				[query] = await Sql.query(
+					'SELECT `name` FROM `categories` WHERE `name` = ?;',
 					[name],
 				);
 
@@ -67,7 +69,7 @@ class Support {
 				category = category.trim();
 
 				const [query] = await Sql.query(
-					'SELECT name FROM categories WHERE id = ?;',
+					'SELECT `name` FROM `categories` WHERE `id` = ?;',
 					[category],
 				);
 
@@ -75,7 +77,7 @@ class Support {
 					let message =
 						'Desculpe, a categoria que você forneceu não existe. Por favor, tente escolher uma categoria existente.';
 
-					const [query] = await Sql.query('SELECT name FROM categories;');
+					const [query] = await Sql.query('SELECT `name` FROM `categories`;');
 
 					if (Object(query).length === 0) {
 						message =
@@ -169,12 +171,12 @@ class Support {
 				Admin.checkLength(location, 1, 64000, 'localização');
 				Admin.checkSubstring(location, ' ', false, false, 'localização');
 			},
-			storeInfo: (storeInfo: string) => {
+			'store-info': (storeInfo: string) => {
 				storeInfo = storeInfo.trim();
 
 				Admin.checkLength(storeInfo, 1, 50, 'informação da loja');
 			},
-			completeStoreInfo: (completeStoreInfo: string) => {
+			'complete-store-info': (completeStoreInfo: string) => {
 				completeStoreInfo = completeStoreInfo.trim();
 
 				Admin.checkLength(completeStoreInfo, 5, 100, 'informação completa');
@@ -193,9 +195,9 @@ class Support {
 				}),
 		},
 		propagandas: {
-			bigImage: async (file: Express.Multer.File | undefined) =>
+			'big-image': async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'cover', { width: 1920, height: 460 }),
-			smallImage: async (file: Express.Multer.File | undefined) =>
+			'small-image': async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'cover', { width: 1080, height: 1080 }),
 		},
 		products: {
@@ -228,10 +230,7 @@ class Support {
 	) {
 		const originalName = file!.originalname;
 
-		file!.originalname = crypto
-			.randomBytes(128)
-			.toString('hex')
-			.substring(0, 255);
+		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
 			file!.buffer = await sharp(file!.buffer)
@@ -263,7 +262,9 @@ class Support {
 		} catch (err: any) {
 			if (
 				err.message === 'Input buffer contains unsupported image format' ||
-				err.message === 'Input Buffer is empty'
+				err.message === 'Input Buffer is empty' ||
+				err.message ===
+					'source: bad seek to 7448\nheif: Invalid input: Unspecified: Bitstream not supported by this decoder (2.0)'
 			) {
 				throw {
 					status: 400,
@@ -290,11 +291,11 @@ class Support {
 	) {
 		Support.textMask.propagandas.imagesContext(imagesContext);
 
-		await this.imageMask.propagandas.bigImage(
+		await this.imageMask.propagandas['big-image'](
 			Object(files)[imagesContext.indexOf('bigImage')],
 		);
 
-		await this.imageMask.propagandas.smallImage(
+		await this.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
 	}
@@ -385,7 +386,7 @@ class Support {
 		Admin.checkType(ids, 'object', 'ids');
 		Admin.checkLength(ids, 1, -1, 'ids');
 
-		const [query] = await Sql.query('SELECT id FROM ' + column);
+		const [query] = await Sql.query('SELECT `id` FROM `' + column + '`;');
 
 		const queryIds: string[] = [];
 
@@ -408,41 +409,6 @@ class Support {
 
 export default class LocalModules {
 	public static readonly multer = multer({ storage: multer.memoryStorage() });
-
-	/**
-	 * Middleware function to check the validity of a token in the request headers.
-	 * Throws an error if the token is invalid or missing.
-	 *
-	 * @param {express.Request} req - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The next middleware function.
-	 */
-	public static async middlewareCheckToken(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
-	) {
-		try {
-			const authorization = String(req.headers.authorization).substring(7);
-
-			const [query] = await Sql.query(
-				'SELECT token FROM admin WHERE token = ?;',
-				[authorization],
-			);
-
-			if (Object(query).length === 0) {
-				throw {
-					status: 401,
-					message: 'unthorized',
-				};
-			}
-
-			return next();
-		} catch (err) {
-			Middleware.handleMiddlewareError(res, err);
-		}
-	}
-
 	/**
 	 * Middleware function for handling file uploads using multer.
 	 * Validates the number of uploaded files based on the specified minimum and maximum counts.
@@ -455,16 +421,8 @@ export default class LocalModules {
 	public static middlewareUploadFiles(
 		minCount: number,
 		maxCount: number,
-	): (
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
-	) => void {
-		return async function (
-			req: express.Request,
-			res: express.Response,
-			next: express.NextFunction,
-		) {
+	): (req: Request, res: Response, next: NextFunction) => void {
+		return async function (req: Request, res: Response, next: NextFunction) {
 			var upload;
 			if (maxCount === 1) {
 				upload = LocalModules.multer.single('file');
@@ -513,14 +471,14 @@ export default class LocalModules {
 	 * Uploads the bigImage and smallImage files to an S3 bucket.
 	 * Inserts the file names into the propagandas table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostPropaganda(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const imagesContext = req.body.imagesContext;
@@ -547,7 +505,7 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO propagandas (bigImage, smallImage) VALUES (?, ?);',
+				'INSERT INTO `propagandas` (`big-image`, `small-image`) VALUES (?, ?);',
 				[bigImage.originalname, smallImage.originalname],
 			);
 
@@ -563,14 +521,14 @@ export default class LocalModules {
 	 * Deletes the associated bigImage and smallImage files from the S3 bucket.
 	 * Removes the propaganda entry from the propagandas table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeletePropaganda(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -579,7 +537,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT bigImage, smallImage FROM propagandas WHERE id = ?;',
+				'SELECT `big-image`, `small-image` FROM `propagandas` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -587,10 +545,10 @@ export default class LocalModules {
 				return next();
 			}
 
-			await S3.deleteFileFromS3Bucket(Object(query)[0].bigImage);
-			await S3.deleteFileFromS3Bucket(Object(query)[0].smallImage);
+			await S3.deleteFileFromS3Bucket(Object(query)[0]['big-image']);
+			await S3.deleteFileFromS3Bucket(Object(query)[0]['small-image']);
 
-			await Sql.query('DELETE FROM propagandas WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `propagandas` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -603,21 +561,21 @@ export default class LocalModules {
 	 * Validates the request data for creating a category and performs necessary operations.
 	 * Inserts the category name into the categories table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostCategory(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const name = req.body.name;
 
 			await Support.textMask.categories.name(name);
 
-			await Sql.query('INSERT INTO categories (name) VALUES (?);', [
+			await Sql.query('INSERT INTO `categories` (`name`) VALUES (?);', [
 				name.trim(),
 			]);
 
@@ -632,14 +590,14 @@ export default class LocalModules {
 	 * Validates the request data for deleting a category and performs necessary operations.
 	 * Deletes the category from the categories table in the database and deletes associated products and their images.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeleteCategory(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -647,14 +605,14 @@ export default class LocalModules {
 			Admin.checkType(id, 'string', 'id');
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
-			await Sql.query('DELETE FROM categories WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
 
 			const [query] = await Sql.query(
-				'SELECT image FROM products WHERE category = ?;',
+				'SELECT `image` FROM `products` WHERE `category` = ?;',
 				[id],
 			);
 
-			await Sql.query('DELETE FROM products WHERE category = ?;', [id]);
+			await Sql.query('DELETE FROM `products` WHERE `category` = ?;', [id]);
 
 			for (let c = 0; c < Object(query).length; c++) {
 				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
@@ -671,14 +629,14 @@ export default class LocalModules {
 	 * Validates the request data for creating a product and performs necessary operations.
 	 * Uploads the product image to an S3 bucket, inserts the product details into the products table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostProduct(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const { category, name, price, off, installment, whatsapp, message } =
@@ -703,7 +661,7 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO products (category, name, image, price, off, installment, whatsapp, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
+				'INSERT INTO `products` (`category`, `name`, `image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category.trim(),
 					name.trim(),
@@ -727,14 +685,14 @@ export default class LocalModules {
 	 * Validates the request data for deleting a product and performs necessary operations.
 	 * Deletes the product from the database and removes the associated image file from the S3 bucket.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeleteProduct(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -743,7 +701,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT id, image FROM products WHERE id = ?;',
+				'SELECT `id`, `image` FROM `products` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -753,7 +711,7 @@ export default class LocalModules {
 
 			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
 
-			await Sql.query('DELETE FROM products WHERE id = ?;', [id]);
+			await Sql.query('DELETE FROM `products` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -766,14 +724,14 @@ export default class LocalModules {
 	 * Validates the request data for updating a text value and performs necessary operations.
 	 * Updates the specified text column in the given table with the provided data for the given id.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePutText(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');
@@ -785,7 +743,7 @@ export default class LocalModules {
 			await Support.validateDataForMiddlewarePutText(id, data, table, column);
 
 			await Sql.query(
-				'UPDATE ' + table + ' SET ' + column + ' = ? WHERE id = ?;',
+				'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
 				[data.trim(), id],
 			);
 
@@ -800,14 +758,14 @@ export default class LocalModules {
 	 * Validates the request data for updating an image file and performs necessary operations.
 	 * Updates the specified image column in the given table with the provided file for the given id.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePutImage(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');
@@ -819,7 +777,7 @@ export default class LocalModules {
 			await Support.validateDataForMiddlewarePutImage(id, file, table, column);
 
 			const [query] = await Sql.query(
-				'SELECT ' + column + ' FROM ' + table + ' WHERE id = ?;',
+				'SELECT `' + column + '` FROM `' + table + '` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -846,9 +804,9 @@ export default class LocalModules {
 	 * @param next - Express next function.
 	 */
 	public static async middlewarePutPosition(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');
@@ -859,7 +817,7 @@ export default class LocalModules {
 
 			for (let c = 0; c < ids.length; c++) {
 				await Sql.query(
-					'UPDATE ' + column + ' SET position = ? WHERE id = ?;',
+					'UPDATE `' + column + '` SET `position` = ? WHERE `id` = ?;',
 					[c, ids[c]],
 				);
 			}

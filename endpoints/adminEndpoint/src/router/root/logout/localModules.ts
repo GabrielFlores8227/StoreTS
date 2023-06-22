@@ -1,6 +1,6 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Middleware from 'storets-middleware';
-import util from 'util';
+import { promisify } from 'util';
 
 export default class LocalModules {
 	/**
@@ -14,14 +14,12 @@ export default class LocalModules {
 	 * @throws {Error} If an error occurs during session destruction.
 	 */
 	public static async middlewareLogout(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
-			const destroySession = util
-				.promisify(req.session.destroy)
-				.bind(req.session);
+			const destroySession = promisify(req.session.destroy).bind(req.session);
 
 			await destroySession();
 
