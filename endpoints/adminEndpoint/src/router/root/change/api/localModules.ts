@@ -1,7 +1,7 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { createHash } from 'crypto';
 import Admin from 'storets-admin';
 import Middleware from 'storets-middleware';
-import crypto from 'crypto';
 import Sql from 'storets-sql';
 
 class Support {
@@ -24,10 +24,7 @@ class Support {
 	) {
 		Admin.checkType(from, 'string', `${key} atual`);
 
-		const hashedFrom = crypto
-			.createHash('sha512')
-			.update(String(from))
-			.digest('hex');
+		const hashedFrom = createHash('sha512').update(String(from)).digest('hex');
 
 		const [query] = await Sql.query(
 			'	SELECT `' + key + '` FROM `admin` WHERE `' + key + '` = ? AND `id` = ?;',
@@ -93,14 +90,14 @@ export default class LocalModules {
 	 * Validates the data received in the request body, updates the specified column in the "admin" table,
 	 * and deletes all sessions.
 	 *
-	 * @param {express.Request} req - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The next middleware function.
+	 * @param {Request} req - The Express request object.
+	 * @param {Response} res - The Express response object.
+	 * @param {NextFunction} next - The next middleware function.
 	 */
 	public static async middlewarePutAuth(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const { from, to, confirm } = req.body;
@@ -109,15 +106,11 @@ export default class LocalModules {
 
 			await Support.validateDataForMiddlewarePutAuth(from, to, confirm, column);
 
-			const hashedFrom = crypto
-				.createHash('sha512')
+			const hashedFrom = createHash('sha512')
 				.update(String(from))
 				.digest('hex');
 
-			const hashedTo = crypto
-				.createHash('sha512')
-				.update(String(to))
-				.digest('hex');
+			const hashedTo = createHash('sha512').update(String(to)).digest('hex');
 
 			await Sql.query(
 				'UPDATE `admin` set `' + column + '` = ? WHERE `' + column + '` = ?;',

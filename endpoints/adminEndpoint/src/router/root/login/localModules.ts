@@ -1,8 +1,8 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { createHash } from 'crypto';
 import Middleware from 'storets-middleware';
 import Admin from 'storets-admin';
 import Sql from 'storets-sql';
-import crypto from 'crypto';
 
 class Support {
 	/**
@@ -28,26 +28,24 @@ export default class LocalModules {
 	 * generates a new token, updates the token in the database,
 	 * sets the token as a cookie in the response, and calls the next middleware.
 	 *
-	 * @param {express.Request} req - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The Express next function.
+	 * @param {Request} req - The Express request object.
+	 * @param {Response} res - The Express response object.
+	 * @param {NextFunction} next - The Express next function.
 	 */
 	public static async middlewareCheckAuth(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const { username, password } = req.body;
 
 			Support.validateDataForMiddlewareCheckAuth(username, password);
 
-			const hashedUsername = crypto
-				.createHash('sha512')
+			const hashedUsername = createHash('sha512')
 				.update(String(username))
 				.digest('hex');
-			const hashedPassword = crypto
-				.createHash('sha512')
+			const hashedPassword = createHash('sha512')
 				.update(String(password))
 				.digest('hex');
 

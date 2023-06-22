@@ -1,8 +1,8 @@
-import express from 'express';
-import Admin from 'storets-admin';
+import { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
+import Admin from 'storets-admin';
 import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 import S3 from 'storets-s3';
@@ -228,10 +228,7 @@ class Support {
 	) {
 		const originalName = file!.originalname;
 
-		file!.originalname = crypto
-			.randomBytes(128)
-			.toString('hex')
-			.substring(0, 255);
+		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
 			file!.buffer = await sharp(file!.buffer)
@@ -422,16 +419,8 @@ export default class LocalModules {
 	public static middlewareUploadFiles(
 		minCount: number,
 		maxCount: number,
-	): (
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
-	) => void {
-		return async function (
-			req: express.Request,
-			res: express.Response,
-			next: express.NextFunction,
-		) {
+	): (req: Request, res: Response, next: NextFunction) => void {
+		return async function (req: Request, res: Response, next: NextFunction) {
 			var upload;
 			if (maxCount === 1) {
 				upload = LocalModules.multer.single('file');
@@ -480,14 +469,14 @@ export default class LocalModules {
 	 * Uploads the bigImage and smallImage files to an S3 bucket.
 	 * Inserts the file names into the propagandas table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostPropaganda(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const imagesContext = req.body.imagesContext;
@@ -530,14 +519,14 @@ export default class LocalModules {
 	 * Deletes the associated bigImage and smallImage files from the S3 bucket.
 	 * Removes the propaganda entry from the propagandas table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeletePropaganda(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -570,14 +559,14 @@ export default class LocalModules {
 	 * Validates the request data for creating a category and performs necessary operations.
 	 * Inserts the category name into the categories table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostCategory(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const name = req.body.name;
@@ -599,14 +588,14 @@ export default class LocalModules {
 	 * Validates the request data for deleting a category and performs necessary operations.
 	 * Deletes the category from the categories table in the database and deletes associated products and their images.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeleteCategory(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -638,14 +627,14 @@ export default class LocalModules {
 	 * Validates the request data for creating a product and performs necessary operations.
 	 * Uploads the product image to an S3 bucket, inserts the product details into the products table in the database.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePostProduct(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const { category, name, price, off, installment, whatsapp, message } =
@@ -694,14 +683,14 @@ export default class LocalModules {
 	 * Validates the request data for deleting a product and performs necessary operations.
 	 * Deletes the product from the database and removes the associated image file from the S3 bucket.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewareDeleteProduct(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const id = req.body.id;
@@ -733,14 +722,14 @@ export default class LocalModules {
 	 * Validates the request data for updating a text value and performs necessary operations.
 	 * Updates the specified text column in the given table with the provided data for the given id.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePutText(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');
@@ -767,14 +756,14 @@ export default class LocalModules {
 	 * Validates the request data for updating an image file and performs necessary operations.
 	 * Updates the specified image column in the given table with the provided file for the given id.
 	 *
-	 * @param {express.Request} req - The express request object.
-	 * @param {express.Response} res - The express response object.
-	 * @param {express.NextFunction} next - The next function to call in the middleware chain.
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
 	 */
 	public static async middlewarePutImage(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');
@@ -813,9 +802,9 @@ export default class LocalModules {
 	 * @param next - Express next function.
 	 */
 	public static async middlewarePutPosition(
-		req: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		req: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const url = req.originalUrl.split('/');

@@ -1,4 +1,4 @@
-import express from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 
@@ -8,14 +8,14 @@ export default class LocalModules {
 	 * Retrieves the token from the database based on the admin ID,
 	 * sets the token as a cookie in the response, and calls the next middleware.
 	 *
-	 * @param {express.Request} _ - The Express request object.
-	 * @param {express.Response} res - The Express response object.
-	 * @param {express.NextFunction} next - The Express next function.
+	 * @param {Request} _ - The Express request object.
+	 * @param {Response} res - The Express response object.
+	 * @param {NextFunction} next - The Express next function.
 	 */
 	public static async middlewareGetToken(
-		_: express.Request,
-		res: express.Response,
-		next: express.NextFunction,
+		_: Request,
+		res: Response,
+		next: NextFunction,
 	) {
 		try {
 			const [query] = await Sql.query(
