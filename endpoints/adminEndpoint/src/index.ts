@@ -77,7 +77,6 @@ app.use(
 		saveUninitialized: true,
 		store,
 		cookie: {
-			secure: true,
 			httpOnly: true,
 			sameSite: 'strict',
 			maxAge: expiration,
