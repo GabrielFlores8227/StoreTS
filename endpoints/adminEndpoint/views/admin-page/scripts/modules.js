@@ -891,15 +891,15 @@ export function handlePseudoInputCursorIndex(div, index = undefined) {
  * @param {HTMLDivElement} div - The file input container element.
  */
 export function loadFileInputProperties(div) {
-	const link = div.querySelector('a');
-	const fileInput = div.querySelector('input');
+	const link = $(div).find('a');
+	const fileInput = $(div).find('input');
 
-	fileInput.addEventListener('input', (e) => {
+	fileInput.on('input', function (e) {
 		const file = e.target.files[0];
 		const fileURL = URL.createObjectURL(file);
 
-		link.href = fileURL;
-		link.innerText = e.target.files[0].name;
+		link.attr('href', fileURL);
+		link.text(e.target.files[0].name);
 	});
 }
 
@@ -1291,12 +1291,12 @@ function addSortableList(sectionName, callBack) {
 			stop: callBack,
 			tolerance: 'pointer',
 			helper: 'clone', // Use 'clone' helper to maintain original widths
-			start: function (event, ui) {
+			start: function (_, ui) {
 				ui.helper.find('th, td').each(function () {
 					$(this).data('width', $(this).width());
 				});
 			},
-			change: function (event, ui) {
+			change: function (_, ui) {
 				ui.helper.find('th, td:not(.action-container)').each(function () {
 					$(this).width($(this).data('width'));
 				});
