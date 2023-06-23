@@ -30,23 +30,23 @@ change.get(
 					authentication: true,
 					firstInput: {
 						type: key === 'Usuário' ? 'text' : 'password',
-						name: 'from',
-						placeholder: key === 'Usuário' ? 'Usuário Atual' : 'Senha atual',
-						maxLength: 30,
-					},
-					secondInput: {
-						type: key === 'Usuário' ? 'text' : 'password',
-						name: 'to',
+						name: 'change',
 						placeholder: key === 'Usuário' ? 'Novo Usuário' : 'Nova Senha',
 						maxLength: 30,
 					},
-					thirdInput: {
+					secondInput: {
 						type: key === 'Usuário' ? 'text' : 'password',
 						name: 'confirm',
 						placeholder:
 							key === 'Usuário'
 								? 'Confirme Novo Usuário'
 								: 'Confirme Nova Senha',
+						maxLength: 30,
+					},
+					thirdInput: {
+						type: 'password',
+						name: 'password',
+						placeholder: 'Senha',
 						maxLength: 30,
 					},
 					button: {
