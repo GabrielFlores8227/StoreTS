@@ -77,8 +77,11 @@ app.use(
 		saveUninitialized: true,
 		store,
 		cookie: {
-			maxAge: expiration,
+			secure: true,
+			httpOnly: true,
 			sameSite: 'strict',
+			maxAge: expiration,
+			expires: new Date(Date.now() + expiration),
 		},
 	}),
 );
