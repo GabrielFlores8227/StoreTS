@@ -27,14 +27,8 @@
 				--dark-gray: rgb(20, 20, 20);
 			}
 		</style>
-		<link
-			rel="stylesheet"
-			href="/admin-form-page/styles/index/index.css"
-		/>
-		<link
-			rel="stylesheet"
-			href="/admin-form-page/styles/header/header.css"
-		/>
+		<link rel="stylesheet" href="/admin-form-page/styles/index/index.css" />
+		<link rel="stylesheet" href="/admin-form-page/styles/header/header.css" />
 		<link rel="stylesheet" href="/admin-form-page/styles/main/main.css" />
 
 		<!--font-awesome-->
@@ -52,12 +46,13 @@
 			type="module"
 			src="/admin-form-page/scripts/index.js"
 		></script>
-		<% if (siteInfo.form.authentication) { %>
 		<script
 			defer
 			type="module"
-			src="/admin-form-page/scripts/form.js"
+			src="/admin-form-page/scripts/modules.js"
 		></script>
+		<% if (siteInfo.form.authentication) { %>
+		<script defer type="module" src="/admin-form-page/scripts/form.js"></script>
 		<% } %>
 	</head>
 	<body>
@@ -77,38 +72,66 @@
 				<div>
 					<h1><%= siteInfo.title %></h1>
 					<div>
-						<form login-form method="<%= siteInfo.form.method %>" action="<%= siteInfo.form.action %>">
-							<span message-container>
-								<i class="fa-solid fa-circle-info"></i>
-								<i message></i>
-							</span>
+						<form
+							login-form
+							method="<%= siteInfo.form.method %>"
+							action="<%= siteInfo.form.action %>"
+						>
+							<div message-container>
+								<div>
+									<p>
+										<i class="fa-solid fa-circle-info"></i>
+										<i error></i>
+									</p>
+								</div>
+								<div>
+									<p>
+										<i class="fa-solid fa-circle-check"></i>
+										<i ok></i>
+									</p>
+								</div>
+								<div>
+									<p>
+										<i></i>
+										<i>Carregando...</i>
+									</p>
+								</div>
+							</div>
 							<div>
 								<div>
 									<div>
 										<input
 											id="first-input"
-										  type="<%= siteInfo.form.firstInput.type %>"
+											type="<%= siteInfo.form.firstInput.type %>"
 											name="<%= siteInfo.form.firstInput.name %>"
 											placeholder="<%= siteInfo.form.firstInput.placeholder %>"
-					 						maxlength="<%= siteInfo.form.firstInput.maxLength %>"
-										  value=""
+											maxlength="<%= siteInfo.form.firstInput.maxLength %>"
+											value=""
 										/>
-										<label for="first-input"><%= siteInfo.form.firstInput.placeholder %></label>
-										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
+										<label for="first-input">
+											<%= siteInfo.form.firstInput.placeholder %>
+										</label>
+										<button tabindex="-1" type="button" toggle-password-input>
+											<i class="fa-solid fa-eye"></i>
+										</button>
 									</div>
 								</div>
 								<div>
 									<div>
 										<input
 											id="second-input"
-										  type="<%= siteInfo.form.secondInput.type %>"
+											type="<%= siteInfo.form.secondInput.type %>"
 											name="<%= siteInfo.form.secondInput.name %>"
 											placeholder="<%= siteInfo.form.secondInput.placeholder %>"
-					 						maxlength="<%= siteInfo.form.secondInput.maxLength %>"
-										  value=""
+											maxlength="<%= siteInfo.form.secondInput.maxLength %>"
+											value=""
 										/>
-										<label for="second-input"><%= siteInfo.form.secondInput.placeholder %></label>
-										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
+										<label for="second-input">
+											<%= siteInfo.form.secondInput.placeholder %>
+										</label>
+										<button tabindex="-1" type="button" toggle-password-input>
+											<i class="fa-solid fa-eye"></i>
+										</button>
 									</div>
 								</div>
 								<% if (siteInfo.form.thirdInput) { %>
@@ -116,14 +139,18 @@
 									<div>
 										<input
 											id="third-input"
-										  type="<%= siteInfo.form.thirdInput.type %>"
+											type="<%= siteInfo.form.thirdInput.type %>"
 											name="<%= siteInfo.form.thirdInput.name %>"
 											placeholder="<%= siteInfo.form.thirdInput.placeholder %>"
-					 						maxlength="<%= siteInfo.form.thirdInput.maxLength %>"
-										  value=""
+											maxlength="<%= siteInfo.form.thirdInput.maxLength %>"
+											value=""
 										/>
-										<label for="third-input"><%= siteInfo.form.thirdInput.placeholder %></label>
-										<button tabindex="-1" type="button" toggle-password-input><i class="fa-solid fa-eye"></i></button>
+										<label for="third-input">
+											<%= siteInfo.form.thirdInput.placeholder %>
+										</label>
+										<button tabindex="-1" type="button" toggle-password-input>
+											<i class="fa-solid fa-eye"></i>
+										</button>
 									</div>
 								</div>
 								<% } %>

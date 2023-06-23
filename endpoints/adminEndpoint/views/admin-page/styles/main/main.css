@@ -161,8 +161,8 @@ div.table-section-container__table-container > table tbody > tr > td.action-cont
   width: 16.1px;
   height: 16.1px;
   border-radius: 100%;
-  border: 3.5px solid var(--regular-green);
-  border-top: 3.5px solid transparent;
+  border: 2.8px solid var(--regular-green);
+  border-top: 2.8px solid transparent;
   animation: spinner 1.4s linear infinite forwards;
 }
 div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:nth-of-type(2) {
@@ -201,8 +201,8 @@ div.cell-container > div.cell-container__cell-info-container i.cell-container__c
   width: 16.1px;
   height: 16.1px;
   border-radius: 100%;
-  border: 3.5px solid var(--regular-green);
-  border-top: 3.5px solid transparent;
+  border: 2.8px solid var(--regular-green);
+  border-top: 2.8px solid transparent;
   animation: spinner 1.4s linear infinite forwards;
 }
 div.cell-container > div.cell-container__cell-info-container > i:nth-of-type(2) {

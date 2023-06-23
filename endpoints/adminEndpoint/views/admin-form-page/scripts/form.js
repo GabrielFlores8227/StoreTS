@@ -1,3 +1,5 @@
+import { handleMessage } from './modules.js';
+
 /**
  * Retrieves the authentication token from the cookies.
  *
@@ -23,11 +25,13 @@ function getToken() {
 const token = getToken();
 
 /**
- * Event listener for form submission. It sends a request to the specified action URL with the form data.
+ * Event listener for form submission. Sends a request to the specified action URL with the form data.
  * Displays a success message if the request is successful, or an error message otherwise.
  */
 window.document.querySelector('form').addEventListener('submit', async (e) => {
 	e.preventDefault();
+
+	handleMessage('loading');
 
 	const action = e.target.getAttribute('action');
 	const method = e.target.getAttribute('method');
@@ -51,19 +55,16 @@ window.document.querySelector('form').addEventListener('submit', async (e) => {
 
 	const res = await req.json();
 
-	const element = window.document.querySelector('span[message-container]');
-
 	if (res.status === 200) {
-		element.querySelector('i[message]').innerText =
-			'Dados atualizados com successo.';
-		element.classList.add('--ok');
+		handleMessage('ok', 'Dados atualizados com successo.');
 		e.target.querySelector('button[submit-button]').classList.add('--off');
 		e.target.querySelector('a[link-button]').setAttribute('class', '--on');
 	} else {
-		element.querySelector('i[message]').innerText =
+		handleMessage(
+			'error',
 			res.status === 401
 				? 'Desculpe, algo deu errado. Por favor, atualize o site para tentar novamente.'
-				: res.message;
-		element.classList.add('--not-ok');
+				: res.message,
+		);
 	}
 });

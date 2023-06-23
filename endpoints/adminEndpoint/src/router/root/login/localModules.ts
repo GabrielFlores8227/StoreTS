@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createHash } from 'crypto';
+import bcrypt from 'bcrypt';
 import Middleware from 'storets-middleware';
 import Admin from 'storets-admin';
 import Sql from 'storets-sql';
@@ -42,19 +42,16 @@ export default class LocalModules {
 
 			Support.validateDataForMiddlewareCheckAuth(username, password);
 
-			const hashedUsername = createHash('sha512')
-				.update(String(username))
-				.digest('hex');
-			const hashedPassword = createHash('sha512')
-				.update(String(password))
-				.digest('hex');
-
 			const [query] = await Sql.query(
-				'SELECT `username`, `password`, `token` FROM `admin` WHERE `id` = ? AND `username` = ? AND `password` = ?;',
-				['only', hashedUsername, hashedPassword],
+				'SELECT `username`, `password`, `token` FROM `admin` WHERE `id` = ?;',
+				['only'],
 			);
 
-			if (Object(query).length === 0) {
+			if (
+				Object(query).length === 0 ||
+				!(await bcrypt.compare(username, Object(query)[0].username)) ||
+				!(await bcrypt.compare(password, Object(query)[0].password))
+			) {
 				throw {
 					status: 401,
 					message:

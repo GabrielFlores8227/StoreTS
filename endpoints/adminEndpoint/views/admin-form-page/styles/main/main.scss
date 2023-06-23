@@ -62,25 +62,73 @@ main {
 
 form {
 	width: 100%;
-	padding-top: 24.5px;
+	padding-top: 21px;
 
-	& > span {
-		&.--not-ok {
-			display: block;
-			color: red;
+	& > div:first-of-type {
+		padding-bottom: 7px;
+
+		& > div {
+			display: none;
+			align-items: center;
+			justify-content: left;
+			gap: 4.2px;
+			padding-bottom: 10.5px;
+
+			p {
+				i {
+					font-style: normal;
+					font-size: 14.7px;
+				}
+
+				& > i:first-of-type {
+					font-size: 14px;
+				}
+			}
+		}
+
+		&.--error {
+			& > div:first-of-type {
+				display: block;
+
+				p {
+					color: red;
+				}
+			}
 		}
 
 		&.--ok {
-			display: block;
-			color: var(--regular-green);
+			& > div:nth-of-type(2) {
+				display: block;
+
+				p {
+					color: var(--regular-green);
+				}
+			}
 		}
 
-		display: none;
-		font-size: 13.3px;
-		padding-bottom: 14px;
+		&.--loading {
+			& > div:last-of-type {
+				display: block;
 
-		i {
-			font-style: normal;
+				p {
+					display: flex;
+					align-items: center;
+					justify-content: left;
+					gap: 4.9px;
+
+					color: var(--regular-green);
+
+					& > i:first-of-type {
+						display: inline-block;
+						width: 14px;
+						height: 14px;
+						border-radius: 100%;
+						border: 2.8px solid var(--regular-green);
+						border-top: 2.8px solid transparent;
+						animation: spinner 1.4s linear infinite forwards;
+					}
+				}
+			}
 		}
 	}
 
@@ -207,5 +255,15 @@ form {
 				color: var(--dark-gray);
 			}
 		}
+	}
+}
+
+@keyframes spinner {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
 	}
 }

@@ -55,7 +55,7 @@ change.get(
 					},
 					a: {
 						icon: 'fa-solid fa-right-to-bracket',
-						name: 'Voltar para tela de login',
+						name: 'Voltar',
 						href: '/admin',
 					},
 				},
