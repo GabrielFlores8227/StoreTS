@@ -143,7 +143,7 @@ form > div > div input {
   transition: ease-in-out 0.28s;
   color: var(--dark-gray);
 }
-form > div > div input:not(:placeholder-shown) + label {
+form > div > div input:-webkit-autofill + label, form > div > div input:not(:placeholder-shown) + label {
   color: var(--regular-gray);
   padding: 0px 7px;
   font-size: 11.9px;

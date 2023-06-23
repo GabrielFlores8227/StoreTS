@@ -145,6 +145,7 @@ form {
 			}
 
 			input {
+				&:-webkit-autofill + label,
 				&:not(:placeholder-shown) + label {
 					color: var(--regular-gray);
 					padding: 0px 7px;
