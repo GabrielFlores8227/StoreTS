@@ -1,11 +1,22 @@
+##
 # Prettier
+##
 ./.prettierrc
 
+##
 # Env
+##
+
 **/.env
 
+##
 # Log
+##
+
 **/.log/
 
+##
 # Node.js
+##
+
 **/node_modules/
