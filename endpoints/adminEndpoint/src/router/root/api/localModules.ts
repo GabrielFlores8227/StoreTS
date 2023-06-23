@@ -11,16 +11,22 @@ class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
+				Admin.checkType(title, 'string', 'título');
+
 				title = title.trim();
 
 				Admin.checkLength(title, 1, 30, 'título');
 			},
 			description: (description: string) => {
+				Admin.checkType(description, 'string', 'descrição');
+
 				description = description.trim();
 
 				Admin.checkLength(description, 1, 255, 'descrição');
 			},
 			color: (color: string) => {
+				Admin.checkType(color, 'string', 'cor');
+
 				color = color.trim();
 
 				Admin.checkLength(color, 7, 7, 'cor');
@@ -45,6 +51,8 @@ class Support {
 		},
 		categories: {
 			name: async (name: string) => {
+				Admin.checkType(name, 'string', 'nome');
+
 				name = name.trim();
 
 				Admin.checkLength(name, 1, 30, 'nome');
@@ -66,6 +74,8 @@ class Support {
 		},
 		products: {
 			category: async (category: string) => {
+				Admin.checkType(category, 'string', 'categoria');
+
 				category = category.trim();
 
 				const [query] = await Sql.query(
@@ -91,18 +101,24 @@ class Support {
 				}
 			},
 			name: (name: string) => {
+				Admin.checkType(name, 'string', 'name');
+
 				name = name.trim();
 
 				Admin.checkLength(name, 1, 30, 'nome');
 			},
 			price: (price: string) => {
+				Admin.checkType(price, 'string', 'preço');
+
 				price = price.trim();
 
 				Admin.checkLength(price, 1, -1, 'preço');
 				Admin.checkNumber(price, 'preço');
-				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'preço');
+				Admin.checkValue(price, 0, 3.402823466e38, 'preço');
 			},
 			off: (off: string) => {
+				Admin.checkType(off, 'string', 'promoção');
+
 				off = off.trim();
 
 				Admin.checkLength(off, 1, -1, 'promoção');
@@ -110,17 +126,23 @@ class Support {
 				Admin.checkValue(off, 0, 100, 'promoção');
 			},
 			installment: (installment: string) => {
+				Admin.checkType(installment, 'string', 'parcelas');
+
 				installment = installment.trim();
 
 				Admin.checkLength(installment, 0, 30, 'parcelas');
 			},
 			whatsapp: (whatsapp: string) => {
+				Admin.checkType(whatsapp, 'string', 'whatsapp');
+
 				whatsapp = whatsapp.trim();
 
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			message: (message: string) => {
+				Admin.checkType(message, 'string', 'mensagem');
+
 				message = message.trim();
 
 				Admin.checkLength(message, 0, 255, 'mensagem');
@@ -128,22 +150,30 @@ class Support {
 		},
 		footer: {
 			title: (title: string) => {
+				Admin.checkType(title, 'string', 'título');
+
 				title = title.trim();
 
 				Admin.checkLength(title, 1, 50, 'título');
 			},
 			text: (text: string) => {
+				Admin.checkType(text, 'string', 'texto');
+
 				text = text.trim();
 
 				Admin.checkLength(text, 1, 255, 'texto');
 			},
 			whatsapp: (whatsapp: string) => {
+				Admin.checkType(whatsapp, 'string', 'whatsapp');
+
 				whatsapp = whatsapp.trim();
 
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
+				Admin.checkType(facebook, 'string', 'facebook');
+
 				facebook = facebook.trim();
 
 				Admin.checkLength(facebook, 2, 30, 'facebook');
@@ -155,6 +185,8 @@ class Support {
 				);
 			},
 			instagram: (instagram: string) => {
+				Admin.checkType(instagram, 'string', 'instagram');
+
 				instagram = instagram.trim();
 
 				Admin.checkLength(instagram, 2, 30, 'instagram');
@@ -166,17 +198,23 @@ class Support {
 				);
 			},
 			location: (location: string) => {
+				Admin.checkType(location, 'string', 'localização');
+
 				location = location.trim();
 
 				Admin.checkLength(location, 1, 64000, 'localização');
 				Admin.checkSubstring(location, ' ', false, false, 'localização');
 			},
 			'store-info': (storeInfo: string) => {
+				Admin.checkType(storeInfo, 'string', 'informação da loja');
+
 				storeInfo = storeInfo.trim();
 
-				Admin.checkLength(storeInfo, 1, 50, 'informação da loja');
+				Admin.checkLength(storeInfo, 1, 50, 'Informação');
 			},
 			'complete-store-info': (completeStoreInfo: string) => {
+				Admin.checkType(completeStoreInfo, 'string', 'informação completa');
+
 				completeStoreInfo = completeStoreInfo.trim();
 
 				Admin.checkLength(completeStoreInfo, 5, 100, 'informação completa');
@@ -392,8 +430,6 @@ class Support {
 		Admin.checkType(id, 'string', 'id');
 		Admin.checkLength(id.trim(), 1, -1, 'id');
 
-		Admin.checkType(data, 'string', column);
-
 		await Object(this.textMask)[table][column](data);
 	}
 
@@ -444,7 +480,7 @@ class Support {
 			throw {
 				status: 400,
 				message:
-					'Desculpe, os IDs enviados não são válidos ou estão incompletos. Por favor, verifique os IDs e certifique-se de que estão corretos e completos.',
+					'Desculpe, os ids enviados não são válidos ou estão incompletos. Por favor, verifique os dados e tente novamente.',
 			};
 		}
 	}
