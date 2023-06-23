@@ -289,7 +289,17 @@ class Support {
 			| Express.Multer.File[]
 			| undefined,
 	) {
-		Support.textMask.propagandas.imagesContext(imagesContext);
+		const [query] = await Sql.query('SELECT `id` FROM `propagandas`;');
+
+		if (Object(query).length >= Number(process.env.MAX_PROPAGANDAS!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de propagandas foi atingido.',
+			};
+		}
+
+		this.textMask.propagandas.imagesContext(imagesContext);
 
 		await this.imageMask.propagandas['big-image'](
 			Object(files)[imagesContext.indexOf('bigImage')],
@@ -298,6 +308,29 @@ class Support {
 		await this.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
+	}
+
+	/**
+	 * Validates the data for the "postCategory" middleware.
+	 * Checks if the number of categories has exceeded the maximum limit.
+	 * Throws an error if the maximum limit is reached.
+	 * Validates the name of the category using a text mask.
+	 *
+	 * @param name - The name of the category.
+	 * @throws Error - Error object with status and message properties.
+	 */
+	public static async validateDataForMiddlewarePostCategory(name: string) {
+		const [query] = await Sql.query('SELECT `id` FROM `categories`;');
+
+		if (Object(query).length >= Number(process.env.MAX_CATEGORIES!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de categorias foi atingido.',
+			};
+		}
+
+		await this.textMask.categories.name(name);
 	}
 
 	/**
@@ -322,6 +355,16 @@ class Support {
 		message: string,
 		file: Express.Multer.File | undefined,
 	) {
+		const [query] = await Sql.query('SELECT `id` FROM `products`;');
+
+		if (Object(query).length >= Number(process.env.MAX_PRODUCTS!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de produtos foi atingido.',
+			};
+		}
+
 		await this.textMask.products.category(category);
 		this.textMask.products.name(name);
 		this.textMask.products.price(price);
@@ -573,7 +616,7 @@ export default class LocalModules {
 		try {
 			const name = req.body.name;
 
-			await Support.textMask.categories.name(name);
+			await Support.validateDataForMiddlewarePostCategory(name);
 
 			await Sql.query('INSERT INTO `categories` (`name`) VALUES (?);', [
 				name.trim(),
