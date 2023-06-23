@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "endpoints/adminEndpoint"  # Location of the first package.json file
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "endpoints/rootEndpoint"  # Location of the second package.json file
+    schedule:
+      interval: "weekly"
+  # Add more entries for additional directories as needed
