@@ -129,7 +129,7 @@
 						<li>
 							<button close-categories-aside-menu-button go-to-section-button>
 								<i></i>
-								<i> <%= category %> </i>
+								<i><%= category %></i>
 							</button>
 						</li>
 						<% }) %>
@@ -1153,6 +1153,7 @@
 							<a
 								target="_blank"
 								href="https://wa.me/<%= builder.footer.whatsapp %>"
+								rel="noopener noreferrer"
 							>
 								<i class="fa-brands fa-whatsapp"></i>
 								Whatsapp
@@ -1161,6 +1162,7 @@
 								<a
 									target="_blank"
 									href="https://www.instagram.com/<%= builder.footer.instagram.replace('@', '') %>"
+									rel="noopener noreferrer"
 								>
 									<i class="fa-brands fa-instagram"></i>
 									Instagram
@@ -1168,12 +1170,17 @@
 								<a
 									target="_blank"
 									href="https://www.facebook.com/<%= builder.footer.facebook.replace('@', '') %>"
+									rel="noopener noreferrer"
 								>
 									<i class="fa-brands fa-square-facebook"></i>
 									Facebook
 								</a>
 							</div>
-							<a target="_blank" href="<%= builder.footer.location %>">
+							<a
+								target="_blank"
+								href="<%= builder.footer.location %>"
+								rel="noopener noreferrer"
+							>
 								<i class="fa-solid fa-location-dot"></i>
 								Location
 							</a>
