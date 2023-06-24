@@ -225,11 +225,12 @@ class Support {
 	public static readonly imageMask = {
 		header: {
 			icon: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'cover', { width: 50, height: 50 }),
+				await this.sharpFile(file, 'contain', { width: 50, height: 50 }),
 			logo: async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'contain', {
 					height: 70,
 					maxScale: 7.5,
+					trim: true,
 				}),
 		},
 		propagandas: {
@@ -264,6 +265,7 @@ class Support {
 			width?: number;
 			height?: number;
 			maxScale?: number;
+			trim?: boolean;
 		},
 	) {
 		const originalName = file!.originalname;
@@ -271,15 +273,24 @@ class Support {
 		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
-			file!.buffer = await sharp(file!.buffer)
-				.trim()
-				.resize({
-					width: options.width,
-					height: options.height,
-					fit,
-					background: { r: 255, g: 255, b: 255, alpha: 0 },
-				})
-				.toBuffer();
+			file!.buffer = options.trim
+				? await sharp(file!.buffer)
+						.trim()
+						.resize({
+							width: options.width,
+							height: options.height,
+							fit,
+							background: { r: 255, g: 255, b: 255, alpha: 0 },
+						})
+						.toBuffer()
+				: await sharp(file!.buffer)
+						.resize({
+							width: options.width,
+							height: options.height,
+							fit,
+							background: { r: 255, g: 255, b: 255, alpha: 0 },
+						})
+						.toBuffer();
 
 			if (options.maxScale) {
 				const imageMetadata = await sharp(file!.buffer).metadata();
