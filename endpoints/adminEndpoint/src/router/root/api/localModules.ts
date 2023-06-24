@@ -44,7 +44,7 @@ class Support {
 					throw {
 						status: 400,
 						message:
-							"Desculpe, dados necessários estão faltando. Por favor tente consertar o campo 'imagesContext'.",
+							"Desculpe, dados necessários estão faltando. Por favor conserte o campo 'imagesContext' e tente novamente.",
 					};
 				}
 			},
@@ -67,7 +67,7 @@ class Support {
 				if (Object(query).length !== 0) {
 					throw {
 						status: 400,
-						message: `Desculpe, a categoria "${name}" já existe. Por favor, tente usar um nome diferente.`,
+						message: `Desculpe, a categoria "${name}" já existe. Por favor, adicione um nome diferente e tente novamente.`,
 					};
 				}
 			},
@@ -85,13 +85,13 @@ class Support {
 
 				if (Object(query).length === 0) {
 					let message =
-						'Desculpe, a categoria que você forneceu não existe. Por favor, tente escolher uma categoria existente.';
+						'Desculpe, a categoria que você forneceu não existe. Por favor, escolha uma categoria existente e tente novamente.';
 
 					const [query] = await Sql.query('SELECT `name` FROM `categories`;');
 
 					if (Object(query).length === 0) {
 						message =
-							'Desculpe, não há categorias disponíveis no momento. Por favor, tente criar uma categoria primeiro.';
+							'Desculpe, não há categorias disponíveis no momento. Por favor, crie uma categoria primeiro e tente novamente.';
 					}
 
 					throw {
@@ -306,7 +306,7 @@ class Support {
 			) {
 				throw {
 					status: 400,
-					message: `Desculpe, a imagem "${originalName}" não é uma imagem válida. Por favor, tente escolher outra imagem.`,
+					message: `Desculpe, a imagem "${originalName}" não é uma imagem válida. Por favor, tente escolher uma outra imagem.`,
 				};
 			}
 
@@ -529,8 +529,8 @@ export default class LocalModules {
 							status: 400,
 							message:
 								maxCount === 1
-									? 'Desculpe, parece que a imagem necessária para completar o pedido não foi enviada. Por favor, adicione uma imagem e tente novamente.'
-									: 'Desculpe, parece que algumas imagens necessárias para completar o pedido não foram enviadas. Por favor, adicione todas as imagens e tente novamente.',
+									? 'Desculpe, parece que nenhuma imagem foi adicionada. Por favor, adicione uma imagem e tente novamente.'
+									: 'Desculpe, parece que algumas imagens não foram adicionadas. Por favor, adicione todas as imagens e tente novamente.',
 						};
 					} else if (err) {
 						throw err;

@@ -62,11 +62,9 @@ main {
 
 form {
 	width: 100%;
-	padding-top: 21px;
+	padding-top: 17.5px;
 
 	& > div:first-of-type {
-		padding-bottom: 7px;
-
 		& > div {
 			display: none;
 			align-items: center;
@@ -148,6 +146,7 @@ form {
 			}
 
 			@extend %small-font-size;
+			user-select: none;
 			align-items: center;
 			justify-content: center;
 			width: 100%;

@@ -115,14 +115,16 @@ aside ul li button i:first-of-type {
   background-color: var(--primary-color);
 }
 
+@media (min-width: 1300px) {
+  aside ul li a i:last-of-type,
+  aside ul li button i:last-of-type {
+    font-size: 16.1px;
+  }
+}
 @media (min-width: 1700px) {
   aside > div {
     width: 322px;
     min-width: 322px;
-  }
-  aside ul li a i:last-of-type,
-  aside ul li button i:last-of-type {
-    font-size: 16.1px;
   }
 }
 aside > div > div:first-of-type > div > img {

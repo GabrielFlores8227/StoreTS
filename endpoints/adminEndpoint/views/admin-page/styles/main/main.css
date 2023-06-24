@@ -101,6 +101,9 @@ div.table-section-container__table-container > table thead {
   height: 41px;
   color: white;
 }
+div.table-section-container__table-container > table thead th {
+  user-select: none;
+}
 div.table-section-container__table-container > table tbody > tr {
   width: 100%;
   background-color: white;

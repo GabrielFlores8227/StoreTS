@@ -72,6 +72,10 @@ div.table-section-container__table-container {
 			width: 100%;
 			height: 41px;
 			color: white;
+
+			th {
+				user-select: none;
+			}
 		}
 
 		tbody {

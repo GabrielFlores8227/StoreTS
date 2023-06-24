@@ -265,6 +265,17 @@
 }
 
 @media (min-width: 1300px) {
+	%aside-list {
+		li {
+			a,
+			button {
+				i:last-of-type {
+					font-size: 16.1px;
+				}
+			}
+		}
+	}
+
 	%product-container {
 		& > div:first-of-type {
 			img {
@@ -276,15 +287,6 @@
 }
 
 @media (min-width: 1700px) {
-	%product-container {
-		& > div:first-of-type {
-			img {
-				width: 170px;
-				height: 170px;
-			}
-		}
-	}
-
 	%aside-menu {
 		& > div {
 			width: 322px;
@@ -292,13 +294,11 @@
 		}
 	}
 
-	%aside-list {
-		li {
-			a,
-			button {
-				i:last-of-type {
-					font-size: 16.1px;
-				}
+	%product-container {
+		& > div:first-of-type {
+			img {
+				width: 170px;
+				height: 170px;
 			}
 		}
 	}

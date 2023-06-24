@@ -64,10 +64,7 @@ main > div:last-of-type > div:first-of-type svg path {
 
 form {
   width: 100%;
-  padding-top: 21px;
-}
-form > div:first-of-type {
-  padding-bottom: 7px;
+  padding-top: 17.5px;
 }
 form > div:first-of-type > div {
   display: none;
@@ -121,6 +118,7 @@ form > div {
 }
 form > div > button,
 form > div a {
+  user-select: none;
   align-items: center;
   justify-content: center;
   width: 100%;

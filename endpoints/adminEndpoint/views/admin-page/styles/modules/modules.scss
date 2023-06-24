@@ -137,14 +137,7 @@
 	}
 }
 
-@media (min-width: 1700px) {
-	%aside-menu {
-		& > div {
-			width: 322px;
-			min-width: 322px;
-		}
-	}
-
+@media (min-width: 1300px) {
 	%aside-list {
 		li {
 			a,
@@ -153,6 +146,15 @@
 					font-size: 16.1px;
 				}
 			}
+		}
+	}
+}
+
+@media (min-width: 1700px) {
+	%aside-menu {
+		& > div {
+			width: 322px;
+			min-width: 322px;
 		}
 	}
 }

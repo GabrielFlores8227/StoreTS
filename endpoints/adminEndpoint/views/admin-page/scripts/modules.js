@@ -164,10 +164,6 @@ async function buildComplexTable(
 		`template[${sectionName}-template]`,
 	);
 
-	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
-		tr.remove();
-	});
-
 	handleTableVisibility();
 
 	if (sectionName === 'products') {
@@ -253,6 +249,7 @@ async function buildComplexTable(
 		const actionContainer = templateUsable.querySelector(
 			'td[action-container]',
 		);
+
 		const actionButtons = actionContainer.querySelectorAll('button');
 
 		actionButtons[2].addEventListener('click', async () => {
@@ -275,6 +272,8 @@ async function buildComplexTable(
 					await deleteItemCallback();
 				}
 
+				templateUsable.remove();
+
 				buildComplexTable(
 					apiListBuilder,
 					sectionName,
@@ -290,7 +289,19 @@ async function buildComplexTable(
 			templateUsable.querySelector('div[action-info]').classList.add('--ok');
 		}
 
-		template.parentElement.prepend(templateUsable);
+		const oldItem = template.parentElement.querySelector(
+			`tr[identifier="${apiItem.id}"]`,
+		);
+
+		const newItem = template.parentElement.querySelector(`tr[new-item]`);
+
+		if (oldItem) {
+			template.parentElement.replaceChild(templateUsable, oldItem);
+		} else if (newItem) {
+			template.parentElement.replaceChild(templateUsable, newItem);
+		} else {
+			template.parentElement.prepend(templateUsable);
+		}
 	}
 }
 
@@ -389,7 +400,13 @@ export function buildCategories(isLastItemNew = false) {
 
 	const deleteItemCallback = async () => {
 		await buildProductsTemplateCallback();
-		await buildProducts();
+
+		window.document
+			.querySelector('template[products-template]')
+			.parentElement.querySelectorAll('tr[original-item]')
+			.forEach((tr) => {
+				tr.remove();
+			});
 	};
 
 	buildComplexTable(
@@ -554,7 +571,10 @@ export async function buildProducts(isLastItemNew = false) {
 			let lastInnerText = div.innerText.replace(/\D/g, '');
 
 			div.addEventListener('focusout', async () => {
-				const currentInnerText = div.innerText.replace(/\D/g, '');
+				const currentInnerText =
+					div.innerText.replace(/\D/g, '') === ''
+						? '0'
+						: div.innerText.replace(/\D/g, '');
 
 				await handleTextInputRequest(
 					lastInnerText,
@@ -695,13 +715,15 @@ export function buildPropagandasTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
+
 			buildPropagandas(true);
 		}
 	});
 
 	actionButtons[2].addEventListener('click', () => {
 		template.remove();
+
 		handleTableVisibility();
 	});
 
@@ -748,7 +770,7 @@ export function buildCategoriesTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
 
 			buildCategories(true);
 
@@ -758,6 +780,7 @@ export function buildCategoriesTemplate(specialSection) {
 
 	actionButtons[2].addEventListener('click', () => {
 		template.remove();
+
 		handleTableVisibility();
 	});
 
@@ -834,7 +857,7 @@ export function buildProductsTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
 
 			await buildProducts(true);
 		}
@@ -963,7 +986,13 @@ export function formatWhatsapp(inputElement) {
  * @param {HTMLDivElement} inputElement - The discount percentage input element.
  */
 export function formatOff(inputElement) {
-	let value = Number(inputElement.innerText.replace(/\D/g, ''));
+	let value = inputElement.innerText.replace(/\D/g, '');
+
+	if (value === '') {
+		return;
+	}
+
+	value = Number(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value > 100) {
 		inputElement.innerText = '100%';
@@ -1295,6 +1324,8 @@ function addSortableList(sectionName, callBack) {
 				ui.helper.find('th, td').each(function () {
 					$(this).data('width', $(this).width());
 				});
+
+				ui.helper.css('box-shadow', '0 0 5px 2px rgba(0, 0, 0, 0.3)');
 			},
 			change: function (_, ui) {
 				ui.helper.find('th, td:not(.action-container)').each(function () {

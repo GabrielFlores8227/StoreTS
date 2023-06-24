@@ -226,23 +226,23 @@ div.saved-product-container > div > div a i {
 }
 
 @media (min-width: 1300px) {
+  aside ul li a i:last-of-type,
+  aside ul li button i:last-of-type {
+    font-size: 16.1px;
+  }
   div.saved-product-container > div > div > div:first-of-type img {
     width: 154px;
     height: 154px;
   }
 }
 @media (min-width: 1700px) {
-  div.saved-product-container > div > div > div:first-of-type img {
-    width: 170px;
-    height: 170px;
-  }
   aside > div {
     width: 322px;
     min-width: 322px;
   }
-  aside ul li a i:last-of-type,
-  aside ul li button i:last-of-type {
-    font-size: 16.1px;
+  div.saved-product-container > div > div > div:first-of-type img {
+    width: 170px;
+    height: 170px;
   }
 }
 aside > div > div:first-of-type > div > img {
