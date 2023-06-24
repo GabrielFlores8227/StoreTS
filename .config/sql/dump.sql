@@ -50,11 +50,11 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `category` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,8 +106,8 @@ DROP TABLE IF EXISTS `header`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `header` (
   `id` enum('only') NOT NULL DEFAULT 'only',
-  `icon` varchar(4) NOT NULL DEFAULT 'icon',
-  `logo` varchar(4) NOT NULL DEFAULT 'logo',
+  `icon` varchar(4) NOT NULL,
+  `logo` varchar(4) NOT NULL,
   `title` varchar(30) NOT NULL,
   `description` varchar(255) NOT NULL,
   `color` varchar(7) NOT NULL,
@@ -144,8 +144,10 @@ CREATE TABLE `products` (
   `message` varchar(255) NOT NULL,
   `history` json DEFAULT NULL,
   `position` smallint DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `fk_category` (`category`),
+  CONSTRAINT `fk_category` FOREIGN KEY (`category`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +172,7 @@ CREATE TABLE `propagandas` (
   `small-image` varchar(255) NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,4 +241,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-19 17:39:30
+-- Dump completed on 2023-06-24 17:45:00

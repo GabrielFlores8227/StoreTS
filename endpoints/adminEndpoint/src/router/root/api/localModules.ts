@@ -695,8 +695,6 @@ export default class LocalModules {
 			Admin.checkType(id, 'string', 'id');
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
-			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
-
 			const [query] = await Sql.query(
 				'SELECT `image` FROM `products` WHERE `category` = ?;',
 				[id],
@@ -707,6 +705,8 @@ export default class LocalModules {
 			for (let c = 0; c < Object(query).length; c++) {
 				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
 			}
+
+			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
