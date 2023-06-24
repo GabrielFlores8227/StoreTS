@@ -1,0 +1,15 @@
+[Unit]
+Description=StoreTS Launcher
+After=network.target
+
+[Service]
+ExecStart=<path>/StoreTS/start.sh
+Restart=always
+User=<user>
+Group=<group>
+WorkingDirectory=<path>/StoreTS/
+
+
+[Install]
+WantedBy=default.target
+
