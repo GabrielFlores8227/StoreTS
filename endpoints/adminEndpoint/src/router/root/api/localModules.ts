@@ -225,7 +225,11 @@ class Support {
 	public static readonly imageMask = {
 		header: {
 			icon: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'contain', { width: 50, height: 50 }),
+				await this.sharpFile(file, 'inside', {
+					width: 50,
+					height: 50,
+					trim: true,
+				}),
 			logo: async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'contain', {
 					height: 70,
