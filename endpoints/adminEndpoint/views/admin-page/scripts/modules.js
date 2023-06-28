@@ -424,22 +424,14 @@ export function buildCategories(isLastItemNew = false) {
  */
 function buildProductCategoriesSelect(categories, select, selected = '') {
 	const selectedOptions = [];
+	const selectedIndex = select.selectedIndex;
 
-	select.querySelectorAll('option').forEach((option, index) => {
-		const attributes = option.attributes;
-
-		for (var i = 0; i < attributes.length; i++) {
-			var attributeName = attributes[i].name;
-			if (attributeName === 'selected') {
-				selectedOptions.push(option.value);
-			}
-		}
-
-		if (!selectedOptions[index]) {
-			selectedOptions.push(false);
-		}
+	select.querySelectorAll('option').forEach((option) => {
+		selectedOptions.push(false);
 		option.remove();
 	});
+
+	selectedOptions[selectedIndex] = true;
 
 	categories.forEach((category, index) => {
 		const template = select.querySelector('template').content.cloneNode(true)
@@ -1098,18 +1090,13 @@ export function loadProductInputsProperties(template) {
 	});
 
 	pseudoInputs[2].addEventListener('keydown', (event) => {
-		if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
-			return;
-		}
-
 		const inputElement = event.target;
 		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 		if (event.key === 'Backspace') {
 			inputElement.innerText = value.slice(0, -1);
+			formatOff(inputElement);
 		}
-
-		formatOff(inputElement);
 	});
 
 	pseudoInputs[2].addEventListener('input', (event) => {
