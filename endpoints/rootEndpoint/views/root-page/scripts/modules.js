@@ -153,7 +153,10 @@ export function handleProductsGrid(element) {
 				);
 			}
 		} else {
-			if ((element.offsetWidth - paddingLeft * 2) / 3 > minWidth) {
+			if (
+				(element.offsetWidth - paddingLeft * 2) / 3 > minWidth &&
+				element.children.length % 3 === 0
+			) {
 				element.style.gridTemplateColumns = '1fr 1fr 1fr';
 
 				return;
