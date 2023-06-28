@@ -161,7 +161,7 @@ const sliderController = [];
 				}
 
 				scrollToPosition(sliderController, index, element, position, duration);
-			}, duration - duration / 3);
+			}, duration - duration / 2);
 
 		let intervalController = interval(duration());
 
