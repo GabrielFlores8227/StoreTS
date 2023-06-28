@@ -5,6 +5,7 @@ import {
 	handleProductsGrid,
 	handleSearch,
 	handlePropagandaScroll,
+	scrollToPosition,
 	convertToMoneyFormat,
 } from './modules.js';
 
@@ -67,28 +68,25 @@ const sliderController = [];
 	sliders.forEach((element, index) => {
 		handleProductsGrid(element);
 
-		element.scrollLeft = index % 2 === 0 ? element.scrollWidth : 0;
-
 		sliderController.push(true);
 
 		let isDown = false;
 		let startX;
-		let position;
-		let left;
 		let scrollLeft;
-		let wait;
-		let setted = false;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
+			sliderController[index] = !isDown;
 		});
 
 		element.addEventListener('touchend', () => {
 			isDown = false;
+			sliderController[index] = !isDown;
 		});
 
 		element.addEventListener('mousedown', (e) => {
 			isDown = true;
+			sliderController[index] = !isDown;
 			element.classList.add('active');
 			startX = e.pageX - element.offsetLeft;
 			scrollLeft = element.scrollLeft;
@@ -96,11 +94,13 @@ const sliderController = [];
 
 		element.addEventListener('mouseleave', () => {
 			isDown = false;
+			sliderController[index] = !isDown;
 			element.classList.remove('active');
 		});
 
 		element.addEventListener('mouseup', () => {
 			isDown = false;
+			sliderController[index] = !isDown;
 			element.classList.remove('active');
 		});
 
@@ -113,54 +113,53 @@ const sliderController = [];
 			position = element.scrollLeft;
 		});
 
-		setInterval(() => {
-			if (setted) {
-				return;
-			}
+		element.scrollLeft =
+			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
 
-			if (wait || !sliderController[index]) {
-				setted = true;
+		let position = element.scrollLeft;
+		let left;
 
-				setTimeout(() => {
-					wait = false;
-					sliderController[index] = true;
-					setted = false;
-				}, 15000);
+		const duration = () =>
+			((element.scrollWidth - element.clientWidth) * 37) / 5;
 
-				return;
-			}
-
-			if (isDown) {
-				wait = true;
-			}
-
-			if (position >= element.scrollWidth - element.clientWidth) {
-				left = false;
-			}
-
-			if (position <= 1) {
-				left = true;
-			}
-
-			if (element.scrollWidth - element.clientWidth > 100) {
-				if (left) {
-					position = element.scrollLeft + 1;
-				} else {
-					position = element.scrollLeft - 1;
+		const interval = (duration) =>
+			setInterval(() => {
+				if (!sliderController[index]) {
+					return;
 				}
-			}
 
-			element.scrollTo({
-				left: position,
-				top: 0,
-			});
-		}, 21);
-	});
+				if (element.scrollLeft === 0) {
+					left = false;
+				}
 
-	window.addEventListener('resize', () => {
-		sliders.forEach((element) => {
+				if (element.scrollLeft >= element.scrollWidth - element.clientWidth) {
+					left = true;
+				}
+
+				if (left) {
+					position =
+						element.scrollLeft -
+						(element.scrollWidth - element.clientWidth) / 5;
+				}
+
+				if (!left) {
+					position =
+						element.scrollLeft +
+						(element.scrollWidth - element.clientWidth) / 5;
+				}
+
+				scrollToPosition(sliderController, index, element, position, duration);
+			}, duration - duration / 2.5);
+
+		let intervalController = interval(duration());
+
+		window.addEventListener('resize', () => {
+			sliderController[index] = false;
+			clearInterval(intervalController);
+			intervalController = interval(duration());
+			sliderController[index] = true;
+
 			element.classList.remove('--special');
-
 			handleProductsGrid(element);
 		});
 	});

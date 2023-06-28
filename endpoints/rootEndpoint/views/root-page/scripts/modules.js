@@ -126,10 +126,16 @@ export function renderSavedProducts(products) {
  * @param {HTMLElement} element - The container element for the products grid.
  */
 export function handleProductsGrid(element) {
+	const minWidth = Number(
+		window.getComputedStyle(element.children[0]).minWidth.replace('px', ''),
+	);
+
+	const paddingLeft = Number(
+		window.getComputedStyle(element).paddingLeft.replace('px', ''),
+	);
+
 	if (
-		element.scrollWidth - element.clientWidth <
-			Number(window.getComputedStyle(element).paddingLeft.replace('px', '')) +
-				280 &&
+		element.scrollWidth - element.clientWidth < paddingLeft + minWidth &&
 		!element.classList.contains('--special')
 	) {
 		element.classList.add('--special');
@@ -147,6 +153,12 @@ export function handleProductsGrid(element) {
 				);
 			}
 		} else {
+			if ((element.offsetWidth - paddingLeft * 2) / 3 > minWidth) {
+				element.style.gridTemplateColumns = '1fr 1fr 1fr';
+
+				return;
+			}
+
 			element.style.gridTemplateColumns = '1fr 1fr';
 		}
 	}
@@ -269,7 +281,7 @@ export function handleSearch(
 							window.scrollY -
 							window.innerHeight / 2 +
 							productCard.offsetHeight / 2 +
-							-60,
+							-80,
 						behavior: 'smooth',
 					});
 
@@ -297,6 +309,54 @@ export function handleSearch(
 
 	searchContainer.classList.toggle('--on', numberOfSelectedProducts > 0);
 	input.classList.toggle('--none', numberOfSelectedProducts === 0);
+}
+
+/**
+ * Scrolls the slider element to a specified position over a given duration.
+ *
+ * @param sliderController - Array of slider controller states.
+ * @param index - The index of the slider element.
+ * @param element - The slider element to scroll.
+ * @param position - The target position to scroll to.
+ * @param duration - The duration of the scrolling animation.
+ */
+export function scrollToPosition(
+	sliderController,
+	index,
+	element,
+	position,
+	duration,
+) {
+	const start = element.scrollLeft;
+	const change = position - start;
+	const increment = 20;
+	let currentTime = 0;
+
+	const animateScroll = function () {
+		currentTime += increment;
+
+		if (!sliderController[index]) {
+			return;
+		}
+
+		const linearEase = linearInterpolation(
+			currentTime,
+			start,
+			change,
+			duration,
+		);
+		element.scrollLeft = linearEase;
+
+		if (currentTime < duration) {
+			requestAnimationFrame(animateScroll);
+		}
+	};
+
+	const linearInterpolation = function (t, b, c, d) {
+		return c * (t / d) + b;
+	};
+
+	animateScroll();
 }
 
 /**
