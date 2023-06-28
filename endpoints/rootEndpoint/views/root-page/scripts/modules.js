@@ -144,6 +144,16 @@ export function handleProductsGrid(element) {
 			return;
 		}
 
+		if (
+			element.clientWidth - paddingLeft * 2 <
+				minWidth * element.children.length &&
+			element.children.length <= 3
+		) {
+			element.style.gridTemplateColumns = '1fr';
+
+			return;
+		}
+
 		if (element.children.length % 2 !== 0) {
 			element.style.gridTemplateColumns = '1fr 1fr 1fr';
 
@@ -332,7 +342,7 @@ export function scrollToPosition(
 ) {
 	const start = element.scrollLeft;
 	const change = position - start;
-	const increment = 20;
+	const increment = 10;
 	let currentTime = 0;
 
 	const animateScroll = function () {

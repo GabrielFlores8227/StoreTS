@@ -73,7 +73,7 @@ const sliderController = [];
 		let isDown = false;
 		let startX;
 		let scrollLeft;
-		const wait = 10000;
+		const wait = 5000;
 		element.scrollLeft =
 			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
 
@@ -125,14 +125,14 @@ const sliderController = [];
 			position = element.scrollLeft;
 		});
 
-		const divider = 5;
+		const divider = 7;
 		let position = element.scrollLeft;
 		let left;
 
 		const duration = () =>
-			window.innerWidth < 1000
-				? ((element.scrollWidth - element.clientWidth) * 37) / divider
-				: ((element.scrollWidth - element.clientWidth) * 21) / divider;
+			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+				? ((element.scrollWidth - element.clientWidth) * 14) / divider
+				: ((element.scrollWidth - element.clientWidth) * 10) / divider;
 
 		const interval = (duration) =>
 			setInterval(() => {
@@ -148,17 +148,11 @@ const sliderController = [];
 					left = true;
 				}
 
-				if (left) {
-					position =
-						element.scrollLeft -
-						(element.scrollWidth - element.clientWidth) / divider;
-				}
+				const current = (element.scrollWidth - element.clientWidth) / divider;
 
-				if (!left) {
-					position =
-						element.scrollLeft +
-						(element.scrollWidth - element.clientWidth) / divider;
-				}
+				left
+					? (position = element.scrollLeft - current)
+					: (position = element.scrollLeft + current);
 
 				scrollToPosition(sliderController, index, element, position, duration);
 			}, duration - duration / 2);
