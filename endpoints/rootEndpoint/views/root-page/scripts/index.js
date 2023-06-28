@@ -73,6 +73,9 @@ const sliderController = [];
 		let isDown = false;
 		let startX;
 		let scrollLeft;
+		const wait = 10000;
+		element.scrollLeft =
+			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
@@ -81,7 +84,10 @@ const sliderController = [];
 
 		element.addEventListener('touchend', () => {
 			isDown = false;
-			sliderController[index] = !isDown;
+
+			setTimeout(() => {
+				sliderController[index] = !isDown;
+			}, wait);
 		});
 
 		element.addEventListener('mousedown', (e) => {
@@ -94,14 +100,20 @@ const sliderController = [];
 
 		element.addEventListener('mouseleave', () => {
 			isDown = false;
-			sliderController[index] = !isDown;
 			element.classList.remove('active');
+
+			setTimeout(() => {
+				sliderController[index] = !isDown;
+			}, wait);
 		});
 
 		element.addEventListener('mouseup', () => {
 			isDown = false;
-			sliderController[index] = !isDown;
 			element.classList.remove('active');
+
+			setTimeout(() => {
+				sliderController[index] = !isDown;
+			}, wait);
 		});
 
 		element.addEventListener('mousemove', (e) => {
@@ -113,18 +125,18 @@ const sliderController = [];
 			position = element.scrollLeft;
 		});
 
-		element.scrollLeft =
-			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
-
+		const divider = 5;
 		let position = element.scrollLeft;
 		let left;
 
 		const duration = () =>
-			((element.scrollWidth - element.clientWidth) * 37) / 5;
+			window.innerWidth < 1000
+				? ((element.scrollWidth - element.clientWidth) * 37) / divider
+				: ((element.scrollWidth - element.clientWidth) * 21) / divider;
 
 		const interval = (duration) =>
 			setInterval(() => {
-				if (!sliderController[index]) {
+				if (isDown) {
 					return;
 				}
 
@@ -139,17 +151,17 @@ const sliderController = [];
 				if (left) {
 					position =
 						element.scrollLeft -
-						(element.scrollWidth - element.clientWidth) / 5;
+						(element.scrollWidth - element.clientWidth) / divider;
 				}
 
 				if (!left) {
 					position =
 						element.scrollLeft +
-						(element.scrollWidth - element.clientWidth) / 5;
+						(element.scrollWidth - element.clientWidth) / divider;
 				}
 
 				scrollToPosition(sliderController, index, element, position, duration);
-			}, duration - duration / 2.5);
+			}, duration - duration / 3);
 
 		let intervalController = interval(duration());
 
