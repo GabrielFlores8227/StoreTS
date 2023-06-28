@@ -400,13 +400,6 @@ export function buildCategories(isLastItemNew = false) {
 
 	const deleteItemCallback = async () => {
 		await buildProductsTemplateCallback();
-
-		window.document
-			.querySelector('template[products-template]')
-			.parentElement.querySelectorAll('tr[original-item]')
-			.forEach((tr) => {
-				tr.remove();
-			});
 	};
 
 	buildComplexTable(
@@ -890,16 +883,13 @@ export async function buildProductsTemplateCallback() {
  * @param {HTMLDivElement} div - The pseudo input element.
  * @param {number} [index] - The optional cursor index to set. If not provided or exceeds the div's text length, the index is set to the end of the text.
  */
-export function handlePseudoInputCursorIndex(div, index = undefined) {
+export function handlePseudoInputCursorIndex(div) {
+	const selection = window.getSelection();
+	const range = document.createRange();
+	const index = div.innerText.length;
+
 	if (div.innerText === '') {
 		return;
-	}
-
-	const range = document.createRange();
-	const selection = window.getSelection();
-
-	if (!index || index > div.innerText.length) {
-		index = div.innerText.length; // Adjust index if it exceeds the div's text length
 	}
 
 	range.setStart(div.firstChild || '', index);
@@ -989,6 +979,8 @@ export function formatOff(inputElement) {
 	let value = inputElement.innerText.replace(/\D/g, '');
 
 	if (value === '') {
+		inputElement.innerText = '';
+
 		return;
 	}
 
@@ -1106,6 +1098,10 @@ export function loadProductInputsProperties(template) {
 	});
 
 	pseudoInputs[2].addEventListener('keydown', (event) => {
+		if ((event.ctrlKey || event.metaKey) && event.key === 'c') {
+			return;
+		}
+
 		const inputElement = event.target;
 		const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
