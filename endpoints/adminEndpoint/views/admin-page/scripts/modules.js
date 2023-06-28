@@ -175,8 +175,10 @@ async function buildComplexTable(
 				apiList[apiItem].reverse().forEach((apiItem) => {
 					handleApiList(apiItem, index, {
 						option: categories,
-						templateProperties: (template) =>
-							loadProductInputsProperties(template),
+						templateProperties: (template) => {
+							template.setAttribute('category', apiItem.category);
+							loadProductInputsProperties(template);
+						},
 					});
 				});
 			});
@@ -253,6 +255,26 @@ async function buildComplexTable(
 		const actionButtons = actionContainer.querySelectorAll('button');
 
 		actionButtons[2].addEventListener('click', async () => {
+			if (
+				sectionName === 'categories' &&
+				templateUsable
+					.querySelector('div[cell-container]')
+					.getAttribute('count') != 0
+			) {
+				const count = templateUsable
+					.querySelector('div[cell-container]')
+					.getAttribute('count');
+
+				const confirm = await handleConfirmCategoryDeletion(
+					apiItem.name,
+					count,
+				);
+
+				if (!confirm) {
+					return;
+				}
+			}
+
 			let form = {};
 
 			form['id'] = String(apiItem.id);
@@ -269,7 +291,7 @@ async function buildComplexTable(
 
 			if (req) {
 				if (deleteItemCallback) {
-					await deleteItemCallback();
+					await deleteItemCallback(apiItem.id);
 				}
 
 				templateUsable.remove();
@@ -372,6 +394,7 @@ export function buildCategories(isLastItemNew = false) {
 	const deleteItemApiUrl = '/admin/api/category';
 	const reorderItemsApiUrl = '/admin/api/categories';
 	const cellFunction = (apiItem, cell, index) => {
+		cell.setAttribute('count', apiItem.productCount);
 		cell.setAttribute('action', '/admin/api/categories/name');
 
 		cell.querySelectorAll('div[pseudo-input]').forEach(async (div) => {
@@ -398,8 +421,13 @@ export function buildCategories(isLastItemNew = false) {
 		});
 	};
 
-	const deleteItemCallback = async () => {
+	const deleteItemCallback = async (id) => {
+		await buildProducts();
 		await buildProductsTemplateCallback();
+
+		window.document.querySelectorAll(`tr[category='${id}']`).forEach((tr) => {
+			tr.remove();
+		});
 	};
 
 	buildComplexTable(
@@ -758,7 +786,6 @@ export function buildCategoriesTemplate(specialSection) {
 			template.setAttribute('new-item', '');
 
 			buildCategories(true);
-
 			await buildProductsTemplateCallback();
 		}
 	});
@@ -845,6 +872,7 @@ export function buildProductsTemplate(specialSection) {
 			template.setAttribute('new-item', '');
 
 			await buildProducts(true);
+			buildCategories();
 		}
 	});
 
@@ -1146,7 +1174,9 @@ export async function handleActionRequest(
 		return true;
 	} else {
 		if (status === 401) {
-			window.document.querySelector('div[warning]').classList.add('--on');
+			window.document
+				.querySelector('div[multiple-windows-warning]')
+				.classList.add('--on');
 		}
 
 		$('--error', message);
@@ -1364,6 +1394,51 @@ function generateRandomString(length) {
 	}
 
 	return result;
+}
+
+/**
+ * Handles the confirmation of category deletion.
+ *
+ * @param {string} category - The name of the category to be deleted.
+ * @param {number} count - The number of products associated with the category.
+ * @returns {Promise<boolean>} A promise that resolves to a boolean value indicating whether to proceed with the deletion or not.
+ */
+async function handleConfirmCategoryDeletion(category, count) {
+	const warningContainer = window.document.querySelector(
+		'div[confirm-category-deletion-warning]',
+	);
+
+	warningContainer.classList.add('--on');
+	warningContainer.querySelector(
+		'p',
+	).innerText = `Tem certeza que deseja deletar a categoria "${category}"? Esta categoria possui ${count} ${
+		count == 1 ? `produto` : `produtos`
+	}. Se você prosseguir com a exclusão, os produtos relacionados também serão removidos.`;
+
+	const buttons = warningContainer.querySelectorAll('button');
+
+	return await new Promise((resolve) => {
+		buttons[0].addEventListener('click', () => {
+			warningContainer.classList.remove('--on');
+
+			destroyButtonsEventListeners();
+
+			resolve(false);
+		});
+
+		buttons[1].addEventListener('click', () => {
+			warningContainer.classList.remove('--on');
+
+			destroyButtonsEventListeners();
+
+			resolve(true);
+		});
+	});
+
+	function destroyButtonsEventListeners() {
+		buttons[0].parentNode.replaceChild(buttons[0].cloneNode(true), buttons[0]);
+		buttons[1].parentNode.replaceChild(buttons[1].cloneNode(true), buttons[1]);
+	}
 }
 
 /**

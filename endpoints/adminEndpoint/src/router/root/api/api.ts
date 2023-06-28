@@ -34,7 +34,7 @@ api.post(
 api.post(
 	'/categories',
 	Middleware.middlewareCheckToken,
-	Middleware.middlewareBuildCategories(),
+	Middleware.middlewareBuildCategories(true),
 	(req, res) => {
 		res.json(Object(req).builder.categories);
 	},

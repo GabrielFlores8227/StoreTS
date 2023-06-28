@@ -6,7 +6,7 @@ import { buildAsideMenus } from './modules.js';
  */
 (() => {
 	window.document
-		.querySelector('div[warning] button')
+		.querySelector('div[multiple-windows-warning] button')
 		.addEventListener('click', () => {
 			location.reload(true);
 		});
