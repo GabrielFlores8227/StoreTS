@@ -23,11 +23,25 @@ function getToken() {
 const token = getToken();
 
 /**
+ * Retrieves the website data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the website data.
+ */
+export async function getWebsite() {
+	return await (
+		await fetch('/admin/api/website', {
+			method: 'POST',
+			headers: { authorization: `Bearer ${token}` },
+		})
+	).json();
+}
+
+/**
  * Retrieves the header data from the server.
  *
  * @returns {Promise} A promise that resolves to the JSON response containing the header data.
  */
-export async function getHeader() {
+async function getHeader() {
 	return await (
 		await fetch('/admin/api/header', {
 			method: 'POST',

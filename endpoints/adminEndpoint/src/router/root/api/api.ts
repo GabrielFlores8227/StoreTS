@@ -7,7 +7,7 @@ const api = express.Router();
 api.post(
 	'/website',
 	Middleware.middlewareCheckToken,
-	Middleware.middlewareBuildWebsite,
+	Middleware.middlewareBuildWebsite(),
 	(req, res) => {
 		res.json(Object(req).builder.website);
 	},

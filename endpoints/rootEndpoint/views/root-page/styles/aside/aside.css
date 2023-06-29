@@ -231,8 +231,8 @@ div.saved-product-container > div > div a i {
     font-size: 16.1px;
   }
   div.saved-product-container > div > div > div:first-of-type img {
-    width: 154px;
-    height: 154px;
+    width: 133px;
+    height: 133px;
   }
 }
 @media (min-width: 1700px) {
