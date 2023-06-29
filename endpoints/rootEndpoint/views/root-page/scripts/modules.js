@@ -145,7 +145,7 @@ export function handleProductsGrid(element) {
 		}
 
 		if (
-			element.clientWidth - paddingLeft * 2 <
+			element.clientWidth - paddingLeft * 2.5 <
 				minWidth * element.children.length &&
 			element.children.length <= 3
 		) {
@@ -339,10 +339,10 @@ export function scrollToPosition(
 	element,
 	position,
 	duration,
+	increment,
 ) {
 	const start = element.scrollLeft;
 	const change = position - start;
-	const increment = 10;
 	let currentTime = 0;
 
 	const animateScroll = function () {

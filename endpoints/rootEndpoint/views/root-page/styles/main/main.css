@@ -283,9 +283,6 @@ div.product-section-container > div > div:last-of-type.--special {
   grid-template-columns: 1fr;
   gap: 14px;
 }
-div.product-section-container > div > div:last-of-type.--special > div {
-  width: 100%;
-}
 div.product-section-container > div > div:last-of-type.--special > div.--special:last-of-type {
   grid-column: span 2;
 }

@@ -129,10 +129,13 @@ const sliderController = [];
 		let position = element.scrollLeft;
 		let left;
 
+		const increment = () =>
+			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 20 : 10;
+
 		const duration = () =>
 			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-				? ((element.scrollWidth - element.clientWidth) * 14) / divider
-				: ((element.scrollWidth - element.clientWidth) * 10) / divider;
+				? ((element.scrollWidth - element.clientWidth) * 25) / divider
+				: ((element.scrollWidth - element.clientWidth) * increment()) / divider;
 
 		const interval = (duration) =>
 			setInterval(() => {
@@ -154,7 +157,14 @@ const sliderController = [];
 					? (position = element.scrollLeft - current)
 					: (position = element.scrollLeft + current);
 
-				scrollToPosition(sliderController, index, element, position, duration);
+				scrollToPosition(
+					sliderController,
+					index,
+					element,
+					position,
+					duration,
+					increment(),
+				);
 			}, duration - duration / 2);
 
 		let intervalController = interval(duration());
