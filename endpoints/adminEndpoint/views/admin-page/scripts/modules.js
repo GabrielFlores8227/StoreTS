@@ -171,9 +171,9 @@ async function buildComplexTable(
 
 		Object.keys(apiList)
 			.reverse()
-			.forEach((apiItem, index) => {
+			.forEach((apiItem) => {
 				apiList[apiItem].reverse().forEach((apiItem) => {
-					handleApiList(apiItem, index, {
+					handleApiList(apiItem, {
 						option: categories,
 						templateProperties: (template) => {
 							template.setAttribute('category', apiItem.category);
@@ -184,13 +184,22 @@ async function buildComplexTable(
 			});
 	} else {
 		apiList.reverse().forEach((apiItem, index) => {
-			handleApiList(apiItem, index);
+			handleApiList(apiItem);
 		});
 	}
 
-	handleTableVisibility();
+	const templateParent = template.parentElement;
 
-	template.parentElement.setAttribute(`sortable-${sectionName}`, '');
+	if (isLastItemNew) {
+		const trList = templateParent.querySelectorAll('tr[original-item]');
+		trList[trList.length - 1]
+			.querySelector('div[action-info]')
+			.classList.add('--ok');
+	}
+
+	templateParent.setAttribute(`sortable-${sectionName}`, '');
+
+	handleTableVisibility();
 
 	addSortableList(`sortable-${sectionName}`, async () => {
 		let ids = [];
@@ -223,7 +232,6 @@ async function buildComplexTable(
 
 	function handleApiList(
 		apiItem,
-		index,
 		{ option = undefined, templateProperties = undefined } = {},
 	) {
 		const templateUsable = template.content.cloneNode(true).children[0];
@@ -307,10 +315,6 @@ async function buildComplexTable(
 			}
 		});
 
-		if (isLastItemNew && index === 0) {
-			templateUsable.querySelector('div[action-info]').classList.add('--ok');
-		}
-
 		const oldItem = template.parentElement.querySelector(
 			`tr[identifier="${apiItem.id}"]`,
 		);
@@ -365,7 +369,12 @@ export function buildPropagandas(isLastItemNew = false) {
 				'href',
 				index === 0 ? apiItem['big-image'] : apiItem['small-image'],
 			);
+
 			link.innerText = `${link.innerText} ${apiItem.id}`;
+
+			link.querySelectorAll('br').forEach((br) => {
+				br.remove();
+			});
 
 			loadFileInputProperties(div);
 		});
