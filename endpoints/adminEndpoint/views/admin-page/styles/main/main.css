@@ -1,43 +1,43 @@
-div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
   padding-right: 21px;
   padding-left: 21px;
 }
 
-div.table-section-container > div:first-of-type > h1 {
+div.section-container > div:first-of-type > h1 {
   font-size: 30.1px;
 }
 
 @media (min-width: 375px) {
-  div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+  div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
     padding-right: 28px;
     padding-left: 28px;
   }
 }
 @media (min-width: 650px) {
-  div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+  div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
     padding-right: 56px;
     padding-left: 56px;
   }
 }
 @media (min-width: 870px) {
-  div.table-section-container > div:first-of-type > h1 {
+  div.section-container > div:first-of-type > h1 {
     font-size: 33.6px;
   }
 }
 @media (min-width: 1300px) {
-  div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+  div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
   }
 }
 @media (min-width: 1700px) {
-  div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+  div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
     padding-right: 21vw;
     padding-left: 21vw;
   }
 }
 @media (min-width: 2880px) {
-  div.table-section-container__table-container, div.table-section-container > div:last-of-type, div.table-section-container > div:first-of-type {
+  div.section-container__table-container, div.section-container__canvas-container, div.section-container__data-container, div.section-container > div.section-container__add-item-container, div.section-container > div:first-of-type {
     padding-right: 30%;
     padding-left: 30%;
   }
@@ -47,20 +47,20 @@ main {
   background-color: var(--light-gray);
 }
 
-div.table-section-container {
+div.section-container {
   padding: 35px 0px;
 }
-div.table-section-container > div:first-of-type > h1 {
+div.section-container > div:first-of-type > h1 {
   color: var(--dark-gray);
-  padding: 14px 0px;
+  padding: 14px 0px 21px 0px;
 }
-div.table-section-container > div:first-of-type > h1 > i {
+div.section-container > div:first-of-type > h1 > i {
   color: var(--primary-color);
 }
-div.table-section-container > div:last-of-type {
-  padding-top: 7px;
+div.section-container > div.section-container__add-item-container {
+  padding-top: 14px;
 }
-div.table-section-container > div:last-of-type > button {
+div.section-container > div.section-container__add-item-container > button {
   gap: 7px;
   font-family: var(--font-bold);
   background-color: var(--regular-green);
@@ -71,20 +71,56 @@ div.table-section-container > div:last-of-type > button {
   padding: 14px;
   border-radius: 7px;
 }
-div.table-section-container > div:last-of-type > button:hover {
+div.section-container > div.section-container__add-item-container > button:hover {
   background-color: var(--dark-green);
 }
 
-div.table-section-container__table-container {
-  padding-top: 14px;
-  padding-bottom: 14px;
+div.section-container__data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  justify-content: space-between;
+}
+div.section-container__data-container > div {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  padding: 21px;
+  border-radius: 7px;
+  background-color: var(--primary-color);
+}
+div.section-container__data-container > div h3,
+div.section-container__data-container > div p {
+  color: white;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+div.section-container__canvas-container {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding-top: 48px;
+}
+div.section-container__canvas-container canvas {
+  height: 336px;
+}
+
+div.section-container__table-container {
   width: 100%;
   overflow-x: scroll;
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
-div.table-section-container__table-container.--off {
+div.section-container__table-container.--off {
   display: none;
 }
-div.table-section-container__table-container > table {
+div.section-container__table-container > table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 7px;
@@ -92,44 +128,44 @@ div.table-section-container__table-container > table {
   background-color: var(--primary-color);
   table-layout: auto;
 }
-div.table-section-container__table-container > table thead,
-div.table-section-container__table-container > table tbody {
+div.section-container__table-container > table thead,
+div.section-container__table-container > table tbody {
   font-size: 14px;
 }
-div.table-section-container__table-container > table thead {
+div.section-container__table-container > table thead {
   width: 100%;
   height: 41px;
   color: white;
 }
-div.table-section-container__table-container > table thead th {
+div.section-container__table-container > table thead th {
   user-select: none;
 }
-div.table-section-container__table-container > table tbody > tr {
+div.section-container__table-container > table tbody > tr {
   width: 100%;
   background-color: white;
 }
-div.table-section-container__table-container > table tbody > tr > td {
+div.section-container__table-container > table tbody > tr > td {
   height: 59.9px;
 }
-div.table-section-container__table-container > table tbody > tr > td.regular-container {
+div.section-container__table-container > table tbody > tr > td.regular-container {
   min-width: 296px;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container {
+div.section-container__table-container > table tbody > tr > td.action-container {
   width: 175px;
   min-width: 175px;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container.--no-drag-button > div > div > button:first-of-type {
+div.section-container__table-container > table tbody > tr > td.action-container.--no-drag-button > div > div > button:first-of-type {
   display: none;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container.--no-send-button > div > div > button:nth-of-type(2) {
+div.section-container__table-container > table tbody > tr > td.action-container.--no-send-button > div > div > button:nth-of-type(2) {
   display: none;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div {
+div.section-container__table-container > table tbody > tr > td.action-container > div {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,30 +173,30 @@ div.table-section-container__table-container > table tbody > tr > td.action-cont
   width: 175px;
   position: relative;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > button {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > button {
   color: var(--primary-color);
   font-size: 16.8px;
   padding: 7px;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container {
   transform: translateY(-50%);
   position: absolute;
   top: 50%;
   right: 13.3px;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--loading i.action-container__cell-info-container__loading {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--loading i.action-container__cell-info-container__loading {
   display: block;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--error i:nth-of-type(2) {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--error i:nth-of-type(2) {
   display: block;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--ok i:last-of-type {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container.--ok i:last-of-type {
   display: block;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container i {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container i {
   display: none;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container i.action-container__cell-info-container__loading {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container i.action-container__cell-info-container__loading {
   width: 16.1px;
   height: 16.1px;
   border-radius: 100%;
@@ -168,10 +204,10 @@ div.table-section-container__table-container > table tbody > tr > td.action-cont
   border-top: 2.8px solid transparent;
   animation: spinner 1.4s linear infinite forwards;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:nth-of-type(2) {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:nth-of-type(2) {
   color: red;
 }
-div.table-section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:last-of-type {
+div.section-container__table-container > table tbody > tr > td.action-container > div > div > div.action-container__action-info-container > i:last-of-type {
   color: var(--regular-green);
 }
 
@@ -312,9 +348,17 @@ div.cell-container__select-container select > option {
     display: none;
   }
 }
+@media (min-width: 600px) {
+  div.section-container__canvas-container {
+    display: flex;
+  }
+}
 @media (min-width: 1000px) {
-  div.table-section-container__table-container > table thead,
-  div.table-section-container__table-container > table tbody {
+  div.section-container__data-container {
+    flex-direction: row;
+  }
+  div.section-container__table-container > table thead,
+  div.section-container__table-container > table tbody {
     font-size: 16.8px;
   }
 }

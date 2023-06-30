@@ -42,11 +42,19 @@
 			referrerpolicy="no-referrer"
 		/>
 
+		<!--chart-->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt-br.min.js"></script>
+
 		<!--jquery-->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 		<!--scripts-->
+		<script charset="utf-8">
+			var builder = <%- JSON.stringify(builder).replace(/\\/g, '\\\\') %>
+		</script>
 		<script defer type="module" src="/admin-page/scripts/index.js"></script>
 	</head>
 	<body>
@@ -133,14 +141,51 @@
 			</div>
 		</header>
 		<main>
-			<div header-table-section class="table-section-container">
+			<div header-table-section class="section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-calendar-days"></i>
+						Overview
+					</h1>
+				</div>
+				<div class="section-container__data-container">
+					<div>
+						<h3>
+							<i class="fa-solid fa-globe"></i>
+							Acessos no site
+						</h3>
+						<p total-website-accesses>Nenhum acesso registrado ainda</p>
+					</div>
+					<div>
+						<h3>
+							<i class="fa-solid fa-pen"></i>
+							Clicks em produtos
+						</h3>
+						<p total-products-clicks>Nenhum click registrado ainda</p>
+					</div>
+					<div>
+						<h3>
+							<i class="fa-solid fa-box"></i>
+							Categoria mais clicada
+						</h3>
+						<p most-clicked-category>Nenhum click registrado ainda</p>
+					</div>
+				</div>
+				<div
+					access-history-chart-container
+					class="section-container__canvas-container"
+				>
+					<canvas></canvas>
+				</div>
+			</div>
+			<div header-table-section class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-helmet-safety"></i>
 						Cabeçalho
 					</h1>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -226,7 +271,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -297,7 +342,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -338,14 +383,14 @@
 					</table>
 				</div>
 			</div>
-			<div special-section class="table-section-container">
+			<div special-section class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-thumbtack"></i>
 						Propagandas
 					</h1>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -448,21 +493,21 @@
 						</tbody>
 					</table>
 				</div>
-				<div>
+				<div class="section-container__add-item-container">
 					<button add-item-to-table-button>
 						<i class="fa-solid fa-thumbtack"></i>
 						Add Propaganda
 					</button>
 				</div>
 			</div>
-			<div special-section class="table-section-container">
+			<div special-section class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-box"></i>
 						Categorias
 					</h1>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -533,21 +578,21 @@
 						</tbody>
 					</table>
 				</div>
-				<div>
+				<div class="section-container__add-item-container">
 					<button add-item-to-table-button>
 						<i class="fa-solid fa-box"></i>
 						Add Categoria
 					</button>
 				</div>
 			</div>
-			<div special-section class="table-section-container">
+			<div special-section class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-pen"></i>
 						Produtos
 					</h1>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -819,21 +864,21 @@
 						</tbody>
 					</table>
 				</div>
-				<div>
+				<div class="section-container__add-item-container">
 					<button add-item-to-table-button>
 						<i class="fa-solid fa-pen"></i>
 						Add Produto
 					</button>
 				</div>
 			</div>
-			<div header-table-section class="table-section-container">
+			<div header-table-section class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-shoe-prints"></i>
 						Rodapé
 					</h1>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -878,7 +923,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -918,7 +963,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -1030,7 +1075,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>
@@ -1070,7 +1115,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div table-container class="table-section-container__table-container">
+				<div table-container class="section-container__table-container">
 					<table>
 						<thead>
 							<tr>

@@ -1,5 +1,6 @@
 import {
 	getWebsite,
+	getProducts,
 	loadFileInputProperties,
 	loadPseudoInputProperties,
 	loadWhatsappProperties,
@@ -7,6 +8,10 @@ import {
 	handleTextInputRequest,
 	handleTableVisibility,
 	buildAsideMenus,
+	buildWebsiteAccesses,
+	buildProductTotalClicks,
+	buildMostClickedCategory,
+	buildWebsiteAccessesYearChart,
 	buildIcon,
 	buildLogo,
 	buildTitle,
@@ -18,6 +23,7 @@ import {
 	buildCategoriesTemplate,
 	buildProductsTemplate,
 	buildProductsTemplateCallback,
+	buildWebsiteAccessesMonthChart,
 } from './modules.js';
 
 /**
@@ -52,6 +58,83 @@ buildAsideMenus([
 		action: 'remove',
 	},
 ]);
+
+(async () => {
+	const website = await getWebsite();
+
+	const _dates = website.history.map((dateString) => {
+		const date = moment(dateString).toDate();
+		const month = moment(date).locale('pt-br').format('MMMM');
+		const year = moment(date).format('YYYY');
+		return { date, month, year };
+	});
+
+	const dates = {};
+
+	_dates.forEach((date) => {
+		const month = date.month;
+		const year = date.year;
+
+		if (!dates[year]) {
+			dates[year] = {};
+		}
+
+		if (!dates[year][month]) {
+			dates[year][month] = [];
+		}
+
+		dates[year][month].push(date);
+	});
+
+	const currentYear = new Date().getFullYear();
+
+	if (Object.keys(dates).length === 0) {
+		window.document
+			.querySelector('div[access-history-chart-container]')
+			.remove();
+
+		return;
+	}
+
+	buildWebsiteAccesses(dates[currentYear]);
+
+	const years = Object.keys(dates);
+
+	if (years.length === 1) {
+		const months = Object.keys(dates[years]);
+
+		if (months.length === 1) {
+			buildWebsiteAccessesMonthChart(dates);
+
+			return;
+		}
+	}
+
+	buildWebsiteAccessesYearChart(dates);
+})();
+
+(async () => {
+	const currentYear = new Date().getFullYear();
+
+	const products = await getProducts();
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			const newHistory = [];
+
+			product.history.forEach((date) => {
+				if (date.startsWith(currentYear)) {
+					newHistory.push(date);
+				}
+			});
+
+			product.history = newHistory;
+		});
+	});
+
+	buildProductTotalClicks(products);
+	buildMostClickedCategory(products);
+})();
 
 /**
  * Immediately invoked function expression (IIFE) that applies the 'loadFileInputProperties' function

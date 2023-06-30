@@ -83,7 +83,7 @@ async function getCategories() {
  *
  * @returns {Promise} A promise that resolves to the JSON response containing the product data.
  */
-async function getProducts() {
+export async function getProducts() {
 	return await (
 		await fetch('/admin/api/products', {
 			method: 'POST',
@@ -109,6 +109,201 @@ export function buildAsideMenus(asideButtonHandler) {
 
 	asideButtonHandler.forEach(({ selector, element, action }) => {
 		addClickHandler(selector, element, action);
+	});
+}
+
+export function buildWebsiteAccesses(dates) {
+	let accesses = 0;
+
+	Object.keys(dates).forEach((month) => {
+		accesses = accesses + dates[month].length;
+	});
+
+	if (accesses !== 0) {
+		window.document.querySelector(
+			'p[total-website-accesses]',
+		).innerText = `${accesses
+			.toString()
+			.replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			accesses > 1 ? 'acessos' : 'acesso'
+		} neste ano`;
+	}
+}
+
+export function buildProductTotalClicks(products) {
+	let clicks = 0;
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			clicks = clicks + product.history.length;
+		});
+	});
+
+	if (clicks !== 0) {
+		window.document.querySelector(
+			'p[total-products-clicks]',
+		).innerText = `${clicks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			clicks > 1 ? 'clicks' : 'click'
+		} neste ano`;
+	}
+}
+
+export function buildMostClickedCategory(products) {
+	let name = '';
+	let clicks = 0;
+
+	Object.keys(products).forEach((category) => {
+		let _clicks = 0;
+
+		products[category].forEach((product) => {
+			_clicks = _clicks + product.history.length;
+		});
+
+		if (_clicks > clicks) {
+			clicks = _clicks;
+			name = category;
+		}
+	});
+
+	if (clicks !== 0) {
+		window.document.querySelector(
+			'p[most-clicked-category]',
+		).innerText = `${name} com ${clicks
+			.toString()
+			.replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			clicks > 1 ? 'clicks' : 'click'
+		} neste ano`;
+	}
+}
+
+export function buildWebsiteAccessesMonthChart(dates) {
+	const canvas = window.document.querySelector(
+		'div[access-history-chart-container] canvas',
+	);
+	const chartCanvas = canvas.getContext('2d');
+
+	const year = Object.keys(dates);
+	const month = Object.keys(dates[year]);
+	const dataSchema = {};
+
+	dates[year][month].forEach((date) => {
+		const day = String(date.date).split(' ')[2];
+
+		if (!dataSchema[day]) {
+			dataSchema[day] = 0;
+		}
+
+		dataSchema[day]++;
+	});
+
+	const label = `Acessos no site em ${month}`;
+	const labels = Object.keys(dataSchema).sort();
+	const data = [];
+
+	labels.forEach((day) => {
+		data.push(dataSchema[day]);
+	});
+
+	const color = getComputedStyle(document.documentElement).getPropertyValue(
+		'--primary-color',
+	);
+
+	const backgroundColor = chartCanvas.createLinearGradient(0, 0, 0, 400);
+	backgroundColor.addColorStop(0, color);
+	backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+	new Chart(chartCanvas, {
+		type: 'line',
+		data: {
+			labels,
+			datasets: [
+				{
+					data,
+					label,
+					fill: true,
+					lineTension: 0.3,
+					backgroundColor,
+				},
+			],
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+		},
+	});
+}
+
+export function buildWebsiteAccessesYearChart(dates) {
+	const canvas = window.document.querySelector(
+		'div[access-history-chart-container] canvas',
+	);
+	const chartCanvas = canvas.getContext('2d');
+
+	const monthOrder = [
+		'janeiro',
+		'fevereiro',
+		'março',
+		'abril',
+		'maio',
+		'junho',
+		'julho',
+		'agosto',
+		'setembro',
+		'outubro',
+		'novembro',
+		'dezembro',
+	];
+
+	const datasets = [];
+	let labels;
+
+	Object.keys(dates).forEach((year, index) => {
+		const label = `Acessos no site em ${year}`;
+
+		const _labels = Object.keys(dates[year]).sort(
+			(a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b),
+		);
+
+		if (!labels || _labels.length > labels.length) {
+			labels = _labels;
+		}
+
+		const data = [];
+
+		_labels.forEach((month) => {
+			data.push(dates[year][month].length);
+		});
+
+		datasets.push({
+			data,
+			label,
+			lineTension: 0.3,
+			fill: true,
+			hidden: true,
+		});
+	});
+
+	const color = getComputedStyle(document.documentElement).getPropertyValue(
+		'--primary-color',
+	);
+
+	const backgroundColor = chartCanvas.createLinearGradient(0, 0, 0, 400);
+	backgroundColor.addColorStop(0, color);
+	backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+	datasets[datasets.length - 1].backgroundColor = backgroundColor;
+	datasets[datasets.length - 1].hidden = false;
+
+	new Chart(chartCanvas, {
+		type: 'line',
+		data: {
+			labels,
+			datasets,
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+		},
 	});
 }
 
@@ -1262,7 +1457,9 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 		return true;
 	} else {
 		if (status === 401) {
-			window.document.querySelector('div[warning]').classList.add('--on');
+			window.document
+				.querySelector('div[multiple-windows-warning]')
+				.classList.add('--on');
 		}
 
 		$('--error', message);
@@ -1474,4 +1671,12 @@ export function convertToMoneyFormat(number) {
 		style: 'currency',
 		currency: 'BRL',
 	});
+}
+
+export function hexToRGBA(hex, alpha) {
+	const hexValue = hex.replace('#', '');
+	const r = parseInt(hexValue.substring(0, 2), 16);
+	const g = parseInt(hexValue.substring(2, 4), 16);
+	const b = parseInt(hexValue.substring(4, 6), 16);
+	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

@@ -5,7 +5,7 @@ main {
 	background-color: var(--light-gray);
 }
 
-div.table-section-container {
+div.section-container {
 	padding: 35px 0px;
 
 	& > div:first-of-type {
@@ -14,7 +14,7 @@ div.table-section-container {
 		& > h1 {
 			@extend %big-font-size;
 			color: var(--dark-gray);
-			padding: 14px 0px;
+			padding: 14px 0px 21px 0px;
 
 			& > i {
 				color: var(--primary-color);
@@ -22,9 +22,9 @@ div.table-section-container {
 		}
 	}
 
-	& > div:last-of-type {
+	& > div.section-container__add-item-container {
 		@extend %default-padding-size;
-		padding-top: 7px;
+		padding-top: 14px;
 
 		& > button {
 			&:hover {
@@ -44,16 +44,57 @@ div.table-section-container {
 	}
 }
 
-div.table-section-container__table-container {
+div.section-container__data-container {
+	@extend %default-padding-size;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	justify-content: space-between;
+
+	& > div {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		width: 100%;
+		height: 100%;
+		padding: 21px;
+		border-radius: 7px;
+		background-color: var(--primary-color);
+
+		h3,
+		p {
+			color: white;
+			white-space: nowrap;
+			width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+}
+
+div.section-container__canvas-container {
+	@extend %default-padding-size;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding-top: 48px;
+
+	canvas {
+		height: 336px;
+	}
+}
+
+div.section-container__table-container {
 	&.--off {
 		display: none;
 	}
 
 	@extend %default-padding-size;
-	padding-top: 14px;
-	padding-bottom: 14px;
 	width: 100%;
 	overflow-x: scroll;
+	padding-top: 7px;
+	padding-bottom: 7px;
 
 	& > table {
 		width: 100%;
@@ -361,8 +402,18 @@ div.cell-container__select-container {
 	}
 }
 
+@media (min-width: 600px) {
+	div.section-container__canvas-container {
+		display: flex;
+	}
+}
+
 @media (min-width: 1000px) {
-	div.table-section-container__table-container {
+	div.section-container__data-container {
+		flex-direction: row;
+	}
+
+	div.section-container__table-container {
 		& > table {
 			thead,
 			tbody {
