@@ -108,8 +108,6 @@ const touchSliderController = [];
 			isDown = false;
 			element.classList.remove('active');
 
-			searchSliderController[index] = !isDown;
-
 			setTimeout(() => {
 				touchSliderController[index] = !isDown;
 			}, wait);

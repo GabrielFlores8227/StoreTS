@@ -299,10 +299,6 @@ export function handleSearchBar(
 					});
 
 					setTimeout(() => {
-						if (productSliderContainer.scrollLeft === 0) {
-							return;
-						}
-
 						productSliderContainer.scrollTo({
 							left:
 								productCard.getBoundingClientRect().left +
