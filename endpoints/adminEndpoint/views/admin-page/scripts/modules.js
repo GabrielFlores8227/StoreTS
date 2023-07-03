@@ -1219,11 +1219,7 @@ export function loadPseudoInputProperties(div) {
 		e.preventDefault();
 
 		var clipboardData = e.clipboardData || window.clipboardData;
-		var htmlContent = clipboardData.getData('text/html');
-
-		var tempDiv = document.createElement('div');
-		tempDiv.innerHTML = htmlContent;
-		var plainText = tempDiv.innerText;
+		var plainText = clipboardData.getData('text/plain');
 
 		document.execCommand('insertText', false, plainText);
 	});
