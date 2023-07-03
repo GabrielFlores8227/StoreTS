@@ -13,6 +13,7 @@ import {
 	buildMostClickedCategory,
 	buildWebsiteAccessesMonthChart,
 	buildWebsiteAccessesYearChart,
+	buildTopProducts,
 	buildIcon,
 	buildLogo,
 	buildTitle,
@@ -147,6 +148,7 @@ buildAsideMenus([
 
 	buildProductTotalClicks(products);
 	buildMostClickedCategory(products);
+	await buildTopProducts();
 })();
 
 /**

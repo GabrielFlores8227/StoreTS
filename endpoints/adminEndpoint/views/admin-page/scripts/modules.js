@@ -196,6 +196,91 @@ export function buildMostClickedCategory(products) {
 }
 
 /**
+ * Builds the top products list based on the provided 'products' object.
+ * It iterates through each category and sorts the products based on the number of clicks.
+ * The top products are added to the 'topList' array, limited to 'max' number of products.
+ * The template is used to create table rows for each top product, and the table is updated in the DOM.
+ */
+export async function buildTopProducts() {
+	const products = await getProducts();
+
+	const topList = [];
+	const max = 10;
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			product.category = category;
+			product.history = product.history.length;
+
+			if (product.history === 0) {
+				return;
+			}
+
+			if (topList.length === 0) {
+				topList.push(product);
+
+				return;
+			}
+
+			for (let c = 0; c < topList.length; c++) {
+				let item = topList[c];
+
+				if (product.history > item.history) {
+					topList.splice(c, 0, product);
+
+					break;
+				}
+
+				if (product.history === item.history) {
+					topList.splice(c + 1, 0, product);
+
+					break;
+				}
+
+				if (topList.length < max && c === topList.length - 1) {
+					topList.push(product);
+
+					break;
+				}
+			}
+		});
+	});
+
+	if (topList.length >= max) {
+		topList.splice(max);
+	}
+
+	const template = window.document.querySelector(
+		'template[top-products-template]',
+	);
+
+	const templateParent = template.parentElement;
+	const oldItems = templateParent.querySelectorAll('tr[table-row]');
+
+	topList.forEach((product, index) => {
+		const templateUsable = template.content.cloneNode(true).children[0];
+
+		templateUsable.setAttribute('table-row', '');
+
+		templateUsable.querySelector('p[top-position]').innerText = `#${index + 1}`;
+		templateUsable.querySelector(
+			'p[product-name]',
+		).innerText = `${product.name} (${product.category})`;
+		templateUsable.querySelector('p[clicks-number]').innerText = `${
+			product.history
+		} ${product.history > 1 ? 'clicks' : 'click'}`;
+
+		if (oldItems[index]) {
+			templateParent.replaceChild(templateUsable, oldItems[index]);
+		} else {
+			templateParent.append(templateUsable);
+		}
+	});
+
+	handleTableVisibility();
+}
+
+/**
  * Builds a line chart to display the website accesses for a specific month based on the provided 'dates' object.
  * It retrieves the canvas element and chart context from the DOM.
  * It processes the data in 'dates' to create the chart dataset.
@@ -296,7 +381,7 @@ export function buildWebsiteAccessesYearChart(dates) {
 	const datasets = [];
 	let labels;
 
-	Object.keys(dates).forEach((year, index) => {
+	Object.keys(dates).forEach((year) => {
 		const label = `Acessos no site em ${year}`;
 
 		const _labels = Object.keys(dates[year]).sort(
@@ -942,6 +1027,8 @@ export async function buildProducts(isLastItemNew = false) {
 		});
 	};
 
+	const deleteItemCallback = async () => await buildTopProducts();
+
 	buildComplexTable(
 		apiListBuilder,
 		sectionName,
@@ -950,6 +1037,7 @@ export async function buildProducts(isLastItemNew = false) {
 		reorderItemsApiUrl,
 		{
 			isLastItemNew,
+			deleteItemCallback,
 		},
 	);
 }
@@ -1590,7 +1678,7 @@ export async function handleTextInputRequest(
  * Handles the visibility of tables in special sections.
  */
 export function handleTableVisibility() {
-	window.document.querySelectorAll('div[special-section]').forEach((div) => {
+	window.document.querySelectorAll('div[table-visibility]').forEach((div) => {
 		const rows = div.querySelectorAll('tr[table-row]');
 
 		if (rows.length === 0) {

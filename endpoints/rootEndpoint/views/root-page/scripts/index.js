@@ -81,6 +81,7 @@ const touchSliderController = [];
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
+
 			touchSliderController[index] = !isDown;
 		});
 
@@ -96,10 +97,11 @@ const touchSliderController = [];
 
 		element.addEventListener('mousedown', (e) => {
 			isDown = true;
-			touchSliderController[index] = !isDown;
 			element.classList.add('active');
 			startX = e.pageX - element.offsetLeft;
 			scrollLeft = element.scrollLeft;
+
+			touchSliderController[index] = !isDown;
 		});
 
 		element.addEventListener('mouseleave', () => {

@@ -141,7 +141,7 @@
 			</div>
 		</header>
 		<main>
-			<div header-table-section class="section-container">
+			<div table-visibility class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-calendar-days"></i>
@@ -177,6 +177,50 @@
 				>
 					<canvas></canvas>
 				</div>
+				<div table-container class="section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Top 10 Produtos</th>
+								<th>Número de Clicks Neste Ano</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template top-products-template>
+								<tr>
+									<td class="ghost-container">
+										<div class="cell-container">
+											<div class="cell-container__content-container">
+												<div>
+													<p top-position></p>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td class="regular-container">
+										<div class="cell-container">
+											<div class="cell-container__content-container">
+												<div>
+													<p product-name></p>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td class="regular-container">
+										<div class="cell-container">
+											<div class="cell-container__content-container">
+												<div>
+													<p clicks-number></p>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
 			</div>
 			<div header-table-section class="section-container">
 				<div>
@@ -205,7 +249,7 @@
 									>
 										<div
 											file-input-container
-											class="cell-container__input-container cell-container__file-input-container"
+											class="cell-container__content-container cell-container__file-input-container"
 										>
 											<label for="icon">
 												<i class="fa-solid fa-image"></i>
@@ -241,7 +285,7 @@
 									>
 										<div
 											file-input-container
-											class="cell-container__input-container cell-container__file-input-container"
+											class="cell-container__content-container cell-container__file-input-container"
 										>
 											<label for="logo">
 												<i class="fa-solid fa-image"></i>
@@ -290,7 +334,7 @@
 										for="title"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -322,7 +366,7 @@
 										for="color"
 									>
 										<div
-											class="cell-container__input-container cell-container__color-input-container"
+											class="cell-container__content-container cell-container__color-input-container"
 										>
 											<input type="color" value="<%= builder.header.color %>" />
 										</div>
@@ -360,7 +404,7 @@
 										for="description"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-area-container"
+											class="cell-container__content-container cell-container__text-area-container"
 										>
 											<textarea maxlength="255" placeholder="Descrição">
 <%= builder.header.description %></textarea
@@ -383,7 +427,7 @@
 					</table>
 				</div>
 			</div>
-			<div special-section class="section-container">
+			<div special-section table-visibility class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-thumbtack"></i>
@@ -434,7 +478,7 @@
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
-												class="cell-container__input-container cell-container__file-input-container"
+												class="cell-container__content-container cell-container__file-input-container"
 											>
 												<label>
 													<i class="fa-solid fa-image"></i>
@@ -463,7 +507,7 @@
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
-												class="cell-container__input-container cell-container__file-input-container"
+												class="cell-container__content-container cell-container__file-input-container"
 											>
 												<label>
 													<i class="fa-solid fa-image"></i>
@@ -500,7 +544,7 @@
 					</button>
 				</div>
 			</div>
-			<div special-section class="section-container">
+			<div special-section table-visibility class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-box"></i>
@@ -549,7 +593,7 @@
 									<td width="100%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													pseudo-input
@@ -585,7 +629,7 @@
 					</button>
 				</div>
 			</div>
-			<div special-section class="section-container">
+			<div special-section table-visibility class="section-container">
 				<div>
 					<h1>
 						<i class="fa-solid fa-pen"></i>
@@ -638,11 +682,11 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
-												class="cell-container__input-container cell-container__file-input-container"
+												class="cell-container__content-container cell-container__file-input-container"
 											>
 												<label>
 													<i class="fa-solid fa-image"></i>
@@ -665,10 +709,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__select-container"
+												class="cell-container__content-container cell-container__select-container"
 											>
 												<select product-category product-categories-select>
 													<template>
@@ -691,10 +735,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-name
@@ -719,10 +763,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-price
@@ -747,10 +791,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-off
@@ -775,10 +819,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-installment
@@ -803,10 +847,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-whatsapp
@@ -831,10 +875,10 @@
 											</div>
 										</div>
 									</td>
-									<td width="12%" class="regular-container">
+									<td width="14.2%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
-												class="cell-container__input-container cell-container__text-input-container"
+												class="cell-container__content-container cell-container__text-input-container"
 											>
 												<div
 													product-message
@@ -896,7 +940,7 @@
 										for="title"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -941,7 +985,7 @@
 										for="text"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-area-container"
+											class="cell-container__content-container cell-container__text-area-container"
 										>
 											<textarea maxlength="255" placeholder="Texto">
 <%= builder.footer.text %></textarea
@@ -983,7 +1027,7 @@
 										for="whatsapp"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -1016,7 +1060,7 @@
 										for="facebook"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -1048,7 +1092,7 @@
 										for="instagram"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -1093,7 +1137,7 @@
 										for="location"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-area-container"
+											class="cell-container__content-container cell-container__text-area-container"
 										>
 											<textarea maxlength="255" placeholder="Localização">
 <%= builder.footer.location %></textarea
@@ -1134,7 +1178,7 @@
 										for="store-info"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input
@@ -1166,7 +1210,7 @@
 										for="complete-store-info"
 									>
 										<div
-											class="cell-container__input-container cell-container__text-input-container"
+											class="cell-container__content-container cell-container__text-input-container"
 										>
 											<div
 												pseudo-input

@@ -79,6 +79,7 @@ div.section-container__canvas-container {
 	align-items: center;
 	justify-content: center;
 	padding-top: 48px;
+	padding-bottom: 48px;
 
 	canvas {
 		height: 336px;
@@ -131,10 +132,13 @@ div.section-container__table-container {
 						min-width: 296px;
 					}
 
+					&.ghost-container,
 					&.action-container {
 						width: 175px;
 						min-width: 175px;
+					}
 
+					&.action-container {
 						&.--no-drag-button {
 							& > div {
 								& > div {
@@ -282,7 +286,7 @@ div.cell-container {
 	}
 }
 
-div.cell-container__input-container {
+div.cell-container__content-container {
 	display: flex;
 	gap: 7px;
 	align-items: center;
