@@ -141,7 +141,15 @@ const touchSliderController = [];
 			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 20 : 10;
 
 		const duration = () =>
-			((element.scrollWidth - element.clientWidth) * increment()) / divider;
+			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+				? ((element.scrollWidth - element.clientWidth) * (increment() + 5)) /
+				  divider
+				: ((element.scrollWidth - element.clientWidth) * increment()) / divider;
+
+		const intervalTime = () =>
+			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+				? duration() / 2
+				: duration() / 1.5;
 
 		const interval = (duration) =>
 			setInterval(() => {
@@ -175,7 +183,7 @@ const touchSliderController = [];
 					duration,
 					increment(),
 				);
-			}, duration / 1.5);
+			}, intervalTime());
 
 		let intervalController = interval(duration());
 
