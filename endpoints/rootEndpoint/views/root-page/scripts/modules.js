@@ -222,7 +222,7 @@ export function handlePropagandaScroll(
  * @param {Event} event - The search event object.
  * @param {Object} sliderController - The controller object for the sliders.
  */
-export function handleSearch(
+export function handleSearchBar(
 	searchContainer,
 	input,
 	templateParent,
@@ -327,14 +327,16 @@ export function handleSearch(
 /**
  * Scrolls the slider element to a specified position over a given duration.
  *
- * @param sliderController - Array of slider controller states.
+ * @param sliderController1 - Array of slider controller states.
+ * @param sliderController2 - Array of slider controller states.
  * @param index - The index of the slider element.
  * @param element - The slider element to scroll.
  * @param position - The target position to scroll to.
  * @param duration - The duration of the scrolling animation.
  */
 export function scrollToPosition(
-	sliderController,
+	sliderController1,
+	sliderController2,
 	index,
 	element,
 	position,
@@ -348,7 +350,7 @@ export function scrollToPosition(
 	const animateScroll = function () {
 		currentTime += increment;
 
-		if (!sliderController[index]) {
+		if (!sliderController1[index] || !sliderController2[index]) {
 			return;
 		}
 

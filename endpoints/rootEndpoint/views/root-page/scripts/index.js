@@ -3,7 +3,7 @@ import {
 	buildAsideMenus,
 	renderSavedProducts,
 	handleProductsGrid,
-	handleSearch,
+	handleSearchBar,
 	handlePropagandaScroll,
 	scrollToPosition,
 	convertToMoneyFormat,
@@ -51,14 +51,15 @@ import {
  * The 'handleProductsGrid' function is called to handle the products grid for each slider element.
  *
  * - The 'sliders' variable stores all elements with the attribute 'product-slider-container'.
- * - The 'sliderController' array is used to track the state of each slider.
+ * - The 'touchSliderController' array is used to track the state of each slider.
  * - Variables like 'isDown', 'startX', 'position', 'left', and 'scrollLeft' keep track of slider state and position.
  * - Event listeners are added to handle touch and mouse events, including movement, click, and release.
  * - An interval is set up to continuously scroll the sliders when not being interacted with.
  * - The 'handleProductsGrid' function is called to handle the products grid layout within each slider.
  * - A resize event listener is added to handle window resizing, applying necessary actions to the sliders.
  */
-const sliderController = [];
+const searchSliderController = [];
+const touchSliderController = [];
 
 (() => {
 	const sliders = window.document.querySelectorAll(
@@ -68,7 +69,8 @@ const sliderController = [];
 	sliders.forEach((element, index) => {
 		handleProductsGrid(element);
 
-		sliderController.push(true);
+		searchSliderController.push(true);
+		touchSliderController.push(true);
 
 		let isDown = false;
 		let startX;
@@ -79,20 +81,22 @@ const sliderController = [];
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
-			sliderController[index] = !isDown;
+			touchSliderController[index] = !isDown;
 		});
 
 		element.addEventListener('touchend', () => {
 			isDown = false;
 
+			searchSliderController[index] = !isDown;
+
 			setTimeout(() => {
-				sliderController[index] = !isDown;
+				touchSliderController[index] = !isDown;
 			}, wait);
 		});
 
 		element.addEventListener('mousedown', (e) => {
 			isDown = true;
-			sliderController[index] = !isDown;
+			touchSliderController[index] = !isDown;
 			element.classList.add('active');
 			startX = e.pageX - element.offsetLeft;
 			scrollLeft = element.scrollLeft;
@@ -102,8 +106,10 @@ const sliderController = [];
 			isDown = false;
 			element.classList.remove('active');
 
+			searchSliderController[index] = !isDown;
+
 			setTimeout(() => {
-				sliderController[index] = !isDown;
+				touchSliderController[index] = !isDown;
 			}, wait);
 		});
 
@@ -111,8 +117,10 @@ const sliderController = [];
 			isDown = false;
 			element.classList.remove('active');
 
+			searchSliderController[index] = !isDown;
+
 			setTimeout(() => {
-				sliderController[index] = !isDown;
+				touchSliderController[index] = !isDown;
 			}, wait);
 		});
 
@@ -158,7 +166,8 @@ const sliderController = [];
 					: (position = element.scrollLeft + current);
 
 				scrollToPosition(
-					sliderController,
+					searchSliderController,
+					touchSliderController,
 					index,
 					element,
 					position,
@@ -170,10 +179,10 @@ const sliderController = [];
 		let intervalController = interval(duration());
 
 		window.addEventListener('resize', () => {
-			sliderController[index] = false;
+			touchSliderController[index] = false;
 			clearInterval(intervalController);
 			intervalController = interval(duration());
-			sliderController[index] = true;
+			touchSliderController[index] = true;
 
 			element.classList.remove('--special');
 			handleProductsGrid(element);
@@ -187,13 +196,13 @@ const sliderController = [];
  * This block of code sets up search functionality for multiple search containers on a web page.
  * It selects all elements with the attribute 'search-container' and iterates over each search container.
  * For each search container, it attaches event listeners to the input field for handling search functionality.
- * The 'handleSearch' function is called to perform the search and update the search results.
+ * The 'handleSearchBar' function is called to perform the search and update the search results.
  *
  * - The 'products' variable is destructured from the 'builder' object.
  * - The code selects all elements with the attribute 'search-container' and iterates over them.
  * - Event listeners are added to the input field for 'input', 'focus', and 'focusout' events.
- * - When the input value changes or the input field gains focus, the 'handleSearch' function is called.
- * - The 'handleSearch' function is provided with the necessary parameters for performing the search.
+ * - When the input value changes or the input field gains focus, the 'handleSearchBar' function is called.
+ * - The 'handleSearchBar' function is provided with the necessary parameters for performing the search.
  * - When the input field loses focus, a timeout is set to remove search results and reset the search container after 120 milliseconds.
  */
 (() => {
@@ -208,24 +217,24 @@ const sliderController = [];
 			);
 
 			input.addEventListener('input', (event) => {
-				handleSearch(
+				handleSearchBar(
 					searchContainer,
 					input,
 					templateParent,
 					products,
 					event,
-					sliderController,
+					searchSliderController,
 				);
 			});
 
 			input.addEventListener('focus', (event) => {
-				handleSearch(
+				handleSearchBar(
 					searchContainer,
 					input,
 					templateParent,
 					products,
 					event,
-					sliderController,
+					searchSliderController,
 				);
 			});
 
