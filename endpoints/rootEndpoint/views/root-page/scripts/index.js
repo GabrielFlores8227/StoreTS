@@ -51,7 +51,7 @@ import {
  * The 'handleProductsGrid' function is called to handle the products grid for each slider element.
  *
  * - The 'sliders' variable stores all elements with the attribute 'product-slider-container'.
- * - The 'touchSliderController' array is used to track the state of each slider.
+ * - The 'searchSliderController' array and 'touchSliderController' array is used to track the state of each slider.
  * - Variables like 'isDown', 'startX', 'position', 'left', and 'scrollLeft' keep track of slider state and position.
  * - Event listeners are added to handle touch and mouse events, including movement, click, and release.
  * - An interval is set up to continuously scroll the sliders when not being interacted with.
@@ -141,9 +141,7 @@ const touchSliderController = [];
 			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 20 : 10;
 
 		const duration = () =>
-			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-				? ((element.scrollWidth - element.clientWidth) * 25) / divider
-				: ((element.scrollWidth - element.clientWidth) * increment()) / divider;
+			((element.scrollWidth - element.clientWidth) * increment()) / divider;
 
 		const interval = (duration) =>
 			setInterval(() => {
@@ -151,11 +149,14 @@ const touchSliderController = [];
 					return;
 				}
 
-				if (element.scrollLeft === 0) {
+				if (Math.ceil(element.scrollLeft) === 0) {
 					left = false;
 				}
 
-				if (element.scrollLeft >= element.scrollWidth - element.clientWidth) {
+				if (
+					Math.ceil(element.scrollLeft) >=
+					element.scrollWidth - element.clientWidth
+				) {
 					left = true;
 				}
 
@@ -174,7 +175,7 @@ const touchSliderController = [];
 					duration,
 					increment(),
 				);
-			}, duration - duration / 2);
+			}, duration / 1.5);
 
 		let intervalController = interval(duration());
 
