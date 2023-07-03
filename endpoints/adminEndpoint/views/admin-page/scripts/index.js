@@ -11,6 +11,7 @@ import {
 	buildWebsiteAccesses,
 	buildProductTotalClicks,
 	buildMostClickedCategory,
+	buildWebsiteAccessesMonthChart,
 	buildWebsiteAccessesYearChart,
 	buildIcon,
 	buildLogo,
@@ -23,7 +24,6 @@ import {
 	buildCategoriesTemplate,
 	buildProductsTemplate,
 	buildProductsTemplateCallback,
-	buildWebsiteAccessesMonthChart,
 } from './modules.js';
 
 /**
@@ -59,6 +59,13 @@ buildAsideMenus([
 	},
 ]);
 
+/**
+ * Immediately invoked function expression (IIFE) that retrieves the website data asynchronously using the 'getWebsite' function.
+ * It processes the retrieved data to generate a formatted 'dates' object, grouping the history dates by year and month.
+ * Based on the processed data, it dynamically builds website access charts.
+ * If there are no valid dates available, it removes the access chart container element from the DOM.
+ * The function follows the pattern of an IIFE for encapsulation and immediate execution.
+ */
 (async () => {
 	const website = await getWebsite();
 
@@ -113,6 +120,12 @@ buildAsideMenus([
 	buildWebsiteAccessesYearChart(dates);
 })();
 
+/**
+ * Immediately invoked function expression (IIFE) that retrieves the current year and the products asynchronously using the 'getProducts' function.
+ * It filters the product history to keep only the dates from the current year.
+ * After filtering, it calls functions to build the total clicks for each product and determine the most clicked category.
+ * The function follows the pattern of an IIFE for encapsulation and immediate execution.
+ */
 (async () => {
 	const currentYear = new Date().getFullYear();
 

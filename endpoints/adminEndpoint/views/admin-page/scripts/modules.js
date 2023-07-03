@@ -112,6 +112,12 @@ export function buildAsideMenus(asideButtonHandler) {
 	});
 }
 
+/**
+ * Calculates the total website accesses based on the provided 'dates' object.
+ * It iterates over each month in the 'dates' object and adds up the number of accesses.
+ * If there are accesses, it updates the corresponding paragraph element in the DOM to display the total accesses for the current year.
+ * @param {Object} dates - The dates object containing website access data grouped by month.
+ */
 export function buildWebsiteAccesses(dates) {
 	let accesses = 0;
 
@@ -130,6 +136,12 @@ export function buildWebsiteAccesses(dates) {
 	}
 }
 
+/**
+ * Calculates the total clicks for all products based on the provided 'products' object.
+ * It iterates over each category and product in the 'products' object and adds up the number of clicks from their respective history arrays.
+ * If there are clicks, it updates the corresponding paragraph element in the DOM to display the total clicks for the current year.
+ * @param {Object} products - The products object containing product data grouped by category.
+ */
 export function buildProductTotalClicks(products) {
 	let clicks = 0;
 
@@ -148,6 +160,13 @@ export function buildProductTotalClicks(products) {
 	}
 }
 
+/**
+ * Determines the most clicked category based on the provided 'products' object.
+ * It iterates over each category and calculates the total clicks by summing up the number of clicks from all products within each category.
+ * It keeps track of the category with the highest number of clicks and updates the 'name' and 'clicks' variables accordingly.
+ * If there are clicks, it updates the corresponding paragraph element in the DOM to display the most clicked category and the total clicks for the current year.
+ * @param {Object} products - The products object containing product data grouped by category.
+ */
 export function buildMostClickedCategory(products) {
 	let name = '';
 	let clicks = 0;
@@ -176,6 +195,14 @@ export function buildMostClickedCategory(products) {
 	}
 }
 
+/**
+ * Builds a line chart to display the website accesses for a specific month based on the provided 'dates' object.
+ * It retrieves the canvas element and chart context from the DOM.
+ * It processes the data in 'dates' to create the chart dataset.
+ * It creates a linear gradient for the chart's background color using the primary color defined in the CSS.
+ * It initializes a new Chart instance with the provided data and options.
+ * @param {Object} dates - The dates object containing website access data for a specific month.
+ */
 export function buildWebsiteAccessesMonthChart(dates) {
 	const canvas = window.document.querySelector(
 		'div[access-history-chart-container] canvas',
@@ -233,6 +260,18 @@ export function buildWebsiteAccessesMonthChart(dates) {
 	});
 }
 
+/**
+ * Builds a line chart to display the website accesses for each month in a specific year based on the provided 'dates' object.
+ * It retrieves the canvas element and chart context from the DOM.
+ * It defines the order of months in Portuguese.
+ * It iterates over the 'dates' object to create the chart datasets for each year.
+ * It determines the labels based on the order of months and the available data.
+ * It creates the chart datasets with the corresponding data, labels, and options.
+ * It creates a linear gradient for the last dataset's background color using the primary color defined in the CSS.
+ * It sets the last dataset to be visible in the chart.
+ * It initializes a new Chart instance with the provided data and options.
+ * @param {Object} dates - The dates object containing website access data for each month in a specific year.
+ */
 export function buildWebsiteAccessesYearChart(dates) {
 	const canvas = window.document.querySelector(
 		'div[access-history-chart-container] canvas',
@@ -359,7 +398,6 @@ export async function buildColor() {
 			dataset.backgroundColor = backgroundColor;
 		});
 
-		// Update the chart
 		chart.update();
 	});
 }
@@ -1136,9 +1174,8 @@ export async function buildProductsTemplateCallback() {
 /**
  * Handles the cursor index within a pseudo input element.
  * @param {HTMLDivElement} div - The pseudo input element.
- * @param {number} [index] - The optional cursor index to set. If not provided or exceeds the div's text length, the index is set to the end of the text.
  */
-export function handlePseudoInputCursorIndex(div) {
+function handlePseudoInputCursorIndex(div) {
 	const selection = window.getSelection();
 	const range = document.createRange();
 	const index = div.innerText.length;
@@ -1215,7 +1252,7 @@ export function loadPseudoInputProperties(div) {
  * Formats the WhatsApp input value based on its length and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The WhatsApp input element.
  */
-export function formatWhatsapp(inputElement) {
+function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
@@ -1243,7 +1280,7 @@ export function formatWhatsapp(inputElement) {
  * Formats the discount percentage input value and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The discount percentage input element.
  */
-export function formatOff(inputElement) {
+function formatOff(inputElement) {
 	let value = inputElement.innerText.replace(/\D/g, '');
 
 	if (value === '') {
@@ -1267,7 +1304,7 @@ export function formatOff(inputElement) {
  * Formats the price input value and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The price input element.
  */
-export function formatPrice(inputElement) {
+function formatPrice(inputElement) {
 	const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 	if (value.length <= 3) {
@@ -1333,7 +1370,7 @@ export function loadWhatsappProperties(div) {
  * Loads product input properties and adds event listeners to handle input and formatting.
  * @param {HTMLElement} template - The product template element.
  */
-export function loadProductInputsProperties(template) {
+function loadProductInputsProperties(template) {
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
 		const key = generateRandomString(30);
 
@@ -1392,7 +1429,7 @@ export function loadProductInputsProperties(template) {
  * @param {string | undefined} contentType - The content type of the request.
  * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
  */
-export async function handleActionRequest(
+async function handleActionRequest(
 	actionContainer,
 	url,
 	method,
@@ -1696,14 +1733,23 @@ async function handleConfirmCategoryDeletion(category, count) {
  * @param {number} number - The number to be converted.
  * @returns {string} - The number in the Brazilian currency format.
  */
-export function convertToMoneyFormat(number) {
+function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {
 		style: 'currency',
 		currency: 'BRL',
 	});
 }
 
-export function hexToRGBA(hex, alpha) {
+/**
+ * Converts a hexadecimal color value to RGBA format with the specified alpha value.
+ * It removes the '#' character from the beginning of the hex string.
+ * It extracts the red, green, and blue values from the hex string and converts them to decimal.
+ * It constructs and returns the RGBA string with the provided alpha value.
+ * @param {string} hex - The hexadecimal color value to convert.
+ * @param {number} alpha - The alpha value for the RGBA format (between 0 and 1).
+ * @returns {string} The RGBA color value.
+ */
+function hexToRGBA(hex, alpha) {
 	const hexValue = hex.replace('#', '');
 	const r = parseInt(hexValue.substring(0, 2), 16);
 	const g = parseInt(hexValue.substring(2, 4), 16);
