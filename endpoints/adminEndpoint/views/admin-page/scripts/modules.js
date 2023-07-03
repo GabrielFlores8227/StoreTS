@@ -345,6 +345,23 @@ export async function buildColor() {
 	const { color } = await getHeader();
 
 	window.document.documentElement.style.setProperty('--primary-color', color);
+
+	window.document.querySelectorAll('canvas').forEach((canvas) => {
+		const ctx = canvas.getContext('2d');
+		const chart = Chart.getChart(ctx);
+
+		const backgroundColor = ctx.createLinearGradient(0, 0, 0, 400);
+		backgroundColor.addColorStop(0, color);
+		backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+		chart.data.datasets.forEach(function (dataset) {
+			dataset.borderColor = backgroundColor;
+			dataset.backgroundColor = backgroundColor;
+		});
+
+		// Update the chart
+		chart.update();
+	});
 }
 
 /**
