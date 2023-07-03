@@ -81,6 +81,7 @@ div.section-container__data-container {
   align-items: center;
   gap: 14px;
   justify-content: space-between;
+  padding-bottom: 21px;
 }
 div.section-container__data-container > div {
   display: flex;
@@ -106,7 +107,7 @@ div.section-container__canvas-container {
   align-items: center;
   justify-content: center;
   padding-top: 48px;
-  padding-bottom: 48px;
+  padding-bottom: 21px;
 }
 div.section-container__canvas-container canvas {
   height: 336px;
