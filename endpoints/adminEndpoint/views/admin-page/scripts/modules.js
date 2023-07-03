@@ -1161,6 +1161,19 @@ export function loadFileInputProperties(div) {
 export function loadPseudoInputProperties(div) {
 	let lastInput = div.innerText;
 
+	div.addEventListener('paste', (e) => {
+		e.preventDefault();
+
+		var clipboardData = e.clipboardData || window.clipboardData;
+		var htmlContent = clipboardData.getData('text/html');
+
+		var tempDiv = document.createElement('div');
+		tempDiv.innerHTML = htmlContent;
+		var plainText = tempDiv.innerText;
+
+		document.execCommand('insertText', false, plainText);
+	});
+
 	div.addEventListener('input', () => {
 		const value = div.innerText;
 		const maxLength = Number(div.getAttribute('maxlength'));
