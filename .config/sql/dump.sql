@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `category` (`name`)
@@ -78,8 +78,8 @@ CREATE TABLE `footer` (
   `title` varchar(50) NOT NULL,
   `text` varchar(255) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
-  `facebook` varchar(30) NOT NULL,
-  `instagram` varchar(30) NOT NULL,
+  `facebook` varchar(70) NOT NULL,
+  `instagram` varchar(70) NOT NULL,
   `location` text NOT NULL,
   `store-info` varchar(50) NOT NULL,
   `complete-store-info` varchar(100) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `header` (
   `id` enum('only') NOT NULL DEFAULT 'only',
   `icon` varchar(4) NOT NULL,
   `logo` varchar(4) NOT NULL,
-  `title` varchar(30) NOT NULL,
+  `title` varchar(70) NOT NULL,
   `description` varchar(255) NOT NULL,
   `color` varchar(7) NOT NULL,
   UNIQUE KEY `id` (`id`)
@@ -135,11 +135,11 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` int NOT NULL,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(70) NOT NULL,
   `image` varchar(255) NOT NULL,
   `price` float NOT NULL,
   `off` float NOT NULL,
-  `installment` varchar(30) NOT NULL,
+  `installment` varchar(70) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
   `message` varchar(255) NOT NULL,
   `history` json DEFAULT NULL,

@@ -15,7 +15,7 @@ class Support {
 
 				title = title.trim();
 
-				Admin.checkLength(title, 1, 30, 'título');
+				Admin.checkLength(title, 1, 70, 'título');
 			},
 			description: (description: string) => {
 				Admin.checkType(description, 'string', 'descrição');
@@ -55,7 +55,7 @@ class Support {
 
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'nome');
+				Admin.checkLength(name, 1, 70, 'nome');
 
 				let query;
 
@@ -105,7 +105,7 @@ class Support {
 
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'nome');
+				Admin.checkLength(name, 1, 70, 'nome');
 			},
 			price: (price: string) => {
 				Admin.checkType(price, 'string', 'preço');
@@ -130,7 +130,7 @@ class Support {
 
 				installment = installment.trim();
 
-				Admin.checkLength(installment, 0, 30, 'parcelas');
+				Admin.checkLength(installment, 0, 70, 'parcelas');
 			},
 			whatsapp: (whatsapp: string) => {
 				Admin.checkType(whatsapp, 'string', 'whatsapp');
@@ -176,7 +176,7 @@ class Support {
 
 				facebook = facebook.trim();
 
-				Admin.checkLength(facebook, 2, 30, 'facebook');
+				Admin.checkLength(facebook, 2, 70, 'facebook');
 				Admin.checkSubstring(facebook, '@', true, true, 'facebook');
 				Admin.checkSubstring(facebook, ' ', false, false, 'facebook');
 				Admin.checkSpecialCharacters(
@@ -189,7 +189,7 @@ class Support {
 
 				instagram = instagram.trim();
 
-				Admin.checkLength(instagram, 2, 30, 'instagram');
+				Admin.checkLength(instagram, 2, 70, 'instagram');
 				Admin.checkSubstring(instagram, '@', true, true, 'instagram');
 				Admin.checkSubstring(instagram, ' ', false, false, 'instagram');
 				Admin.checkSpecialCharacters(
@@ -245,7 +245,11 @@ class Support {
 		},
 		products: {
 			image: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'inside', { width: 1080, height: 1080 }),
+				await this.sharpFile(file, 'inside', {
+					width: 1080,
+					height: 1080,
+					trim: true,
+				}),
 		},
 	};
 
