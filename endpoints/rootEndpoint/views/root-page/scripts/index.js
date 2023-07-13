@@ -192,7 +192,7 @@ const touchSliderController = [];
 						behavior: 'smooth',
 					});
 				},
-				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 4000 : 3000,
+				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 5000 : 4000,
 			);
 		};
 
