@@ -288,7 +288,6 @@ export function handleSearchBar(
 					);
 
 					window.scrollTo({
-						left: 0,
 						top:
 							productCard.getBoundingClientRect().top +
 							window.scrollY -
@@ -305,7 +304,6 @@ export function handleSearchBar(
 								productSliderContainer.scrollLeft -
 								window.innerWidth / 2 +
 								productCard.offsetWidth / 2,
-							top: 0,
 							behavior: 'smooth',
 						});
 					}, 2000);
@@ -318,56 +316,6 @@ export function handleSearchBar(
 
 	searchContainer.classList.toggle('--on', numberOfSelectedProducts > 0);
 	input.classList.toggle('--none', numberOfSelectedProducts === 0);
-}
-
-/**
- * Scrolls the slider element to a specified position over a given duration.
- *
- * @param sliderController1 - Array of slider controller states.
- * @param sliderController2 - Array of slider controller states.
- * @param index - The index of the slider element.
- * @param element - The slider element to scroll.
- * @param position - The target position to scroll to.
- * @param duration - The duration of the scrolling animation.
- */
-export function scrollToPosition(
-	sliderController1,
-	sliderController2,
-	index,
-	element,
-	position,
-	duration,
-	increment,
-) {
-	const start = element.scrollLeft;
-	const change = position - start;
-	let currentTime = 0;
-
-	const animateScroll = function () {
-		currentTime += increment;
-
-		if (!sliderController1[index] || !sliderController2[index]) {
-			return;
-		}
-
-		const linearEase = linearInterpolation(
-			currentTime,
-			start,
-			change,
-			duration,
-		);
-		element.scrollLeft = linearEase;
-
-		if (currentTime < duration) {
-			requestAnimationFrame(animateScroll);
-		}
-	};
-
-	const linearInterpolation = function (t, b, c, d) {
-		return c * (t / d) + b;
-	};
-
-	animateScroll();
 }
 
 /**

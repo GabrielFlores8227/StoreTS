@@ -5,7 +5,6 @@ import {
 	handleProductsGrid,
 	handleSearchBar,
 	handlePropagandaScroll,
-	scrollToPosition,
 	convertToMoneyFormat,
 } from './modules.js';
 
@@ -75,7 +74,7 @@ const touchSliderController = [];
 		let isDown = false;
 		let startX;
 		let scrollLeft;
-		const wait = 5000;
+		const wait = 20000;
 		element.scrollLeft =
 			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
 
@@ -130,71 +129,97 @@ const touchSliderController = [];
 			const x = e.pageX - element.offsetLeft;
 			const walk = x - startX;
 			element.scrollLeft = scrollLeft - walk;
-			position = element.scrollLeft;
 		});
 
-		const divider = 7;
-		let position = element.scrollLeft;
-		let left;
+		let left = false;
+		let intervalController;
 
-		const increment = () =>
-			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 20 : 10;
+		const setElementInterval = () => {
+			intervalController = setInterval(
+				() => {
+					if (
+						window.document.hidden ||
+						isDown ||
+						!touchSliderController[index] ||
+						!searchSliderController[index]
+					) {
+						return;
+					}
 
-		const duration = () =>
-			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-				? ((element.scrollWidth - element.clientWidth) * (increment() + 5)) /
-				  divider
-				: ((element.scrollWidth - element.clientWidth) * increment()) / divider;
+					const children = Array.from(element.children);
 
-		const intervalTime = () =>
-			/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-				? duration() / 2.5
-				: duration() / 2;
+					const containerMiddle = element.scrollLeft + element.offsetWidth / 2;
 
-		const interval = (duration) =>
-			setInterval(() => {
-				if (isDown) {
-					return;
-				}
+					let closestElement = null;
+					let closestDistance = Infinity;
+					let closestIndex = -1;
 
-				if (Math.ceil(element.scrollLeft) === 0) {
-					left = false;
-				}
+					for (let i = 0; i < children.length; i++) {
+						const child = children[i];
 
-				if (
-					Math.ceil(element.scrollLeft) >=
-					element.scrollWidth - element.clientWidth
-				) {
-					left = true;
-				}
+						const childMiddle = child.offsetLeft + child.offsetWidth / 2;
 
-				const current = (element.scrollWidth - element.clientWidth) / divider;
+						const distance = Math.abs(containerMiddle - childMiddle);
 
-				left
-					? (position = element.scrollLeft - current)
-					: (position = element.scrollLeft + current);
+						if (distance < closestDistance) {
+							closestElement = child;
+							closestDistance = distance;
+							closestIndex = i;
+						}
+					}
 
-				scrollToPosition(
-					searchSliderController,
-					touchSliderController,
-					index,
-					element,
-					position,
-					duration,
-					increment(),
-				);
-			}, intervalTime());
+					if (element.scrollLeft === 0) {
+						left = false;
+					}
 
-		let intervalController = interval(duration());
+					if (
+						element.scrollWidth - element.clientWidth <=
+						Math.ceil(element.scrollLeft)
+					) {
+						left = true;
+					}
+
+					const child = left
+						? children[closestIndex - 1]
+						: children[closestIndex + 1];
+
+					element.scrollTo({
+						left:
+							child.getBoundingClientRect().left +
+							element.scrollLeft -
+							window.innerWidth / 2 +
+							child.offsetWidth / 2,
+						behavior: 'smooth',
+					});
+				},
+				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 7000 : 6000,
+			);
+		};
+
+		const clearElementInterval = () => {
+			if (intervalController) {
+				clearInterval(intervalController);
+
+				intervalController = undefined;
+			}
+		};
+
+		if (element.scrollWidth > element.clientWidth) {
+			setElementInterval();
+		}
 
 		window.addEventListener('resize', () => {
 			touchSliderController[index] = false;
-			clearInterval(intervalController);
-			intervalController = interval(duration());
 			touchSliderController[index] = true;
 
 			element.classList.remove('--special');
 			handleProductsGrid(element);
+
+			if (element.scrollWidth > element.clientWidth) {
+				setElementInterval();
+			} else {
+				clearElementInterval();
+			}
 		});
 	});
 })();
