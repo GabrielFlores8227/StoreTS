@@ -107,7 +107,7 @@ div.section-container__canvas-container {
   align-items: center;
   justify-content: center;
   padding-top: 48px;
-  padding-bottom: 21px;
+  padding-bottom: 45px;
 }
 div.section-container__canvas-container canvas {
   height: 336px;
