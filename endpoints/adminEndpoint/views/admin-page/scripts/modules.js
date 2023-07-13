@@ -878,6 +878,7 @@ export async function buildProducts(isLastItemNew = false) {
 					'category',
 					e.target.value,
 					String(apiItem.id),
+					() => buildCategories(),
 				);
 			});
 
