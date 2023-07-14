@@ -64,6 +64,7 @@ const touchSliderController = [];
 	const sliders = window.document.querySelectorAll(
 		'div[product-slider-container]',
 	);
+	const wait = 5000;
 
 	sliders.forEach((element, index) => {
 		handleProductsGrid(element);
@@ -74,23 +75,28 @@ const touchSliderController = [];
 		let isDown = false;
 		let startX;
 		let scrollLeft;
-		const wait = 20000;
 		element.scrollLeft =
 			index % 2 === 0 ? 0 : element.scrollWidth - element.clientWidth;
+		let startAgain;
+		let left = false;
 
 		element.addEventListener('touchmove', () => {
 			isDown = true;
 
-			touchSliderController[index] = !isDown;
+			touchSliderController[index] = false;
 		});
 
 		element.addEventListener('touchend', () => {
 			isDown = false;
 
-			searchSliderController[index] = !isDown;
+			searchSliderController[index] = true;
 
-			setTimeout(() => {
-				touchSliderController[index] = !isDown;
+			if (startAgain) {
+				clearTimeout(startAgain);
+			}
+
+			startAgain = setTimeout(() => {
+				touchSliderController[index] = true;
 			}, wait);
 		});
 
@@ -100,15 +106,21 @@ const touchSliderController = [];
 			startX = e.pageX - element.offsetLeft;
 			scrollLeft = element.scrollLeft;
 
-			touchSliderController[index] = !isDown;
+			touchSliderController[index] = false;
 		});
 
 		element.addEventListener('mouseleave', () => {
 			isDown = false;
 			element.classList.remove('active');
 
-			setTimeout(() => {
-				touchSliderController[index] = !isDown;
+			searchSliderController[index] = true;
+
+			if (startAgain) {
+				clearTimeout(startAgain);
+			}
+
+			startAgain = setTimeout(() => {
+				touchSliderController[index] = true;
 			}, wait);
 		});
 
@@ -116,10 +128,14 @@ const touchSliderController = [];
 			isDown = false;
 			element.classList.remove('active');
 
-			searchSliderController[index] = !isDown;
+			searchSliderController[index] = true;
 
-			setTimeout(() => {
-				touchSliderController[index] = !isDown;
+			if (startAgain) {
+				clearTimeout(startAgain);
+			}
+
+			startAgain = setTimeout(() => {
+				touchSliderController[index] = true;
 			}, wait);
 		});
 
@@ -131,82 +147,68 @@ const touchSliderController = [];
 			element.scrollLeft = scrollLeft - walk;
 		});
 
-		let left = false;
-		let intervalController;
-
-		const setElementInterval = () => {
-			intervalController = setInterval(
-				() => {
-					if (
-						window.document.hidden ||
-						isDown ||
-						!touchSliderController[index] ||
-						!searchSliderController[index]
-					) {
-						return;
-					}
-
-					const children = Array.from(element.children);
-
-					const containerMiddle = element.scrollLeft + element.offsetWidth / 2;
-
-					let closestElement = null;
-					let closestDistance = Infinity;
-					let closestIndex = -1;
-
-					for (let i = 0; i < children.length; i++) {
-						const child = children[i];
-
-						const childMiddle = child.offsetLeft + child.offsetWidth / 2;
-
-						const distance = Math.abs(containerMiddle - childMiddle);
-
-						if (distance < closestDistance) {
-							closestElement = child;
-							closestDistance = distance;
-							closestIndex = i;
-						}
-					}
-
-					if (element.scrollLeft === 0) {
-						left = false;
-					}
-
-					if (
-						element.scrollWidth - element.clientWidth <=
-						Math.ceil(element.scrollLeft)
-					) {
-						left = true;
-					}
-
-					const child = left
-						? children[closestIndex - 1]
-						: children[closestIndex + 1];
-
-					element.scrollTo({
-						left:
-							child.getBoundingClientRect().left +
-							element.scrollLeft -
-							window.innerWidth / 2 +
-							child.offsetWidth / 2,
-						behavior: 'smooth',
-					});
-				},
-				/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 6000 : 4000,
-			);
-		};
-
-		const clearElementInterval = () => {
-			if (intervalController) {
-				clearInterval(intervalController);
-
-				intervalController = undefined;
+		setInterval(() => {
+			if (
+				window.innerWidth < 320 ||
+				!(element.scrollWidth > element.clientWidth)
+			) {
+				return;
 			}
-		};
 
-		if (element.scrollWidth > element.clientWidth) {
-			setElementInterval();
-		}
+			if (
+				isDown ||
+				!touchSliderController[index] ||
+				!searchSliderController[index]
+			) {
+				return;
+			}
+
+			const children = Array.from(element.children);
+
+			const containerMiddle = element.scrollLeft + element.offsetWidth / 2;
+
+			let closestElement = null;
+			let closestDistance = Infinity;
+			let closestIndex = -1;
+
+			for (let i = 0; i < children.length; i++) {
+				const child = children[i];
+
+				const childMiddle = child.offsetLeft + child.offsetWidth / 2;
+
+				const distance = Math.abs(containerMiddle - childMiddle);
+
+				if (distance < closestDistance) {
+					closestElement = child;
+					closestDistance = distance;
+					closestIndex = i;
+				}
+			}
+
+			if (element.scrollLeft === 0) {
+				left = false;
+			}
+
+			if (
+				element.scrollWidth - element.clientWidth <=
+				Math.ceil(element.scrollLeft)
+			) {
+				left = true;
+			}
+
+			const child = left
+				? children[closestIndex - 1]
+				: children[closestIndex + 1];
+
+			element.scrollTo({
+				left:
+					child.getBoundingClientRect().left +
+					element.scrollLeft -
+					window.innerWidth / 2 +
+					child.offsetWidth / 2,
+				behavior: 'smooth',
+			});
+		}, 3000);
 
 		window.addEventListener('resize', () => {
 			touchSliderController[index] = false;
@@ -214,12 +216,6 @@ const touchSliderController = [];
 
 			element.classList.remove('--special');
 			handleProductsGrid(element);
-
-			if (element.scrollWidth > element.clientWidth) {
-				setElementInterval();
-			} else {
-				clearElementInterval();
-			}
 		});
 	});
 })();
