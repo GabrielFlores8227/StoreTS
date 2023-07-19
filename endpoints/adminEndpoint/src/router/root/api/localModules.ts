@@ -250,6 +250,12 @@ class Support {
 					height: 1080,
 					trim: true,
 				}),
+			'additional-image': async (file: Express.Multer.File | undefined) =>
+				await this.sharpFile(file, 'inside', {
+					width: 1080,
+					height: 1080,
+					trim: true,
+				}),
 		},
 	};
 
@@ -410,7 +416,12 @@ class Support {
 		installment: string,
 		whatsapp: string,
 		message: string,
-		file: Express.Multer.File | undefined,
+		files:
+			| {
+					[fieldname: string]: Express.Multer.File[];
+			  }
+			| Express.Multer.File[]
+			| undefined,
 	) {
 		const [query] = await Sql.query('SELECT `id` FROM `products`;');
 
@@ -429,7 +440,11 @@ class Support {
 		this.textMask.products.installment(installment);
 		this.textMask.products.whatsapp(whatsapp);
 		this.textMask.products.message(message);
-		await this.imageMask.products.image(file);
+		await this.imageMask.products.image(Object(files)[0]);
+
+		if (Object(files)[1]) {
+			await this.imageMask.products.image(Object(files)[1]);
+		}
 	}
 
 	/**
@@ -549,7 +564,7 @@ export default class LocalModules {
 							message:
 								maxCount === 1
 									? 'Desculpe, parece que nenhuma imagem foi adicionada. Por favor, adicione uma imagem e tente novamente.'
-									: 'Desculpe, parece que algumas imagens não foram adicionadas. Por favor, adicione todas as imagens e tente novamente.',
+									: 'Desculpe, parece que algumas imagens não foram adicionadas. Por favor, adicione todas as imagens necessárias e tente novamente.',
 						};
 					} else if (err) {
 						throw err;
@@ -739,7 +754,7 @@ export default class LocalModules {
 		try {
 			const { category, name, price, off, installment, whatsapp, message } =
 				req.body;
-			const file = req.file;
+			const files = req.files;
 
 			await Support.validateDataForMiddlewarePostProduct(
 				category,
@@ -749,21 +764,26 @@ export default class LocalModules {
 				installment,
 				whatsapp,
 				message,
-				file,
+				files,
 			);
 
-			await S3.uploadFileToS3Bucket(
-				file!.buffer,
-				file!.originalname,
-				file!.mimetype,
-			);
+			for (let c = 0; c < Object(files).length; c++) {
+				const file = Object(files)[c];
+
+				await S3.uploadFileToS3Bucket(
+					file!.buffer,
+					file!.originalname,
+					file!.mimetype,
+				);
+			}
 
 			await Sql.query(
-				'INSERT INTO `products` (`category`, `name`, `image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
+				'INSERT INTO `products` (`category`, `name`, `image`, `additional-image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category.trim(),
 					name.trim(),
-					file!.originalname,
+					Object(files)[0]!.originalname,
+					Object(files)[1] ? Object(files)[1]!.originalname : null,
 					price.trim(),
 					off.trim(),
 					installment.trim(),
@@ -799,7 +819,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT `id`, `image` FROM `products` WHERE `id` = ?;',
+				'SELECT `id`, `image`, `additional-image` FROM `products` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -808,6 +828,10 @@ export default class LocalModules {
 			}
 
 			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
+
+			if (Object(query)[0]['additional-image']) {
+				await S3.deleteFileFromS3Bucket(Object(query)[0]['additional-image']);
+			}
 
 			await Sql.query('DELETE FROM `products` WHERE `id` = ?;', [id]);
 
@@ -881,6 +905,17 @@ export default class LocalModules {
 
 			if (Object(query).length === 0) {
 				return next();
+			}
+
+			if (!Object(query)[0][column]) {
+				const newName = randomBytes(128).toString('hex').substring(0, 255);
+
+				await Sql.query(
+					'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
+					[newName, id],
+				);
+
+				Object(query)[0][column] = newName;
 			}
 
 			await S3.uploadFileToS3Bucket(

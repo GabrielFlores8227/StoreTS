@@ -165,6 +165,7 @@ div.saved-product-container > div > div > div:first-of-type img {
   height: 140px;
   border-radius: 7px;
   object-fit: contain;
+  transition: ease-in-out 0.6s;
 }
 div.saved-product-container > div > div > div:first-of-type > div:last-of-type {
   display: flex;

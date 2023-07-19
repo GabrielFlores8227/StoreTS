@@ -850,7 +850,11 @@ export async function buildProducts(isLastItemNew = false) {
 	const reorderItemsApiUrl = '/admin/api/products';
 	const cellFunction = (apiItem, cell, index, categories) => {
 		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
-			cell.setAttribute('action', '/admin/api/products/image');
+			if (index === 0) {
+				cell.setAttribute('action', '/admin/api/products/image');
+			} else {
+				cell.setAttribute('action', '/admin/api/products/additional-image');
+			}
 
 			div.querySelectorAll('input').forEach((input) => {
 				input.addEventListener('input', async (e) => {
@@ -863,7 +867,13 @@ export async function buildProducts(isLastItemNew = false) {
 				});
 			});
 
-			div.querySelector('a').setAttribute('href', apiItem.image);
+			if (index === 0) {
+				div.querySelector('a').setAttribute('href', apiItem.image);
+			} else if (index === 1 && apiItem['additional-image']) {
+				div
+					.querySelector('a')
+					.setAttribute('href', apiItem['additional-image']);
+			}
 
 			loadFileInputProperties(div);
 		});
@@ -1187,7 +1197,15 @@ export function buildProductsTemplate(specialSection) {
 		const form = new FormData();
 
 		const image = template.querySelector('input[product-image]').files[0];
-		form.append('file', image);
+		const additionalImage = template.querySelector('input[additional-image]')
+			.files[0];
+
+		if (additionalImage) {
+			form.append('files', image);
+			form.append('files', additionalImage);
+		} else {
+			form.append('files', image);
+		}
 
 		const category = template.querySelector('select[product-category]').value;
 		form.append('category', category);

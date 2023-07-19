@@ -235,11 +235,20 @@
 								<div>
 									<hr />
 								</div>
+								<% if (product['additional-image']) { %>
+								<img
+									draggable="false"
+									src="<%= product.image %>"
+									plus-src="<%= product['additional-image'] %>"
+									alt="<%= product.name %>"
+								/>
+								<% } else { %>
 								<img
 									draggable="false"
 									src="<%= product.image %>"
 									alt="<%= product.name %>"
 								/>
+								<% } %>
 								<div>
 									<p><%= product.name %></p>
 									<% if (product.off !== 0) { %>

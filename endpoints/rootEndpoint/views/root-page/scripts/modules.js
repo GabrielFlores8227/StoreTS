@@ -23,9 +23,55 @@ export function handleLoadingImages(loadingScreenContainer) {
 		if (allImages.length === loadedImages) {
 			setTimeout(() => {
 				loadingScreenContainer.parentElement.classList.add('--off');
+
+				setProductsImageProperties();
 			}, 1500);
 		}
 	}
+}
+
+/**
+ * Sets image properties for products with 'plus-src' attribute.
+ * This function finds all image elements with the 'plus-src' attribute, and for each image,
+ * it calls the 'loadProductImageProperties' function to handle the image swapping effect.
+ * The 'loadProductImageProperties' function will be triggered for each image, setting up the
+ * animation for image transition with a fade-in and fade-out effect.
+ */
+function setProductsImageProperties() {
+	window.document.querySelectorAll('img[plus-src]').forEach((img) => {
+		loadProductImageProperties(img);
+	});
+}
+
+/**
+ * Loads product image properties for the image element with animation effect.
+ * This function is responsible for animating the image swapping effect for a single image.
+ * It swaps the 'src' attribute with the 'plus-src' attribute, creating a fade-in and fade-out
+ * transition effect between two images. The image will appear to change every 7 seconds (7000ms)
+ * while transitioning between the two images.
+ * @param {HTMLElement} img - The image element to apply the image swapping effect.
+ */
+function loadProductImageProperties(img) {
+	let src = img.getAttribute('src');
+	let plusSrc = img.getAttribute('plus-src');
+	let temp;
+
+	setInterval(() => {
+		img.style.filter = 'opacity(0%)';
+
+		setTimeout(() => {
+			img.setAttribute('src', plusSrc);
+			img.setAttribute('plus-src', src);
+
+			temp = src;
+			src = plusSrc;
+			plusSrc = temp;
+
+			setTimeout(() => {
+				img.style.filter = 'opacity(100%)';
+			}, 600);
+		}, 600);
+	}, 7000);
 }
 
 /**
@@ -99,6 +145,7 @@ export function renderSavedProducts(products) {
 			});
 
 			productImage.src = product.image;
+
 			productImage.alt = product.name;
 			productName.textContent = product.name;
 

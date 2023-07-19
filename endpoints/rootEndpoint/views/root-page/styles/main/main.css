@@ -49,6 +49,7 @@ div.product-section-container > div > div:last-of-type > div > div:first-of-type
   height: 140px;
   border-radius: 7px;
   object-fit: contain;
+  transition: ease-in-out 0.6s;
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type {
   display: flex;

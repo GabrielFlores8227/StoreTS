@@ -79,7 +79,7 @@ api.post(
 
 api.post(
 	'/product',
-	LocalModules.middlewareUploadFiles(1, 1),
+	LocalModules.middlewareUploadFiles(1, 2),
 	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePostProduct,
 	(_, res) => {
@@ -123,6 +123,7 @@ api.put(
 		'/propagandas/big-image',
 		'/propagandas/small-image',
 		'/products/image',
+		'/products/additional-image',
 	],
 	LocalModules.middlewareUploadFiles(1, 1),
 	Middleware.middlewareCheckToken,

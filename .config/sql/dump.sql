@@ -137,6 +137,7 @@ CREATE TABLE `products` (
   `category` int NOT NULL,
   `name` varchar(70) NOT NULL,
   `image` varchar(255) NOT NULL,
+  `additional-image` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
   `off` float NOT NULL,
   `installment` varchar(70) NOT NULL,
