@@ -248,13 +248,11 @@ class Support {
 				await this.sharpFile(file, 'inside', {
 					width: 1080,
 					height: 1080,
-					trim: true,
 				}),
 			'additional-image': async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'inside', {
 					width: 1080,
 					height: 1080,
-					trim: true,
 				}),
 		},
 	};
