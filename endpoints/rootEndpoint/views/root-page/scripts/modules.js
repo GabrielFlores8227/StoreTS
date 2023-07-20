@@ -56,7 +56,48 @@ function loadProductImageProperties(img) {
 	let plusSrc = img.getAttribute('plus-src');
 	let temp;
 
-	setInterval(() => {
+	const createInterval = () =>
+		setInterval(() => {
+			changeImage();
+		}, Math.floor(Math.random() * (10000 - 7000 + 1)) + 7000);
+
+	let interval = createInterval();
+
+	if (
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+			navigator.userAgent,
+		)
+	) {
+		let setAgain;
+
+		img.addEventListener('click', () => {
+			changeImage();
+
+			clearInterval(interval);
+
+			if (setAgain) {
+				clearTimeout(setAgain);
+			}
+
+			setAgain = setTimeout(() => {
+				interval = createInterval();
+			}, 10000);
+		});
+	} else {
+		img.addEventListener('mouseenter', () => {
+			clearInterval(interval);
+
+			changeImage();
+		});
+
+		img.addEventListener('mouseleave', () => {
+			interval = createInterval();
+
+			changeImage();
+		});
+	}
+
+	function changeImage() {
 		img.style.filter = 'opacity(0%)';
 
 		setTimeout(() => {
@@ -69,9 +110,9 @@ function loadProductImageProperties(img) {
 
 			setTimeout(() => {
 				img.style.filter = 'opacity(100%)';
-			}, 600);
-		}, 600);
-	}, 7000);
+			}, 250);
+		}, 250);
+	}
 }
 
 /**
