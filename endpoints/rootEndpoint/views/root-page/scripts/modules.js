@@ -9,13 +9,13 @@ export function handleLoadingImages(loadingScreenContainer) {
 	allImages.forEach((img) => {
 		if (img.complete) {
 			loadedImages++;
-			$(loadingScreenContainer, allImages, loadedImages);
+			$();
 			return;
 		}
 
 		img.addEventListener('load', () => {
 			loadedImages++;
-			$(loadingScreenContainer, allImages, loadedImages);
+			$();
 		});
 	});
 
@@ -64,7 +64,7 @@ export function loadProductImageProperties(img) {
 	const createInterval = () =>
 		setInterval(() => {
 			changeImage();
-		}, Math.floor(Math.random() * (10000 - 7000 + 1)) + 7000);
+		}, Math.floor(Math.random() * (12000 - 9000 + 1)) + 9000);
 
 	const changeImage = () => {
 		img.style.filter = 'opacity(0%)';
