@@ -261,19 +261,31 @@ div.cell-container__content-container {
   width: 100%;
 }
 
-div.cell-container__file-input-container label {
+div.cell-container__file-input-container.--special button {
+  display: block;
+}
+div.cell-container__file-input-container label,
+div.cell-container__file-input-container button {
+  padding: 0px 6.3px;
+  font-size: 17.5px;
   color: var(--primary-color);
   cursor: pointer;
+}
+div.cell-container__file-input-container button {
+  display: none;
+  font-size: 16.8px;
+}
+div.cell-container__file-input-container label {
+  padding-right: 3.5px;
 }
 div.cell-container__file-input-container input {
   display: none;
 }
 div.cell-container__file-input-container a {
   white-space: nowrap;
-  max-width: 70%;
+  max-width: 60%;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0px 3.5px;
 }
 
 div.cell-container__text-input-container div[pseudo-input] {

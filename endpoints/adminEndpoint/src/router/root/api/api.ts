@@ -169,4 +169,13 @@ api.delete(
 	},
 );
 
+api.delete(
+	'/product/additional-image',
+	Middleware.middlewareCheckToken,
+	LocalModules.middlewareDeleteProductAdditionalImage,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
 export default api;

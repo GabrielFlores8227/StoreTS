@@ -856,6 +856,30 @@ export async function buildProducts(isLastItemNew = false) {
 				cell.setAttribute('action', '/admin/api/products/additional-image');
 			}
 
+			const deleteAdditionalImage = async () => {
+				let form = {};
+				form['id'] = String(apiItem.id);
+				form = JSON.stringify(form);
+
+				const req = await handleCellRequest(cell, form, {
+					method: 'DELETE',
+					useAction: '/admin/api/product/additional-image',
+					contentType: 'application/json',
+				});
+
+				if (req) {
+					const a = div.querySelector('a');
+
+					a.innerText = 'Imagem Adicional';
+					a.removeAttribute('href', '');
+					div.classList.remove('--special');
+
+					const button = div.querySelector('button');
+					const clonedButton = button.cloneNode(true);
+					button.parentNode.replaceChild(clonedButton, button);
+				}
+			};
+
 			div.querySelectorAll('input').forEach((input) => {
 				input.addEventListener('input', async (e) => {
 					const form = new FormData();
@@ -863,7 +887,17 @@ export async function buildProducts(isLastItemNew = false) {
 					form.append('file', e.target.files[0]);
 					form.append('id', apiItem.id);
 
-					await handleCellRequest(cell, form);
+					const req = await handleCellRequest(cell, form);
+
+					if (index === 1) {
+						if (req && !div.classList.contains('--special')) {
+							div.classList.add('--special');
+						}
+
+						div.querySelector('button').addEventListener('click', async () => {
+							await deleteAdditionalImage();
+						});
+					}
 				});
 			});
 
@@ -873,6 +907,12 @@ export async function buildProducts(isLastItemNew = false) {
 				div
 					.querySelector('a')
 					.setAttribute('href', apiItem['additional-image']);
+
+				div.classList.add('--special');
+
+				div.querySelector('button').addEventListener('click', async () => {
+					await deleteAdditionalImage();
+				});
 			}
 
 			loadFileInputProperties(div);
@@ -1595,16 +1635,22 @@ async function handleActionRequest(
 }
 
 /**
- * Handles a cell request by sending a PUT request to the action URL specified in the cell's attribute with the provided body and headers.
- * @param {HTMLElement} cell - The cell element representing the action.
- * @param {FormData | string | null} body - The body of the request.
- * @param {string | undefined} contentType - The content type of the request.
- * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
+ * Handles a cell request.
+ * Makes a request using fetch to the specified action URL with the given method, body, and headers.
+ *
+ * @param {HTMLElement} cell - The cell element for the request.
+ * @param {any} body - The request body data.
+ * @param {{ method?: string, contentType?: string | undefined, useAction?: string | null }} [options={}] - Options for the request, including method, content type, and custom action URL.
+ * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the request was successful (true) or unsuccessful (false).
  */
-export async function handleCellRequest(cell, body, contentType = undefined) {
+export async function handleCellRequest(
+	cell,
+	body,
+	{ method = 'PUT', contentType = undefined, useAction = undefined } = {},
+) {
 	$('--loading');
 
-	const action = cell.getAttribute('action');
+	const action = useAction || cell.getAttribute('action');
 
 	const headers = {
 		authorization: `Bearer ${token}`,
@@ -1615,7 +1661,7 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 	}
 
 	const req = await fetch(action, {
-		method: 'PUT',
+		method,
 		headers,
 		body,
 	});
@@ -1686,7 +1732,9 @@ export async function handleTextInputRequest(
 	form['id'] = identifier;
 	form = JSON.stringify(form);
 
-	const req = await handleCellRequest(cell, form, 'application/json');
+	const req = await handleCellRequest(cell, form, {
+		contentType: 'application/json',
+	});
 
 	if (req && callBack) {
 		await callBack();

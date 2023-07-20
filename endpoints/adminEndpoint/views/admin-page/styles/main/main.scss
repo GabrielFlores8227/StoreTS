@@ -296,9 +296,27 @@ div.cell-container__content-container {
 }
 
 div.cell-container__file-input-container {
-	label {
+	&.--special {
+		button {
+			display: block;
+		}
+	}
+
+	label,
+	button {
+		padding: 0px 6.3px;
+		font-size: 17.5px;
 		color: var(--primary-color);
 		cursor: pointer;
+	}
+
+	button {
+		display: none;
+		font-size: 16.8px;
+	}
+
+	label {
+		padding-right: 3.5px;
 	}
 
 	input {
@@ -307,10 +325,9 @@ div.cell-container__file-input-container {
 
 	a {
 		white-space: nowrap;
-		max-width: 70%;
+		max-width: 60%;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		padding: 0px 3.5px;
 	}
 }
 

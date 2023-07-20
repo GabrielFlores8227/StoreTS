@@ -842,6 +842,50 @@ export default class LocalModules {
 	}
 
 	/**
+	 * Middleware function for handling the deletion of an additional image for a product.
+	 * Validates the request data for deleting the additional image and performs necessary operations.
+	 * Deletes the additional image from the specified product in the database and the associated S3 bucket.
+	 *
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
+	 */
+	public static async middlewareDeleteProductAdditionalImage(
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	) {
+		try {
+			const id = req.body.id;
+
+			Admin.checkType(id, 'string', 'id');
+			Admin.checkLength(id.trim(), 1, -1, 'id');
+
+			const [query] = await Sql.query(
+				'SELECT `id`, `additional-image` FROM `products` WHERE `id` = ?;',
+				[id],
+			);
+
+			if (Object(query).length === 0) {
+				return next();
+			}
+
+			if (Object(query)[0]['additional-image']) {
+				await S3.deleteFileFromS3Bucket(Object(query)[0]['additional-image']);
+
+				await Sql.query(
+					'UPDATE `products` SET `additional-image` = ? WHERE `id` = ?;',
+					[null, id],
+				);
+			}
+
+			return next();
+		} catch (err) {
+			Middleware.handleMiddlewareError(res, err);
+		}
+	}
+
+	/**
 	 * Middleware function for handling the update of a text value.
 	 * Validates the request data for updating a text value and performs necessary operations.
 	 * Updates the specified text column in the given table with the provided data for the given id.
