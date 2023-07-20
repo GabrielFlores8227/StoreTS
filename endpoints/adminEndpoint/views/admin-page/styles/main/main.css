@@ -260,6 +260,10 @@ div.cell-container__content-container {
   justify-content: center;
   width: 100%;
 }
+div.cell-container__content-container p {
+  padding: 7px 0px;
+  text-align: center;
+}
 
 div.cell-container__file-input-container.--special button {
   display: block;
