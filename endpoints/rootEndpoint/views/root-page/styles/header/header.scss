@@ -150,17 +150,14 @@ div.search-container {
 
 				& > div {
 					width: 100%;
-					overflow: hidden;
-					text-overflow: ellipsis;
+					display: flex;
+					flex-direction: column;
+					gap: 7px;
 
 					p {
-						width: inherit;
-						line-height: 140%;
+						line-height: 115%;
 						cursor: pointer;
 						text-align: left;
-						text-overflow: ellipsis;
-						overflow: hidden;
-						white-space: nowrap;
 						font-family: var(--font-bold);
 					}
 

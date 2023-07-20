@@ -82,7 +82,7 @@ aside ul li button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 10.5px;
   padding: 7px;
   width: 100%;
   position: relative;
@@ -91,14 +91,12 @@ aside ul li a i:last-of-type,
 aside ul li button i:last-of-type {
   width: 100%;
   text-align: left;
-  white-space: nowrap;
   transition: ease-in-out 0.35s;
   color: var(--dark-gray);
   font-family: var(--font-bold);
   font-style: normal;
   font-size: 16.8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 115%;
 }
 aside ul li a i:last-of-type:hover,
 aside ul li button i:last-of-type:hover {
@@ -108,9 +106,8 @@ aside ul li a i:first-of-type {
   color: var(--primary-color);
 }
 aside ul li button i:first-of-type {
-  display: block;
-  width: 8.4px;
-  height: 8.4px;
+  display: inline-block;
+  padding: 4.2px;
   border-radius: 100%;
   background-color: var(--primary-color);
 }

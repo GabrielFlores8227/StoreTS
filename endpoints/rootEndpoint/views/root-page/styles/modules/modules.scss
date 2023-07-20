@@ -96,7 +96,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 7px;
+			gap: 10.5px;
 			padding: 7px;
 			width: 100%;
 			position: relative;
@@ -108,14 +108,12 @@
 
 				width: 100%;
 				text-align: left;
-				white-space: nowrap;
 				transition: ease-in-out 0.35s;
 				color: var(--dark-gray);
 				font-family: var(--font-bold);
 				font-style: normal;
 				font-size: 16.8px;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				line-height: 115%;
 			}
 		}
 
