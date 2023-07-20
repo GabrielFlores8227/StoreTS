@@ -23,24 +23,9 @@ export function handleLoadingImages(loadingScreenContainer) {
 		if (allImages.length === loadedImages) {
 			setTimeout(() => {
 				loadingScreenContainer.parentElement.classList.add('--off');
-
-				setProductsImageProperties();
 			}, 1500);
 		}
 	}
-}
-
-/**
- * Sets image properties for products with 'plus-src' attribute.
- * This function finds all image elements with the 'plus-src' attribute, and for each image,
- * it calls the 'loadProductImageProperties' function to handle the image swapping effect.
- * The 'loadProductImageProperties' function will be triggered for each image, setting up the
- * animation for image transition with a fade-in and fade-out effect.
- */
-function setProductsImageProperties() {
-	window.document.querySelectorAll('img[plus-src]').forEach((img) => {
-		loadProductImageProperties(img);
-	});
 }
 
 /**
@@ -51,15 +36,40 @@ function setProductsImageProperties() {
  * while transitioning between the two images.
  * @param {HTMLElement} img - The image element to apply the image swapping effect.
  */
-function loadProductImageProperties(img) {
+export function loadProductImageProperties(img) {
 	let src = img.getAttribute('src');
 	let plusSrc = img.getAttribute('plus-src');
 	let temp;
+
+	const preloadImage = (url) => {
+		const img = new Image();
+		img.src = url;
+	};
+
+	preloadImage(src);
+	preloadImage(plusSrc);
 
 	const createInterval = () =>
 		setInterval(() => {
 			changeImage();
 		}, Math.floor(Math.random() * (10000 - 7000 + 1)) + 7000);
+
+	const changeImage = () => {
+		img.style.filter = 'opacity(0%)';
+
+		setTimeout(() => {
+			img.setAttribute('src', plusSrc);
+			img.setAttribute('plus-src', src);
+
+			temp = src;
+			src = plusSrc;
+			plusSrc = temp;
+
+			setTimeout(() => {
+				img.style.filter = 'opacity(100%)';
+			}, 250);
+		}, 250);
+	};
 
 	let interval = createInterval();
 
@@ -95,23 +105,6 @@ function loadProductImageProperties(img) {
 
 			changeImage();
 		});
-	}
-
-	function changeImage() {
-		img.style.filter = 'opacity(0%)';
-
-		setTimeout(() => {
-			img.setAttribute('src', plusSrc);
-			img.setAttribute('plus-src', src);
-
-			temp = src;
-			src = plusSrc;
-			plusSrc = temp;
-
-			setTimeout(() => {
-				img.style.filter = 'opacity(100%)';
-			}, 250);
-		}, 250);
 	}
 }
 

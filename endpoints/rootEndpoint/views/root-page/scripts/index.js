@@ -6,6 +6,7 @@ import {
 	handleSearchBar,
 	handlePropagandaScroll,
 	convertToMoneyFormat,
+	loadProductImageProperties,
 } from './modules.js';
 
 /**
@@ -38,6 +39,25 @@ import {
 	setTimeout(() => {
 		handleLoadingImages(loadingScreenContainer);
 	}, 2000);
+})();
+
+/**
+ * Load Product Images with Custom Attribute 'plus-src'
+ *
+ * This block of code is responsible for loading product images on a web page.
+ * It selects all <img> elements in the DOM that have a custom attribute called 'plus-src'
+ * and loads the properties related to product images for each of these elements.
+ * The 'loadProductImageProperties' function is called to handle loading image properties.
+ *
+ * - The code uses an immediately invoked function expression (IIFE) to execute the script immediately after it is defined.
+ * - The 'querySelectorAll' method selects all <img> elements with the 'plus-src' attribute.
+ * - The 'forEach' method iterates through each selected <img> element.
+ * - The 'loadProductImageProperties' function is called for each <img> element to handle loading its properties.
+ */
+(() => {
+	window.document.querySelectorAll('img[plus-src]').forEach((img) => {
+		loadProductImageProperties(img);
+	});
 })();
 
 /**
