@@ -19,23 +19,11 @@ export function handleLoadingImages(loadingScreenContainer) {
 		});
 	});
 
-	let deactivated = false;
-
-	setTimeout(() => {
-		if (!deactivated) {
-			deactivated = true;
-			loadingScreenContainer.parentElement.classList.add('--off');
-		}
-	}, 7000);
-
 	function $() {
 		if (allImages.length === loadedImages) {
 			setTimeout(() => {
-				if (!deactivated) {
-					deactivated = true;
-					loadingScreenContainer.parentElement.classList.add('--off');
-				}
-			}, 1500);
+				loadingScreenContainer.parentElement.classList.add('--off');
+			}, 500);
 		}
 	}
 }
