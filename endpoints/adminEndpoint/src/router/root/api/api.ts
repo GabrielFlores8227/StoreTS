@@ -7,7 +7,7 @@ const api = express.Router();
 api.post(
 	'/website',
 	Middleware.middlewareCheckToken,
-	Middleware.middlewareBuildWebsite,
+	Middleware.middlewareBuildWebsite(),
 	(req, res) => {
 		res.json(Object(req).builder.website);
 	},
@@ -34,7 +34,7 @@ api.post(
 api.post(
 	'/categories',
 	Middleware.middlewareCheckToken,
-	Middleware.middlewareBuildCategories(),
+	Middleware.middlewareBuildCategories(true),
 	(req, res) => {
 		res.json(Object(req).builder.categories);
 	},
@@ -79,7 +79,7 @@ api.post(
 
 api.post(
 	'/product',
-	LocalModules.middlewareUploadFiles(1, 1),
+	LocalModules.middlewareUploadFiles(1, 2),
 	Middleware.middlewareCheckToken,
 	LocalModules.middlewarePostProduct,
 	(_, res) => {
@@ -123,6 +123,7 @@ api.put(
 		'/propagandas/big-image',
 		'/propagandas/small-image',
 		'/products/image',
+		'/products/additional-image',
 	],
 	LocalModules.middlewareUploadFiles(1, 1),
 	Middleware.middlewareCheckToken,
@@ -163,6 +164,15 @@ api.delete(
 	'/product',
 	Middleware.middlewareCheckToken,
 	LocalModules.middlewareDeleteProduct,
+	(_, res) => {
+		res.json({ status: 200 });
+	},
+);
+
+api.delete(
+	'/product/additional-image',
+	Middleware.middlewareCheckToken,
+	LocalModules.middlewareDeleteProductAdditionalImage,
 	(_, res) => {
 		res.json({ status: 200 });
 	},

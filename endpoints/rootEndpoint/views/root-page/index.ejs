@@ -1,3 +1,4 @@
+<!--1.0.0-->
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
@@ -99,7 +100,7 @@
 									</div>
 									<a product-link target="_blank">
 										<i class="fa-brands fa-whatsapp"></i>
-										Order Product
+										Pedir Produto
 									</a>
 								</div>
 							</div>
@@ -129,7 +130,7 @@
 						<li>
 							<button close-categories-aside-menu-button go-to-section-button>
 								<i></i>
-								<i> <%= category %> </i>
+								<i><%= category %></i>
 							</button>
 						</li>
 						<% }) %>
@@ -147,7 +148,7 @@
 					/>
 				</a>
 				<div search-container class="search-container">
-					<input type="text" placeholder="O que você procura?" />
+					<input type="text" placeholder="O que você está procurando?" />
 					<div>
 						<div search-results>
 							<template>
@@ -176,7 +177,7 @@
 					<i class="fa-solid fa-bars"></i>
 				</button>
 				<div search-container class="search-container">
-					<input type="text" placeholder="What are you looking for?" />
+					<input type="text" placeholder="O que você está procurando?" />
 					<div>
 						<div search-results>
 							<template>
@@ -235,11 +236,20 @@
 								<div>
 									<hr />
 								</div>
+								<% if (product['additional-image']) { %>
+								<img
+									draggable="false"
+									src="<%= product.image %>"
+									plus-src="<%= product['additional-image'] %>"
+									alt="<%= product.name %>"
+								/>
+								<% } else { %>
 								<img
 									draggable="false"
 									src="<%= product.image %>"
 									alt="<%= product.name %>"
 								/>
+								<% } %>
 								<div>
 									<p><%= product.name %></p>
 									<% if (product.off !== 0) { %>
@@ -263,6 +273,7 @@
 				<% }) %>
 			</div>
 		</main>
+
 		<footer>
 			<div>
 				<div>
@@ -1153,6 +1164,7 @@
 							<a
 								target="_blank"
 								href="https://wa.me/<%= builder.footer.whatsapp %>"
+								rel="noopener noreferrer"
 							>
 								<i class="fa-brands fa-whatsapp"></i>
 								Whatsapp
@@ -1161,6 +1173,7 @@
 								<a
 									target="_blank"
 									href="https://www.instagram.com/<%= builder.footer.instagram.replace('@', '') %>"
+									rel="noopener noreferrer"
 								>
 									<i class="fa-brands fa-instagram"></i>
 									Instagram
@@ -1168,14 +1181,19 @@
 								<a
 									target="_blank"
 									href="https://www.facebook.com/<%= builder.footer.facebook.replace('@', '') %>"
+									rel="noopener noreferrer"
 								>
 									<i class="fa-brands fa-square-facebook"></i>
 									Facebook
 								</a>
 							</div>
-							<a target="_blank" href="<%= builder.footer.location %>">
+							<a
+								target="_blank"
+								href="<%= builder.footer.location %>"
+								rel="noopener noreferrer"
+							>
 								<i class="fa-solid fa-location-dot"></i>
-								Location
+								Localização
 							</a>
 						</div>
 						<p><%= builder.footer['complete-store-info'] %></p>

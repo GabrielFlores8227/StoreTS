@@ -1,3 +1,5 @@
+import { handleMessage } from './modules.js';
+
 /**
  * Immediately invoked function expression (IIFE) that retrieves the 'message' parameter from the URL query string
  * and updates the message element if the parameter is present.
@@ -6,10 +8,7 @@
 	const message = new URLSearchParams(window.location.search).get('message');
 
 	if (message) {
-		const element = window.document.querySelector('span[message-container]');
-
-		element.querySelector('i[message]').innerText = message;
-		element.classList.add('--not-ok');
+		handleMessage('error', message);
 	}
 })();
 

@@ -49,6 +49,7 @@ div.product-section-container > div > div:last-of-type > div > div:first-of-type
   height: 140px;
   border-radius: 7px;
   object-fit: contain;
+  transition: ease-in-out 0.25s;
 }
 div.product-section-container > div > div:last-of-type > div > div:first-of-type > div:last-of-type {
   display: flex;
@@ -111,8 +112,8 @@ div.product-section-container > div > div:last-of-type > div a i {
 
 @media (min-width: 1300px) {
   div.product-section-container > div > div:last-of-type > div > div:first-of-type img {
-    width: 154px;
-    height: 154px;
+    width: 133px;
+    height: 133px;
   }
 }
 @media (min-width: 1700px) {
@@ -282,9 +283,6 @@ div.product-section-container > div > div:last-of-type.--special {
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
-}
-div.product-section-container > div > div:last-of-type.--special > div {
-  width: 100%;
 }
 div.product-section-container > div > div:last-of-type.--special > div.--special:last-of-type {
   grid-column: span 2;

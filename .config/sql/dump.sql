@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `admin`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admin` (
   `id` enum('only') NOT NULL DEFAULT 'only',
-  `username` varchar(128) NOT NULL,
-  `password` varchar(128) NOT NULL,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(60) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -37,7 +37,7 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
-INSERT INTO `admin` VALUES ('only','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec','c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec','');
+INSERT INTO `admin` VALUES ('only','$2b$10$N.OtidvgZi1dzViPzuqhTeLQrJlFL/AlPjF99SKoYuJb5dKHaIhGS','$2b$10$N.OtidvgZi1dzViPzuqhTeLQrJlFL/AlPjF99SKoYuJb5dKHaIhGS','');
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,11 +50,11 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) COLLATE utf8mb4_bin NOT NULL,
+  `name` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `category` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,8 +78,8 @@ CREATE TABLE `footer` (
   `title` varchar(50) NOT NULL,
   `text` varchar(255) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
-  `facebook` varchar(30) NOT NULL,
-  `instagram` varchar(30) NOT NULL,
+  `facebook` varchar(70) NOT NULL,
+  `instagram` varchar(70) NOT NULL,
   `location` text NOT NULL,
   `store-info` varchar(50) NOT NULL,
   `complete-store-info` varchar(100) NOT NULL,
@@ -106,9 +106,9 @@ DROP TABLE IF EXISTS `header`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `header` (
   `id` enum('only') NOT NULL DEFAULT 'only',
-  `icon` varchar(4) NOT NULL DEFAULT 'icon',
-  `logo` varchar(4) NOT NULL DEFAULT 'logo',
-  `title` varchar(30) NOT NULL,
+  `icon` varchar(4) NOT NULL,
+  `logo` varchar(4) NOT NULL,
+  `title` varchar(70) NOT NULL,
   `description` varchar(255) NOT NULL,
   `color` varchar(7) NOT NULL,
   UNIQUE KEY `id` (`id`)
@@ -135,17 +135,20 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category` int NOT NULL,
-  `name` varchar(30) NOT NULL,
+  `name` varchar(70) NOT NULL,
   `image` varchar(255) NOT NULL,
+  `additional-image` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
   `off` float NOT NULL,
-  `installment` varchar(30) NOT NULL,
+  `installment` varchar(70) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
   `message` varchar(255) NOT NULL,
   `history` json DEFAULT NULL,
   `position` smallint DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `fk_category` (`category`),
+  CONSTRAINT `fk_category` FOREIGN KEY (`category`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -170,7 +173,7 @@ CREATE TABLE `propagandas` (
   `small-image` varchar(255) NOT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-19 17:39:30
+-- Dump completed on 2023-06-24 17:45:00

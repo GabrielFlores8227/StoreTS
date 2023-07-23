@@ -11,16 +11,22 @@ class Support {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
+				Admin.checkType(title, 'string', 'título');
+
 				title = title.trim();
 
-				Admin.checkLength(title, 1, 30, 'título');
+				Admin.checkLength(title, 1, 70, 'título');
 			},
 			description: (description: string) => {
+				Admin.checkType(description, 'string', 'descrição');
+
 				description = description.trim();
 
 				Admin.checkLength(description, 1, 255, 'descrição');
 			},
 			color: (color: string) => {
+				Admin.checkType(color, 'string', 'cor');
+
 				color = color.trim();
 
 				Admin.checkLength(color, 7, 7, 'cor');
@@ -38,16 +44,18 @@ class Support {
 					throw {
 						status: 400,
 						message:
-							"Desculpe, dados necessários estão faltando. Por favor tente consertar o campo 'imagesContext'.",
+							"Desculpe, dados necessários estão faltando. Por favor conserte o campo 'imagesContext' e tente novamente.",
 					};
 				}
 			},
 		},
 		categories: {
 			name: async (name: string) => {
+				Admin.checkType(name, 'string', 'nome');
+
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'nome');
+				Admin.checkLength(name, 1, 70, 'nome');
 
 				let query;
 
@@ -59,13 +67,15 @@ class Support {
 				if (Object(query).length !== 0) {
 					throw {
 						status: 400,
-						message: `Desculpe, a categoria "${name}" já existe. Por favor, tente usar um nome diferente.`,
+						message: `Desculpe, a categoria "${name}" já existe. Por favor, adicione um nome diferente e tente novamente.`,
 					};
 				}
 			},
 		},
 		products: {
 			category: async (category: string) => {
+				Admin.checkType(category, 'string', 'categoria');
+
 				category = category.trim();
 
 				const [query] = await Sql.query(
@@ -75,13 +85,13 @@ class Support {
 
 				if (Object(query).length === 0) {
 					let message =
-						'Desculpe, a categoria que você forneceu não existe. Por favor, tente escolher uma categoria existente.';
+						'Desculpe, a categoria que você forneceu não existe. Por favor, escolha uma categoria existente e tente novamente.';
 
 					const [query] = await Sql.query('SELECT `name` FROM `categories`;');
 
 					if (Object(query).length === 0) {
 						message =
-							'Desculpe, não há categorias disponíveis no momento. Por favor, tente criar uma categoria primeiro.';
+							'Desculpe, não há categorias disponíveis no momento. Por favor, crie uma categoria primeiro e tente novamente.';
 					}
 
 					throw {
@@ -91,18 +101,24 @@ class Support {
 				}
 			},
 			name: (name: string) => {
+				Admin.checkType(name, 'string', 'name');
+
 				name = name.trim();
 
-				Admin.checkLength(name, 1, 30, 'nome');
+				Admin.checkLength(name, 1, 70, 'nome');
 			},
 			price: (price: string) => {
+				Admin.checkType(price, 'string', 'preço');
+
 				price = price.trim();
 
 				Admin.checkLength(price, 1, -1, 'preço');
 				Admin.checkNumber(price, 'preço');
-				Admin.checkValue(price, -3.402823466e38, 3.402823466e38, 'preço');
+				Admin.checkValue(price, 0, 3.402823466e38, 'preço');
 			},
 			off: (off: string) => {
+				Admin.checkType(off, 'string', 'promoção');
+
 				off = off.trim();
 
 				Admin.checkLength(off, 1, -1, 'promoção');
@@ -110,17 +126,23 @@ class Support {
 				Admin.checkValue(off, 0, 100, 'promoção');
 			},
 			installment: (installment: string) => {
+				Admin.checkType(installment, 'string', 'parcelas');
+
 				installment = installment.trim();
 
-				Admin.checkLength(installment, 0, 30, 'parcelas');
+				Admin.checkLength(installment, 0, 70, 'parcelas');
 			},
 			whatsapp: (whatsapp: string) => {
+				Admin.checkType(whatsapp, 'string', 'whatsapp');
+
 				whatsapp = whatsapp.trim();
 
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			message: (message: string) => {
+				Admin.checkType(message, 'string', 'mensagem');
+
 				message = message.trim();
 
 				Admin.checkLength(message, 0, 255, 'mensagem');
@@ -128,25 +150,33 @@ class Support {
 		},
 		footer: {
 			title: (title: string) => {
+				Admin.checkType(title, 'string', 'título');
+
 				title = title.trim();
 
 				Admin.checkLength(title, 1, 50, 'título');
 			},
 			text: (text: string) => {
+				Admin.checkType(text, 'string', 'texto');
+
 				text = text.trim();
 
 				Admin.checkLength(text, 1, 255, 'texto');
 			},
 			whatsapp: (whatsapp: string) => {
+				Admin.checkType(whatsapp, 'string', 'whatsapp');
+
 				whatsapp = whatsapp.trim();
 
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
 			facebook: (facebook: string) => {
+				Admin.checkType(facebook, 'string', 'facebook');
+
 				facebook = facebook.trim();
 
-				Admin.checkLength(facebook, 2, 30, 'facebook');
+				Admin.checkLength(facebook, 2, 70, 'facebook');
 				Admin.checkSubstring(facebook, '@', true, true, 'facebook');
 				Admin.checkSubstring(facebook, ' ', false, false, 'facebook');
 				Admin.checkSpecialCharacters(
@@ -155,9 +185,11 @@ class Support {
 				);
 			},
 			instagram: (instagram: string) => {
+				Admin.checkType(instagram, 'string', 'instagram');
+
 				instagram = instagram.trim();
 
-				Admin.checkLength(instagram, 2, 30, 'instagram');
+				Admin.checkLength(instagram, 2, 70, 'instagram');
 				Admin.checkSubstring(instagram, '@', true, true, 'instagram');
 				Admin.checkSubstring(instagram, ' ', false, false, 'instagram');
 				Admin.checkSpecialCharacters(
@@ -166,17 +198,23 @@ class Support {
 				);
 			},
 			location: (location: string) => {
+				Admin.checkType(location, 'string', 'localização');
+
 				location = location.trim();
 
 				Admin.checkLength(location, 1, 64000, 'localização');
 				Admin.checkSubstring(location, ' ', false, false, 'localização');
 			},
 			'store-info': (storeInfo: string) => {
+				Admin.checkType(storeInfo, 'string', 'informação da loja');
+
 				storeInfo = storeInfo.trim();
 
-				Admin.checkLength(storeInfo, 1, 50, 'informação da loja');
+				Admin.checkLength(storeInfo, 1, 50, 'Informação');
 			},
 			'complete-store-info': (completeStoreInfo: string) => {
+				Admin.checkType(completeStoreInfo, 'string', 'informação completa');
+
 				completeStoreInfo = completeStoreInfo.trim();
 
 				Admin.checkLength(completeStoreInfo, 5, 100, 'informação completa');
@@ -187,11 +225,16 @@ class Support {
 	public static readonly imageMask = {
 		header: {
 			icon: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'cover', { width: 50, height: 50 }),
+				await this.sharpFile(file, 'inside', {
+					width: 50,
+					height: 50,
+					trim: true,
+				}),
 			logo: async (file: Express.Multer.File | undefined) =>
 				await this.sharpFile(file, 'contain', {
 					height: 70,
 					maxScale: 7.5,
+					trim: true,
 				}),
 		},
 		propagandas: {
@@ -202,7 +245,15 @@ class Support {
 		},
 		products: {
 			image: async (file: Express.Multer.File | undefined) =>
-				await this.sharpFile(file, 'inside', { width: 1080, height: 1080 }),
+				await this.sharpFile(file, 'inside', {
+					width: 1080,
+					height: 1080,
+				}),
+			'additional-image': async (file: Express.Multer.File | undefined) =>
+				await this.sharpFile(file, 'inside', {
+					width: 1080,
+					height: 1080,
+				}),
 		},
 	};
 
@@ -226,6 +277,7 @@ class Support {
 			width?: number;
 			height?: number;
 			maxScale?: number;
+			trim?: boolean;
 		},
 	) {
 		const originalName = file!.originalname;
@@ -233,15 +285,24 @@ class Support {
 		file!.originalname = randomBytes(128).toString('hex').substring(0, 255);
 
 		try {
-			file!.buffer = await sharp(file!.buffer)
-				.trim()
-				.resize({
-					width: options.width,
-					height: options.height,
-					fit,
-					background: { r: 255, g: 255, b: 255, alpha: 0 },
-				})
-				.toBuffer();
+			file!.buffer = options.trim
+				? await sharp(file!.buffer)
+						.trim()
+						.resize({
+							width: options.width,
+							height: options.height,
+							fit,
+							background: { r: 255, g: 255, b: 255, alpha: 0 },
+						})
+						.toBuffer()
+				: await sharp(file!.buffer)
+						.resize({
+							width: options.width,
+							height: options.height,
+							fit,
+							background: { r: 255, g: 255, b: 255, alpha: 0 },
+						})
+						.toBuffer();
 
 			if (options.maxScale) {
 				const imageMetadata = await sharp(file!.buffer).metadata();
@@ -268,7 +329,7 @@ class Support {
 			) {
 				throw {
 					status: 400,
-					message: `Desculpe, a imagem "${originalName}" não é uma imagem válida. Por favor, tente escolher outra imagem.`,
+					message: `Desculpe, a imagem "${originalName}" não é uma imagem válida. Por favor, tente escolher uma outra imagem.`,
 				};
 			}
 
@@ -289,7 +350,17 @@ class Support {
 			| Express.Multer.File[]
 			| undefined,
 	) {
-		Support.textMask.propagandas.imagesContext(imagesContext);
+		const [query] = await Sql.query('SELECT `id` FROM `propagandas`;');
+
+		if (Object(query).length >= Number(process.env.MAX_PROPAGANDAS!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de propagandas foi atingido.',
+			};
+		}
+
+		this.textMask.propagandas.imagesContext(imagesContext);
 
 		await this.imageMask.propagandas['big-image'](
 			Object(files)[imagesContext.indexOf('bigImage')],
@@ -298,6 +369,29 @@ class Support {
 		await this.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
+	}
+
+	/**
+	 * Validates the data for the "postCategory" middleware.
+	 * Checks if the number of categories has exceeded the maximum limit.
+	 * Throws an error if the maximum limit is reached.
+	 * Validates the name of the category using a text mask.
+	 *
+	 * @param name - The name of the category.
+	 * @throws Error - Error object with status and message properties.
+	 */
+	public static async validateDataForMiddlewarePostCategory(name: string) {
+		const [query] = await Sql.query('SELECT `id` FROM `categories`;');
+
+		if (Object(query).length >= Number(process.env.MAX_CATEGORIES!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de categorias foi atingido.',
+			};
+		}
+
+		await this.textMask.categories.name(name);
 	}
 
 	/**
@@ -320,8 +414,23 @@ class Support {
 		installment: string,
 		whatsapp: string,
 		message: string,
-		file: Express.Multer.File | undefined,
+		files:
+			| {
+					[fieldname: string]: Express.Multer.File[];
+			  }
+			| Express.Multer.File[]
+			| undefined,
 	) {
+		const [query] = await Sql.query('SELECT `id` FROM `products`;');
+
+		if (Object(query).length >= Number(process.env.MAX_PRODUCTS!)) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe pelo inconveniente, parece que o número máximo de produtos foi atingido.',
+			};
+		}
+
 		await this.textMask.products.category(category);
 		this.textMask.products.name(name);
 		this.textMask.products.price(price);
@@ -329,7 +438,11 @@ class Support {
 		this.textMask.products.installment(installment);
 		this.textMask.products.whatsapp(whatsapp);
 		this.textMask.products.message(message);
-		await this.imageMask.products.image(file);
+		await this.imageMask.products.image(Object(files)[0]);
+
+		if (Object(files)[1]) {
+			await this.imageMask.products.image(Object(files)[1]);
+		}
 	}
 
 	/**
@@ -348,8 +461,6 @@ class Support {
 	) {
 		Admin.checkType(id, 'string', 'id');
 		Admin.checkLength(id.trim(), 1, -1, 'id');
-
-		Admin.checkType(data, 'string', column);
 
 		await Object(this.textMask)[table][column](data);
 	}
@@ -401,7 +512,7 @@ class Support {
 			throw {
 				status: 400,
 				message:
-					'Desculpe, os IDs enviados não são válidos ou estão incompletos. Por favor, verifique os IDs e certifique-se de que estão corretos e completos.',
+					'Desculpe, os ids enviados não são válidos ou estão incompletos. Por favor, verifique os dados e tente novamente.',
 			};
 		}
 	}
@@ -450,8 +561,8 @@ export default class LocalModules {
 							status: 400,
 							message:
 								maxCount === 1
-									? 'Desculpe, parece que a imagem necessária para completar o pedido não foi enviada. Por favor, adicione uma imagem e tente novamente.'
-									: 'Desculpe, parece que algumas imagens necessárias para completar o pedido não foram enviadas. Por favor, adicione todas as imagens e tente novamente.',
+									? 'Desculpe, parece que nenhuma imagem foi adicionada. Por favor, adicione uma imagem e tente novamente.'
+									: 'Desculpe, parece que algumas imagens não foram adicionadas. Por favor, adicione todas as imagens necessárias e tente novamente.',
 						};
 					} else if (err) {
 						throw err;
@@ -573,7 +684,7 @@ export default class LocalModules {
 		try {
 			const name = req.body.name;
 
-			await Support.textMask.categories.name(name);
+			await Support.validateDataForMiddlewarePostCategory(name);
 
 			await Sql.query('INSERT INTO `categories` (`name`) VALUES (?);', [
 				name.trim(),
@@ -605,8 +716,6 @@ export default class LocalModules {
 			Admin.checkType(id, 'string', 'id');
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
-			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
-
 			const [query] = await Sql.query(
 				'SELECT `image` FROM `products` WHERE `category` = ?;',
 				[id],
@@ -617,6 +726,8 @@ export default class LocalModules {
 			for (let c = 0; c < Object(query).length; c++) {
 				await S3.deleteFileFromS3Bucket(Object(query)[c].image);
 			}
+
+			await Sql.query('DELETE FROM `categories` WHERE `id` = ?;', [id]);
 
 			return next();
 		} catch (err) {
@@ -641,7 +752,7 @@ export default class LocalModules {
 		try {
 			const { category, name, price, off, installment, whatsapp, message } =
 				req.body;
-			const file = req.file;
+			const files = req.files;
 
 			await Support.validateDataForMiddlewarePostProduct(
 				category,
@@ -651,21 +762,26 @@ export default class LocalModules {
 				installment,
 				whatsapp,
 				message,
-				file,
+				files,
 			);
 
-			await S3.uploadFileToS3Bucket(
-				file!.buffer,
-				file!.originalname,
-				file!.mimetype,
-			);
+			for (let c = 0; c < Object(files).length; c++) {
+				const file = Object(files)[c];
+
+				await S3.uploadFileToS3Bucket(
+					file!.buffer,
+					file!.originalname,
+					file!.mimetype,
+				);
+			}
 
 			await Sql.query(
-				'INSERT INTO `products` (`category`, `name`, `image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);',
+				'INSERT INTO `products` (`category`, `name`, `image`, `additional-image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category.trim(),
 					name.trim(),
-					file!.originalname,
+					Object(files)[0]!.originalname,
+					Object(files)[1] ? Object(files)[1]!.originalname : null,
 					price.trim(),
 					off.trim(),
 					installment.trim(),
@@ -701,7 +817,7 @@ export default class LocalModules {
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT `id`, `image` FROM `products` WHERE `id` = ?;',
+				'SELECT `id`, `image`, `additional-image` FROM `products` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -711,7 +827,55 @@ export default class LocalModules {
 
 			await S3.deleteFileFromS3Bucket(Object(query)[0].image);
 
+			if (Object(query)[0]['additional-image']) {
+				await S3.deleteFileFromS3Bucket(Object(query)[0]['additional-image']);
+			}
+
 			await Sql.query('DELETE FROM `products` WHERE `id` = ?;', [id]);
+
+			return next();
+		} catch (err) {
+			Middleware.handleMiddlewareError(res, err);
+		}
+	}
+
+	/**
+	 * Middleware function for handling the deletion of an additional image for a product.
+	 * Validates the request data for deleting the additional image and performs necessary operations.
+	 * Deletes the additional image from the specified product in the database and the associated S3 bucket.
+	 *
+	 * @param {Request} req - The request object.
+	 * @param {Response} res - The response object.
+	 * @param {NextFunction} next - The next function to call in the middleware chain.
+	 */
+	public static async middlewareDeleteProductAdditionalImage(
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	) {
+		try {
+			const id = req.body.id;
+
+			Admin.checkType(id, 'string', 'id');
+			Admin.checkLength(id.trim(), 1, -1, 'id');
+
+			const [query] = await Sql.query(
+				'SELECT `id`, `additional-image` FROM `products` WHERE `id` = ?;',
+				[id],
+			);
+
+			if (Object(query).length === 0) {
+				return next();
+			}
+
+			if (Object(query)[0]['additional-image']) {
+				await S3.deleteFileFromS3Bucket(Object(query)[0]['additional-image']);
+
+				await Sql.query(
+					'UPDATE `products` SET `additional-image` = ? WHERE `id` = ?;',
+					[null, id],
+				);
+			}
 
 			return next();
 		} catch (err) {
@@ -783,6 +947,17 @@ export default class LocalModules {
 
 			if (Object(query).length === 0) {
 				return next();
+			}
+
+			if (!Object(query)[0][column]) {
+				const newName = randomBytes(128).toString('hex').substring(0, 255);
+
+				await Sql.query(
+					'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
+					[newName, id],
+				);
+
+				Object(query)[0][column] = newName;
 			}
 
 			await S3.uploadFileToS3Bucket(

@@ -30,17 +30,11 @@ change.get(
 					authentication: true,
 					firstInput: {
 						type: key === 'Usuário' ? 'text' : 'password',
-						name: 'from',
-						placeholder: key === 'Usuário' ? 'Usuário Atual' : 'Senha atual',
-						maxLength: 30,
-					},
-					secondInput: {
-						type: key === 'Usuário' ? 'text' : 'password',
-						name: 'to',
+						name: 'change',
 						placeholder: key === 'Usuário' ? 'Novo Usuário' : 'Nova Senha',
 						maxLength: 30,
 					},
-					thirdInput: {
+					secondInput: {
 						type: key === 'Usuário' ? 'text' : 'password',
 						name: 'confirm',
 						placeholder:
@@ -49,13 +43,19 @@ change.get(
 								: 'Confirme Nova Senha',
 						maxLength: 30,
 					},
+					thirdInput: {
+						type: 'password',
+						name: 'password',
+						placeholder: 'Senha',
+						maxLength: 30,
+					},
 					button: {
 						icon: key === 'Usuário' ? 'fa-solid fa-user' : 'fa-solid fa-lock',
 						name: key === 'Usuário' ? 'Trocar Usuário' : 'Trocar Senha',
 					},
 					a: {
 						icon: 'fa-solid fa-right-to-bracket',
-						name: 'Voltar para tela de login',
+						name: 'Voltar',
 						href: '/admin',
 					},
 				},

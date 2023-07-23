@@ -96,7 +96,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 7px;
+			gap: 10.5px;
 			padding: 7px;
 			width: 100%;
 			position: relative;
@@ -108,14 +108,12 @@
 
 				width: 100%;
 				text-align: left;
-				white-space: nowrap;
 				transition: ease-in-out 0.35s;
 				color: var(--dark-gray);
 				font-family: var(--font-bold);
 				font-style: normal;
 				font-size: 16.8px;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				line-height: 115%;
 			}
 		}
 
@@ -192,6 +190,7 @@
 			height: 140px;
 			border-radius: 7px;
 			object-fit: contain;
+			transition: ease-in-out 0.25s;
 		}
 
 		& > div:last-of-type {
@@ -265,33 +264,6 @@
 }
 
 @media (min-width: 1300px) {
-	%product-container {
-		& > div:first-of-type {
-			img {
-				width: 154px;
-				height: 154px;
-			}
-		}
-	}
-}
-
-@media (min-width: 1700px) {
-	%product-container {
-		& > div:first-of-type {
-			img {
-				width: 170px;
-				height: 170px;
-			}
-		}
-	}
-
-	%aside-menu {
-		& > div {
-			width: 322px;
-			min-width: 322px;
-		}
-	}
-
 	%aside-list {
 		li {
 			a,
@@ -299,6 +271,33 @@
 				i:last-of-type {
 					font-size: 16.1px;
 				}
+			}
+		}
+	}
+
+	%product-container {
+		& > div:first-of-type {
+			img {
+				width: 133px;
+				height: 133px;
+			}
+		}
+	}
+}
+
+@media (min-width: 1700px) {
+	%aside-menu {
+		& > div {
+			width: 322px;
+			min-width: 322px;
+		}
+	}
+
+	%product-container {
+		& > div:first-of-type {
+			img {
+				width: 170px;
+				height: 170px;
 			}
 		}
 	}

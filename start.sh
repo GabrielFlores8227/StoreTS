@@ -67,7 +67,7 @@ function CHECK_REPO_UPDATE() {
       ./install.sh
       ./update.sh
 
-      echo -e "\n\033[1;32m[v] Starting StoreTS local repository has been successfully updated\033[0m"
+      echo -e "\n\033[1;32m[v] StoreTS local repository has been successfully updated\033[0m"
 
       sleep 5
 

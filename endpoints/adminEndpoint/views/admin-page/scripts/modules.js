@@ -23,11 +23,25 @@ function getToken() {
 const token = getToken();
 
 /**
+ * Retrieves the website data from the server.
+ *
+ * @returns {Promise} A promise that resolves to the JSON response containing the website data.
+ */
+export async function getWebsite() {
+	return await (
+		await fetch('/admin/api/website', {
+			method: 'POST',
+			headers: { authorization: `Bearer ${token}` },
+		})
+	).json();
+}
+
+/**
  * Retrieves the header data from the server.
  *
  * @returns {Promise} A promise that resolves to the JSON response containing the header data.
  */
-export async function getHeader() {
+async function getHeader() {
 	return await (
 		await fetch('/admin/api/header', {
 			method: 'POST',
@@ -69,7 +83,7 @@ async function getCategories() {
  *
  * @returns {Promise} A promise that resolves to the JSON response containing the product data.
  */
-async function getProducts() {
+export async function getProducts() {
 	return await (
 		await fetch('/admin/api/products', {
 			method: 'POST',
@@ -95,6 +109,325 @@ export function buildAsideMenus(asideButtonHandler) {
 
 	asideButtonHandler.forEach(({ selector, element, action }) => {
 		addClickHandler(selector, element, action);
+	});
+}
+
+/**
+ * Calculates the total website accesses based on the provided 'dates' object.
+ * It iterates over each month in the 'dates' object and adds up the number of accesses.
+ * If there are accesses, it updates the corresponding paragraph element in the DOM to display the total accesses for the current year.
+ * @param {Object} dates - The dates object containing website access data grouped by month.
+ */
+export function buildWebsiteAccesses(dates) {
+	let accesses = 0;
+
+	Object.keys(dates).forEach((month) => {
+		accesses = accesses + dates[month].length;
+	});
+
+	if (accesses !== 0) {
+		window.document.querySelector(
+			'p[total-website-accesses]',
+		).innerText = `${accesses
+			.toString()
+			.replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			accesses > 1 ? 'acessos' : 'acesso'
+		} neste ano`;
+	}
+}
+
+/**
+ * Calculates the total clicks for all products based on the provided 'products' object.
+ * It iterates over each category and product in the 'products' object and adds up the number of clicks from their respective history arrays.
+ * If there are clicks, it updates the corresponding paragraph element in the DOM to display the total clicks for the current year.
+ * @param {Object} products - The products object containing product data grouped by category.
+ */
+export function buildProductTotalClicks(products) {
+	let clicks = 0;
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			clicks = clicks + product.history.length;
+		});
+	});
+
+	if (clicks !== 0) {
+		window.document.querySelector(
+			'p[total-products-clicks]',
+		).innerText = `${clicks.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			clicks > 1 ? 'clicks' : 'click'
+		} neste ano`;
+	}
+}
+
+/**
+ * Determines the most clicked category based on the provided 'products' object.
+ * It iterates over each category and calculates the total clicks by summing up the number of clicks from all products within each category.
+ * It keeps track of the category with the highest number of clicks and updates the 'name' and 'clicks' variables accordingly.
+ * If there are clicks, it updates the corresponding paragraph element in the DOM to display the most clicked category and the total clicks for the current year.
+ * @param {Object} products - The products object containing product data grouped by category.
+ */
+export function buildMostClickedCategory(products) {
+	let name = '';
+	let clicks = 0;
+
+	Object.keys(products).forEach((category) => {
+		let _clicks = 0;
+
+		products[category].forEach((product) => {
+			_clicks = _clicks + product.history.length;
+		});
+
+		if (_clicks > clicks) {
+			clicks = _clicks;
+			name = category;
+		}
+	});
+
+	if (clicks !== 0) {
+		window.document.querySelector(
+			'p[most-clicked-category]',
+		).innerText = `${name} com ${clicks
+			.toString()
+			.replace(/\B(?=(\d{3})+(?!\d))/g, '.')} ${
+			clicks > 1 ? 'clicks' : 'click'
+		} neste ano`;
+	}
+}
+
+/**
+ * Builds the top products list based on the provided 'products' object.
+ * It iterates through each category and sorts the products based on the number of clicks.
+ * The top products are added to the 'topList' array, limited to 'max' number of products.
+ * The template is used to create table rows for each top product, and the table is updated in the DOM.
+ */
+export async function buildTopProducts() {
+	const products = await getProducts();
+
+	const topList = [];
+	const max = 10;
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			product.category = category;
+			product.history = product.history.length;
+
+			if (product.history === 0) {
+				return;
+			}
+
+			if (topList.length === 0) {
+				topList.push(product);
+
+				return;
+			}
+
+			for (let c = 0; c < topList.length; c++) {
+				let item = topList[c];
+
+				if (product.history > item.history) {
+					topList.splice(c, 0, product);
+
+					break;
+				}
+
+				if (product.history === item.history) {
+					topList.splice(c + 1, 0, product);
+
+					break;
+				}
+
+				if (topList.length < max && c === topList.length - 1) {
+					topList.push(product);
+
+					break;
+				}
+			}
+		});
+	});
+
+	if (topList.length >= max) {
+		topList.splice(max);
+	}
+
+	const template = window.document.querySelector(
+		'template[top-products-template]',
+	);
+
+	const templateParent = template.parentElement;
+	const oldItems = templateParent.querySelectorAll('tr[table-row]');
+
+	topList.forEach((product, index) => {
+		const templateUsable = template.content.cloneNode(true).children[0];
+
+		templateUsable.setAttribute('table-row', '');
+
+		templateUsable.querySelector('p[top-position]').innerText = `#${index + 1}`;
+		templateUsable.querySelector(
+			'p[product-name]',
+		).innerText = `${product.name} (${product.category})`;
+		templateUsable.querySelector('p[clicks-number]').innerText = `${
+			product.history
+		} ${product.history > 1 ? 'clicks' : 'click'}`;
+
+		if (oldItems[index]) {
+			templateParent.replaceChild(templateUsable, oldItems[index]);
+		} else {
+			templateParent.append(templateUsable);
+		}
+	});
+
+	handleTableVisibility();
+}
+
+/**
+ * Builds a line chart to display the website accesses for a specific month based on the provided 'dates' object.
+ * It retrieves the canvas element and chart context from the DOM.
+ * It processes the data in 'dates' to create the chart dataset.
+ * It creates a linear gradient for the chart's background color using the primary color defined in the CSS.
+ * It initializes a new Chart instance with the provided data and options.
+ * @param {Object} dates - The dates object containing website access data for a specific month.
+ */
+export function buildWebsiteAccessesMonthChart(dates) {
+	const canvas = window.document.querySelector(
+		'div[access-history-chart-container] canvas',
+	);
+	const chartCanvas = canvas.getContext('2d');
+
+	const year = Object.keys(dates);
+	const month = Object.keys(dates[year]);
+	const dataSchema = {};
+
+	dates[year][month].forEach((date) => {
+		const day = String(date.date).split(' ')[2];
+
+		if (!dataSchema[day]) {
+			dataSchema[day] = 0;
+		}
+
+		dataSchema[day]++;
+	});
+
+	const label = `Acessos no site em ${month}`;
+	const labels = Object.keys(dataSchema).sort();
+	const data = [];
+
+	labels.forEach((day) => {
+		data.push(dataSchema[day]);
+	});
+
+	const color = getComputedStyle(document.documentElement).getPropertyValue(
+		'--primary-color',
+	);
+
+	const backgroundColor = chartCanvas.createLinearGradient(0, 0, 0, 400);
+	backgroundColor.addColorStop(0, color);
+	backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+	new Chart(chartCanvas, {
+		type: 'line',
+		data: {
+			labels,
+			datasets: [
+				{
+					data,
+					label,
+					fill: true,
+					lineTension: 0.3,
+					backgroundColor,
+				},
+			],
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+		},
+	});
+}
+
+/**
+ * Builds a line chart to display the website accesses for each month in a specific year based on the provided 'dates' object.
+ * It retrieves the canvas element and chart context from the DOM.
+ * It defines the order of months in Portuguese.
+ * It iterates over the 'dates' object to create the chart datasets for each year.
+ * It determines the labels based on the order of months and the available data.
+ * It creates the chart datasets with the corresponding data, labels, and options.
+ * It creates a linear gradient for the last dataset's background color using the primary color defined in the CSS.
+ * It sets the last dataset to be visible in the chart.
+ * It initializes a new Chart instance with the provided data and options.
+ * @param {Object} dates - The dates object containing website access data for each month in a specific year.
+ */
+export function buildWebsiteAccessesYearChart(dates) {
+	const canvas = window.document.querySelector(
+		'div[access-history-chart-container] canvas',
+	);
+	const chartCanvas = canvas.getContext('2d');
+
+	const monthOrder = [
+		'janeiro',
+		'fevereiro',
+		'março',
+		'abril',
+		'maio',
+		'junho',
+		'julho',
+		'agosto',
+		'setembro',
+		'outubro',
+		'novembro',
+		'dezembro',
+	];
+
+	const datasets = [];
+	let labels;
+
+	Object.keys(dates).forEach((year) => {
+		const label = `Acessos no site em ${year}`;
+
+		const _labels = Object.keys(dates[year]).sort(
+			(a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b),
+		);
+
+		if (!labels || _labels.length > labels.length) {
+			labels = _labels;
+		}
+
+		const data = [];
+
+		_labels.forEach((month) => {
+			data.push(dates[year][month].length);
+		});
+
+		datasets.push({
+			data,
+			label,
+			lineTension: 0.3,
+			fill: true,
+			hidden: true,
+		});
+	});
+
+	const color = getComputedStyle(document.documentElement).getPropertyValue(
+		'--primary-color',
+	);
+
+	const backgroundColor = chartCanvas.createLinearGradient(0, 0, 0, 400);
+	backgroundColor.addColorStop(0, color);
+	backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+	datasets[datasets.length - 1].backgroundColor = backgroundColor;
+	datasets[datasets.length - 1].hidden = false;
+
+	new Chart(chartCanvas, {
+		type: 'line',
+		data: {
+			labels,
+			datasets,
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+		},
 	});
 }
 
@@ -136,6 +469,22 @@ export async function buildColor() {
 	const { color } = await getHeader();
 
 	window.document.documentElement.style.setProperty('--primary-color', color);
+
+	window.document.querySelectorAll('canvas').forEach((canvas) => {
+		const ctx = canvas.getContext('2d');
+		const chart = Chart.getChart(ctx);
+
+		const backgroundColor = ctx.createLinearGradient(0, 0, 0, 400);
+		backgroundColor.addColorStop(0, color);
+		backgroundColor.addColorStop(1, hexToRGBA(color, 0.3));
+
+		chart.data.datasets.forEach(function (dataset) {
+			dataset.borderColor = backgroundColor;
+			dataset.backgroundColor = backgroundColor;
+		});
+
+		chart.update();
+	});
 }
 
 /**
@@ -164,10 +513,6 @@ async function buildComplexTable(
 		`template[${sectionName}-template]`,
 	);
 
-	template.parentElement.querySelectorAll('tr[original-item]').forEach((tr) => {
-		tr.remove();
-	});
-
 	handleTableVisibility();
 
 	if (sectionName === 'products') {
@@ -175,24 +520,35 @@ async function buildComplexTable(
 
 		Object.keys(apiList)
 			.reverse()
-			.forEach((apiItem, index) => {
+			.forEach((apiItem) => {
 				apiList[apiItem].reverse().forEach((apiItem) => {
-					handleApiList(apiItem, index, {
+					handleApiList(apiItem, {
 						option: categories,
-						templateProperties: (template) =>
-							loadProductInputsProperties(template),
+						templateProperties: (template) => {
+							template.setAttribute('category', apiItem.category);
+							loadProductInputsProperties(template);
+						},
 					});
 				});
 			});
 	} else {
 		apiList.reverse().forEach((apiItem, index) => {
-			handleApiList(apiItem, index);
+			handleApiList(apiItem);
 		});
 	}
 
-	handleTableVisibility();
+	const templateParent = template.parentElement;
 
-	template.parentElement.setAttribute(`sortable-${sectionName}`, '');
+	if (isLastItemNew) {
+		const trList = templateParent.querySelectorAll('tr[original-item]');
+		trList[trList.length - 1]
+			.querySelector('div[action-info]')
+			.classList.add('--ok');
+	}
+
+	templateParent.setAttribute(`sortable-${sectionName}`, '');
+
+	handleTableVisibility();
 
 	addSortableList(`sortable-${sectionName}`, async () => {
 		let ids = [];
@@ -225,7 +581,6 @@ async function buildComplexTable(
 
 	function handleApiList(
 		apiItem,
-		index,
 		{ option = undefined, templateProperties = undefined } = {},
 	) {
 		const templateUsable = template.content.cloneNode(true).children[0];
@@ -253,9 +608,30 @@ async function buildComplexTable(
 		const actionContainer = templateUsable.querySelector(
 			'td[action-container]',
 		);
+
 		const actionButtons = actionContainer.querySelectorAll('button');
 
 		actionButtons[2].addEventListener('click', async () => {
+			if (
+				sectionName === 'categories' &&
+				templateUsable
+					.querySelector('div[cell-container]')
+					.getAttribute('count') != 0
+			) {
+				const count = templateUsable
+					.querySelector('div[cell-container]')
+					.getAttribute('count');
+
+				const confirm = await handleConfirmCategoryDeletion(
+					apiItem.name,
+					count,
+				);
+
+				if (!confirm) {
+					return;
+				}
+			}
+
 			let form = {};
 
 			form['id'] = String(apiItem.id);
@@ -272,8 +648,10 @@ async function buildComplexTable(
 
 			if (req) {
 				if (deleteItemCallback) {
-					await deleteItemCallback();
+					await deleteItemCallback(apiItem.id);
 				}
+
+				templateUsable.remove();
 
 				buildComplexTable(
 					apiListBuilder,
@@ -286,11 +664,19 @@ async function buildComplexTable(
 			}
 		});
 
-		if (isLastItemNew && index === 0) {
-			templateUsable.querySelector('div[action-info]').classList.add('--ok');
-		}
+		const oldItem = template.parentElement.querySelector(
+			`tr[identifier="${apiItem.id}"]`,
+		);
 
-		template.parentElement.prepend(templateUsable);
+		const newItem = template.parentElement.querySelector(`tr[new-item]`);
+
+		if (oldItem) {
+			template.parentElement.replaceChild(templateUsable, oldItem);
+		} else if (newItem) {
+			template.parentElement.replaceChild(templateUsable, newItem);
+		} else {
+			template.parentElement.prepend(templateUsable);
+		}
 	}
 }
 
@@ -332,7 +718,12 @@ export function buildPropagandas(isLastItemNew = false) {
 				'href',
 				index === 0 ? apiItem['big-image'] : apiItem['small-image'],
 			);
+
 			link.innerText = `${link.innerText} ${apiItem.id}`;
+
+			link.querySelectorAll('br').forEach((br) => {
+				br.remove();
+			});
 
 			loadFileInputProperties(div);
 		});
@@ -361,6 +752,7 @@ export function buildCategories(isLastItemNew = false) {
 	const deleteItemApiUrl = '/admin/api/category';
 	const reorderItemsApiUrl = '/admin/api/categories';
 	const cellFunction = (apiItem, cell, index) => {
+		cell.setAttribute('count', apiItem.productCount);
 		cell.setAttribute('action', '/admin/api/categories/name');
 
 		cell.querySelectorAll('div[pseudo-input]').forEach(async (div) => {
@@ -387,9 +779,13 @@ export function buildCategories(isLastItemNew = false) {
 		});
 	};
 
-	const deleteItemCallback = async () => {
-		await buildProductsTemplateCallback();
+	const deleteItemCallback = async (id) => {
 		await buildProducts();
+		await buildProductsTemplateCallback();
+
+		window.document.querySelectorAll(`tr[category='${id}']`).forEach((tr) => {
+			tr.remove();
+		});
 	};
 
 	buildComplexTable(
@@ -414,22 +810,14 @@ export function buildCategories(isLastItemNew = false) {
  */
 function buildProductCategoriesSelect(categories, select, selected = '') {
 	const selectedOptions = [];
+	const selectedIndex = select.selectedIndex;
 
-	select.querySelectorAll('option').forEach((option, index) => {
-		const attributes = option.attributes;
-
-		for (var i = 0; i < attributes.length; i++) {
-			var attributeName = attributes[i].name;
-			if (attributeName === 'selected') {
-				selectedOptions.push(option.value);
-			}
-		}
-
-		if (!selectedOptions[index]) {
-			selectedOptions.push(false);
-		}
+	select.querySelectorAll('option').forEach((option) => {
+		selectedOptions.push(false);
 		option.remove();
 	});
+
+	selectedOptions[selectedIndex] = true;
 
 	categories.forEach((category, index) => {
 		const template = select.querySelector('template').content.cloneNode(true)
@@ -462,7 +850,35 @@ export async function buildProducts(isLastItemNew = false) {
 	const reorderItemsApiUrl = '/admin/api/products';
 	const cellFunction = (apiItem, cell, index, categories) => {
 		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
-			cell.setAttribute('action', '/admin/api/products/image');
+			if (index === 0) {
+				cell.setAttribute('action', '/admin/api/products/image');
+			} else {
+				cell.setAttribute('action', '/admin/api/products/additional-image');
+			}
+
+			const deleteAdditionalImage = async () => {
+				let form = {};
+				form['id'] = String(apiItem.id);
+				form = JSON.stringify(form);
+
+				const req = await handleCellRequest(cell, form, {
+					method: 'DELETE',
+					useAction: '/admin/api/product/additional-image',
+					contentType: 'application/json',
+				});
+
+				if (req) {
+					const a = div.querySelector('a');
+
+					a.innerText = 'Imagem Adicional';
+					a.removeAttribute('href', '');
+					div.classList.remove('--special');
+
+					const button = div.querySelector('button');
+					const clonedButton = button.cloneNode(true);
+					button.parentNode.replaceChild(clonedButton, button);
+				}
+			};
 
 			div.querySelectorAll('input').forEach((input) => {
 				input.addEventListener('input', async (e) => {
@@ -471,11 +887,33 @@ export async function buildProducts(isLastItemNew = false) {
 					form.append('file', e.target.files[0]);
 					form.append('id', apiItem.id);
 
-					await handleCellRequest(cell, form);
+					const req = await handleCellRequest(cell, form);
+
+					if (index === 1) {
+						if (req && !div.classList.contains('--special')) {
+							div.classList.add('--special');
+						}
+
+						div.querySelector('button').addEventListener('click', async () => {
+							await deleteAdditionalImage();
+						});
+					}
 				});
 			});
 
-			div.querySelector('a').setAttribute('href', apiItem.image);
+			if (index === 0) {
+				div.querySelector('a').setAttribute('href', apiItem.image);
+			} else if (index === 1 && apiItem['additional-image']) {
+				div
+					.querySelector('a')
+					.setAttribute('href', apiItem['additional-image']);
+
+				div.classList.add('--special');
+
+				div.querySelector('button').addEventListener('click', async () => {
+					await deleteAdditionalImage();
+				});
+			}
 
 			loadFileInputProperties(div);
 		});
@@ -490,6 +928,7 @@ export async function buildProducts(isLastItemNew = false) {
 					'category',
 					e.target.value,
 					String(apiItem.id),
+					() => buildCategories(),
 				);
 			});
 
@@ -554,7 +993,10 @@ export async function buildProducts(isLastItemNew = false) {
 			let lastInnerText = div.innerText.replace(/\D/g, '');
 
 			div.addEventListener('focusout', async () => {
-				const currentInnerText = div.innerText.replace(/\D/g, '');
+				const currentInnerText =
+					div.innerText.replace(/\D/g, '') === ''
+						? '0'
+						: div.innerText.replace(/\D/g, '');
 
 				await handleTextInputRequest(
 					lastInnerText,
@@ -636,6 +1078,8 @@ export async function buildProducts(isLastItemNew = false) {
 		});
 	};
 
+	const deleteItemCallback = async () => await buildTopProducts();
+
 	buildComplexTable(
 		apiListBuilder,
 		sectionName,
@@ -644,6 +1088,7 @@ export async function buildProducts(isLastItemNew = false) {
 		reorderItemsApiUrl,
 		{
 			isLastItemNew,
+			deleteItemCallback,
 		},
 	);
 }
@@ -695,13 +1140,15 @@ export function buildPropagandasTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
+
 			buildPropagandas(true);
 		}
 	});
 
 	actionButtons[2].addEventListener('click', () => {
 		template.remove();
+
 		handleTableVisibility();
 	});
 
@@ -748,16 +1195,16 @@ export function buildCategoriesTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
 
 			buildCategories(true);
-
 			await buildProductsTemplateCallback();
 		}
 	});
 
 	actionButtons[2].addEventListener('click', () => {
 		template.remove();
+
 		handleTableVisibility();
 	});
 
@@ -790,7 +1237,15 @@ export function buildProductsTemplate(specialSection) {
 		const form = new FormData();
 
 		const image = template.querySelector('input[product-image]').files[0];
-		form.append('file', image);
+		const additionalImage = template.querySelector('input[additional-image]')
+			.files[0];
+
+		if (additionalImage) {
+			form.append('files', image);
+			form.append('files', additionalImage);
+		} else {
+			form.append('files', image);
+		}
 
 		const category = template.querySelector('select[product-category]').value;
 		form.append('category', category);
@@ -834,9 +1289,10 @@ export function buildProductsTemplate(specialSection) {
 		);
 
 		if (req) {
-			template.setAttribute('original-item', '');
+			template.setAttribute('new-item', '');
 
 			await buildProducts(true);
+			buildCategories();
 		}
 	});
 
@@ -865,18 +1321,14 @@ export async function buildProductsTemplateCallback() {
 /**
  * Handles the cursor index within a pseudo input element.
  * @param {HTMLDivElement} div - The pseudo input element.
- * @param {number} [index] - The optional cursor index to set. If not provided or exceeds the div's text length, the index is set to the end of the text.
  */
-export function handlePseudoInputCursorIndex(div, index = undefined) {
+function handlePseudoInputCursorIndex(div) {
+	const selection = window.getSelection();
+	const range = document.createRange();
+	const index = div.innerText.length;
+
 	if (div.innerText === '') {
 		return;
-	}
-
-	const range = document.createRange();
-	const selection = window.getSelection();
-
-	if (!index || index > div.innerText.length) {
-		index = div.innerText.length; // Adjust index if it exceeds the div's text length
 	}
 
 	range.setStart(div.firstChild || '', index);
@@ -891,15 +1343,15 @@ export function handlePseudoInputCursorIndex(div, index = undefined) {
  * @param {HTMLDivElement} div - The file input container element.
  */
 export function loadFileInputProperties(div) {
-	const link = div.querySelector('a');
-	const fileInput = div.querySelector('input');
+	const link = $(div).find('a');
+	const fileInput = $(div).find('input');
 
-	fileInput.addEventListener('input', (e) => {
+	fileInput.on('input', function (e) {
 		const file = e.target.files[0];
 		const fileURL = URL.createObjectURL(file);
 
-		link.href = fileURL;
-		link.innerText = e.target.files[0].name;
+		link.attr('href', fileURL);
+		link.text(e.target.files[0].name);
 	});
 }
 
@@ -909,6 +1361,15 @@ export function loadFileInputProperties(div) {
  */
 export function loadPseudoInputProperties(div) {
 	let lastInput = div.innerText;
+
+	div.addEventListener('paste', (e) => {
+		e.preventDefault();
+
+		var clipboardData = e.clipboardData || window.clipboardData;
+		var plainText = clipboardData.getData('text/plain');
+
+		document.execCommand('insertText', false, plainText);
+	});
 
 	div.addEventListener('input', () => {
 		const value = div.innerText;
@@ -934,7 +1395,7 @@ export function loadPseudoInputProperties(div) {
  * Formats the WhatsApp input value based on its length and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The WhatsApp input element.
  */
-export function formatWhatsapp(inputElement) {
+function formatWhatsapp(inputElement) {
 	let value = String(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value.length === 0) {
@@ -962,8 +1423,16 @@ export function formatWhatsapp(inputElement) {
  * Formats the discount percentage input value and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The discount percentage input element.
  */
-export function formatOff(inputElement) {
-	let value = Number(inputElement.innerText.replace(/\D/g, ''));
+function formatOff(inputElement) {
+	let value = inputElement.innerText.replace(/\D/g, '');
+
+	if (value === '') {
+		inputElement.innerText = '';
+
+		return;
+	}
+
+	value = Number(inputElement.innerText.replace(/\D/g, ''));
 
 	if (value > 100) {
 		inputElement.innerText = '100%';
@@ -978,7 +1447,7 @@ export function formatOff(inputElement) {
  * Formats the price input value and updates the input element's text content.
  * @param {HTMLDivElement} inputElement - The price input element.
  */
-export function formatPrice(inputElement) {
+function formatPrice(inputElement) {
 	const value = String(Number(inputElement.innerText.replace(/\D/g, '')));
 
 	if (value.length <= 3) {
@@ -1044,7 +1513,7 @@ export function loadWhatsappProperties(div) {
  * Loads product input properties and adds event listeners to handle input and formatting.
  * @param {HTMLElement} template - The product template element.
  */
-export function loadProductInputsProperties(template) {
+function loadProductInputsProperties(template) {
 	template.querySelectorAll('div[file-input-container]').forEach((div) => {
 		const key = generateRandomString(30);
 
@@ -1082,9 +1551,8 @@ export function loadProductInputsProperties(template) {
 
 		if (event.key === 'Backspace') {
 			inputElement.innerText = value.slice(0, -1);
+			formatOff(inputElement);
 		}
-
-		formatOff(inputElement);
 	});
 
 	pseudoInputs[2].addEventListener('input', (event) => {
@@ -1104,7 +1572,7 @@ export function loadProductInputsProperties(template) {
  * @param {string | undefined} contentType - The content type of the request.
  * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
  */
-export async function handleActionRequest(
+async function handleActionRequest(
 	actionContainer,
 	url,
 	method,
@@ -1134,7 +1602,9 @@ export async function handleActionRequest(
 		return true;
 	} else {
 		if (status === 401) {
-			window.document.querySelector('div[warning]').classList.add('--on');
+			window.document
+				.querySelector('div[multiple-windows-warning]')
+				.classList.add('--on');
 		}
 
 		$('--error', message);
@@ -1165,16 +1635,22 @@ export async function handleActionRequest(
 }
 
 /**
- * Handles a cell request by sending a PUT request to the action URL specified in the cell's attribute with the provided body and headers.
- * @param {HTMLElement} cell - The cell element representing the action.
- * @param {FormData | string | null} body - The body of the request.
- * @param {string | undefined} contentType - The content type of the request.
- * @returns {Promise<boolean>} A promise that resolves to true if the request is successful, false otherwise.
+ * Handles a cell request.
+ * Makes a request using fetch to the specified action URL with the given method, body, and headers.
+ *
+ * @param {HTMLElement} cell - The cell element for the request.
+ * @param {any} body - The request body data.
+ * @param {{ method?: string, contentType?: string | undefined, useAction?: string | null }} [options={}] - Options for the request, including method, content type, and custom action URL.
+ * @returns {Promise<boolean>} A promise that resolves to a boolean indicating whether the request was successful (true) or unsuccessful (false).
  */
-export async function handleCellRequest(cell, body, contentType = undefined) {
+export async function handleCellRequest(
+	cell,
+	body,
+	{ method = 'PUT', contentType = undefined, useAction = undefined } = {},
+) {
 	$('--loading');
 
-	const action = cell.getAttribute('action');
+	const action = useAction || cell.getAttribute('action');
 
 	const headers = {
 		authorization: `Bearer ${token}`,
@@ -1185,7 +1661,7 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 	}
 
 	const req = await fetch(action, {
-		method: 'PUT',
+		method,
 		headers,
 		body,
 	});
@@ -1197,7 +1673,9 @@ export async function handleCellRequest(cell, body, contentType = undefined) {
 		return true;
 	} else {
 		if (status === 401) {
-			window.document.querySelector('div[warning]').classList.add('--on');
+			window.document
+				.querySelector('div[multiple-windows-warning]')
+				.classList.add('--on');
 		}
 
 		$('--error', message);
@@ -1254,7 +1732,9 @@ export async function handleTextInputRequest(
 	form['id'] = identifier;
 	form = JSON.stringify(form);
 
-	const req = await handleCellRequest(cell, form, 'application/json');
+	const req = await handleCellRequest(cell, form, {
+		contentType: 'application/json',
+	});
 
 	if (req && callBack) {
 		await callBack();
@@ -1265,7 +1745,7 @@ export async function handleTextInputRequest(
  * Handles the visibility of tables in special sections.
  */
 export function handleTableVisibility() {
-	window.document.querySelectorAll('div[special-section]').forEach((div) => {
+	window.document.querySelectorAll('div[table-visibility]').forEach((div) => {
 		const rows = div.querySelectorAll('tr[table-row]');
 
 		if (rows.length === 0) {
@@ -1291,12 +1771,14 @@ function addSortableList(sectionName, callBack) {
 			stop: callBack,
 			tolerance: 'pointer',
 			helper: 'clone', // Use 'clone' helper to maintain original widths
-			start: function (event, ui) {
+			start: function (_, ui) {
 				ui.helper.find('th, td').each(function () {
 					$(this).data('width', $(this).width());
 				});
+
+				ui.helper.css('box-shadow', '0 0 5px 2px rgba(0, 0, 0, 0.3)');
 			},
-			change: function (event, ui) {
+			change: function (_, ui) {
 				ui.helper.find('th, td:not(.action-container)').each(function () {
 					$(this).width($(this).data('width'));
 				});
@@ -1353,13 +1835,75 @@ function generateRandomString(length) {
 }
 
 /**
+ * Handles the confirmation of category deletion.
+ *
+ * @param {string} category - The name of the category to be deleted.
+ * @param {number} count - The number of products associated with the category.
+ * @returns {Promise<boolean>} A promise that resolves to a boolean value indicating whether to proceed with the deletion or not.
+ */
+async function handleConfirmCategoryDeletion(category, count) {
+	const warningContainer = window.document.querySelector(
+		'div[confirm-category-deletion-warning]',
+	);
+
+	warningContainer.classList.add('--on');
+	warningContainer.querySelector(
+		'p',
+	).innerText = `Tem certeza que deseja deletar a categoria "${category}"? Esta categoria possui ${count} ${
+		count == 1 ? `produto` : `produtos`
+	}. Se você prosseguir com a exclusão, os produtos relacionados também serão removidos.`;
+
+	const buttons = warningContainer.querySelectorAll('button');
+
+	return await new Promise((resolve) => {
+		buttons[0].addEventListener('click', () => {
+			warningContainer.classList.remove('--on');
+
+			destroyButtonsEventListeners();
+
+			resolve(false);
+		});
+
+		buttons[1].addEventListener('click', () => {
+			warningContainer.classList.remove('--on');
+
+			destroyButtonsEventListeners();
+
+			resolve(true);
+		});
+	});
+
+	function destroyButtonsEventListeners() {
+		buttons[0].parentNode.replaceChild(buttons[0].cloneNode(true), buttons[0]);
+		buttons[1].parentNode.replaceChild(buttons[1].cloneNode(true), buttons[1]);
+	}
+}
+
+/**
  * Converts a number to the Brazilian currency format.
  * @param {number} number - The number to be converted.
  * @returns {string} - The number in the Brazilian currency format.
  */
-export function convertToMoneyFormat(number) {
+function convertToMoneyFormat(number) {
 	return number.toLocaleString('pt-BR', {
 		style: 'currency',
 		currency: 'BRL',
 	});
+}
+
+/**
+ * Converts a hexadecimal color value to RGBA format with the specified alpha value.
+ * It removes the '#' character from the beginning of the hex string.
+ * It extracts the red, green, and blue values from the hex string and converts them to decimal.
+ * It constructs and returns the RGBA string with the provided alpha value.
+ * @param {string} hex - The hexadecimal color value to convert.
+ * @param {number} alpha - The alpha value for the RGBA format (between 0 and 1).
+ * @returns {string} The RGBA color value.
+ */
+function hexToRGBA(hex, alpha) {
+	const hexValue = hex.replace('#', '');
+	const r = parseInt(hexValue.substring(0, 2), 16);
+	const g = parseInt(hexValue.substring(2, 4), 16);
+	const b = parseInt(hexValue.substring(4, 6), 16);
+	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }

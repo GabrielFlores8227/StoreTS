@@ -1,4 +1,31 @@
-import { buildAsideMenus } from './modules.js';
+import {
+	getWebsite,
+	getProducts,
+	loadFileInputProperties,
+	loadPseudoInputProperties,
+	loadWhatsappProperties,
+	handleCellRequest,
+	handleTextInputRequest,
+	handleTableVisibility,
+	buildAsideMenus,
+	buildWebsiteAccesses,
+	buildProductTotalClicks,
+	buildMostClickedCategory,
+	buildWebsiteAccessesMonthChart,
+	buildWebsiteAccessesYearChart,
+	buildTopProducts,
+	buildIcon,
+	buildLogo,
+	buildTitle,
+	buildColor,
+	buildPropagandas,
+	buildCategories,
+	buildProducts,
+	buildPropagandasTemplate,
+	buildCategoriesTemplate,
+	buildProductsTemplate,
+	buildProductsTemplateCallback,
+} from './modules.js';
 
 /**
  * Immediately invoked function expression (IIFE) that adds a click event listener to the button within the 'div[warning]' element.
@@ -6,7 +33,7 @@ import { buildAsideMenus } from './modules.js';
  */
 (() => {
 	window.document
-		.querySelector('div[warning] button')
+		.querySelector('div[multiple-windows-warning] button')
 		.addEventListener('click', () => {
 			location.reload(true);
 		});
@@ -32,6 +59,303 @@ buildAsideMenus([
 		action: 'remove',
 	},
 ]);
+
+/**
+ * Immediately invoked function expression (IIFE) that retrieves the website data asynchronously using the 'getWebsite' function.
+ * It processes the retrieved data to generate a formatted 'dates' object, grouping the history dates by year and month.
+ * Based on the processed data, it dynamically builds website access charts.
+ * If there are no valid dates available, it removes the access chart container element from the DOM.
+ * The function follows the pattern of an IIFE for encapsulation and immediate execution.
+ */
+(async () => {
+	const website = await getWebsite();
+
+	const _dates = website.history.map((dateString) => {
+		const date = moment(dateString).toDate();
+		const month = moment(date).locale('pt-br').format('MMMM');
+		const year = moment(date).format('YYYY');
+		return { date, month, year };
+	});
+
+	const dates = {};
+
+	_dates.forEach((date) => {
+		const month = date.month;
+		const year = date.year;
+
+		if (!dates[year]) {
+			dates[year] = {};
+		}
+
+		if (!dates[year][month]) {
+			dates[year][month] = [];
+		}
+
+		dates[year][month].push(date);
+	});
+
+	const currentYear = new Date().getFullYear();
+
+	if (Object.keys(dates).length === 0) {
+		window.document
+			.querySelector('div[access-history-chart-container]')
+			.remove();
+
+		return;
+	}
+
+	buildWebsiteAccesses(dates[currentYear]);
+
+	const years = Object.keys(dates);
+
+	if (years.length === 1) {
+		const months = Object.keys(dates[years]);
+
+		if (months.length === 1) {
+			buildWebsiteAccessesMonthChart(dates);
+
+			return;
+		}
+	}
+
+	buildWebsiteAccessesYearChart(dates);
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that retrieves the current year and the products asynchronously using the 'getProducts' function.
+ * It filters the product history to keep only the dates from the current year.
+ * After filtering, it calls functions to build the total clicks for each product and determine the most clicked category.
+ * The function follows the pattern of an IIFE for encapsulation and immediate execution.
+ */
+(async () => {
+	const currentYear = new Date().getFullYear();
+
+	const products = await getProducts();
+
+	Object.keys(products).forEach((category) => {
+		products[category].forEach((product) => {
+			const newHistory = [];
+
+			product.history.forEach((date) => {
+				if (date.startsWith(currentYear)) {
+					newHistory.push(date);
+				}
+			});
+
+			product.history = newHistory;
+		});
+	});
+
+	buildProductTotalClicks(products);
+	buildMostClickedCategory(products);
+	await buildTopProducts();
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that applies the 'loadFileInputProperties' function
+ * to all 'div' elements with the 'file-input-container' attribute.
+ */
+(() => {
+	window.document
+		.querySelectorAll('div[file-input-container]')
+		.forEach((div) => {
+			loadFileInputProperties(div);
+		});
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that applies the 'loadPseudoInputProperties' function
+ * to all 'div' elements with the 'pseudo-input' attribute, and adds a 'keydown' event listener to all
+ * 'textarea' elements to handle the 'Enter' key press.
+ */
+(() => {
+	window.document.querySelectorAll('div[pseudo-input]').forEach((div) => {
+		loadPseudoInputProperties(div);
+	});
+
+	window.document.querySelectorAll('textarea').forEach((textarea) => {
+		textarea.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.target.blur();
+				return e.preventDefault();
+			}
+		});
+	});
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that adjusts the height of 'textarea' elements
+ * based on their content and handles resizing when the window is resized.
+ */
+(() => {
+	window.document.querySelectorAll('textarea').forEach((textarea) => {
+		textarea.style.height =
+			textarea.scrollHeight <= 74
+				? '53px'
+				: `${textarea.offsetHeight + 14 * 2}px`;
+
+		if (textarea.scrollHeight === 74) {
+			textarea.style.height = 'auto';
+		}
+
+		textarea.addEventListener('input', () => {
+			textarea.style.height = '53px';
+
+			if (textarea.scrollHeight - textarea.offsetHeight === 0) {
+				return;
+			}
+
+			textarea.style.height = 'auto';
+			textarea.style.height = `${textarea.scrollHeight}px`;
+		});
+
+		window.addEventListener('resize', () => {
+			textarea.style.height = '53px';
+
+			if (textarea.scrollHeight - textarea.offsetHeight === 0) {
+				return;
+			}
+
+			textarea.style.height = 'auto';
+			textarea.style.height = `${textarea.scrollHeight}px`;
+		});
+	});
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that handles various interactions within 'div[cell-container]'
+ * elements, such as file input changes, pseudo input focusout, textarea changes, and input color changes.
+ * It utilizes callback functions based on the specified 'action' attribute.
+ */
+(() => {
+	const callBack = {
+		'/admin/api/header/icon': async () => await buildIcon(),
+		'/admin/api/header/logo': async () => await buildLogo(),
+		'/admin/api/header/title': async () => await buildTitle(),
+		'/admin/api/header/color': async () => await buildColor(),
+	};
+
+	window.document.querySelectorAll('div[cell-container]').forEach((cell) => {
+		const forItem = cell.getAttribute('for');
+		const action = cell.getAttribute('action');
+		const identifier = cell.getAttribute('identifier');
+
+		cell.querySelectorAll('input[type="file"]').forEach((input) => {
+			input.addEventListener('input', async (e) => {
+				const form = new FormData();
+
+				form.append('file', e.target.files[0]);
+				form.append('id', identifier);
+
+				const req = await handleCellRequest(cell, form);
+
+				if (req && callBack[action]) {
+					await callBack[action]();
+				}
+			});
+		});
+
+		cell.querySelectorAll('div[pseudo-input]').forEach((div) => {
+			if (div.getAttribute('placeholder') === 'Whatsapp') {
+				loadWhatsappProperties(div);
+			}
+
+			let lastInnerText = div.innerText;
+
+			div.addEventListener('focusout', async () => {
+				let currentInnerText = div.innerText;
+
+				if (div.getAttribute('placeholder') === 'Whatsapp') {
+					currentInnerText = currentInnerText.replace(/\D/g, '');
+				}
+
+				handleTextInputRequest(
+					lastInnerText,
+					cell,
+					forItem,
+					currentInnerText,
+					identifier,
+					callBack[action] ? async () => await callBack[action]() : undefined,
+				);
+
+				lastInnerText = currentInnerText;
+			});
+		});
+
+		cell.querySelectorAll('textarea').forEach((input) => {
+			input.addEventListener('change', async (e) => {
+				handleTextInputRequest(
+					false,
+					cell,
+					forItem,
+					e.target.value,
+					identifier,
+				);
+			});
+		});
+
+		cell.querySelectorAll('input[type="color"]').forEach((input) => {
+			input.addEventListener('change', async (e) => {
+				handleTextInputRequest(
+					false,
+					cell,
+					forItem,
+					e.target.value,
+					identifier,
+					async () => await callBack[action](),
+				);
+			});
+		});
+	});
+})();
+
+/**
+ * Immediately invoked function expression (IIFE) that initializes and handles the dynamic building of elements and templates.
+ * It iterates over special sections in the document, builds specific elements, sets up event listeners, and handles table visibility.
+ */
+(() => {
+	const build = [
+		() => buildPropagandas(),
+		() => buildCategories(),
+		() => buildProducts(),
+	];
+
+	const buildTemplate = [
+		(specialSection) => buildPropagandasTemplate(specialSection),
+		(specialSection) => buildCategoriesTemplate(specialSection),
+		(specialSection) => buildProductsTemplate(specialSection),
+	];
+
+	const buildTemplateCallback = [
+		undefined,
+		undefined,
+		() => buildProductsTemplateCallback(),
+	];
+
+	window.document
+		.querySelectorAll('div[special-section]')
+		.forEach((div, index) => {
+			build[index]();
+
+			handleTableVisibility();
+
+			div
+				.querySelector('button[add-item-to-table-button]')
+				.addEventListener('click', async () => {
+					const templateUsable = buildTemplate[index](div);
+
+					div
+						.querySelector('tbody > template')
+						.parentElement.append(templateUsable);
+
+					handleTableVisibility();
+
+					if (buildTemplateCallback[index]) {
+						await buildProductsTemplateCallback();
+					}
+				});
+		});
+})();
 
 /**
  * Immediately invoked function expression (IIFE) that enables sliding functionality for slider containers.

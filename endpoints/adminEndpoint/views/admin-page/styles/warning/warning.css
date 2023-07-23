@@ -60,7 +60,7 @@ div.warning-container > div {
   border-radius: 7px;
   background-color: white;
   max-width: 420px;
-  transform: translateY(-50%);
+  transform: translateY(-35%);
 }
 div.warning-container > div > h2 {
   text-align: center;

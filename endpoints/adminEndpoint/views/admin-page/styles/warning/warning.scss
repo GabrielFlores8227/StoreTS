@@ -5,6 +5,7 @@ div.warning-container {
 		filter: opacity(100%);
 		pointer-events: all;
 	}
+
 	@extend %default-padding-size;
 	filter: opacity(0%);
 	pointer-events: none;
@@ -28,7 +29,7 @@ div.warning-container {
 		border-radius: 7px;
 		background-color: white;
 		max-width: 420px;
-		transform: translateY(-50%);
+		transform: translateY(-35%);
 
 		& > h2 {
 			text-align: center;

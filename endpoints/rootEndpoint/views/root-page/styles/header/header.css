@@ -132,6 +132,7 @@ div.search-container > input {
   border-radius: 7px;
   padding: 5.6px 11.2px;
   font-size: 13.3px;
+  border: 1px solid white;
   color: var(--dark-gray);
 }
 div.search-container > input.--none {
@@ -176,17 +177,14 @@ div.search-container > div > div > button > img {
 }
 div.search-container > div > div > button > div {
   width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 div.search-container > div > div > button > div p {
-  width: inherit;
-  line-height: 140%;
+  line-height: 115%;
   cursor: pointer;
   text-align: left;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   font-family: var(--font-bold);
 }
 div.search-container > div > div > button > div > p:first-of-type {

@@ -5,26 +5,117 @@
 export function handleLoadingImages(loadingScreenContainer) {
 	const allImages = window.document.querySelectorAll('img');
 	let loadedImages = 0;
+	let timeOut = false;
 
 	allImages.forEach((img) => {
 		if (img.complete) {
 			loadedImages++;
-			$(loadingScreenContainer, allImages, loadedImages);
+			$();
 			return;
 		}
 
 		img.addEventListener('load', () => {
 			loadedImages++;
-			$(loadingScreenContainer, allImages, loadedImages);
+			$();
 		});
 	});
 
-	function $(loadingScreenContainer, allImages, loadedImages) {
-		if (allImages.length === loadedImages) {
+	setTimeout(() => {
+		$(true);
+	}, 10000);
+
+	function $(remove = false) {
+		if (timeOut) {
+			return;
+		}
+
+		if (allImages.length === loadedImages || remove) {
+			timeOut = true;
+
 			setTimeout(() => {
 				loadingScreenContainer.parentElement.classList.add('--off');
-			}, 1500);
+			}, 500);
 		}
+	}
+}
+
+/**
+ * Loads product image properties for the image element with animation effect.
+ * This function is responsible for animating the image swapping effect for a single image.
+ * It swaps the 'src' attribute with the 'plus-src' attribute, creating a fade-in and fade-out
+ * transition effect between two images. The image will appear to change every 7 seconds (7000ms)
+ * while transitioning between the two images.
+ * @param {HTMLElement} img - The image element to apply the image swapping effect.
+ */
+export function loadProductImageProperties(img) {
+	let src = img.getAttribute('src');
+	let plusSrc = img.getAttribute('plus-src');
+	let temp;
+
+	const preloadImage = (url) => {
+		const img = new Image();
+		img.src = url;
+	};
+
+	preloadImage(src);
+	preloadImage(plusSrc);
+
+	const createInterval = () =>
+		setInterval(() => {
+			changeImage();
+		}, Math.floor(Math.random() * (14000 - 9000 + 1)) + 9000);
+
+	const changeImage = () => {
+		img.style.filter = 'opacity(0%)';
+
+		setTimeout(() => {
+			img.setAttribute('src', plusSrc);
+			img.setAttribute('plus-src', src);
+
+			temp = src;
+			src = plusSrc;
+			plusSrc = temp;
+
+			setTimeout(() => {
+				img.style.filter = 'opacity(100%)';
+			}, 250);
+		}, 250);
+	};
+
+	let interval = createInterval();
+
+	if (
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+			navigator.userAgent,
+		)
+	) {
+		let setAgain;
+
+		img.addEventListener('click', () => {
+			changeImage();
+
+			clearInterval(interval);
+
+			if (setAgain) {
+				clearTimeout(setAgain);
+			}
+
+			setAgain = setTimeout(() => {
+				interval = createInterval();
+			}, 10000);
+		});
+	} else {
+		img.addEventListener('mouseenter', () => {
+			clearInterval(interval);
+
+			changeImage();
+		});
+
+		img.addEventListener('mouseleave', () => {
+			interval = createInterval();
+
+			changeImage();
+		});
 	}
 }
 
@@ -99,6 +190,7 @@ export function renderSavedProducts(products) {
 			});
 
 			productImage.src = product.image;
+
 			productImage.alt = product.name;
 			productName.textContent = product.name;
 
@@ -126,15 +218,31 @@ export function renderSavedProducts(products) {
  * @param {HTMLElement} element - The container element for the products grid.
  */
 export function handleProductsGrid(element) {
+	const minWidth = Number(
+		window.getComputedStyle(element.children[0]).minWidth.replace('px', ''),
+	);
+
+	const paddingLeft = Number(
+		window.getComputedStyle(element).paddingLeft.replace('px', ''),
+	);
+
 	if (
-		element.scrollWidth - element.clientWidth <
-			Number(window.getComputedStyle(element).paddingLeft.replace('px', '')) +
-				280 &&
+		element.scrollWidth - element.clientWidth < paddingLeft + minWidth &&
 		!element.classList.contains('--special')
 	) {
 		element.classList.add('--special');
 
 		if (element.children.length === 1) {
+			return;
+		}
+
+		if (
+			element.clientWidth - paddingLeft * 2.5 <
+				minWidth * element.children.length &&
+			element.children.length <= 3
+		) {
+			element.style.gridTemplateColumns = '1fr';
+
 			return;
 		}
 
@@ -147,6 +255,15 @@ export function handleProductsGrid(element) {
 				);
 			}
 		} else {
+			if (
+				(element.offsetWidth - paddingLeft * 2) / 3 > minWidth &&
+				element.children.length % 3 === 0
+			) {
+				element.style.gridTemplateColumns = '1fr 1fr 1fr';
+
+				return;
+			}
+
 			element.style.gridTemplateColumns = '1fr 1fr';
 		}
 	}
@@ -197,7 +314,7 @@ export function handlePropagandaScroll(
  * @param {Event} event - The search event object.
  * @param {Object} sliderController - The controller object for the sliders.
  */
-export function handleSearch(
+export function handleSearchBar(
 	searchContainer,
 	input,
 	templateParent,
@@ -263,28 +380,22 @@ export function handleSearch(
 					);
 
 					window.scrollTo({
-						left: 0,
 						top:
 							productCard.getBoundingClientRect().top +
 							window.scrollY -
 							window.innerHeight / 2 +
 							productCard.offsetHeight / 2 +
-							-60,
+							-80,
 						behavior: 'smooth',
 					});
 
 					setTimeout(() => {
-						if (productSliderContainer.scrollLeft === 0) {
-							return;
-						}
-
 						productSliderContainer.scrollTo({
 							left:
 								productCard.getBoundingClientRect().left +
 								productSliderContainer.scrollLeft -
 								window.innerWidth / 2 +
 								productCard.offsetWidth / 2,
-							top: 0,
 							behavior: 'smooth',
 						});
 					}, 2000);
