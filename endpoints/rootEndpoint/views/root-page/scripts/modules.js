@@ -63,7 +63,7 @@ export function loadProductImageProperties(img) {
 	const createInterval = () =>
 		setInterval(() => {
 			changeImage();
-		}, Math.floor(Math.random() * (12000 - 9000 + 1)) + 9000);
+		}, Math.floor(Math.random() * (14000 - 9000 + 1)) + 9000);
 
 	const changeImage = () => {
 		img.style.filter = 'opacity(0%)';
