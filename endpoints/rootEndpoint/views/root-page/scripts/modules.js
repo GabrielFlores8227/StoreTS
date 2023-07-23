@@ -5,6 +5,7 @@
 export function handleLoadingImages(loadingScreenContainer) {
 	const allImages = window.document.querySelectorAll('img');
 	let loadedImages = 0;
+	let timeOut = false;
 
 	allImages.forEach((img) => {
 		if (img.complete) {
@@ -19,8 +20,18 @@ export function handleLoadingImages(loadingScreenContainer) {
 		});
 	});
 
-	function $() {
-		if (allImages.length === loadedImages) {
+	setTimeout(() => {
+		$(true);
+	}, 10000);
+
+	function $(remove = false) {
+		if (timeOut) {
+			return;
+		}
+
+		if (allImages.length === loadedImages || remove) {
+			timeOut = true;
+
 			setTimeout(() => {
 				loadingScreenContainer.parentElement.classList.add('--off');
 			}, 500);
