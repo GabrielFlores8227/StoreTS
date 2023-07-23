@@ -22,24 +22,6 @@ class Support {
 		password: string,
 		key: string,
 	) {
-		Admin.checkType(password, 'string', 'senha');
-
-		const [query] = await Sql.query(
-			'	SELECT `username`, `password` FROM `admin` WHERE `id` = ?;',
-			['only'],
-		);
-
-		if (
-			Object(query).length === 0 ||
-			!(await bcrypt.compare(password, Object(query)[0].password))
-		) {
-			throw {
-				status: 400,
-				message:
-					'Desculpe, a senha fornecida está incorreta. Por favor, verifique os dados e tente novamente.',
-			};
-		}
-
 		Admin.checkType(
 			change,
 			'string',
@@ -54,6 +36,20 @@ class Support {
 		);
 
 		Admin.checkType(confirm, 'string', `confirme ${key}`);
+
+		Admin.checkLength(
+			confirm,
+			5,
+			30,
+			key === 'username' ? `confirme novo usuário` : `confirme nova senha`,
+		);
+
+		Admin.checkType(password, 'string', 'senha');
+
+		const [query] = await Sql.query(
+			'	SELECT `username`, `password` FROM `admin` WHERE `id` = ?;',
+			['only'],
+		);
 
 		if (await bcrypt.compare(change, Object(query)[0][key])) {
 			const message = `Por favor, forneça ${
@@ -76,6 +72,17 @@ class Support {
 			throw {
 				status: 400,
 				message,
+			};
+		}
+
+		if (
+			Object(query).length === 0 ||
+			!(await bcrypt.compare(password, Object(query)[0].password))
+		) {
+			throw {
+				status: 400,
+				message:
+					'Desculpe, a senha fornecida está incorreta. Por favor, verifique os dados e tente novamente.',
 			};
 		}
 	}
