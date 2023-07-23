@@ -56,7 +56,7 @@ login.post(
 				.status(429)
 				.redirect(
 					`/admin/login?message=${String(
-						'Devido ao número máximo de tentativas de login ser atingido, sua conta será bloqueada temporariamente por alguns minutos neste dispositivo.',
+						'Devido ao número máximo de tentativas de login ser atingido, sua conta será bloqueada temporariamente por alguns minutos.',
 					).replace(/ /g, '%20')}`,
 				);
 		},
