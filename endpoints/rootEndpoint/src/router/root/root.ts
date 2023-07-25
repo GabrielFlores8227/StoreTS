@@ -9,6 +9,7 @@ root.get(
 	'/',
 	LocalModules.middlewareGetRoot,
 	Middleware.middlewareBuildHeader(),
+	Middleware.middlewareBuildPopUp(),
 	Middleware.middlewareBuildPropagandas(),
 	Middleware.middlewareBuildProducts(),
 	Middleware.middlewareBuildFooter(),

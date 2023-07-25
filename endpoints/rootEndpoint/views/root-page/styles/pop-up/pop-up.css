@@ -1,0 +1,73 @@
+div.pop-up-container {
+  padding-right: 21px;
+  padding-left: 21px;
+}
+
+@media (min-width: 375px) {
+  div.pop-up-container {
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+@media (min-width: 650px) {
+  div.pop-up-container {
+    padding-right: 56px;
+    padding-left: 56px;
+  }
+}
+@media (min-width: 1300px) {
+  div.pop-up-container {
+    padding-right: 15.4vw;
+    padding-left: 15.4vw;
+  }
+}
+@media (min-width: 1700px) {
+  div.pop-up-container {
+    padding-right: 21vw;
+    padding-left: 21vw;
+  }
+}
+@media (min-width: 2880px) {
+  div.pop-up-container {
+    padding-right: 30%;
+    padding-left: 30%;
+  }
+}
+div.pop-up-container {
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  filter: opacity(0%);
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
+  transition: ease-in-out 0.8s;
+  position: fixed;
+}
+div.pop-up-container > a {
+  transform: translateY(-17.5%) scale(0%, 0%);
+  transition: ease-in-out 0.8s;
+}
+div.pop-up-container > a > img {
+  max-height: 455px;
+  width: 100%;
+  border-radius: 7px;
+}
+div.pop-up-container.--on {
+  pointer-events: all;
+  filter: opacity(100%);
+}
+div.pop-up-container.--on > a {
+  transform: translateY(-14%) scale(100%, 100%);
+}
+div.pop-up-container.--off {
+  filter: opacity(0%);
+  pointer-events: none;
+}
+div.pop-up-container.--off > a {
+  transform: translateY(-200%) scale(100%, 100%);
+}
+
+/*# sourceMappingURL=pop-up.css.map */

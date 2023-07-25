@@ -30,7 +30,7 @@ app.set('view engine', 'ejs');
 app.use(
 	rateLimit({
 		windowMs: 24 * 60 * 60 * 1000,
-		max: 5000,
+		max: 10000,
 		handler: async (_: express.Request, res: express.Response) => {
 			res.status(429).render('admin-error-page', {
 				builder: {

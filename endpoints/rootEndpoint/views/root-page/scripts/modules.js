@@ -34,9 +34,51 @@ export function handleLoadingImages(loadingScreenContainer) {
 
 			setTimeout(() => {
 				loadingScreenContainer.parentElement.classList.add('--off');
+				handlePopUp();
 			}, 500);
 		}
 	}
+}
+
+/**
+ * Handles the pop-up functionality.
+ * If the pop-up has an image, it triggers a pop-up animation when called.
+ * Clicking on the background or the "a" element in the pop-up will close the pop-up.
+ */
+function handlePopUp() {
+	const popUp = builder['pop-up'];
+
+	if (!popUp.image) {
+		return;
+	}
+
+	setTimeout(() => {
+		const container = window.document.querySelector('div[pop-up-container]');
+
+		container.classList.add('--on');
+
+		setTimeout(() => {
+			let go = true;
+
+			container.querySelector('a').addEventListener('click', () => {
+				go = false;
+			});
+
+			container.addEventListener('click', () => {
+				if (!go) {
+					go = true;
+					return;
+				}
+
+				container.classList.remove('--on');
+				container.classList.add('--off');
+
+				setTimeout(() => {
+					container.classList.remove('--off');
+				}, 1000);
+			});
+		}, 400);
+	}, 1500);
 }
 
 /**

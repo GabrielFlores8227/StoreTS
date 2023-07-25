@@ -14,10 +14,12 @@ import {
 	buildWebsiteAccessesMonthChart,
 	buildWebsiteAccessesYearChart,
 	buildTopProducts,
-	buildIcon,
-	buildLogo,
-	buildTitle,
-	buildColor,
+	buildIconCallBack,
+	buildLogoCallBack,
+	buildTitleCallBack,
+	buildColorCallBack,
+	buildPopUpCallBack,
+	buildPopUp,
 	buildPropagandas,
 	buildCategories,
 	buildProducts,
@@ -229,10 +231,11 @@ buildAsideMenus([
  */
 (() => {
 	const callBack = {
-		'/admin/api/header/icon': async () => await buildIcon(),
-		'/admin/api/header/logo': async () => await buildLogo(),
-		'/admin/api/header/title': async () => await buildTitle(),
-		'/admin/api/header/color': async () => await buildColor(),
+		'/admin/api/header/icon': async () => await buildIconCallBack(),
+		'/admin/api/header/logo': async () => await buildLogoCallBack(),
+		'/admin/api/header/title': async () => await buildTitleCallBack(),
+		'/admin/api/header/color': async () => await buildColorCallBack(),
+		'/admin/api/pop-up/image': () => buildPopUpCallBack(),
 	};
 
 	window.document.querySelectorAll('div[cell-container]').forEach((cell) => {
@@ -308,6 +311,8 @@ buildAsideMenus([
 		});
 	});
 })();
+
+buildPopUp();
 
 /**
  * Immediately invoked function expression (IIFE) that initializes and handles the dynamic building of elements and templates.
