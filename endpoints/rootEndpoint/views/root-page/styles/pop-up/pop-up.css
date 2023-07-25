@@ -51,7 +51,7 @@ div.pop-up-container > a {
   transition: ease-in-out 0.8s;
 }
 div.pop-up-container > a > img {
-  max-height: 420px;
+  max-height: 455px;
   width: 100%;
   border-radius: 7px;
 }
