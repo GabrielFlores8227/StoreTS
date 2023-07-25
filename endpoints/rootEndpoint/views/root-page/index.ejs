@@ -63,7 +63,11 @@
 		</div>
 		<div pop-up-container class="pop-up-container">
 			<% if (builder['pop-up'].link !== "") { %>
-			<a href="<%= builder['pop-up'].link %>" target="_blank">
+			<a
+				href="<%= builder['pop-up'].link %>"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
 				<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a
 			><% } else { %>
 			<a> <img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a>
