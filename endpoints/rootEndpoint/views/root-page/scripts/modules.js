@@ -52,19 +52,36 @@ function handlePopUp() {
 		return;
 	}
 
-	setTimeout(() => {
-		const container = window.document.querySelector('div[pop-up-container]');
+	const show = localStorage.getItem('popUp');
 
+	if (!show || show === 'false') {
+		localStorage.setItem('popUp', 'true');
+	} else {
+		localStorage.setItem('popUp', 'false');
+		return;
+	}
+
+	const container = window.document.querySelector('div[pop-up-container]');
+	const link = container.querySelector('a');
+
+	if (link.getAttribute('href') === '') {
+		link.removeAttribute('target');
+		link.removeAttribute('href');
+	}
+
+	setTimeout(() => {
 		container.classList.add('--on');
 
 		setTimeout(() => {
 			let go = true;
 
-			container.querySelector('a').addEventListener('click', () => {
-				go = false;
-			});
+			container
+				.querySelector('div[pop-up-image-container]')
+				.addEventListener('click', () => {
+					go = false;
+				});
 
-			container.addEventListener('click', () => {
+			const closePopUp = () => {
 				if (!go) {
 					go = true;
 					return;
@@ -76,7 +93,12 @@ function handlePopUp() {
 				setTimeout(() => {
 					container.classList.remove('--off');
 				}, 1000);
-			});
+			};
+
+			container.addEventListener('click', () => closePopUp());
+			container
+				.querySelector('button')
+				.addEventListener('click', () => closePopUp());
 		}, 400);
 	}, 1500);
 }

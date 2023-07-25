@@ -1,4 +1,5 @@
 <!--v1.0.1-->
+<!--^3sU99!&036l-->
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
@@ -62,16 +63,14 @@
 			</div>
 		</div>
 		<div pop-up-container class="pop-up-container">
-			<% if (builder['pop-up'].link !== "") { %>
-			<a
-				href="<%= builder['pop-up'].link %>"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a
-			><% } else { %>
-			<a> <img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a>
-			<% } %>
+			<div pop-up-image-container>
+				<button>
+					<i class="fa-solid fa-circle-xmark"></i>
+				</button>
+				<a href="<%= builder['pop-up'].link %>" target="_blank">
+					<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" />
+				</a>
+			</div>
 		</div>
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>

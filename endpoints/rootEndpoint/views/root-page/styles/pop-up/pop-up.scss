@@ -14,14 +14,28 @@ div.pop-up-container {
 	transition: ease-in-out 0.8s;
 	position: fixed;
 
-	& > a {
-		transform: translateY(-17.5%) scale(0%, 0%);
+	& > div {
+		background-color: var(--primary-color);
+		padding: 7px;
+		border-radius: 7px;
+		transform: translateY(200%);
 		transition: ease-in-out 0.8s;
 
-		& > img {
-			max-height: 455px;
+		& > button {
+			@extend %default-font-size;
+			justify-content: right;
+			padding: 7px;
+			padding-bottom: 11.2px;
 			width: 100%;
-			border-radius: 7px;
+			color: white;
+		}
+
+		& > a {
+			& > img {
+				max-height: 455px;
+				width: 100%;
+				border-radius: 7px;
+			}
 		}
 	}
 
@@ -29,8 +43,8 @@ div.pop-up-container {
 		pointer-events: all;
 		filter: opacity(100%);
 
-		& > a {
-			transform: translateY(-14%) scale(100%, 100%);
+		& > div {
+			transform: translateY(-17.5%);
 		}
 	}
 
@@ -38,8 +52,8 @@ div.pop-up-container {
 		filter: opacity(0%);
 		pointer-events: none;
 
-		& > a {
-			transform: translateY(-200%) scale(100%, 100%);
+		& > div {
+			transform: translateY(-200%);
 		}
 	}
 }
