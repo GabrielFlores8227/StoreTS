@@ -13,7 +13,7 @@ div.loading-container > div > img {
   }
 }
 div.loading-container {
-  z-index: 4;
+  z-index: 6;
   display: flex;
   align-items: center;
   justify-content: center;

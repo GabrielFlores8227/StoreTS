@@ -1,0 +1,45 @@
+@import '../controller/controller.scss';
+
+div.pop-up-container {
+	@extend %default-padding-size;
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+	filter: opacity(0%);
+	pointer-events: none;
+	width: 100vw;
+	height: 100vh;
+	transition: ease-in-out 0.8s;
+	position: fixed;
+
+	& > a {
+		transform: translateY(-17.5%) scale(0%, 0%);
+		transition: ease-in-out 0.8s;
+
+		& > img {
+			max-height: 399px;
+			width: 100%;
+			border-radius: 7px;
+		}
+	}
+
+	&.--on {
+		pointer-events: all;
+		filter: opacity(100%);
+
+		& > a {
+			transform: translateY(-14%) scale(100%, 100%);
+		}
+	}
+
+	&.--off {
+		filter: opacity(0%);
+		pointer-events: none;
+
+		& > a {
+			transform: translateY(-200%) scale(100%, 100%);
+		}
+	}
+}

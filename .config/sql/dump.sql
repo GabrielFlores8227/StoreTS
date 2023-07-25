@@ -126,6 +126,31 @@ INSERT INTO `header` VALUES ('only','icon','logo','StoreTS','Crie portfólios at
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pop-up`
+--
+
+DROP TABLE IF EXISTS `pop-up`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pop-up` (
+  `id` enum('only') NOT NULL DEFAULT 'only',
+  `image` varchar(255) DEFAULT NULL,
+  `link` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pop-up`
+--
+
+LOCK TABLES `pop-up` WRITE;
+/*!40000 ALTER TABLE `pop-up` DISABLE KEYS */;
+INSERT INTO `pop-up` VALUES ('only',NULL,'');
+/*!40000 ALTER TABLE `pop-up` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `products`
 --
 
@@ -242,4 +267,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-24 17:45:00
+-- Dump completed on 2023-07-25 10:27:22

@@ -427,6 +427,111 @@
 					</table>
 				</div>
 			</div>
+			<div pop-up-table-section class="section-container">
+				<div>
+					<h1>
+						<i class="fa-solid fa-clone"></i>
+						Pop-Up
+					</h1>
+				</div>
+				<div table-container class="section-container__table-container">
+					<table>
+						<thead>
+							<tr>
+								<th>Imagem</th>
+								<th>Link</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/pop-up/image"
+										identifier="only"
+										for="icon"
+									>
+										<div
+											file-input-container
+											class="cell-container__content-container cell-container__file-input-container"
+										>
+											<button>
+												<i class="fa-solid fa-trash"></i>
+											</button>
+											<label for="image">
+												<i class="fa-solid fa-image"></i>
+											</label>
+											<input image id="image" type="file" accept="image/*" />
+											<% if (builder['pop-up'].image) { %>
+											<a
+												href="<%= builder['pop-up'].image %>"
+												target="_blank"
+												rel="noopener noreferrer"
+												>Imagem</a
+											>
+											<% } else { %>
+											<a target="_blank" rel="noopener noreferrer">Imagem</a>
+											<% } %>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+								<td class="regular-container">
+									<div
+										cell-container
+										class="cell-container"
+										action="/admin/api/pop-up/link"
+										identifier="only"
+										for="link"
+									>
+										<div
+											class="cell-container__content-container cell-container__text-input-container"
+										>
+											<% if (builder['pop-up'].link !== '') { %>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Link"
+												maxlength="255"
+											>
+												<%= builder['pop-up'].link %>
+											</div>
+											<% } else { %>
+											<div
+												pseudo-input
+												contenteditable="true"
+												placeholder="Link"
+												maxlength="255"
+											></div>
+											<% } %>
+										</div>
+										<div cell-info class="cell-container__cell-info-container">
+											<i
+												class="cell-container__cell-info-container__loading"
+											></i>
+											<i
+												cell-info-error
+												class="fa-sharp fa-solid fa-circle-exclamation"
+											></i>
+											<i class="fa-solid fa-circle-check"></i>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 			<div special-section table-visibility class="section-container">
 				<div>
 					<h1>

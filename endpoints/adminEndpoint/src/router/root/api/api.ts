@@ -92,6 +92,7 @@ api.put(
 		'/header/title',
 		'/header/description',
 		'/header/color',
+		'/pop-up/link',
 		'/categories/name',
 		'/products/category',
 		'/products/name',
@@ -120,6 +121,7 @@ api.put(
 	[
 		'/header/icon',
 		'/header/logo',
+		'/pop-up/image',
 		'/propagandas/big-image',
 		'/propagandas/small-image',
 		'/products/image',
@@ -170,9 +172,9 @@ api.delete(
 );
 
 api.delete(
-	'/product/additional-image',
+	['/pop-up/image', '/products/additional-image'],
 	Middleware.middlewareCheckToken,
-	LocalModules.middlewareDeleteProductAdditionalImage,
+	LocalModules.middlewareDeleteImage,
 	(_, res) => {
 		res.json({ status: 200 });
 	},

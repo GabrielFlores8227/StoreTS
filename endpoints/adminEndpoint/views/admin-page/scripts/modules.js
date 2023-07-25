@@ -434,7 +434,7 @@ export function buildWebsiteAccessesYearChart(dates) {
 /**
  * Builds the icon for the web page based on the header data.
  */
-export async function buildIcon() {
+export async function buildIconCallBack() {
 	const { icon } = await getHeader();
 
 	window.document
@@ -445,7 +445,7 @@ export async function buildIcon() {
 /**
  * Builds the logo for the web page based on the header data.
  */
-export async function buildLogo() {
+export async function buildLogoCallBack() {
 	const { logo } = await getHeader();
 
 	window.document.querySelectorAll('img[logo]').forEach((img) => {
@@ -456,7 +456,7 @@ export async function buildLogo() {
 /**
  * Builds the title for the web page based on the header data.
  */
-export async function buildTitle() {
+export async function buildTitleCallBack() {
 	const { title } = await getHeader();
 
 	window.document.querySelector('title').innerText = title + ' | Admin';
@@ -465,7 +465,7 @@ export async function buildTitle() {
 /**
  * Builds the primary color for the web page based on the header data.
  */
-export async function buildColor() {
+export async function buildColorCallBack() {
 	const { color } = await getHeader();
 
 	window.document.documentElement.style.setProperty('--primary-color', color);
@@ -485,6 +485,43 @@ export async function buildColor() {
 
 		chart.update();
 	});
+}
+
+/**
+ * Builds the callback function for the pop-up, handling image deletion.
+ * @returns {void}
+ */
+export function buildPopUpCallBack() {
+	const section = window.document.querySelector('div[pop-up-table-section]');
+	const cell = section.querySelector('div[cell-container]');
+	const div = section.querySelector('div[file-input-container]');
+
+	if (!div.classList.contains('--special')) {
+		div.classList.add('--special');
+	}
+
+	div.querySelector('button').addEventListener('click', async () => {
+		await deleteImage(cell, div, 'only', '/admin/api/pop-up/image', 'Imagem');
+	});
+}
+
+export async function buildPopUp() {
+	const section = window.document.querySelector('div[pop-up-table-section]');
+	const cell = section.querySelector('div[cell-container]');
+	const div = section.querySelector('div[file-input-container]');
+
+	const link = section.querySelector('a');
+	const linkHref = link.getAttribute('href');
+
+	if (linkHref) {
+		section
+			.querySelector('div[file-input-container]')
+			.classList.add('--special');
+
+		section.querySelector('button').addEventListener('click', async () => {
+			await deleteImage(cell, div, 'only', '/admin/api/pop-up/image', 'Imagem');
+		});
+	}
 }
 
 /**
@@ -856,30 +893,6 @@ export async function buildProducts(isLastItemNew = false) {
 				cell.setAttribute('action', '/admin/api/products/additional-image');
 			}
 
-			const deleteAdditionalImage = async () => {
-				let form = {};
-				form['id'] = String(apiItem.id);
-				form = JSON.stringify(form);
-
-				const req = await handleCellRequest(cell, form, {
-					method: 'DELETE',
-					useAction: '/admin/api/product/additional-image',
-					contentType: 'application/json',
-				});
-
-				if (req) {
-					const a = div.querySelector('a');
-
-					a.innerText = 'Imagem Adicional';
-					a.removeAttribute('href', '');
-					div.classList.remove('--special');
-
-					const button = div.querySelector('button');
-					const clonedButton = button.cloneNode(true);
-					button.parentNode.replaceChild(clonedButton, button);
-				}
-			};
-
 			div.querySelectorAll('input').forEach((input) => {
 				input.addEventListener('input', async (e) => {
 					const form = new FormData();
@@ -895,7 +908,13 @@ export async function buildProducts(isLastItemNew = false) {
 						}
 
 						div.querySelector('button').addEventListener('click', async () => {
-							await deleteAdditionalImage();
+							await deleteImage(
+								cell,
+								div,
+								apiItem.id,
+								'/admin/api/products/additional-image',
+								'Imagem Adicional',
+							);
 						});
 					}
 				});
@@ -911,7 +930,13 @@ export async function buildProducts(isLastItemNew = false) {
 				div.classList.add('--special');
 
 				div.querySelector('button').addEventListener('click', async () => {
-					await deleteAdditionalImage();
+					await deleteImage(
+						cell,
+						div,
+						apiItem.id,
+						'/admin/api/products/additional-image',
+						'Imagem Adicional',
+					);
 				});
 			}
 
@@ -1876,6 +1901,38 @@ async function handleConfirmCategoryDeletion(category, count) {
 	function destroyButtonsEventListeners() {
 		buttons[0].parentNode.replaceChild(buttons[0].cloneNode(true), buttons[0]);
 		buttons[1].parentNode.replaceChild(buttons[1].cloneNode(true), buttons[1]);
+	}
+}
+
+/**
+ * Deletes an image asynchronously from the specified container using a DELETE request.
+ *
+ * @param {HTMLElement} cell - The HTML element representing the cell of the image.
+ * @param {HTMLElement} container - The HTML element representing the container of the image.
+ * @param {string} id - The unique identifier of the image to be deleted.
+ * @param {string} url - The URL to which the DELETE request will be sent.
+ */
+async function deleteImage(cell, container, id, url, placeholder) {
+	let form = {};
+	form['id'] = String(id);
+	form = JSON.stringify(form);
+
+	const req = await handleCellRequest(cell, form, {
+		method: 'DELETE',
+		useAction: url,
+		contentType: 'application/json',
+	});
+
+	if (req) {
+		const a = container.querySelector('a');
+
+		a.innerText = placeholder;
+		a.removeAttribute('href', '');
+		container.classList.remove('--special');
+
+		const button = container.querySelector('button');
+		const clonedButton = button.cloneNode(true);
+		button.parentNode.replaceChild(clonedButton, button);
 	}
 }
 

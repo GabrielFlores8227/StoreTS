@@ -1,4 +1,4 @@
-<!--1.0.0-->
+<!--1.0.1-->
 <!DOCTYPE html>
 <html lang="pt-BR">
 	<head>
@@ -30,6 +30,7 @@
 		</style>
 		<link rel="stylesheet" href="/root-page/styles/index/index.css" />
 		<link rel="stylesheet" href="/root-page/styles/loading/loading.css" />
+		<link rel="stylesheet" href="/root-page/styles/pop-up/pop-up.css" />
 		<link rel="stylesheet" href="/root-page/styles/aside/aside.css" />
 		<link rel="stylesheet" href="/root-page/styles/header/header.css" />
 		<link rel="stylesheet" href="/root-page/styles/main/main.css" />
@@ -45,7 +46,7 @@
 		/>
 
 		<!--scripts-->
-		<script charset="utf-8">
+		<script builder-container charset="utf-8">
 			var builder = <%- JSON.stringify(builder).replace(/\\/g, '\\\\') %>
 		</script>
 		<script defer type="module" src="/root-page/scripts/index.js"></script>
@@ -59,6 +60,14 @@
 					alt="<%= builder.header.title %> Logo"
 				/>
 			</div>
+		</div>
+		<div pop-up-container class="pop-up-container">
+			<% if (builder['pop-up'].link !== "") { %>
+			<a href="<%= builder['pop-up'].link %>" target="_blank">
+				<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a
+			><% } else { %>
+			<a> <img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" /></a>
+			<% } %>
 		</div>
 		<aside saved-aside-menu>
 			<button close-saved-aside-menu-button></button>

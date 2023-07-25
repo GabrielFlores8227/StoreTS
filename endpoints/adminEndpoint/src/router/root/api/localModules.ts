@@ -32,6 +32,16 @@ class Support {
 				Admin.checkLength(color, 7, 7, 'cor');
 			},
 		},
+		'pop-up': {
+			link: (link: string) => {
+				Admin.checkType(link, 'string', 'link');
+
+				link = link.trim();
+
+				Admin.checkLength(link, 0, 64000, 'link');
+				Admin.checkSubstring(link, ' ', false, false, 'link');
+			},
+		},
 		propagandas: {
 			imagesContext: (imagesContext: Array<string>) => {
 				Admin.checkType(imagesContext, 'object', 'imagesContext');
@@ -236,6 +246,10 @@ class Support {
 					maxScale: 7.5,
 					trim: true,
 				}),
+		},
+		'pop-up': {
+			image: async (file: Express.Multer.File | undefined) =>
+				await this.sharpFile(file, 'inside', { width: 1920, height: 1080 }),
 		},
 		propagandas: {
 			'big-image': async (file: Express.Multer.File | undefined) =>
@@ -840,27 +854,35 @@ export default class LocalModules {
 	}
 
 	/**
-	 * Middleware function for handling the deletion of an additional image for a product.
-	 * Validates the request data for deleting the additional image and performs necessary operations.
-	 * Deletes the additional image from the specified product in the database and the associated S3 bucket.
+	 * Middleware for handling image deletion from the specified table and column.
 	 *
-	 * @param {Request} req - The request object.
-	 * @param {Response} res - The response object.
-	 * @param {NextFunction} next - The next function to call in the middleware chain.
+	 * This middleware is responsible for deleting an image associated with a specific record
+	 * in the database. It extracts the table name, column name, and record ID from the request's URL
+	 * and validates the ID parameter. If the record does not exist or the specified column value is empty,
+	 * the middleware proceeds to the next middleware in the chain. If the column value is not empty,
+	 * it deletes the corresponding image from the S3 bucket, sets the column value to NULL in the database,
+	 * and continues to the next middleware.
+	 *
+	 * @param {Request} req - The Express request object.
+	 * @param {Response} res - The Express response object.
+	 * @param {NextFunction} next - The next middleware function to be called.
 	 */
-	public static async middlewareDeleteProductAdditionalImage(
+	public static async middlewareDeleteImage(
 		req: Request,
 		res: Response,
 		next: NextFunction,
 	) {
 		try {
+			const url = req.originalUrl.split('/');
+			const table = String(url[3]);
+			const column = String(url[4]);
 			const id = req.body.id;
 
 			Admin.checkType(id, 'string', 'id');
 			Admin.checkLength(id.trim(), 1, -1, 'id');
 
 			const [query] = await Sql.query(
-				'SELECT `id`, `additional-image` FROM `products` WHERE `id` = ?;',
+				'SELECT `id`, `' + column + '` FROM `' + table + '` WHERE `id` = ?;',
 				[id],
 			);
 
@@ -868,11 +890,11 @@ export default class LocalModules {
 				return next();
 			}
 
-			if (Object(query)[0]['additional-image']) {
-				await S3.deleteFileFromS3Bucket(Object(query)[0]['additional-image']);
+			if (Object(query)[0][column]) {
+				await S3.deleteFileFromS3Bucket(Object(query)[0][column]);
 
 				await Sql.query(
-					'UPDATE `products` SET `additional-image` = ? WHERE `id` = ?;',
+					'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
 					[null, id],
 				);
 			}
