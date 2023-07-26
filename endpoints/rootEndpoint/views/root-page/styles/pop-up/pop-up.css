@@ -95,4 +95,10 @@ div.pop-up-container.--off > div {
   transform: translateY(-200%);
 }
 
+@media (min-width: 1300px) {
+  div.pop-up-container.--on > div {
+    transform: translateY(0%);
+  }
+}
+
 /*# sourceMappingURL=pop-up.css.map */
