@@ -74,7 +74,7 @@ function CHECK_REPO_UPDATE() {
       START
     fi
 
-    sleep 1h
+    sleep 30m
   done
 }
 
