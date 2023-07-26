@@ -85,7 +85,7 @@ div.pop-up-container.--on {
   filter: opacity(100%);
 }
 div.pop-up-container.--on > div {
-  transform: translateY(-17.5%);
+  transform: translateY(-10.5%);
 }
 div.pop-up-container.--off {
   filter: opacity(0%);
