@@ -57,3 +57,13 @@ div.pop-up-container {
 		}
 	}
 }
+
+@media (min-width: 1300px) {
+	div.pop-up-container {
+		&.--on {
+			& > div {
+				transform: translateY(0%);
+			}
+		}
+	}
+}
