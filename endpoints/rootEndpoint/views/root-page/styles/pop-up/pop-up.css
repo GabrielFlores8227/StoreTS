@@ -85,7 +85,7 @@ div.pop-up-container.--on {
   filter: opacity(100%);
 }
 div.pop-up-container.--on > div {
-  transform: translateY(-17.5%);
+  transform: translateY(-10.5%);
 }
 div.pop-up-container.--off {
   filter: opacity(0%);
@@ -93,6 +93,12 @@ div.pop-up-container.--off {
 }
 div.pop-up-container.--off > div {
   transform: translateY(-200%);
+}
+
+@media (min-width: 1300px) {
+  div.pop-up-container.--on > div {
+    transform: translateY(0%);
+  }
 }
 
 /*# sourceMappingURL=pop-up.css.map */
