@@ -3,6 +3,10 @@ div.pop-up-container {
   padding-left: 21px;
 }
 
+div.pop-up-container > div > button {
+  font-size: 17.5px;
+}
+
 @media (min-width: 375px) {
   div.pop-up-container {
     padding-right: 28px;
@@ -15,16 +19,27 @@ div.pop-up-container {
     padding-left: 56px;
   }
 }
+@media (min-width: 870px) {
+  div.pop-up-container > div > button {
+    font-size: 18.9px;
+  }
+}
 @media (min-width: 1300px) {
   div.pop-up-container {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
+  }
+  div.pop-up-container > div > button {
+    font-size: 19.6px;
   }
 }
 @media (min-width: 1700px) {
   div.pop-up-container {
     padding-right: 21vw;
     padding-left: 21vw;
+  }
+  div.pop-up-container > div > button {
+    font-size: 21px;
   }
 }
 @media (min-width: 2880px) {
@@ -46,11 +61,21 @@ div.pop-up-container {
   transition: ease-in-out 0.8s;
   position: fixed;
 }
-div.pop-up-container > a {
-  transform: translateY(-17.5%) scale(0%, 0%);
+div.pop-up-container > div {
+  background-color: var(--primary-color);
+  padding: 7px;
+  border-radius: 7px;
+  transform: translateY(200%);
   transition: ease-in-out 0.8s;
 }
-div.pop-up-container > a > img {
+div.pop-up-container > div > button {
+  justify-content: right;
+  padding: 7px;
+  padding-bottom: 11.2px;
+  width: 100%;
+  color: white;
+}
+div.pop-up-container > div > a > img {
   max-height: 455px;
   width: 100%;
   border-radius: 7px;
@@ -59,15 +84,15 @@ div.pop-up-container.--on {
   pointer-events: all;
   filter: opacity(100%);
 }
-div.pop-up-container.--on > a {
-  transform: translateY(-14%) scale(100%, 100%);
+div.pop-up-container.--on > div {
+  transform: translateY(-17.5%);
 }
 div.pop-up-container.--off {
   filter: opacity(0%);
   pointer-events: none;
 }
-div.pop-up-container.--off > a {
-  transform: translateY(-200%) scale(100%, 100%);
+div.pop-up-container.--off > div {
+  transform: translateY(-200%);
 }
 
 /*# sourceMappingURL=pop-up.css.map */
