@@ -8,6 +8,7 @@ main {
 }
 
 div.propagandas-container {
+	width: 100vw;
 	position: relative;
 
 	button {
@@ -67,12 +68,15 @@ div.propagandas-container {
 }
 
 div.product-section-container {
+	z-index: 1;
 	padding: 35px 0;
+	position: relative;
 
 	& > div {
 		&.--special {
 			&::before {
 				content: '';
+				z-index: -1;
 				width: 305px;
 				height: 305px;
 				border-radius: 100%;
@@ -85,6 +89,7 @@ div.product-section-container {
 
 			&::after {
 				content: '';
+				z-index: -1;
 				width: 305px;
 				height: 305px;
 				border-radius: 100%;
@@ -169,6 +174,29 @@ div.product-section-container {
 	}
 }
 
+div.product-section-container__propagandas-pop-container {
+	z-index: 2;
+	@extend %default-padding-size;
+
+	& > div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 14px;
+
+		a:last-of-type {
+			display: none;
+		}
+
+		img {
+			width: 100%;
+			border-radius: 7px;
+			object-fit: cover;
+		}
+	}
+}
+
 @media (min-width: 490px) {
 	main {
 		padding-top: 140px;
@@ -177,8 +205,15 @@ div.product-section-container {
 	div.propagandas-container {
 		& > div:first-of-type {
 			img {
-				width: 100vw;
 				height: 41vw;
+			}
+		}
+	}
+
+	div.product-section-container__propagandas-pop-container {
+		& > div {
+			img {
+				height: 35vw;
 			}
 		}
 	}
@@ -192,7 +227,6 @@ div.product-section-container {
 	div.propagandas-container {
 		& > div:first-of-type {
 			img {
-				width: 100vw;
 				height: auto;
 			}
 		}
@@ -212,6 +246,14 @@ div.product-section-container {
 			}
 		}
 	}
+
+	div.product-section-container__propagandas-pop-container {
+		& > div {
+			img {
+				height: auto;
+			}
+		}
+	}
 }
 
 @media (min-width: 1300px) {
@@ -227,6 +269,32 @@ div.product-section-container {
 
 			width: 48px;
 			height: 48px;
+		}
+	}
+}
+
+@media (min-width: 1700px) {
+	div.product-section-container__propagandas-pop-container {
+		& > div {
+			flex-direction: row;
+
+			a:last-of-type {
+				display: block;
+			}
+
+			img {
+				height: 21vh;
+			}
+		}
+	}
+}
+
+@media (min-width: 2000px) {
+	div.product-section-container__propagandas-pop-container {
+		& > div {
+			img {
+				height: auto;
+			}
 		}
 	}
 }
