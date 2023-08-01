@@ -4,87 +4,103 @@ import Admin from 'storets-admin';
 import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 
+class Mask {
+	public static readonly textMask = {
+		admin: {
+			'username-&-password': async (
+				change: string,
+				confirm: string,
+				password: string,
+				key: string,
+			) => {
+				Admin.checkType(
+					change,
+					'string',
+					key === 'username' ? `novo usuário` : `nova senha`,
+				);
+
+				Admin.checkLength(
+					change,
+					5,
+					30,
+					key === 'username' ? `novo usuário` : `nova senha`,
+				);
+
+				Admin.checkType(confirm, 'string', `confirme ${key}`);
+
+				Admin.checkLength(
+					confirm,
+					5,
+					30,
+					key === 'username' ? `confirme novo usuário` : `confirme nova senha`,
+				);
+
+				Admin.checkType(password, 'string', 'senha');
+
+				const [query] = await Sql.query(
+					'	SELECT `username`, `password` FROM `admin` WHERE `id` = ?;',
+					['only'],
+				);
+
+				if (await bcrypt.compare(change, Object(query)[0][key])) {
+					const message = `Por favor, forneça ${
+						key === 'username'
+							? 'um novo usuário diferente do usuário atual'
+							: 'uma nova senha diferente da senha atual'
+					}.`;
+
+					throw {
+						status: 400,
+						message,
+					};
+				}
+
+				if (change !== confirm) {
+					const message = `Desculpe, parece que o campo '${
+						key === 'username' ? 'confirme novo usuário' : 'confirme nova senha'
+					}' está incorreto. Por favor, verifique os dados e tente novamente.`;
+
+					throw {
+						status: 400,
+						message,
+					};
+				}
+
+				if (
+					Object(query).length === 0 ||
+					!(await bcrypt.compare(password, Object(query)[0].password))
+				) {
+					throw {
+						status: 400,
+						message:
+							'Desculpe, a senha fornecida está incorreta. Por favor, verifique os dados e tente novamente.',
+					};
+				}
+			},
+		},
+	};
+}
+
 class Support {
 	/**
-	 * Validates the data for the "putAuth" middleware.
-	 * Checks the data types and length of the "change", "confirm", and "password" parameters,
-	 * and throws an error if the password is incorrect or the "change" and "confirm" values are invalid.
-	 *
-	 * @param {string} change - The new value of the parameter.
-	 * @param {string} confirm - The confirmed new value of the parameter.
-	 * @param {string} password - The current password for verification.
-	 * @param {string} key - The key representing the parameter name.
-	 * @throws {object} - Error object with status and message properties.
+	 * Validates data before processing an authenticated middleware PUT operation.
+	 * @param {string} change - The new username or password to be changed to.
+	 * @param {string} confirm - The confirmation of the new username or password.
+	 * @param {string} password - The current password for authentication.
+	 * @param {string} key - The authentication key to authorize the PUT operation.
 	 */
-	public static async validateDataForMiddlewarePutAuth(
+	public static async validateDataForMiddlewarePutUsernameAndPassword(
 		change: string,
 		confirm: string,
 		password: string,
 		key: string,
 	) {
-		Admin.checkType(
+		await Mask.textMask.admin['username-&-password'](
 			change,
-			'string',
-			key === 'username' ? `novo usuário` : `nova senha`,
-		);
-
-		Admin.checkLength(
-			change,
-			5,
-			30,
-			key === 'username' ? `novo usuário` : `nova senha`,
-		);
-
-		Admin.checkType(confirm, 'string', `confirme ${key}`);
-
-		Admin.checkLength(
 			confirm,
-			5,
-			30,
-			key === 'username' ? `confirme novo usuário` : `confirme nova senha`,
+			password,
+			key,
 		);
-
-		Admin.checkType(password, 'string', 'senha');
-
-		const [query] = await Sql.query(
-			'	SELECT `username`, `password` FROM `admin` WHERE `id` = ?;',
-			['only'],
-		);
-
-		if (await bcrypt.compare(change, Object(query)[0][key])) {
-			const message = `Por favor, forneça ${
-				key === 'username'
-					? 'um novo usuário diferente do usuário atual'
-					: 'uma nova senha diferente da senha atual'
-			}.`;
-
-			throw {
-				status: 400,
-				message,
-			};
-		}
-
-		if (change !== confirm) {
-			const message = `Desculpe, parece que o campo '${
-				key === 'username' ? 'confirme novo usuário' : 'confirme nova senha'
-			}' está incorreto. Por favor, verifique os dados e tente novamente.`;
-
-			throw {
-				status: 400,
-				message,
-			};
-		}
-
-		if (
-			Object(query).length === 0 ||
-			!(await bcrypt.compare(password, Object(query)[0].password))
-		) {
-			throw {
-				status: 400,
-				message:
-					'Desculpe, a senha fornecida está incorreta. Por favor, verifique os dados e tente novamente.',
-			};
-		}
 	}
 }
 
@@ -108,7 +124,7 @@ export default class LocalModules {
 			const url = req.originalUrl.split('/');
 			const column = String(url[url.length - 1]);
 
-			await Support.validateDataForMiddlewarePutAuth(
+			await Support.validateDataForMiddlewarePutUsernameAndPassword(
 				change,
 				confirm,
 				password,
