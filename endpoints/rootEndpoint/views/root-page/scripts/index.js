@@ -480,38 +480,33 @@ const touchSliderController = [];
 			controller.imageSliderContainer
 				.querySelectorAll('button')
 				.forEach((button, index) => {
-					button.addEventListener(
-						/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-							? 'touchstart'
-							: 'mousedown',
-						() => {
-							if (!move) {
-								return;
-							}
+					button.addEventListener('mousedown', () => {
+						if (!move) {
+							return;
+						}
 
-							move = false;
+						move = false;
 
-							setTimeout(() => {
-								move = true;
-							}, 600);
+						setTimeout(() => {
+							move = true;
+						}, 600);
 
-							if (restoreIsMoving) {
-								clearTimeout(restoreIsMoving);
-							}
+						if (restoreIsMoving) {
+							clearTimeout(restoreIsMoving);
+						}
 
-							controller.isMoving = true;
+						controller.isMoving = true;
 
-							handlePropagandaScroll(
-								controller,
-								index === 0 ? false : true,
-								true,
-							);
+						handlePropagandaScroll(
+							controller,
+							index === 0 ? false : true,
+							true,
+						);
 
-							restoreIsMoving = setTimeout(() => {
-								controller.isMoving = false;
-							}, 10000);
-						},
-					);
+						restoreIsMoving = setTimeout(() => {
+							controller.isMoving = false;
+						}, 10000);
+					});
 				});
 
 			window.addEventListener('resize', () => {

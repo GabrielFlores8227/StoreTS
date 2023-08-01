@@ -127,6 +127,10 @@ div.product-section-container > div > div:last-of-type, div.product-section-cont
   padding-left: 21px;
 }
 
+div.propagandas-container button {
+  font-size: 17.5px;
+}
+
 div.product-section-container > div > div:first-of-type h1 {
   font-size: 30.1px;
 }
@@ -144,6 +148,9 @@ div.product-section-container > div > div:first-of-type h1 {
   }
 }
 @media (min-width: 870px) {
+  div.propagandas-container button {
+    font-size: 18.9px;
+  }
   div.product-section-container > div > div:first-of-type h1 {
     font-size: 33.6px;
   }
@@ -153,11 +160,17 @@ div.product-section-container > div > div:first-of-type h1 {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
   }
+  div.propagandas-container button {
+    font-size: 19.6px;
+  }
 }
 @media (min-width: 1700px) {
   div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 21vw;
     padding-left: 21vw;
+  }
+  div.propagandas-container button {
+    font-size: 21px;
   }
 }
 @media (min-width: 2880px) {
@@ -176,16 +189,29 @@ div.propagandas-container {
   position: relative;
 }
 div.propagandas-container button {
-  width: 50%;
-  height: 100%;
+  width: 41px;
+  height: 41px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background-color: white;
+  color: var(--regular-gray);
+  transition: ease-in-out 0.35s;
+  transform: translateY(-50%);
   position: absolute;
-  top: 0;
+  top: 50%;
+}
+div.propagandas-container button.--off {
+  filter: opacity(0%);
 }
 div.propagandas-container button:first-of-type {
-  left: 0;
+  left: 21px;
 }
 div.propagandas-container button:last-of-type {
-  right: 0;
+  right: 21px;
+}
+div.propagandas-container button i {
+  transform: scale(90%, 90%);
 }
 div.propagandas-container > div:first-of-type {
   display: flex;
@@ -316,6 +342,18 @@ div.product-section-container > div > div:last-of-type > div {
     filter: opacity(100%);
     width: 420px;
     height: 420px;
+  }
+}
+@media (min-width: 1300px) {
+  div.propagandas-container button {
+    width: 48px;
+    height: 48px;
+  }
+  div.propagandas-container button:first-of-type {
+    left: 41px;
+  }
+  div.propagandas-container button:last-of-type {
+    right: 41px;
   }
 }
 

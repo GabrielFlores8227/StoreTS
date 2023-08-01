@@ -58,6 +58,14 @@ class Mask {
 					};
 				}
 			},
+			link: (link: string) => {
+				Admin.checkType(link, 'string', 'link');
+
+				link = link.trim();
+
+				Admin.checkLength(link, 0, 64000, 'link');
+				Admin.checkSubstring(link, ' ', false, false, 'link');
+			},
 		},
 		categories: {
 			name: async (name: string) => {
@@ -365,6 +373,7 @@ class Support {
 			| { [fieldname: string]: Express.Multer.File[] }
 			| Express.Multer.File[]
 			| undefined,
+		link: string,
 	) {
 		const [query] = await Sql.query('SELECT `id` FROM `propagandas`;');
 
@@ -385,6 +394,8 @@ class Support {
 		await Mask.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
+
+		Mask.textMask.propagandas.link(link);
 	}
 
 	/**
@@ -481,7 +492,7 @@ class Support {
 		Admin.checkType(id, 'string', 'id');
 		Admin.checkLength(id.trim(), 1, -1, 'id');
 
-		await Object(Mask.textMask)[table][column](data);
+		return await Object(Mask.textMask)[table][column](data);
 	}
 
 	/**
@@ -620,12 +631,13 @@ export default class LocalModules {
 		next: NextFunction,
 	) {
 		try {
-			const imagesContext = req.body.imagesContext;
+			const { imagesContext, link } = req.body;
 			const files = req.files;
 
 			await Support.validateDataForMiddlewarePostPropaganda(
 				imagesContext,
 				files,
+				link,
 			);
 
 			const bigImage = Object(files)[imagesContext.indexOf('bigImage')];
@@ -644,8 +656,8 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO `propagandas` (`big-image`, `small-image`) VALUES (?, ?);',
-				[bigImage.originalname, smallImage.originalname],
+				'INSERT INTO `propagandas` (`big-image`, `small-image`, `link`) VALUES (?, ?, ?);',
+				[bigImage.originalname, smallImage.originalname, link],
 			);
 
 			return next();
@@ -940,7 +952,7 @@ export default class LocalModules {
 
 			await Sql.query(
 				'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
-				[data.trim(), id],
+				[data.trim().length === 0 ? null : data.trim(), id],
 			);
 
 			return next();

@@ -497,7 +497,7 @@
 										<div
 											class="cell-container__content-container cell-container__text-input-container"
 										>
-											<% if (builder['pop-up'].link !== '') { %>
+											<% if (builder['pop-up'].link) { %>
 											<div
 												pseudo-input
 												contenteditable="true"
@@ -546,6 +546,7 @@
 								<th>Ações</th>
 								<th>Imagem Grande</th>
 								<th>Imagem Pequena</th>
+								<th>Link</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -579,7 +580,7 @@
 											</div>
 										</div>
 									</td>
-									<td width="50%" class="regular-container">
+									<td width="33.33%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
@@ -608,7 +609,7 @@
 											</div>
 										</div>
 									</td>
-									<td width="50%" class="regular-container">
+									<td width="33.33%" class="regular-container">
 										<div cell-container class="cell-container">
 											<div
 												file-input-container
@@ -621,6 +622,34 @@
 												<a target="_blank" rel="noopener noreferrer">
 													Imagem Pequena
 												</a>
+											</div>
+											<div
+												cell-info
+												class="cell-container__cell-info-container"
+											>
+												<i
+													class="cell-container__cell-info-container__loading"
+												></i>
+												<i
+													cell-info-error
+													class="fa-sharp fa-solid fa-circle-exclamation"
+												></i>
+												<i class="fa-solid fa-circle-check"></i>
+											</div>
+										</div>
+									</td>
+									<td width="33.33%" class="regular-container">
+										<div cell-container class="cell-container">
+											<div
+												class="cell-container__content-container cell-container__text-input-container"
+											>
+												<div
+													propaganda-link
+													pseudo-input
+													contenteditable="true"
+													placeholder="Link"
+													maxlength="255"
+												></div>
 											</div>
 											<div
 												cell-info

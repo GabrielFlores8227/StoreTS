@@ -11,18 +11,34 @@ div.propagandas-container {
 	position: relative;
 
 	button {
+		&.--off {
+			filter: opacity(0%);
+		}
+
 		&:first-of-type {
-			left: 0;
+			left: 21px;
 		}
 
 		&:last-of-type {
-			right: 0;
+			right: 21px;
 		}
 
-		width: 50%;
-		height: 100%;
+		@extend %default-font-size;
+		width: 41px;
+		height: 41px;
+		justify-content: center;
+		align-items: center;
+		border-radius: 100%;
+		background-color: white;
+		color: var(--regular-gray);
+		transition: ease-in-out 0.35s;
+		transform: translateY(-50%);
 		position: absolute;
-		top: 0;
+		top: 50%;
+
+		i {
+			transform: scale(90%, 90%);
+		}
 	}
 
 	& > div:first-of-type {
@@ -194,6 +210,23 @@ div.product-section-container {
 					height: 420px;
 				}
 			}
+		}
+	}
+}
+
+@media (min-width: 1300px) {
+	div.propagandas-container {
+		button {
+			&:first-of-type {
+				left: 41px;
+			}
+
+			&:last-of-type {
+				right: 41px;
+			}
+
+			width: 48px;
+			height: 48px;
 		}
 	}
 }

@@ -66,6 +66,7 @@
 				<button>
 					<i class="fa-solid fa-circle-xmark"></i>
 				</button>
+				<% if (builder['pop-up'].link) { %>
 				<a
 					href="<%= builder['pop-up'].link %>"
 					target="_blank"
@@ -73,6 +74,11 @@
 				>
 					<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" />
 				</a>
+				<% } else { %>
+				<a>
+					<img src="<%= builder['pop-up'].image %>" alt="Pop-Up Image" />
+				</a>
+				<% } %>
 			</div>
 		</div>
 		<aside saved-aside-menu>
@@ -212,24 +218,49 @@
 		<main>
 			<% if (builder.propagandas.length > 0) { %>
 			<div image-slider-container class="propagandas-container">
-				<button tabindex="-1"></button>
+				<button tabindex="-1">
+					<i class="fa-solid fa-angle-left"></i>
+				</button>
 				<div>
-					<% builder.propagandas.forEach((propaganda) => { %>
-					<picture>
-						<source
-							media="(min-width: 490px)"
-							srcset="<%= propaganda['big-image'] %>"
-						/>
-						<img
-							draggable="false"
-							src="<%= propaganda['small-image'] %>"
-							alt="Propaganda"
-						/>
-					</picture>
-					<% }) %>
+					<% builder.propagandas.forEach((propaganda) => { %> <% if
+					(propaganda.link) { %>
+					<a
+						target="_blank"
+						href="<%= propaganda.link %>"
+						rel="noopener noreferrer"
+					>
+						<picture>
+							<source
+								media="(min-width: 490px)"
+								srcset="<%= propaganda['big-image'] %>"
+							/>
+							<img
+								draggable="false"
+								src="<%= propaganda['small-image'] %>"
+								alt="Propaganda"
+							/>
+						</picture>
+					</a>
+					<% } else {%>
+					<a>
+						<picture>
+							<source
+								media="(min-width: 490px)"
+								srcset="<%= propaganda['big-image'] %>"
+							/>
+							<img
+								draggable="false"
+								src="<%= propaganda['small-image'] %>"
+								alt="Propaganda"
+							/>
+						</picture>
+					</a>
+					<% } %> <% }) %>
 				</div>
 				<p><%= builder.footer['store-info'] %></p>
-				<button tabindex="-1"></button>
+				<button tabindex="-1">
+					<i class="fa-solid fa-angle-right"></i>
+				</button>
 			</div>
 			<% } %>
 			<div class="product-section-container">

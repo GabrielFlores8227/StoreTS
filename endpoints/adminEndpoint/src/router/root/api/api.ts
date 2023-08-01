@@ -93,6 +93,7 @@ api.put(
 		'/header/description',
 		'/header/color',
 		'/pop-up/link',
+		'/propagandas/link',
 		'/categories/name',
 		'/products/category',
 		'/products/name',
