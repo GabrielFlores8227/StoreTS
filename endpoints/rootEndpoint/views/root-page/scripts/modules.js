@@ -356,13 +356,14 @@ export function handlePropagandaScroll(
 	const firstButton = container[0];
 	const lastButton = container[1];
 
+	firstButton.classList.remove('--off');
+	lastButton.classList.remove('--off');
+
 	if (controller.currentIndex + 1 >= controller.numberOfPropagandas) {
 		controller.currentIndex = controller.numberOfPropagandas - 1;
 		controller.goingLeft = false;
 
 		lastButton.classList.add('--off');
-
-		return;
 	}
 
 	if (controller.currentIndex <= 0) {
@@ -370,12 +371,7 @@ export function handlePropagandaScroll(
 		controller.goingLeft = true;
 
 		firstButton.classList.add('--off');
-
-		return;
 	}
-
-	firstButton.classList.remove('--off');
-	lastButton.classList.remove('--off');
 }
 
 /**

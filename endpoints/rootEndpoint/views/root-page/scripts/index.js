@@ -454,66 +454,69 @@ const touchSliderController = [];
  *   When the window is resized, the 'scrollLeft' property of the image slider is adjusted to maintain the current position.
  */
 (() => {
-	window.document
-		.querySelectorAll('div[image-slider-container]')
-		.forEach((div) => {
-			const controller = {
-				imageSliderContainer: div,
-				imageSlider: div.querySelector('div'),
-				numberOfPropagandas: div.querySelectorAll('img').length,
-				currentIndex: 0,
-				goingLeft: true,
-				isMoving: false,
-			};
+	const div = window.document.querySelector('div[image-slider-container]');
 
-			setInterval(() => {
-				if (controller.goingLeft) {
-					handlePropagandaScroll(controller, true);
-				} else {
-					handlePropagandaScroll(controller, false);
+	const controller = {
+		imageSliderContainer: div,
+		imageSlider: div.querySelector('div'),
+		numberOfPropagandas: div.querySelectorAll('img').length,
+		currentIndex: 0,
+		goingLeft: true,
+		isMoving: false,
+	};
+
+	if (builder.propagandas.length < 2) {
+		controller.imageSliderContainer
+			.querySelectorAll('button')
+			.forEach((button) => {
+				button.classList.add('--off');
+			});
+
+		return;
+	}
+
+	setInterval(() => {
+		if (controller.goingLeft) {
+			handlePropagandaScroll(controller, true);
+		} else {
+			handlePropagandaScroll(controller, false);
+		}
+	}, 10000);
+
+	let restoreIsMoving;
+	let move = true;
+
+	controller.imageSliderContainer
+		.querySelectorAll('button')
+		.forEach((button, index) => {
+			button.addEventListener('mousedown', () => {
+				if (!move) {
+					return;
 				}
-			}, 10000);
 
-			let restoreIsMoving;
-			let move = true;
+				move = false;
 
-			controller.imageSliderContainer
-				.querySelectorAll('button')
-				.forEach((button, index) => {
-					button.addEventListener('mousedown', () => {
-						if (!move) {
-							return;
-						}
+				setTimeout(() => {
+					move = true;
+				}, 600);
 
-						move = false;
+				if (restoreIsMoving) {
+					clearTimeout(restoreIsMoving);
+				}
 
-						setTimeout(() => {
-							move = true;
-						}, 600);
+				controller.isMoving = true;
 
-						if (restoreIsMoving) {
-							clearTimeout(restoreIsMoving);
-						}
+				handlePropagandaScroll(controller, index === 0 ? false : true, true);
 
-						controller.isMoving = true;
-
-						handlePropagandaScroll(
-							controller,
-							index === 0 ? false : true,
-							true,
-						);
-
-						restoreIsMoving = setTimeout(() => {
-							controller.isMoving = false;
-						}, 10000);
-					});
-				});
-
-			window.addEventListener('resize', () => {
-				controller.imageSlider.scrollLeft =
-					(controller.imageSlider.scrollWidth /
-						controller.numberOfPropagandas) *
-					controller.currentIndex;
+				restoreIsMoving = setTimeout(() => {
+					controller.isMoving = false;
+				}, 10000);
 			});
 		});
+
+	window.addEventListener('resize', () => {
+		controller.imageSlider.scrollLeft =
+			(controller.imageSlider.scrollWidth / controller.numberOfPropagandas) *
+			controller.currentIndex;
+	});
 })();
