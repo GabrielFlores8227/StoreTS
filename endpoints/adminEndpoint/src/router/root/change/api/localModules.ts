@@ -7,7 +7,7 @@ import Sql from 'storets-sql';
 class Mask {
 	public static readonly textMask = {
 		admin: {
-			'username-&-password': async (
+			auth: async (
 				change: string,
 				confirm: string,
 				password: string,
@@ -89,24 +89,19 @@ class Support {
 	 * @param {string} password - The current password for authentication.
 	 * @param {string} key - The authentication key to authorize the PUT operation.
 	 */
-	public static async validateDataForMiddlewarePutUsernameAndPassword(
+	public static async validateDataForMiddlewarePutAuth(
 		change: string,
 		confirm: string,
 		password: string,
 		key: string,
 	) {
-		await Mask.textMask.admin['username-&-password'](
-			change,
-			confirm,
-			password,
-			key,
-		);
+		await Mask.textMask.admin.auth(change, confirm, password, key);
 	}
 }
 
 export default class LocalModules {
 	/**
-	 * Middleware function for handling the "putAuth" route.
+	 * Middleware function for handling the auth route.
 	 * Validates the data received in the request body, updates the specified column in the "admin" table,
 	 * and deletes all sessions except the current session.
 	 *
@@ -124,7 +119,7 @@ export default class LocalModules {
 			const url = req.originalUrl.split('/');
 			const column = String(url[url.length - 1]);
 
-			await Support.validateDataForMiddlewarePutUsernameAndPassword(
+			await Support.validateDataForMiddlewarePutAuth(
 				change,
 				confirm,
 				password,
