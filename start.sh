@@ -9,6 +9,11 @@ function START() {
 
   for INDEX in "${!APP_PORTS[@]}"
   do
+    if ! [ -e "${APP_END_POINTS[INDEX]}/.env" ];
+    then
+      echo -e "\033[1;31m[x] StoreTS could not be started. The required .env file is missing (${APP_END_POINTS[INDEX]}/.env)\033[0m" && exit 1
+    fi
+
     APP_PORT="${APP_PORTS[INDEX]}"
     APP_END_POINT="${APP_END_POINTS[INDEX]}"
 

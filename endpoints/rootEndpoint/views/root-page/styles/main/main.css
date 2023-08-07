@@ -122,9 +122,13 @@ div.product-section-container > div > div:last-of-type > div a i {
     height: 170px;
   }
 }
-div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
   padding-right: 21px;
   padding-left: 21px;
+}
+
+div.propagandas-container button {
+  font-size: 17.5px;
 }
 
 div.product-section-container > div > div:first-of-type h1 {
@@ -132,36 +136,45 @@ div.product-section-container > div > div:first-of-type h1 {
 }
 
 @media (min-width: 375px) {
-  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 28px;
     padding-left: 28px;
   }
 }
 @media (min-width: 650px) {
-  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 56px;
     padding-left: 56px;
   }
 }
 @media (min-width: 870px) {
+  div.propagandas-container button {
+    font-size: 18.9px;
+  }
   div.product-section-container > div > div:first-of-type h1 {
     font-size: 33.6px;
   }
 }
 @media (min-width: 1300px) {
-  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 15.4vw;
     padding-left: 15.4vw;
   }
+  div.propagandas-container button {
+    font-size: 19.6px;
+  }
 }
 @media (min-width: 1700px) {
-  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 21vw;
     padding-left: 21vw;
   }
+  div.propagandas-container button {
+    font-size: 21px;
+  }
 }
 @media (min-width: 2880px) {
-  div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
+  div.product-section-container__propagandas-pop-container, div.product-section-container > div > div:last-of-type, div.product-section-container > div > div:first-of-type {
     padding-right: 30%;
     padding-left: 30%;
   }
@@ -173,19 +186,33 @@ main {
 }
 
 div.propagandas-container {
+  width: 100vw;
   position: relative;
 }
 div.propagandas-container button {
-  width: 50%;
-  height: 100%;
+  width: 41px;
+  height: 41px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background-color: white;
+  color: var(--regular-gray);
+  transition: ease-in-out 0.35s;
+  transform: translateY(-50%);
   position: absolute;
-  top: 0;
+  top: 50%;
+}
+div.propagandas-container button.--off {
+  filter: opacity(0%);
 }
 div.propagandas-container button:first-of-type {
-  left: 0;
+  left: 21px;
 }
 div.propagandas-container button:last-of-type {
-  right: 0;
+  right: 21px;
+}
+div.propagandas-container button i {
+  transform: scale(90%, 90%);
 }
 div.propagandas-container > div:first-of-type {
   display: flex;
@@ -210,7 +237,9 @@ div.propagandas-container > p {
 }
 
 div.product-section-container {
+  z-index: 1;
   padding: 35px 0;
+  position: relative;
 }
 div.product-section-container > div {
   padding: 42px 0;
@@ -223,6 +252,7 @@ div.product-section-container > div.--special {
 }
 div.product-section-container > div.--special::before {
   content: "";
+  z-index: -1;
   width: 305px;
   height: 305px;
   border-radius: 100%;
@@ -234,6 +264,7 @@ div.product-section-container > div.--special::before {
 }
 div.product-section-container > div.--special::after {
   content: "";
+  z-index: -1;
   width: 305px;
   height: 305px;
   border-radius: 100%;
@@ -292,13 +323,34 @@ div.product-section-container > div > div:last-of-type > div {
   width: 100%;
 }
 
+div.product-section-container__propagandas-pop-container {
+  z-index: 2;
+}
+div.product-section-container__propagandas-pop-container > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+div.product-section-container__propagandas-pop-container > div a:last-of-type {
+  display: none;
+}
+div.product-section-container__propagandas-pop-container > div img {
+  width: 100%;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
 @media (min-width: 490px) {
   main {
     padding-top: 140px;
   }
   div.propagandas-container > div:first-of-type img {
-    width: 100vw;
     height: 41vw;
+  }
+  div.product-section-container__propagandas-pop-container > div img {
+    height: 35vw;
   }
 }
 @media (min-width: 870px) {
@@ -306,7 +358,6 @@ div.product-section-container > div > div:last-of-type > div {
     padding: 84px 0 140px 0;
   }
   div.propagandas-container > div:first-of-type img {
-    width: 100vw;
     height: auto;
   }
   div.product-section-container {
@@ -316,6 +367,37 @@ div.product-section-container > div > div:last-of-type > div {
     filter: opacity(100%);
     width: 420px;
     height: 420px;
+  }
+  div.product-section-container__propagandas-pop-container > div img {
+    height: auto;
+  }
+}
+@media (min-width: 1300px) {
+  div.propagandas-container button {
+    width: 48px;
+    height: 48px;
+  }
+  div.propagandas-container button:first-of-type {
+    left: 41px;
+  }
+  div.propagandas-container button:last-of-type {
+    right: 41px;
+  }
+}
+@media (min-width: 1700px) {
+  div.product-section-container__propagandas-pop-container > div {
+    flex-direction: row;
+  }
+  div.product-section-container__propagandas-pop-container > div a:last-of-type {
+    display: block;
+  }
+  div.product-section-container__propagandas-pop-container > div img {
+    height: 21vh;
+  }
+}
+@media (min-width: 2000px) {
+  div.product-section-container__propagandas-pop-container > div img {
+    height: auto;
   }
 }
 

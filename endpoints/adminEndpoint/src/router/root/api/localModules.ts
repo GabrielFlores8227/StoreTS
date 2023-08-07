@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import multer from 'multer';
-import sharp from 'sharp';
 import { randomBytes } from 'crypto';
 import Admin from 'storets-admin';
 import Middleware from 'storets-middleware';
 import Sql from 'storets-sql';
 import S3 from 'storets-s3';
+import sharp from 'sharp';
 
-class Support {
+class Mask {
 	public static readonly textMask = {
 		header: {
 			title: (title: string) => {
@@ -57,6 +57,14 @@ class Support {
 							"Desculpe, dados necessários estão faltando. Por favor conserte o campo 'imagesContext' e tente novamente.",
 					};
 				}
+			},
+			link: (link: string) => {
+				Admin.checkType(link, 'string', 'link');
+
+				link = link.trim();
+
+				Admin.checkLength(link, 0, 64000, 'link');
+				Admin.checkSubstring(link, ' ', false, false, 'link');
 			},
 		},
 		categories: {
@@ -350,7 +358,9 @@ class Support {
 			throw err;
 		}
 	}
+}
 
+class Support {
 	/**
 	 * Validates data for the middleware handling the "post propaganda" operation.
 	 *
@@ -363,6 +373,7 @@ class Support {
 			| { [fieldname: string]: Express.Multer.File[] }
 			| Express.Multer.File[]
 			| undefined,
+		link: string,
 	) {
 		const [query] = await Sql.query('SELECT `id` FROM `propagandas`;');
 
@@ -374,15 +385,17 @@ class Support {
 			};
 		}
 
-		this.textMask.propagandas.imagesContext(imagesContext);
+		Mask.textMask.propagandas.imagesContext(imagesContext);
 
-		await this.imageMask.propagandas['big-image'](
+		await Mask.imageMask.propagandas['big-image'](
 			Object(files)[imagesContext.indexOf('bigImage')],
 		);
 
-		await this.imageMask.propagandas['small-image'](
+		await Mask.imageMask.propagandas['small-image'](
 			Object(files)[imagesContext.indexOf('smallImage')],
 		);
+
+		Mask.textMask.propagandas.link(link);
 	}
 
 	/**
@@ -405,20 +418,23 @@ class Support {
 			};
 		}
 
-		await this.textMask.categories.name(name);
+		await Mask.textMask.categories.name(name);
 	}
 
 	/**
-	 * Validates data for the middleware handling the "post product" operation.
-	 *
+	 * Validates data for the middleware that handles POST requests to create a new product.
 	 * @param {string} category - The category of the product.
 	 * @param {string} name - The name of the product.
-	 * @param {string} price - The price of the product.
-	 * @param {string} off - The discount/offers for the product.
-	 * @param {string} installment - The installment options for the product.
-	 * @param {string} whatsapp - The WhatsApp contact for the product.
-	 * @param {string} message - The message associated with the product.
-	 * @param {Express.Multer.File | undefined} file - The file/image associated with the product.
+	 * @param {string} price - The price of the product as a string.
+	 * @param {string} off - The discount percentage of the product as a string.
+	 * @param {string} installment - The installment value of the product as a string.
+	 * @param {string} whatsapp - The WhatsApp contact number for the product.
+	 * @param {string} message - A message associated with the product.
+	 * @param {Object} files - An object containing uploaded files or an array of files.
+	 *                        It can be in one of the following formats:
+	 *                        1. { [fieldname: string]: Express.Multer.File[] }
+	 *                        2. Express.Multer.File[]
+	 *                        3. undefined
 	 */
 	public static async validateDataForMiddlewarePostProduct(
 		category: string,
@@ -445,17 +461,17 @@ class Support {
 			};
 		}
 
-		await this.textMask.products.category(category);
-		this.textMask.products.name(name);
-		this.textMask.products.price(price);
-		this.textMask.products.off(off);
-		this.textMask.products.installment(installment);
-		this.textMask.products.whatsapp(whatsapp);
-		this.textMask.products.message(message);
-		await this.imageMask.products.image(Object(files)[0]);
+		await Mask.textMask.products.category(category);
+		Mask.textMask.products.name(name);
+		Mask.textMask.products.price(price);
+		Mask.textMask.products.off(off);
+		Mask.textMask.products.installment(installment);
+		Mask.textMask.products.whatsapp(whatsapp);
+		Mask.textMask.products.message(message);
+		await Mask.imageMask.products.image(Object(files)[0]);
 
 		if (Object(files)[1]) {
-			await this.imageMask.products.image(Object(files)[1]);
+			await Mask.imageMask.products.image(Object(files)[1]);
 		}
 	}
 
@@ -476,7 +492,7 @@ class Support {
 		Admin.checkType(id, 'string', 'id');
 		Admin.checkLength(id.trim(), 1, -1, 'id');
 
-		await Object(this.textMask)[table][column](data);
+		return await Object(Mask.textMask)[table][column](data);
 	}
 
 	/**
@@ -496,7 +512,7 @@ class Support {
 		Admin.checkType(id, 'string', 'id');
 		Admin.checkLength(id.trim(), 1, -1, 'id');
 
-		await Object(Support.imageMask)[table][column](file);
+		await Object(Mask.imageMask)[table][column](file);
 	}
 
 	/**
@@ -529,6 +545,15 @@ class Support {
 					'Desculpe, os ids enviados não são válidos ou estão incompletos. Por favor, verifique os dados e tente novamente.',
 			};
 		}
+	}
+
+	/**
+	 * Validates the data before processing a middleware delete operation.
+	 * @param {string} id - The ID to be validated.
+	 */
+	public static async validateDataForMiddlewareDelete(id: string) {
+		Admin.checkType(id, 'string', 'id');
+		Admin.checkLength(id.trim(), 1, -1, 'id');
 	}
 }
 
@@ -606,12 +631,13 @@ export default class LocalModules {
 		next: NextFunction,
 	) {
 		try {
-			const imagesContext = req.body.imagesContext;
+			const { imagesContext, link } = req.body;
 			const files = req.files;
 
 			await Support.validateDataForMiddlewarePostPropaganda(
 				imagesContext,
 				files,
+				link,
 			);
 
 			const bigImage = Object(files)[imagesContext.indexOf('bigImage')];
@@ -630,8 +656,8 @@ export default class LocalModules {
 			);
 
 			await Sql.query(
-				'INSERT INTO `propagandas` (`big-image`, `small-image`) VALUES (?, ?);',
-				[bigImage.originalname, smallImage.originalname],
+				'INSERT INTO `propagandas` (`big-image`, `small-image`, `link`) VALUES (?, ?, ?);',
+				[bigImage.originalname, smallImage.originalname, link],
 			);
 
 			return next();
@@ -658,8 +684,7 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id.trim(), 1, -1, 'id');
+			Support.validateDataForMiddlewareDelete(id);
 
 			const [query] = await Sql.query(
 				'SELECT `big-image`, `small-image` FROM `propagandas` WHERE `id` = ?;',
@@ -727,8 +752,7 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id.trim(), 1, -1, 'id');
+			Support.validateDataForMiddlewareDelete(id);
 
 			const [query] = await Sql.query(
 				'SELECT `image` FROM `products` WHERE `category` = ?;',
@@ -827,8 +851,7 @@ export default class LocalModules {
 		try {
 			const id = req.body.id;
 
-			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id.trim(), 1, -1, 'id');
+			Support.validateDataForMiddlewareDelete(id);
 
 			const [query] = await Sql.query(
 				'SELECT `id`, `image`, `additional-image` FROM `products` WHERE `id` = ?;',
@@ -878,8 +901,7 @@ export default class LocalModules {
 			const column = String(url[4]);
 			const id = req.body.id;
 
-			Admin.checkType(id, 'string', 'id');
-			Admin.checkLength(id.trim(), 1, -1, 'id');
+			Support.validateDataForMiddlewareDelete(id);
 
 			const [query] = await Sql.query(
 				'SELECT `id`, `' + column + '` FROM `' + table + '` WHERE `id` = ?;',
@@ -930,7 +952,7 @@ export default class LocalModules {
 
 			await Sql.query(
 				'UPDATE `' + table + '` SET `' + column + '` = ? WHERE `id` = ?;',
-				[data.trim(), id],
+				[data.trim().length === 0 ? null : data.trim(), id],
 			);
 
 			return next();

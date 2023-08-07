@@ -728,12 +728,38 @@ export function buildPropagandas(isLastItemNew = false) {
 	const deleteItemApiUrl = '/admin/api/propaganda';
 	const reorderItemsApiUrl = '/admin/api/propagandas';
 	const cellFunction = (apiItem, cell, index) => {
-		cell.setAttribute(
-			'action',
-			`/admin/api/propagandas/${index === 0 ? 'big-image' : 'small-image'}`,
-		);
+		cell.querySelectorAll('div[propaganda-link]').forEach((div) => {
+			cell.setAttribute('action', '/admin/api/propagandas/link');
+
+			if (apiItem.link) {
+				div.innerText = apiItem.link;
+			}
+
+			loadPseudoInputProperties(div);
+
+			let lastInnerText = div.innerText;
+
+			div.addEventListener('focusout', async () => {
+				const currentValue = div.innerText;
+
+				handleTextInputRequest(
+					lastInnerText,
+					cell,
+					'link',
+					div.innerText,
+					String(apiItem.id),
+				);
+
+				lastInnerText = currentValue;
+			});
+		});
 
 		cell.querySelectorAll('div[file-input-container]').forEach((div) => {
+			cell.setAttribute(
+				'action',
+				`/admin/api/propagandas/${index === 0 ? 'big-image' : 'small-image'}`,
+			);
+
 			const key = generateRandomString(30);
 
 			div.querySelector('label').setAttribute('for', key);
@@ -1150,12 +1176,15 @@ export function buildPropagandasTemplate(specialSection) {
 	actionButtons[1].addEventListener('click', async () => {
 		const form = new FormData();
 		const files = template.querySelectorAll('input');
+		const link = template.querySelector('div[propaganda-link]').innerText;
 
 		form.append('files', files[0].files[0]);
 		form.append('files', files[1].files[0]);
 
 		form.append('imagesContext', 'bigImage');
 		form.append('imagesContext', 'smallImage');
+
+		form.append('link', link);
 
 		const req = await handleActionRequest(
 			actionContainer,

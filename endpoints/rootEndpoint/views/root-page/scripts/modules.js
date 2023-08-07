@@ -62,12 +62,6 @@ function handlePopUp() {
 	}
 
 	const container = window.document.querySelector('div[pop-up-container]');
-	const link = container.querySelector('a');
-
-	if (link.getAttribute('href') === '') {
-		link.removeAttribute('target');
-		link.removeAttribute('href');
-	}
 
 	setTimeout(() => {
 		container.classList.add('--on');
@@ -358,14 +352,25 @@ export function handlePropagandaScroll(
 		behavior: 'smooth',
 	});
 
+	const container = controller.imageSliderContainer.querySelectorAll('button');
+	const firstButton = container[0];
+	const lastButton = container[1];
+
+	firstButton.classList.remove('--off');
+	lastButton.classList.remove('--off');
+
 	if (controller.currentIndex + 1 >= controller.numberOfPropagandas) {
 		controller.currentIndex = controller.numberOfPropagandas - 1;
 		controller.goingLeft = false;
+
+		lastButton.classList.add('--off');
 	}
 
 	if (controller.currentIndex <= 0) {
 		controller.currentIndex = 0;
 		controller.goingLeft = true;
+
+		firstButton.classList.add('--off');
 	}
 }
 

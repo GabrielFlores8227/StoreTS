@@ -293,6 +293,7 @@ div.cell-container__file-input-container a {
 }
 
 div.cell-container__text-input-container div[pseudo-input] {
+  cursor: text;
   max-width: 80%;
   padding: 0px 21px;
   text-align: center;
