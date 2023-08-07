@@ -26,7 +26,7 @@
     "mysql": "^2.18.1",
     "sharp": "^0.32.3",
     "storets-admin": "^1.0.1",
-    "storets-middleware": "^1.3.9",
+    "storets-middleware": "^1.4.6",
     "storets-s3": "^1.0.0",
     "storets-sql": "^1.0.0",
     "ts-node": "^10.9.1"
