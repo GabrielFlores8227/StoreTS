@@ -143,7 +143,11 @@ class Mask {
 				Admin.checkNumber(off, 'promoção');
 				Admin.checkValue(off, 0, 100, 'promoção');
 			},
-			description: (description: string) => {
+			description: (description: string | null) => {
+				if (!description) {
+					return;
+				}
+
 				Admin.checkType(description, 'string', 'descrição');
 
 				description = description.trim();
@@ -158,7 +162,11 @@ class Mask {
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
-			message: (message: string) => {
+			message: (message: string | null) => {
+				if (!message) {
+					return;
+				}
+
 				Admin.checkType(message, 'string', 'mensagem');
 
 				message = message.trim();
@@ -822,9 +830,9 @@ export default class LocalModules {
 					Object(files)[1] ? Object(files)[1]!.originalname : null,
 					price.trim(),
 					off.trim(),
-					description.trim(),
+					description ? description.trim() : null,
 					whatsapp.trim(),
-					message.trim(),
+					message ? message.trim() : null,
 				],
 			);
 

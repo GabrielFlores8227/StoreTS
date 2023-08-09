@@ -456,6 +456,10 @@ const touchSliderController = [];
 (() => {
 	const div = window.document.querySelector('div[image-slider-container]');
 
+	if (!div) {
+		return;
+	}
+
 	const controller = {
 		imageSliderContainer: div,
 		imageSlider: div.querySelector('div'),
