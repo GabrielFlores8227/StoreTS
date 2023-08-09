@@ -36,7 +36,13 @@ export default class LocalModules {
 
 			Object(req).redirectTo = `https://api.whatsapp.com/send?phone=${
 				Object(query)[0].whatsapp
-			}&text=${Object(query)[0].message.replace('###', Object(query)[0].name)}`;
+			}`;
+
+			if (Object(query)[0].message) {
+				Object(req).redirectTo = `${Object(req).redirectTo}&text=${Object(
+					query,
+				)[0].message.replace('###', Object(query)[0].name)}`;
+			}
 
 			return next();
 		} catch (err) {

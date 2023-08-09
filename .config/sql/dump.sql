@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.33, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Linux (x86_64)
 --
 -- Host: localhost    Database: StoreTS
 -- ------------------------------------------------------
--- Server version	8.0.33
+-- Server version	8.0.34
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -165,9 +165,9 @@ CREATE TABLE `products` (
   `additional-image` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
   `off` float NOT NULL,
-  `installment` varchar(70) NOT NULL,
+  `description` varchar(70) DEFAULT NULL,
   `whatsapp` varchar(13) NOT NULL,
-  `message` varchar(255) NOT NULL,
+  `message` varchar(255) DEFAULT NULL,
   `history` json DEFAULT NULL,
   `position` smallint DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -268,4 +268,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-25 10:27:22
+-- Dump completed on 2023-08-09 17:03:27

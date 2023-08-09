@@ -143,12 +143,16 @@ class Mask {
 				Admin.checkNumber(off, 'promoção');
 				Admin.checkValue(off, 0, 100, 'promoção');
 			},
-			installment: (installment: string) => {
-				Admin.checkType(installment, 'string', 'parcelas');
+			description: (description: string | null) => {
+				if (!description) {
+					return;
+				}
 
-				installment = installment.trim();
+				Admin.checkType(description, 'string', 'descrição');
 
-				Admin.checkLength(installment, 0, 70, 'parcelas');
+				description = description.trim();
+
+				Admin.checkLength(description, 0, 70, 'descrição');
 			},
 			whatsapp: (whatsapp: string) => {
 				Admin.checkType(whatsapp, 'string', 'whatsapp');
@@ -158,7 +162,11 @@ class Mask {
 				Admin.checkLength(whatsapp, 13, 13, 'whatsapp');
 				Admin.checkNumber(whatsapp, 'whatsapp');
 			},
-			message: (message: string) => {
+			message: (message: string | null) => {
+				if (!message) {
+					return;
+				}
+
 				Admin.checkType(message, 'string', 'mensagem');
 
 				message = message.trim();
@@ -427,7 +435,7 @@ class Support {
 	 * @param {string} name - The name of the product.
 	 * @param {string} price - The price of the product as a string.
 	 * @param {string} off - The discount percentage of the product as a string.
-	 * @param {string} installment - The installment value of the product as a string.
+	 * @param {string} description - The description value of the product as a string.
 	 * @param {string} whatsapp - The WhatsApp contact number for the product.
 	 * @param {string} message - A message associated with the product.
 	 * @param {Object} files - An object containing uploaded files or an array of files.
@@ -441,7 +449,7 @@ class Support {
 		name: string,
 		price: string,
 		off: string,
-		installment: string,
+		description: string,
 		whatsapp: string,
 		message: string,
 		files:
@@ -465,7 +473,7 @@ class Support {
 		Mask.textMask.products.name(name);
 		Mask.textMask.products.price(price);
 		Mask.textMask.products.off(off);
-		Mask.textMask.products.installment(installment);
+		Mask.textMask.products.description(description);
 		Mask.textMask.products.whatsapp(whatsapp);
 		Mask.textMask.products.message(message);
 		await Mask.imageMask.products.image(Object(files)[0]);
@@ -788,7 +796,7 @@ export default class LocalModules {
 		next: NextFunction,
 	) {
 		try {
-			const { category, name, price, off, installment, whatsapp, message } =
+			const { category, name, price, off, description, whatsapp, message } =
 				req.body;
 			const files = req.files;
 
@@ -797,7 +805,7 @@ export default class LocalModules {
 				name,
 				price,
 				off,
-				installment,
+				description,
 				whatsapp,
 				message,
 				files,
@@ -814,7 +822,7 @@ export default class LocalModules {
 			}
 
 			await Sql.query(
-				'INSERT INTO `products` (`category`, `name`, `image`, `additional-image`, `price`, `off`, `installment`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',
+				'INSERT INTO `products` (`category`, `name`, `image`, `additional-image`, `price`, `off`, `description`, `whatsapp`, `message`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);',
 				[
 					category.trim(),
 					name.trim(),
@@ -822,9 +830,9 @@ export default class LocalModules {
 					Object(files)[1] ? Object(files)[1]!.originalname : null,
 					price.trim(),
 					off.trim(),
-					installment.trim(),
+					description ? description.trim() : null,
 					whatsapp.trim(),
-					message.trim(),
+					message ? message.trim() : null,
 				],
 			);
 
