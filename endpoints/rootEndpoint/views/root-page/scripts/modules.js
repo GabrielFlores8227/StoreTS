@@ -231,8 +231,8 @@ export function renderSavedProducts(products) {
 			const productImage = template.querySelector('img[product-image]');
 			const productName = template.querySelector('p[product-name]');
 			const productPrice = template.querySelector('p[product-price]');
-			const productInstallment = template.querySelector(
-				'p[product-installment]',
+			const productDescription = template.querySelector(
+				'p[product-description]',
 			);
 			const productLink = template.querySelector('a[product-link]');
 
@@ -262,7 +262,7 @@ export function renderSavedProducts(products) {
 				oldPriceElement.textContent = convertToMoneyFormat(product.price);
 			}
 
-			productInstallment.textContent = product.installment;
+			productDescription.textContent = product.description;
 			productLink.href = `/api/order/${product.id}`;
 
 			templateParent.append(template);

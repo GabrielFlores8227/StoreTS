@@ -165,7 +165,7 @@ CREATE TABLE `products` (
   `additional-image` varchar(255) DEFAULT NULL,
   `price` float NOT NULL,
   `off` float NOT NULL,
-  `installment` varchar(70) NOT NULL,
+  `description` varchar(70) NOT NULL,
   `whatsapp` varchar(13) NOT NULL,
   `message` varchar(255) NOT NULL,
   `history` json DEFAULT NULL,

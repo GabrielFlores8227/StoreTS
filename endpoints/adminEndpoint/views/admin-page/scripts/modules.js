@@ -1061,10 +1061,10 @@ export async function buildProducts(isLastItemNew = false) {
 			});
 		});
 
-		cell.querySelectorAll('div[product-installment]').forEach((div) => {
-			cell.setAttribute('action', '/admin/api/products/installment');
+		cell.querySelectorAll('div[product-description]').forEach((div) => {
+			cell.setAttribute('action', '/admin/api/products/description');
 
-			div.innerText = apiItem.installment;
+			div.innerText = apiItem.description;
 
 			let lastInnerText = div.innerText;
 
@@ -1074,7 +1074,7 @@ export async function buildProducts(isLastItemNew = false) {
 				await handleTextInputRequest(
 					lastInnerText,
 					cell,
-					'installment',
+					'description',
 					currentInnerText,
 					String(apiItem.id),
 				);
@@ -1322,10 +1322,10 @@ export function buildProductsTemplate(specialSection) {
 			.innerText.replace(/\D/g, '');
 		form.append('off', off === '' ? '0' : off);
 
-		const installment = template.querySelector(
-			'div[product-installment]',
+		const description = template.querySelector(
+			'div[product-description]',
 		).innerText;
-		form.append('installment', installment);
+		form.append('description', description);
 
 		const whatsapp = template
 			.querySelector('div[product-whatsapp]')

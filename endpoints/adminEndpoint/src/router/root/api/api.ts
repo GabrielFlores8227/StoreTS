@@ -99,7 +99,7 @@ api.put(
 		'/products/name',
 		'/products/price',
 		'/products/off',
-		'/products/installment',
+		'/products/description',
 		'/products/whatsapp',
 		'/products/message',
 		'/footer/title',
