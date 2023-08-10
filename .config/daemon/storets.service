@@ -1,3 +1,7 @@
+# This systemd unit file is provided under the terms of the GNU General Public License v3.0
+# You should have received a copy of the GNU General Public License along with this file.
+# If not, see <https://www.gnu.org/licenses/gpl-3.0.en.html>.
+
 [Unit]
 Description=StoreTS Launcher
 After=network.target
