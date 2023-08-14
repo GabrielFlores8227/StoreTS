@@ -20,6 +20,6 @@
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
-    "sass": "^1.62.1"
+    "sass": "^1.65.1"
   }
 }
