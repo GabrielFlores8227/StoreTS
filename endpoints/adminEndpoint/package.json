@@ -30,8 +30,5 @@
     "storets-s3": "^1.0.0",
     "storets-sql": "^1.0.0",
     "ts-node": "^10.9.1"
-  },
-  "devDependencies": {
-    "sass": "^1.65.1"
   }
 }
